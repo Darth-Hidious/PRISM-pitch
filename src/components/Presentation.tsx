@@ -205,7 +205,63 @@ export default function Presentation({ slides }: PresentationProps) {
                     ← → Navigate · F Fullscreen
                 </div>
 
-                {/* Bottom nav bar */}
+                {/* Left edge arrow */}
+                <button
+                    onClick={prev}
+                    className="absolute top-1/2 -translate-y-1/2 border-none outline-none cursor-pointer flex items-center justify-center rounded-full pointer-events-auto"
+                    style={{
+                        left: 'clamp(10px, 1.2%, 20px)',
+                        width: 'clamp(36px, 3.5vw, 52px)',
+                        height: 'clamp(36px, 3.5vw, 52px)',
+                        color: current === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.7)',
+                        background: 'rgba(255,255,255,0.06)',
+                        backdropFilter: 'blur(4px)',
+                        transition: 'all 300ms',
+                    }}
+                    onMouseEnter={(e) => {
+                        if (current > 0) {
+                            e.currentTarget.style.color = 'rgba(255,255,255,0.95)';
+                            e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+                        }
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = current === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.7)';
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
+                    }}
+                    aria-label="Previous slide"
+                >
+                    <ChevronLeft style={{ width: 'clamp(18px, 2vw, 28px)', height: 'clamp(18px, 2vw, 28px)' }} />
+                </button>
+
+                {/* Right edge arrow */}
+                <button
+                    onClick={next}
+                    className="absolute top-1/2 -translate-y-1/2 border-none outline-none cursor-pointer flex items-center justify-center rounded-full pointer-events-auto"
+                    style={{
+                        right: 'clamp(10px, 1.2%, 20px)',
+                        width: 'clamp(36px, 3.5vw, 52px)',
+                        height: 'clamp(36px, 3.5vw, 52px)',
+                        color: current === total - 1 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.7)',
+                        background: 'rgba(255,255,255,0.06)',
+                        backdropFilter: 'blur(4px)',
+                        transition: 'all 300ms',
+                    }}
+                    onMouseEnter={(e) => {
+                        if (current < total - 1) {
+                            e.currentTarget.style.color = 'rgba(255,255,255,0.95)';
+                            e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+                        }
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = current === total - 1 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.7)';
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
+                    }}
+                    aria-label="Next slide"
+                >
+                    <ChevronRight style={{ width: 'clamp(18px, 2vw, 28px)', height: 'clamp(18px, 2vw, 28px)' }} />
+                </button>
+
+                {/* Bottom bar */}
                 <div className="absolute bottom-0 left-0 right-0 pb-[3%] px-[5.2%] flex items-center justify-between pointer-events-auto">
                     {/* Slide counter */}
                     <span
@@ -240,64 +296,11 @@ export default function Presentation({ slides }: PresentationProps) {
                         ))}
                     </div>
 
-                    {/* Prev / Next / Fullscreen buttons */}
-                    <div className="flex items-center" style={{ gap: 'clamp(4px, 0.5vw, 8px)' }}>
-                        <button
-                            onClick={prev}
-                            className="border-none outline-none cursor-pointer flex items-center justify-center rounded-md"
-                            style={{
-                                color: 'rgba(255,255,255,0.5)',
-                                background: 'transparent',
-                                padding: 'clamp(4px, 0.4vw, 8px)',
-                                transition: 'all 200ms',
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                                e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.color = 'rgba(255,255,255,0.5)';
-                                e.currentTarget.style.background = 'transparent';
-                            }}
-                            aria-label="Previous slide"
-                        >
-                            <ChevronLeft size={18} />
-                        </button>
-                        <button
-                            onClick={next}
-                            className="border-none outline-none cursor-pointer flex items-center justify-center rounded-md"
-                            style={{
-                                color: 'rgba(255,255,255,0.5)',
-                                background: 'transparent',
-                                padding: 'clamp(4px, 0.4vw, 8px)',
-                                transition: 'all 200ms',
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.color = 'rgba(255,255,255,0.9)';
-                                e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.color = 'rgba(255,255,255,0.5)';
-                                e.currentTarget.style.background = 'transparent';
-                            }}
-                            aria-label="Next slide"
-                        >
-                            <ChevronRight size={18} />
-                        </button>
-
-                        {/* Divider */}
-                        <div
-                            style={{
-                                width: '1px',
-                                height: '16px',
-                                background: 'rgba(255,255,255,0.2)',
-                                margin: '0 clamp(2px, 0.3vw, 6px)',
-                            }}
-                        />
-
+                    {/* Fullscreen */}
+                    <div style={{ minWidth: '50px', display: 'flex', justifyContent: 'flex-end' }}>
                         <button
                             onClick={toggleFullscreen}
-                            className="border-none outline-none cursor-pointer flex items-center justify-center rounded-md"
+                            className="border-none outline-none cursor-pointer flex items-center justify-center rounded-md mobile-hide"
                             style={{
                                 color: 'rgba(255,255,255,0.5)',
                                 background: 'transparent',

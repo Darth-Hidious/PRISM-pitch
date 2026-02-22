@@ -6,6 +6,7 @@ import ArchitectureSlide from './slides/ArchitectureSlide';
 import ALabSlide from './slides/ALabSlide';
 import TractionSlide from './slides/TractionSlide';
 import MarketSlide from './slides/MarketSlide';
+import FinancialsSlide from './slides/FinancialsSlide';
 import AskSlide from './slides/AskSlide';
 import OutroSlide from './slides/OutroSlide';
 
@@ -20,6 +21,7 @@ export default function App() {
                 <ALabSlide key="alab" />,
                 <TractionSlide key="traction" />,
                 <MarketSlide key="market" />,
+                <FinancialsSlide key="financials" />,
                 <AskSlide key="ask" />,
                 <OutroSlide key="outro" />,
             ]}
