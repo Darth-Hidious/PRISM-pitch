@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { ReactElement } from 'react';
 import { ChevronLeft, ChevronRight, Maximize, Minimize } from 'lucide-react';
 
@@ -10,6 +10,7 @@ export default function Presentation({ slides }: PresentationProps) {
     const [current, setCurrent] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [controlsVisible, setControlsVisible] = useState(true);
+    const containerRef = useRef<HTMLDivElement>(null);
     const total = slides.length;
 
     const next = useCallback(() => setCurrent((c) => Math.min(c + 1, total - 1)), [total]);
@@ -60,6 +61,75 @@ export default function Presentation({ slides }: PresentationProps) {
         return () => document.removeEventListener('fullscreenchange', handler);
     }, []);
 
+    // Re-trigger CSS animations when slide changes
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const slideEl = containerRef.current.children[current] as HTMLElement;
+        if (!slideEl) return;
+        const animEls = slideEl.querySelectorAll('.anim-in');
+        animEls.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            htmlEl.style.animation = 'none';
+            // Force reflow then restore
+            void htmlEl.offsetHeight;
+            htmlEl.style.animation = '';
+        });
+    }, [current]);
+
+    // Touch tap zones: right 75% = forward, left 25% = back
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        const onTouchStart = (e: TouchEvent) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        };
+
+        const onTouchEnd = (e: TouchEvent) => {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            const dt = Date.now() - touchStartTime;
+
+            // Ignore long presses and large vertical swipes (scrolling)
+            if (dt > 400 || Math.abs(dy) > 60) return;
+
+            // Swipe gesture: horizontal swipe > 50px
+            if (Math.abs(dx) > 50) {
+                if (dx < 0) next();
+                else prev();
+                return;
+            }
+
+            // Tap gesture: minimal movement
+            if (Math.abs(dx) < 15 && Math.abs(dy) < 15) {
+                // Ignore taps on interactive elements
+                const target = e.target as HTMLElement;
+                if (target.closest('button, a, input, [role="button"]')) return;
+
+                const tapX = e.changedTouches[0].clientX;
+                const width = el.getBoundingClientRect().width;
+                // Left 25% = back, right 75% = forward
+                if (tapX < width * 0.25) {
+                    prev();
+                } else {
+                    next();
+                }
+            }
+        };
+
+        el.addEventListener('touchstart', onTouchStart, { passive: true });
+        el.addEventListener('touchend', onTouchEnd, { passive: true });
+        return () => {
+            el.removeEventListener('touchstart', onTouchStart);
+            el.removeEventListener('touchend', onTouchEnd);
+        };
+    }, [next, prev]);
+
     // Auto-hide controls
     useEffect(() => {
         let timeout: ReturnType<typeof setTimeout>;
@@ -77,7 +147,7 @@ export default function Presentation({ slides }: PresentationProps) {
     }, []);
 
     return (
-        <div className="relative w-full h-full overflow-hidden bg-black">
+        <div ref={containerRef} className="relative w-full h-full overflow-hidden bg-black">
             {/* Slides */}
             {slides.map((slide, i) => {
                 const offset = i - current;
@@ -105,9 +175,9 @@ export default function Presentation({ slides }: PresentationProps) {
                     transition: 'opacity 300ms ease',
                 }}
             >
-                {/* Top keyboard hint - moved from corner to center top to prevent overlaps */}
+                {/* Top keyboard hint - hidden on mobile */}
                 <div
-                    className="absolute top-[1.5%] left-1/2 -translate-x-1/2"
+                    className="absolute top-[1.5%] left-1/2 -translate-x-1/2 mobile-hide"
                     style={{ fontSize: 'clamp(9px, 0.85vw, 11px)', color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}
                 >
                     ← → Navigate · F Fullscreen
