@@ -55,7 +55,6 @@ export default function OutroSlide() {
                     <div className="anim-in anim-d4 flex flex-col" style={{ gap: 'clamp(10px, 1vw, 16px)' }}>
                         {[
                             { icon: '\u2605', text: 'ESA SPARK Prime Contractor & ITER Supplier' },
-                            { icon: '\u2192', text: 'github.com/Darth-Hidious/PRISM' },
                             { icon: '\u25CB', text: 'bimotech.pl' },
                             { icon: '\u25A0', text: 'Wroc\u0142aw Technology Park, Poland' },
                         ].map((item) => (
@@ -80,14 +79,9 @@ export default function OutroSlide() {
                     </div>
                 </main>
 
-                {/* Footer */}
-                <footer className="anim-in anim-d5" style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'clamp(9px, 0.7vw, 11px)',
-                    color: 'var(--c-dim)',
-                    letterSpacing: '0.1em',
-                }}>
-                    concept by marc27
+                {/* Footer — animated logo */}
+                <footer className="anim-in anim-d5">
+                    <AnimatedBimoLogo style={{ height: 'clamp(24px, 2.5vw, 40px)', width: 'auto' }} />
                 </footer>
             </div>
         </div>
