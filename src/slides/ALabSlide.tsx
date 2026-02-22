@@ -139,13 +139,12 @@ export default function ALabSlide() {
                             { step: '04', label: 'Phase Identification', desc: 'Neural networks compare patterns against structure databases to confirm phases.' },
                             { step: '05', label: 'Feedback Loop', desc: 'Empirical data structured via amsight and fed back into the Evolver\'s Reflector.' },
                         ].map((item) => (
-                            <div key={item.step} className="flex items-start" style={{ gap: 'clamp(12px, 1.2vw, 20px)' }}>
+                            <div key={item.step} className="flex items-baseline" style={{ gap: 'clamp(12px, 1.2vw, 20px)' }}>
                                 <div style={{
                                     fontFamily: 'var(--font-mono)',
                                     fontSize: 'clamp(10px, 0.8vw, 13px)',
                                     color: 'var(--c-gold)',
                                     minWidth: 'clamp(24px, 2vw, 32px)',
-                                    paddingTop: '2px',
                                 }}>
                                     {item.step}
                                 </div>

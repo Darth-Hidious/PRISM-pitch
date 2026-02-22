@@ -27,7 +27,7 @@ export default function AskSlide() {
                         letterSpacing: '0.15em',
                         color: 'var(--c-gold)',
                     }}>
-                        07 &mdash; THE ASK
+                        08 &mdash; THE ASK
                     </span>
                     <span style={{
                         fontFamily: 'var(--font-mono)',

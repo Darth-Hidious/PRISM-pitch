@@ -24,7 +24,7 @@ export default function MarketSlide() {
 
                 <main className="flex-1 flex flex-col justify-center">
                     {/* Big number + context */}
-                    <div className="flex items-end anim-in anim-d2 mobile-stack" style={{ gap: 'clamp(8px, 2vw, 32px)', marginBottom: 'clamp(20px, 4vw, 64px)' }}>
+                    <div className="flex items-baseline anim-in anim-d2 mobile-stack" style={{ gap: 'clamp(8px, 2vw, 32px)', marginBottom: 'clamp(20px, 4vw, 64px)' }}>
                         <div style={{
                             fontFamily: 'var(--font-display)',
                             fontSize: 'clamp(64px, 8vw, 160px)',
@@ -35,7 +35,7 @@ export default function MarketSlide() {
                         }}>
                             {'\u20AC'}49B
                         </div>
-                        <div style={{ paddingBottom: 'clamp(8px, 1vw, 16px)' }}>
+                        <div>
                             <div style={{
                                 fontFamily: 'var(--font-display)',
                                 fontSize: 'clamp(18px, 2vw, 36px)',
