@@ -49,7 +49,7 @@ export default function SolutionSlide() {
                             fontSize: 'clamp(13px, 1.1vw, 20px)',
                             color: 'var(--c-muted)',
                             lineHeight: 1.6,
-                            maxWidth: '50%',
+                            maxWidth: '100%',
                             marginTop: 'clamp(20px, 2.5vw, 40px)',
                         }}
                     >
@@ -60,8 +60,8 @@ export default function SolutionSlide() {
 
                     {/* Key points */}
                     <div
-                        className="flex anim-in anim-d4"
-                        style={{ gap: 'clamp(16px, 2vw, 32px)', marginTop: 'clamp(32px, 4vw, 64px)' }}
+                        className="flex anim-in anim-d4 mobile-stack"
+                        style={{ gap: 'clamp(12px, 2vw, 32px)', marginTop: 'clamp(20px, 4vw, 64px)', flexWrap: 'wrap' }}
                     >
                         {[
                             { label: 'Target', value: 'RHEAs for\npreburners', color: 'var(--c-gold)' },

@@ -24,11 +24,11 @@ export default function IntroSlide() {
                     </h1>
 
                     {/* Three-column layout */}
-                    <div className="flex w-full items-start" style={{ marginTop: '3.5%', gap: '4%' }}>
+                    <div className="flex w-full items-start mobile-stack" style={{ marginTop: '3.5%', gap: '4%' }}>
                         {/* Column 1 */}
                         <div style={{ flex: '0 0 22%' }}>
                             <p style={{ fontSize: 'clamp(13px, 1.1vw, 20px)', opacity: 0.9, lineHeight: 1.5, marginBottom: '20px' }}>
-                                The extreme-environment aerospace materials market ($49B TAM) relies on trial and error and human intuition. Discoveries routinely take a decade to reach production.
+                                The extreme-environment aerospace materials market ({'\u20AC'}49B TAM) relies on trial and error and human intuition. Discoveries routinely take a decade to reach production.
                             </p>
                             <div className="flex items-baseline gap-3">
                                 <span style={{ fontSize: 'clamp(28px, 3.5vw, 64px)', fontWeight: 700, lineHeight: 1 }}>10-20</span>

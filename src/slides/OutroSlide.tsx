@@ -7,27 +7,16 @@ export default function OutroSlide() {
             <VideoBackground src="https://stream.mux.com/00qQnfNo7sSpn3pB1hYKkyeSDvxs01NxiQ3sr29uL3e028.m3u8" />
 
             <div className="relative z-10 w-full h-full flex flex-col slide-pad">
-                {/* Header */}
-                <header className="flex items-center justify-between anim-in anim-d1">
-                    <div className="flex items-center" style={{ gap: 'clamp(8px, 0.8vw, 14px)' }}>
-                        <AnimatedBimoLogo style={{ height: 'clamp(18px, 1.8vw, 28px)', width: 'clamp(18px, 1.8vw, 28px)' }} />
-                        <span style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: 'clamp(10px, 0.85vw, 13px)',
-                            letterSpacing: '0.15em',
-                            color: 'var(--c-muted)',
-                        }}>
-                            BIMO TECH
-                        </span>
-                    </div>
-                    <span style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: 'clamp(10px, 0.85vw, 13px)',
-                        letterSpacing: '0.1em',
-                        color: 'var(--c-dim)',
-                    }}>
-                        PRISM
-                    </span>
+                {/* Header — Bimo Tech logo (big) */}
+                <header className="anim-in anim-d1">
+                    <img
+                        src="/bimo-logo.svg"
+                        alt="Bimo Tech"
+                        style={{
+                            height: 'clamp(36px, 4vw, 72px)',
+                            width: 'auto',
+                        }}
+                    />
                 </header>
 
                 {/* Main */}
@@ -38,7 +27,7 @@ export default function OutroSlide() {
                         fontWeight: 700,
                         letterSpacing: '-0.03em',
                         lineHeight: 1.05,
-                        maxWidth: '70%',
+                        maxWidth: '100%',
                     }}>
                         The Operating System for Accelerated Innovation.
                     </h1>
@@ -54,9 +43,9 @@ export default function OutroSlide() {
                     {/* Contact grid */}
                     <div className="anim-in anim-d4 flex flex-col" style={{ gap: 'clamp(10px, 1vw, 16px)' }}>
                         {[
-                            { icon: '\u2605', text: 'ESA SPARK Prime Contractor & ITER Supplier' },
-                            { icon: '\u25CB', text: 'bimotech.pl' },
-                            { icon: '\u25A0', text: 'Wroc\u0142aw Technology Park, Poland' },
+                            { icon: '\u2605', text: 'ESA SPARK Prime Contractor & ITER Supplier', href: null },
+                            { icon: '\u25CB', text: 'bimotech.pl', href: 'https://bimotech.pl' },
+                            { icon: '\u25A0', text: 'Wroc\u0142aw Technology Park, Poland', href: null },
                         ].map((item) => (
                             <div key={item.text} className="flex items-center" style={{ gap: 'clamp(10px, 1vw, 16px)' }}>
                                 <span style={{
@@ -68,20 +57,54 @@ export default function OutroSlide() {
                                 }}>
                                     {item.icon}
                                 </span>
-                                <span style={{
-                                    fontSize: 'clamp(13px, 1.1vw, 20px)',
-                                    color: 'var(--c-muted)',
-                                }}>
-                                    {item.text}
-                                </span>
+                                {item.href ? (
+                                    <a
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            fontSize: 'clamp(13px, 1.1vw, 20px)',
+                                            color: 'var(--c-muted)',
+                                            textDecoration: 'none',
+                                            borderBottom: '1px solid transparent',
+                                            transition: 'border-color 0.2s',
+                                        }}
+                                        onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--c-gold)')}
+                                        onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'transparent')}
+                                    >
+                                        {item.text}
+                                    </a>
+                                ) : (
+                                    <span style={{
+                                        fontSize: 'clamp(13px, 1.1vw, 20px)',
+                                        color: 'var(--c-muted)',
+                                    }}>
+                                        {item.text}
+                                    </span>
+                                )}
                             </div>
                         ))}
                     </div>
                 </main>
 
-                {/* Footer — animated logo */}
-                <footer className="anim-in anim-d5">
-                    <AnimatedBimoLogo style={{ height: 'clamp(24px, 2.5vw, 40px)', width: 'auto' }} />
+                {/* Footer — marc27 animated logo, linked to research.marc27.com */}
+                <footer className="anim-in anim-d5 flex items-center" style={{ gap: 'clamp(10px, 1vw, 16px)' }}>
+                    <span style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 'clamp(9px, 0.7vw, 11px)',
+                        letterSpacing: '0.1em',
+                        color: 'var(--c-dim)',
+                    }}>
+                        CONCEPT BY
+                    </span>
+                    <a href="https://research.marc27.com" target="_blank" rel="noopener noreferrer">
+                        <AnimatedBimoLogo
+                            style={{
+                                height: 'clamp(48px, 5vw, 90px)',
+                                width: 'auto',
+                            }}
+                        />
+                    </a>
                 </footer>
             </div>
         </div>

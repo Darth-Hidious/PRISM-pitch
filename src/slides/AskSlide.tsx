@@ -63,7 +63,7 @@ export default function AskSlide() {
                     </div>
 
                     {/* Two columns: allocation + roadmap */}
-                    <div className="flex anim-in anim-d3" style={{ gap: 'clamp(32px, 4vw, 64px)' }}>
+                    <div className="flex anim-in anim-d3 mobile-stack" style={{ gap: 'clamp(20px, 4vw, 64px)' }}>
                         {/* Allocation */}
                         <div style={{ flex: 1 }}>
                             <div style={{

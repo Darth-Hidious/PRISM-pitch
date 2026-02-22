@@ -110,3 +110,28 @@ body,
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
+
+/* ── Mobile responsiveness ── */
+@media (max-width: 768px) {
+  .slide-pad {
+    padding: 16px 20px 48px;
+  }
+
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+
+  .mobile-full {
+    max-width: 100% !important;
+  }
+
+  .mobile-hide {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .slide-pad {
+    padding: 12px 16px 40px;
+  }
+}

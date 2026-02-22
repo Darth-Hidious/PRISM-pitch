@@ -45,9 +45,9 @@ export default function ArchitectureSlide() {
                 </p>
 
                 {/* Content: SVG + descriptions */}
-                <div className="flex-1 flex items-center anim-in anim-d4" style={{ gap: 'clamp(24px, 3vw, 48px)', minHeight: 0 }}>
+                <div className="flex-1 flex items-center anim-in anim-d4 mobile-stack" style={{ gap: 'clamp(16px, 3vw, 48px)', minHeight: 0 }}>
                     {/* SVG Loop */}
-                    <div style={{ flex: '0 0 45%', maxHeight: '100%' }}>
+                    <div className="mobile-hide" style={{ flex: '0 0 45%', maxHeight: '100%' }}>
                         <svg viewBox="0 0 400 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                             <g fontFamily="monospace" textAnchor="middle" fill="#EDEDEF">
                                 <text x="200" y="115" fontSize="12" opacity="0.5" letterSpacing="2">AI_PIPELINE</text>

@@ -36,7 +36,7 @@ export default function ProblemSlide() {
                             fontWeight: 700,
                             letterSpacing: '-0.03em',
                             lineHeight: 1.05,
-                            maxWidth: '75%',
+                            maxWidth: '100%',
                         }}
                     >
                         The materials innovation cycle is fundamentally broken.
@@ -48,7 +48,7 @@ export default function ProblemSlide() {
                             fontSize: 'clamp(13px, 1.1vw, 20px)',
                             color: 'var(--c-muted)',
                             lineHeight: 1.6,
-                            maxWidth: '55%',
+                            maxWidth: '100%',
                             marginTop: 'clamp(16px, 2vw, 32px)',
                         }}
                     >
@@ -59,8 +59,8 @@ export default function ProblemSlide() {
 
                     {/* Stats row */}
                     <div
-                        className="flex items-start anim-in anim-d4"
-                        style={{ gap: 'clamp(32px, 5vw, 80px)', marginTop: 'clamp(32px, 4vw, 64px)' }}
+                        className="flex items-start anim-in anim-d4 mobile-stack"
+                        style={{ gap: 'clamp(16px, 5vw, 80px)', marginTop: 'clamp(20px, 4vw, 64px)', flexWrap: 'wrap' }}
                     >
                         <div>
                             <div style={{
@@ -84,7 +84,7 @@ export default function ProblemSlide() {
                             </div>
                         </div>
 
-                        <div style={{ width: '1px', height: 'clamp(48px, 5vw, 80px)', background: 'var(--c-border)' }} />
+                        <div className="mobile-hide" style={{ width: '1px', height: 'clamp(48px, 5vw, 80px)', background: 'var(--c-border)' }} />
 
                         <div>
                             <div style={{
@@ -107,7 +107,7 @@ export default function ProblemSlide() {
                             </div>
                         </div>
 
-                        <div style={{ width: '1px', height: 'clamp(48px, 5vw, 80px)', background: 'var(--c-border)' }} />
+                        <div className="mobile-hide" style={{ width: '1px', height: 'clamp(48px, 5vw, 80px)', background: 'var(--c-border)' }} />
 
                         <div>
                             <div style={{
@@ -118,7 +118,7 @@ export default function ProblemSlide() {
                                 letterSpacing: '-0.03em',
                                 color: 'var(--c-blue)',
                             }}>
-                                $49B
+                                {'\u20AC'}49B
                             </div>
                             <div style={{
                                 fontFamily: 'var(--font-mono)',

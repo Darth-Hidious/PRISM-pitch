@@ -42,9 +42,9 @@ export default function ALabSlide() {
                 </p>
 
                 {/* Content: SVG + Pipeline */}
-                <div className="flex-1 flex items-center anim-in anim-d4" style={{ gap: 'clamp(32px, 4vw, 64px)', minHeight: 0 }}>
+                <div className="flex-1 flex items-center anim-in anim-d4 mobile-stack" style={{ gap: 'clamp(16px, 4vw, 64px)', minHeight: 0 }}>
                     {/* Robot arm SVG */}
-                    <div style={{ flex: '0 0 42%', maxHeight: '100%' }}>
+                    <div className="mobile-hide" style={{ flex: '0 0 42%', maxHeight: '100%' }}>
                         <svg viewBox="0 0 400 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                             <g stroke="#EDEDEF" strokeWidth="0.5" opacity="0.15">
                                 <path d="M 20 20 L 20 30 M 15 25 L 25 25" />

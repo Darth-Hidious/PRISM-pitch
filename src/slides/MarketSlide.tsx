@@ -24,7 +24,7 @@ export default function MarketSlide() {
 
                 <main className="flex-1 flex flex-col justify-center">
                     {/* Big number + context */}
-                    <div className="flex items-end anim-in anim-d2" style={{ gap: 'clamp(16px, 2vw, 32px)', marginBottom: 'clamp(32px, 4vw, 64px)' }}>
+                    <div className="flex items-end anim-in anim-d2 mobile-stack" style={{ gap: 'clamp(8px, 2vw, 32px)', marginBottom: 'clamp(20px, 4vw, 64px)' }}>
                         <div style={{
                             fontFamily: 'var(--font-display)',
                             fontSize: 'clamp(64px, 8vw, 160px)',
@@ -33,7 +33,7 @@ export default function MarketSlide() {
                             letterSpacing: '-0.04em',
                             color: 'var(--c-gold)',
                         }}>
-                            $49B
+                            {'\u20AC'}49B
                         </div>
                         <div style={{ paddingBottom: 'clamp(8px, 1vw, 16px)' }}>
                             <div style={{
@@ -65,7 +65,7 @@ export default function MarketSlide() {
                         FOUR COMPOUNDING REVENUE STREAMS
                     </div>
 
-                    <div className="flex anim-in anim-d3" style={{ gap: 'clamp(12px, 1.5vw, 24px)' }}>
+                    <div className="flex anim-in anim-d3 mobile-stack" style={{ gap: 'clamp(10px, 1.5vw, 24px)', flexWrap: 'wrap' }}>
                         {[
                             { stream: 'R&D Contracts', desc: 'ESA, GSTP, Horizon Europe funding for technology maturation.', yr: 'Y1', amount: '\u20AC700K', color: 'var(--c-gold)' },
                             { stream: 'RHEA Components', desc: 'Prototype coupons and qualified production parts for OEMs.', yr: 'Y2', amount: '\u20AC40K', color: 'var(--c-blue)' },
