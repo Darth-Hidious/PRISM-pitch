@@ -112,7 +112,7 @@ export default function ArchitectureSlide() {
                     </div>
 
                     {/* Module descriptions */}
-                    <div className="flex flex-col" style={{ flex: 1, gap: 'clamp(10px, 1.2vw, 18px)' }}>
+                    <div className="flex flex-col mobile-text" style={{ flex: 1, gap: 'clamp(10px, 1.2vw, 18px)', position: 'relative', zIndex: 1 }}>
                         {[
                             {
                                 color: '#C9A84C',

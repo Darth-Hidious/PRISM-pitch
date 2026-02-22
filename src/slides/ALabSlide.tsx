@@ -131,7 +131,7 @@ export default function ALabSlide() {
                     </div>
 
                     {/* Pipeline steps */}
-                    <div className="flex flex-col" style={{ flex: 1, gap: 'clamp(8px, 1vw, 14px)' }}>
+                    <div className="flex flex-col mobile-text" style={{ flex: 1, gap: 'clamp(8px, 1vw, 14px)', position: 'relative', zIndex: 1 }}>
                         {[
                             { step: '01', label: 'Recipe Translation', desc: 'AI outputs target recipes: precursors, temperatures, thermal profiles.' },
                             { step: '02', label: 'Robotic Synthesis', desc: 'Automated arms handle powder dosing and move samples through heating profiles.' },

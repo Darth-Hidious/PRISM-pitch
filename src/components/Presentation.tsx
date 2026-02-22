@@ -10,8 +10,12 @@ export default function Presentation({ slides }: PresentationProps) {
     const [current, setCurrent] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [controlsVisible, setControlsVisible] = useState(true);
+    const [phase, setPhase] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const total = slides.length;
+
+    // Slides with two-phase mobile reveal (SVG first, then text): Architecture (3), ALab (4)
+    const twoPhaseSlides = new Set([3, 4]);
 
     const next = useCallback(() => setCurrent((c) => Math.min(c + 1, total - 1)), [total]);
     const prev = useCallback(() => setCurrent((c) => Math.max(c - 1, 0)), []);
@@ -61,8 +65,9 @@ export default function Presentation({ slides }: PresentationProps) {
         return () => document.removeEventListener('fullscreenchange', handler);
     }, []);
 
-    // Re-trigger CSS animations when slide changes
+    // Re-trigger CSS animations and reset phase when slide changes
     useEffect(() => {
+        setPhase(0);
         if (!containerRef.current) return;
         const slideEl = containerRef.current.children[current] as HTMLElement;
         if (!slideEl) return;
@@ -70,7 +75,6 @@ export default function Presentation({ slides }: PresentationProps) {
         animEls.forEach((el) => {
             const htmlEl = el as HTMLElement;
             htmlEl.style.animation = 'none';
-            // Force reflow then restore
             void htmlEl.offsetHeight;
             htmlEl.style.animation = '';
         });
@@ -98,10 +102,28 @@ export default function Presentation({ slides }: PresentationProps) {
             // Ignore long presses and large vertical swipes (scrolling)
             if (dt > 400 || Math.abs(dy) > 60) return;
 
+            const isMobile = window.innerWidth <= 768;
+
+            const goFwd = () => {
+                if (isMobile && twoPhaseSlides.has(current) && phase === 0) {
+                    setPhase(1);
+                } else {
+                    next();
+                }
+            };
+
+            const goBack = () => {
+                if (isMobile && twoPhaseSlides.has(current) && phase === 1) {
+                    setPhase(0);
+                } else {
+                    prev();
+                }
+            };
+
             // Swipe gesture: horizontal swipe > 50px
             if (Math.abs(dx) > 50) {
-                if (dx < 0) next();
-                else prev();
+                if (dx < 0) goFwd();
+                else goBack();
                 return;
             }
 
@@ -115,9 +137,9 @@ export default function Presentation({ slides }: PresentationProps) {
                 const width = el.getBoundingClientRect().width;
                 // Left 25% = back, right 75% = forward
                 if (tapX < width * 0.25) {
-                    prev();
+                    goBack();
                 } else {
-                    next();
+                    goFwd();
                 }
             }
         };
@@ -128,7 +150,7 @@ export default function Presentation({ slides }: PresentationProps) {
             el.removeEventListener('touchstart', onTouchStart);
             el.removeEventListener('touchend', onTouchEnd);
         };
-    }, [next, prev]);
+    }, [next, prev, current, phase]);
 
     // Auto-hide controls
     useEffect(() => {
@@ -154,7 +176,7 @@ export default function Presentation({ slides }: PresentationProps) {
                 return (
                     <div
                         key={i}
-                        className="absolute inset-0 w-full h-full"
+                        className={`absolute inset-0 w-full h-full${offset === 0 && twoPhaseSlides.has(i) ? ` slide-phase-${phase}` : ''}`}
                         style={{
                             opacity: offset === 0 ? 1 : 0,
                             transition: 'opacity 800ms ease-in-out',

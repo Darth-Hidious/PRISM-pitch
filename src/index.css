@@ -129,6 +129,7 @@ body,
     display: none !important;
   }
 
+  /* SVG overlay — always positioned behind content */
   .mobile-svg {
     position: absolute !important;
     inset: 0 !important;
@@ -136,15 +137,37 @@ body,
     max-height: none !important;
     width: 100% !important;
     height: 100% !important;
-    opacity: 0.12 !important;
     pointer-events: none !important;
     z-index: 0 !important;
+    transition: opacity 0.6s ease !important;
   }
 
   .mobile-svg svg {
     width: 100% !important;
     height: 100% !important;
     object-fit: contain;
+  }
+
+  /* Phase 0: SVG bright, text hidden */
+  .slide-phase-0 .mobile-svg {
+    opacity: 0.35 !important;
+  }
+
+  .slide-phase-0 .mobile-text {
+    opacity: 0 !important;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  /* Phase 1: text fades in, SVG dims */
+  .slide-phase-1 .mobile-svg {
+    opacity: 0.08 !important;
+  }
+
+  .slide-phase-1 .mobile-text {
+    opacity: 1 !important;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
   }
 }
 
