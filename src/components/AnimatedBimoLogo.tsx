@@ -5,7 +5,10 @@ export default function AnimatedBimoLogo({ className = '', style = {} }: { class
 
     useEffect(() => {
         if (!svgRef.current) return;
-        const paths = svgRef.current.querySelectorAll('path');
+        // Only animate visible paths (skip clip-path definitions inside <defs>)
+        const paths = Array.from(svgRef.current.querySelectorAll('path')).filter(
+            p => !p.closest('defs')
+        );
         let activeAnimations: Animation[] = [];
 
         function playAnimation() {
@@ -13,10 +16,11 @@ export default function AnimatedBimoLogo({ className = '', style = {} }: { class
             activeAnimations = [];
 
             paths.forEach((path, index) => {
-                const length = path.getTotalLength() || 10000;
+                const length = path.getTotalLength() || 50000;
                 path.style.fillOpacity = '0';
                 path.style.stroke = "#ffffff";
-                path.style.strokeWidth = "30";
+                // Paths live inside scale(0.1), so strokeWidth needs to be large
+                path.style.strokeWidth = "200";
                 path.style.strokeDasharray = `${length + 50}`;
                 path.style.strokeDashoffset = `${length + 50}`;
 
@@ -25,8 +29,8 @@ export default function AnimatedBimoLogo({ className = '', style = {} }: { class
                     { strokeDashoffset: 0, fillOpacity: 0, strokeOpacity: 1, offset: 0.7 },
                     { strokeDashoffset: 0, fillOpacity: 1, strokeOpacity: 0 }
                 ], {
-                    duration: 6500,
-                    delay: index * 60,
+                    duration: 4000,
+                    delay: index * 30,
                     easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
                     fill: 'forwards'
                 });
@@ -37,7 +41,6 @@ export default function AnimatedBimoLogo({ className = '', style = {} }: { class
 
         playAnimation();
 
-        // Optional: replay on hover or click
         const svgEl = svgRef.current;
         const handleInteraction = () => playAnimation();
         svgEl.addEventListener('mouseenter', handleInteraction);
