@@ -1,7 +1,19 @@
+import { useState, useCallback } from 'react';
 import VideoBackground from '../components/VideoBackground';
 import AnimatedBimoLogo from '../components/AnimatedBimoLogo';
 
+const INSTALL_CMD = 'curl -fsSL https://prism.marc27.com/install.sh | bash';
+
 export default function CoverSlide() {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = useCallback(() => {
+        navigator.clipboard.writeText(INSTALL_CMD).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    }, []);
+
     return (
         <div className="relative w-full h-full video-dim">
             <VideoBackground src="https://stream.mux.com/JNJEOYI6B3EffB9f5ZhpGbuxzc6gSyJcXaCBbCgZKRg.m3u8" />
@@ -86,10 +98,65 @@ export default function CoverSlide() {
                     >
                         AI-NATIVE AUTONOMOUS MATERIALS DISCOVERY
                     </p>
+
+                    {/* Install command */}
+                    <button
+                        onClick={handleCopy}
+                        className="anim-in anim-d6"
+                        style={{
+                            marginTop: 'clamp(24px, 3vw, 48px)',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 'clamp(8px, 0.8vw, 14px)',
+                            padding: 'clamp(8px, 0.7vw, 14px) clamp(14px, 1.2vw, 24px)',
+                            background: 'rgba(255, 255, 255, 0.04)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            transition: 'all 300ms ease',
+                            outline: 'none',
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                            e.currentTarget.style.borderColor = 'rgba(201, 168, 76, 0.3)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                        }}
+                        title="Click to copy"
+                    >
+                        <span style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: 'clamp(10px, 0.75vw, 13px)',
+                            color: 'var(--c-dim)',
+                            userSelect: 'none',
+                        }}>
+                            $
+                        </span>
+                        <code style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: 'clamp(10px, 0.75vw, 13px)',
+                            color: 'rgba(255, 255, 255, 0.6)',
+                            letterSpacing: '0.02em',
+                        }}>
+                            {INSTALL_CMD}
+                        </code>
+                        <span style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: 'clamp(9px, 0.65vw, 11px)',
+                            color: copied ? 'var(--c-gold)' : 'var(--c-dim)',
+                            marginLeft: 'clamp(4px, 0.4vw, 8px)',
+                            transition: 'color 200ms',
+                            userSelect: 'none',
+                        }}>
+                            {copied ? '✓ copied' : '⧉'}
+                        </span>
+                    </button>
                 </main>
 
                 {/* Bottom hint */}
-                <footer className="anim-in anim-d6 text-center" style={{
+                <footer className="anim-in anim-d7 text-center" style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: 'clamp(9px, 0.7vw, 11px)',
                     color: 'var(--c-dim)',
