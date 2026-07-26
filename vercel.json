@@ -3,6 +3,10 @@
     {
       "source": "/install.sh",
       "destination": "https://raw.githubusercontent.com/Darth-Hidious/PRISM/main/install.sh"
+    },
+    {
+      "source": "/install.ps1",
+      "destination": "https://raw.githubusercontent.com/Darth-Hidious/PRISM/main/install.ps1"
     }
   ]
 }
