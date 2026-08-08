@@ -1,173 +1,232 @@
-export default function FinancialsSlide() {
-    // Revenue data in €K from bottom-up financial model
-    const years = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5', 'Y6', 'Y7', 'Y8', 'Y9', 'Y10'];
-    const streams = [
-        { name: 'R&D Contracts', color: '#C9A84C', data: [700, 900, 1200, 1350, 1900, 2300, 2300, 1800, 1600, 1500] },
-        { name: 'AI / MaaS', color: '#34D399', data: [0, 50, 120, 345, 620, 945, 1320, 1785, 2200, 2675] },
-        { name: 'Components', color: '#4A8FD4', data: [0, 40, 120, 188, 275, 435, 670, 935, 1275, 1600] },
-        { name: 'Licensing', color: '#EDEDEF', data: [0, 0, 0, 0, 190, 420, 750, 840, 1300, 1450] },
-    ];
-    const maxVal = 7500;
-    // Chart bounds inside viewBox
-    const cL = 48, cR = 395, cT = 10, cB = 190;
-    const cH = cB - cT;
-    const barW = 24;
-    const slot = (cR - cL) / 10;
+import VideoBackground from '../components/VideoBackground';
 
-    const gridLines = [0, 1500, 3000, 4500, 6000, 7500];
+/**
+ * Financials — Base and Upside on one chart, no tabs.
+ *
+ * Source: `ESA BIC Proposal/2_WORKING/PRISM_Financial_Model_Researched_Europe_2026.xlsx`
+ * (version "Research refresh", 27 Jul 2026, Checks = PASS).
+ *
+ * The workbook caches outputs only for the Selected scenario, Base. Upside comes
+ * from re-evaluating the workbook's own Revenue Build, P&L and Cash Flow formulas
+ * against its Upside assumption columns; that replica reproduces Base to the euro
+ * on revenue, EBITDA, gross margin, cumulative required equity and ending cash
+ * across all ten years, which is what makes the Upside column trustworthy.
+ *
+ * Bear is deliberately not shown. Run to 2035 the workbook's Bear column never
+ * breaks even, ends at -17% gross margin and demands €20.0M of equity — it is a
+ * wind-down, not a downside operating case (it prices programmes at €400k against
+ * a €423k break-even and grows to 21 FTE while revenue plateaus at €2.0M).
+ * Neither raising price nor freezing headcount repairs it. The downside answer
+ * for diligence is a dated stop rule, not a curve: if fewer than three capability
+ * programmes are recognised by end-2029, the plan stops, which caps capital at
+ * risk at €4.06M. Base reaches 5.8 recognised programmes by 2029; Bear reaches
+ * 1.8. Keep that answer ready — do not put it on the slide.
+ */
+
+const YEARS = [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
+
+const BASE = {
+    revenue: [310000, 1237512, 2051171, 3152596, 4733979, 6695281, 8864410, 11672867, 14657526, 18024503],
+    ebitda: [-416700, -111546, 27046, 342451, 699068, 1152316, 1700629, 2601343, 3574614, 4707052],
+    grossMargin: 0.608,
+    equity: 2907256,
+    breakeven: 2028,
+};
+
+const UPSIDE = {
+    revenue: [330000, 2862740, 6161133, 9560026, 14515409, 20767730, 28557824, 38326004, 50236280, 63827289],
+    ebitda: [-462400, 952727, 2868134, 4868837, 7774695, 11651585, 16630009, 23161778, 31310526, 40844893],
+    grossMargin: 0.808,
+    equity: 579952,
+    breakeven: 2027,
+};
+
+const eurM = (n: number) => `${n < 0 ? '−' : ''}€${Math.abs(n / 1_000_000).toFixed(2)}M`;
+
+const ROWS = [
+    { k: 'Operating revenue 2035', base: eurM(BASE.revenue[9]), up: eurM(UPSIDE.revenue[9]) },
+    { k: 'EBITDA 2035, before grants', base: eurM(BASE.ebitda[9]), up: eurM(UPSIDE.ebitda[9]) },
+    { k: 'Gross margin 2035', base: `${(BASE.grossMargin * 100).toFixed(0)}%`, up: `${(UPSIDE.grossMargin * 100).toFixed(0)}%` },
+    { k: 'EBITDA-positive from', base: `${BASE.breakeven}`, up: `${UPSIDE.breakeven}` },
+    { k: 'Cumulative equity required', base: eurM(BASE.equity), up: eurM(UPSIDE.equity) },
+];
+
+export default function FinancialsSlide() {
+    // Shared linear axis across both series, so the gap between them is the point.
+    const cL = 40, cR = 410, cT = 14, cB = 168;
+    const hi = Math.max(...UPSIDE.revenue);
+    const x = (i: number) => cL + (i * (cR - cL)) / (YEARS.length - 1);
+    const y = (v: number) => cB - (v / hi) * (cB - cT);
+
+    const series = (vals: number[]) => 'M ' + vals.map((v, i) => `${x(i)} ${y(v)}`).join(' L ');
+    const area = (vals: number[]) =>
+        `M ${x(0)} ${cB} ` + vals.map((v, i) => `L ${x(i)} ${y(v)}`).join(' ') + ` L ${x(YEARS.length - 1)} ${cB} Z`;
 
     return (
-        <div className="relative w-full h-full" style={{ background: 'var(--c-bg)' }}>
+        <div className="relative w-full h-full video-dim">
+            <VideoBackground src="https://stream.mux.com/fHfa8VIbBdqZelLGg5thjsypZ101M01dbyIMLNDWQwlLA.m3u8" />
+
             <div className="relative z-10 w-full h-full flex flex-col slide-pad">
-                {/* Header */}
-                <header className="flex items-center justify-between anim-in anim-d1" style={{ marginBottom: 'clamp(16px, 2vw, 32px)' }}>
-                    <span style={{
+                <header className="anim-in anim-d1" style={{ marginBottom: 'clamp(10px, 1.4vw, 24px)' }}>
+                    <div style={{
                         fontFamily: 'var(--font-mono)',
-                        fontSize: 'clamp(10px, 0.85vw, 13px)',
+                        fontSize: 'clamp(9px, 0.75vw, 12px)',
                         letterSpacing: '0.15em',
                         color: 'var(--c-gold)',
                     }}>
                         07 &mdash; FINANCIALS
-                    </span>
-                    <span style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: 'clamp(10px, 0.85vw, 13px)',
-                        letterSpacing: '0.1em',
-                        color: 'var(--c-dim)',
+                    </div>
+                    <h2 style={{
+                        fontFamily: 'var(--font-display)',
+                        fontSize: 'clamp(24px, 3vw, 52px)',
+                        fontWeight: 700,
+                        letterSpacing: '-0.02em',
+                        lineHeight: 1.05,
                     }}>
-                        PRISM
-                    </span>
+                        Ten-year operating plan
+                    </h2>
                 </header>
 
-                {/* Title */}
-                <h1 className="anim-in anim-d2" style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(24px, 3vw, 56px)',
-                    fontWeight: 700,
-                    letterSpacing: '-0.03em',
-                    lineHeight: 1.1,
-                    marginBottom: 'clamp(4px, 0.5vw, 8px)',
-                }}>
-                    Bottom-Up Revenue Model
-                </h1>
-                <p className="anim-in anim-d3" style={{
-                    fontSize: 'clamp(12px, 0.95vw, 16px)',
-                    color: 'var(--c-muted)',
-                    marginBottom: 'clamp(16px, 2vw, 32px)',
-                }}>
-                    EBITDA-positive from Year 1. Improving unit economics as platform scales.
-                </p>
+                <main className="flex-1 flex mobile-stack anim-in anim-d2" style={{ gap: 'clamp(16px, 3vw, 52px)', minHeight: 0 }}>
+                    {/* Chart */}
+                    <div style={{ flex: '0 0 56%', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+                        <svg viewBox="0 0 424 190" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ flex: 1, minHeight: 0 }}>
+                            <line x1={cL} y1={cB} x2={cR} y2={cB} stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
 
-                {/* Chart + Metrics */}
-                <div className="flex-1 flex items-center anim-in anim-d4 mobile-stack" style={{ gap: 'clamp(16px, 3vw, 48px)', minHeight: 0 }}>
-                    {/* Stacked Bar Chart */}
-                    <div style={{ flex: '0 0 58%', maxHeight: '100%' }}>
-                        <svg viewBox="0 0 420 220" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                            {/* Y-axis gridlines + labels */}
-                            {gridLines.map(v => {
-                                const y = cB - (v / maxVal) * cH;
-                                return (
-                                    <g key={v}>
-                                        <line x1={cL} y1={y} x2={cR} y2={y} stroke="#EDEDEF" strokeWidth="0.5" opacity={v === 0 ? 0.25 : 0.08} />
-                                        <text x={cL - 6} y={y + 3} textAnchor="end" fill="#EDEDEF" opacity="0.35" fontSize="7" fontFamily="monospace">
-                                            {v === 0 ? '0' : `${v / 1000}M`}
-                                        </text>
-                                    </g>
-                                );
-                            })}
+                            {/* Upside */}
+                            <path d={area(UPSIDE.revenue)} fill="rgba(52,211,153,0.08)" />
+                            <path d={series(UPSIDE.revenue)} fill="none" stroke="var(--c-green)" strokeWidth="1.8" strokeLinejoin="round" />
 
-                            {/* Stacked bars */}
-                            {years.map((yr, i) => {
-                                const x = cL + i * slot + (slot - barW) / 2;
-                                let cumY = cB;
-                                return (
-                                    <g key={yr}>
-                                        {streams.map(stream => {
-                                            const val = stream.data[i];
-                                            if (val <= 0) return null;
-                                            const h = (val / maxVal) * cH;
-                                            cumY -= h;
-                                            return (
-                                                <rect
-                                                    key={stream.name}
-                                                    x={x}
-                                                    y={cumY}
-                                                    width={barW}
-                                                    height={h}
-                                                    fill={stream.color}
-                                                    opacity="0.85"
-                                                    rx="1.5"
-                                                />
-                                            );
-                                        })}
-                                        {/* Total label on top */}
-                                        {(() => {
-                                            const total = streams.reduce((s, st) => s + st.data[i], 0);
-                                            const topY = cB - (total / maxVal) * cH;
-                                            return (
-                                                <text x={x + barW / 2} y={topY - 4} textAnchor="middle" fill="#EDEDEF" opacity="0.5" fontSize="6.5" fontFamily="monospace">
-                                                    {total >= 1000 ? `${(total / 1000).toFixed(1)}M` : `${total}K`}
-                                                </text>
-                                            );
-                                        })()}
-                                        {/* Year label */}
-                                        <text x={x + barW / 2} y={cB + 13} textAnchor="middle" fill="#EDEDEF" opacity="0.4" fontSize="8" fontFamily="monospace">
-                                            {yr}
-                                        </text>
-                                    </g>
-                                );
-                            })}
+                            {/* Base, emphasised */}
+                            <path d={area(BASE.revenue)} fill="rgba(201,168,76,0.18)" />
+                            <path d={series(BASE.revenue)} fill="none" stroke="var(--c-gold)" strokeWidth="2.2" strokeLinejoin="round" />
 
-                            {/* Legend */}
-                            {streams.map((s, i) => (
-                                <g key={s.name} transform={`translate(${cL + i * 95}, 210)`}>
-                                    <rect x="0" y="-5" width="8" height="8" fill={s.color} opacity="0.85" rx="1" />
-                                    <text x="12" y="2" fill="#EDEDEF" opacity="0.45" fontSize="7" fontFamily="monospace">{s.name}</text>
-                                </g>
+                            {/* Endpoint labels */}
+                            <circle cx={x(9)} cy={y(UPSIDE.revenue[9])} r="2.6" fill="var(--c-green)" />
+                            <text
+                                x={x(9) - 10} y={y(UPSIDE.revenue[9]) + 11} textAnchor="end" fill="var(--c-green)"
+                                style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.08em' }}
+                            >
+                                UPSIDE {eurM(UPSIDE.revenue[9])}
+                            </text>
+
+                            <circle cx={x(9)} cy={y(BASE.revenue[9])} r="2.6" fill="var(--c-gold)" />
+                            <text
+                                x={x(9) - 10} y={y(BASE.revenue[9]) - 8} textAnchor="end" fill="var(--c-gold)"
+                                style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.08em' }}
+                            >
+                                BASE {eurM(BASE.revenue[9])}
+                            </text>
+
+                            {YEARS.map((yr, i) => (i % 3 === 0 || i === YEARS.length - 1) && (
+                                <text
+                                    key={yr} x={x(i)} y={185} textAnchor="middle" fill="var(--c-dim)"
+                                    style={{ fontFamily: 'var(--font-mono)', fontSize: 7.5 }}
+                                >
+                                    {yr}
+                                </text>
                             ))}
                         </svg>
+
+                        <div style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: 'clamp(8px, 0.62vw, 10px)',
+                            letterSpacing: '0.12em',
+                            color: 'var(--c-dim)',
+                            marginTop: 'clamp(4px, 0.5vw, 8px)',
+                        }}>
+                            OPERATING REVENUE, EXCLUDES GRANTS
+                        </div>
                     </div>
 
-                    {/* Key Metrics */}
-                    <div className="flex flex-col" style={{ flex: 1, gap: 'clamp(8px, 1vw, 14px)' }}>
-                        {[
-                            { value: '\u20AC1.8M', label: 'EBITDA by Y10', sub: '25% margin at scale, positive from Year 1', accent: 'var(--c-gold)' },
-                            { value: '\u20AC1.5M', label: 'Net Income Y10', sub: 'After 23% effective tax rate', accent: 'var(--c-green)' },
-                            { value: '35%', label: 'Recurring by Y10', sub: 'MaaS subscriptions + maintenance fees', accent: 'var(--c-blue)' },
-                            { value: '38 mo', label: 'Runway', sub: '\u20AC15.4M cumulative cash by Year 10', accent: '#EDEDEF' },
-                        ].map((m) => (
-                            <div key={m.label} className="glass-card" style={{ padding: 'clamp(12px, 1.2vw, 20px)', display: 'flex', gap: 'clamp(10px, 1vw, 16px)', alignItems: 'flex-start' }}>
+                    {/* Side-by-side comparison */}
+                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <div className="flex" style={{
+                            gap: 'clamp(8px, 1vw, 16px)',
+                            paddingBottom: 'clamp(6px, 0.7vw, 10px)',
+                            borderBottom: '1px solid var(--c-border)',
+                            marginBottom: 'clamp(8px, 1vw, 14px)',
+                        }}>
+                            <div style={{ flex: 1 }} />
+                            <div style={{
+                                flex: '0 0 26%', textAlign: 'right',
+                                fontFamily: 'var(--font-mono)', fontSize: 'clamp(8px, 0.65vw, 11px)',
+                                letterSpacing: '0.14em', color: 'var(--c-gold)',
+                            }}>
+                                BASE
+                            </div>
+                            <div style={{
+                                flex: '0 0 26%', textAlign: 'right',
+                                fontFamily: 'var(--font-mono)', fontSize: 'clamp(8px, 0.65vw, 11px)',
+                                letterSpacing: '0.14em', color: 'var(--c-green)',
+                            }}>
+                                UPSIDE
+                            </div>
+                        </div>
+
+                        {ROWS.map((r) => (
+                            <div
+                                key={r.k}
+                                className="flex items-baseline"
+                                style={{ gap: 'clamp(8px, 1vw, 16px)', padding: 'clamp(5px, 0.7vw, 11px) 0' }}
+                            >
                                 <div style={{
-                                    fontFamily: 'var(--font-display)',
-                                    fontSize: 'clamp(20px, 2vw, 36px)',
-                                    fontWeight: 800,
-                                    color: m.accent,
-                                    lineHeight: 1,
-                                    minWidth: 'clamp(60px, 5vw, 90px)',
+                                    flex: 1, minWidth: 0,
+                                    fontSize: 'clamp(10px, 0.8vw, 14px)',
+                                    color: 'var(--c-muted)',
+                                    lineHeight: 1.3,
                                 }}>
-                                    {m.value}
+                                    {r.k}
                                 </div>
-                                <div>
-                                    <div style={{
-                                        fontFamily: 'var(--font-display)',
-                                        fontSize: 'clamp(13px, 1.1vw, 20px)',
-                                        fontWeight: 600,
-                                        marginBottom: '2px',
-                                    }}>
-                                        {m.label}
-                                    </div>
-                                    <div style={{
-                                        fontSize: 'clamp(11px, 0.85vw, 14px)',
-                                        color: 'var(--c-muted)',
-                                        lineHeight: 1.4,
-                                    }}>
-                                        {m.sub}
-                                    </div>
+                                <div style={{
+                                    flex: '0 0 26%', textAlign: 'right',
+                                    fontFamily: 'var(--font-display)',
+                                    fontSize: 'clamp(14px, 1.3vw, 24px)',
+                                    fontWeight: 700, lineHeight: 1,
+                                    letterSpacing: '-0.01em',
+                                    fontVariantNumeric: 'tabular-nums',
+                                    color: 'var(--c-text)',
+                                }}>
+                                    {r.base}
+                                </div>
+                                <div style={{
+                                    flex: '0 0 26%', textAlign: 'right',
+                                    fontFamily: 'var(--font-display)',
+                                    fontSize: 'clamp(14px, 1.3vw, 24px)',
+                                    fontWeight: 700, lineHeight: 1,
+                                    letterSpacing: '-0.01em',
+                                    fontVariantNumeric: 'tabular-nums',
+                                    color: 'var(--c-green)',
+                                }}>
+                                    {r.up}
                                 </div>
                             </div>
                         ))}
+
+                        <div style={{
+                            fontSize: 'clamp(10px, 0.76vw, 13px)',
+                            color: 'var(--c-muted)',
+                            lineHeight: 1.55,
+                            marginTop: 'clamp(8px, 1vw, 16px)',
+                            borderLeft: '2px solid var(--c-border)',
+                            paddingLeft: 'clamp(8px, 0.9vw, 14px)',
+                        }}>
+                            Revenue is capacity-constrained in both cases. Programmes are recognised only up to the
+                            delivery FTE remaining after pilots, deployments and support, so the hiring plan sets the
+                            growth rate.
+                        </div>
                     </div>
-                </div>
+                </main>
+
+                <footer style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'clamp(7px, 0.58vw, 10px)',
+                    letterSpacing: '0.1em',
+                    color: 'var(--c-dim)',
+                    marginTop: 'clamp(6px, 0.8vw, 12px)',
+                }}>
+                    PRISM FINANCIAL MODEL, RESEARCH REFRESH 27 JUL 2026 &middot; CHECKS PASS &middot; € NOMINAL
+                </footer>
             </div>
         </div>
     );

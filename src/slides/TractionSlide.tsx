@@ -36,8 +36,8 @@ export default function TractionSlide() {
                         lineHeight: 1.1,
                         marginBottom: 'clamp(24px, 3vw, 48px)',
                     }}>
-                        Not a whitepaper.<br />
-                        <span style={{ color: 'var(--c-gold)' }}>Contracted and delivering.</span>
+                        Contracted, funded,<br />
+                        <span style={{ color: 'var(--c-gold)' }}>and delivering.</span>
                     </h1>
 
                     {/* Two columns */}
@@ -55,7 +55,7 @@ export default function TractionSlide() {
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(14px, 1.5vw, 24px)' }}>
                                 {[
-                                    { title: 'ESA SPARK Prime Contractor', sub: 'FIRST!/FLPP initiative. Full AI discovery loop for first campaigns.' },
+                                    { title: 'ESA FLPP \u2014 PRISM', sub: 'FIRST! Simulation & Intelligence. Initial development of PRISM funded under FLPP.' },
                                     { title: 'ITER Supplier', sub: 'Titanium first-wall materials and rhodium targets for fusion.' },
                                     { title: 'ArianeGroup Interest', sub: 'Direct end-user buy-in to test for full-flow staged combustion engines.' },
                                 ].map((item) => (
@@ -106,7 +106,7 @@ export default function TractionSlide() {
                                 lineHeight: 1.5,
                                 marginBottom: 'clamp(20px, 2vw, 32px)',
                             }}>
-                                GFlowNet sampling + CALPHAD thermodynamics as soft context. Enables discovery of metastable alloys. Patent filings in progress.
+                                Generative sampling over composition space, conditioned on thermodynamic feasibility. Reaches metastable alloys that equilibrium screening excludes. Patent filings in progress.
                             </div>
 
                             <div style={{

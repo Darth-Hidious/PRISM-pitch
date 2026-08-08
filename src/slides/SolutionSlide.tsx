@@ -39,8 +39,8 @@ export default function SolutionSlide() {
                         }}
                     >
                         Replace trial-and-error<br />
-                        with a deterministic,<br />
-                        <span style={{ color: 'var(--c-gold)' }}>self-optimizing loop.</span>
+                        with a closed loop that<br />
+                        <span style={{ color: 'var(--c-gold)' }}>learns from each batch.</span>
                     </h1>
 
                     <p
@@ -53,9 +53,9 @@ export default function SolutionSlide() {
                             marginTop: 'clamp(20px, 2.5vw, 40px)',
                         }}
                     >
-                        PRISM evaluates millions of compositions in minutes computationally, shifting
-                        failure from the physical lab to the digital domain. De-risking the discovery
-                        of Refractory High-Entropy Alloys for liquid rocket engine preburners.
+                        PRISM screens millions of candidate compositions computationally before any
+                        powder is weighed, so most failures happen in simulation. First target:
+                        Refractory High-Entropy Alloys for liquid rocket engine preburners.
                     </p>
 
                     {/* Key points */}

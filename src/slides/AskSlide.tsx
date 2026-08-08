@@ -1,16 +1,16 @@
 import VideoBackground from '../components/VideoBackground';
 
 const allocations = [
-    { label: 'AI Team Scale-Up', pct: 40, color: 'var(--c-gold)', desc: 'ML engineers + materials scientists' },
+    { label: 'AI and Materials Hiring', pct: 40, color: 'var(--c-gold)', desc: 'ML engineers + materials scientists' },
     { label: 'Autonomous A-Lab', pct: 30, color: 'var(--c-blue)', desc: 'Robotic synthesis & characterization hardware' },
     { label: 'Compute Infrastructure', pct: 15, color: 'var(--c-green)', desc: 'Dedicated GPU cluster for training' },
     { label: 'IP & Market Dev', pct: 15, color: '#9CA3AF', desc: 'Patents, BD, conference presence' },
 ];
 
 const phases = [
-    { id: 'I', months: '6 mo', title: 'Computational Validation', desc: 'Full AI discovery loop running first SPARK campaigns.' },
+    { id: 'I', months: '6 mo', title: 'Computational Validation', desc: 'Full AI discovery loop running the first PRISM campaigns.' },
     { id: 'II', months: '12 mo', title: 'Hybrid Loop', desc: 'Integration with Fraunhofer IAPT additive manufacturing data.' },
-    { id: 'III', months: '24 mo', title: 'Full A-Lab Integration', desc: 'Direct instrument control adapters for completely closed-loop.' },
+    { id: 'III', months: '24 mo', title: 'Full A-Lab Integration', desc: 'Direct instrument control adapters close the loop with no human in the sequence.' },
 ];
 
 export default function AskSlide() {
@@ -49,7 +49,7 @@ export default function AskSlide() {
                             lineHeight: 0.85,
                             letterSpacing: '-0.04em',
                         }}>
-                            {'\u20AC'}5M
+                            {'\u20AC'}10M
                         </div>
                         <div style={{
                             fontFamily: 'var(--font-display)',
@@ -59,6 +59,15 @@ export default function AskSlide() {
                             marginTop: 'clamp(8px, 1vw, 16px)',
                         }}>
                             Seed Round
+                        </div>
+                        <div style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: 'clamp(11px, 0.95vw, 15px)',
+                            letterSpacing: '0.1em',
+                            color: 'var(--c-muted)',
+                            marginTop: 'clamp(6px, 0.8vw, 12px)',
+                        }}>
+                            CLOSING 15 NOVEMBER 2026
                         </div>
                     </div>
 
@@ -127,7 +136,7 @@ export default function AskSlide() {
                                 color: 'var(--c-dim)',
                                 marginBottom: 'clamp(12px, 1.5vw, 24px)',
                             }}>
-                                ROADMAP TO AUTONOMY
+                                ROADMAP &mdash; 24 MONTHS
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(16px, 1.5vw, 24px)' }}>
                                 {phases.map((p) => (

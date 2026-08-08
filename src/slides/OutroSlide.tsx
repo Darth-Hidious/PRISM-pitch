@@ -28,7 +28,7 @@ export default function OutroSlide() {
                         paddingLeft: 'clamp(12px, 1.5vw, 24px)',
                         lineHeight: 1.4,
                     }}>
-                        PRISM IS A SPIN-OFF<br />OF BIMO TECH
+                        MIRDYNE IS A SPIN-OFF<br />OF BIMO TECH
                     </span>
                 </header>
 
@@ -42,7 +42,7 @@ export default function OutroSlide() {
                         lineHeight: 1.05,
                         maxWidth: '100%',
                     }}>
-                        The Operating System for Accelerated Innovation.
+                        Alloy design, synthesis and qualification in one loop.
                     </h1>
 
                     <div className="anim-in anim-d3" style={{
@@ -65,7 +65,7 @@ export default function OutroSlide() {
                                 textAlign: 'center',
                             }}>{'\u2605'}</span>
                             <span style={{ fontSize: 'clamp(13px, 1.1vw, 20px)', color: 'var(--c-muted)' }}>
-                                ESA SPARK Prime Contractor & ITER Supplier
+                                PRISM funded under ESA FLPP &mdash; FIRST! Simulation &amp; Intelligence
                             </span>
                         </div>
 
@@ -102,7 +102,7 @@ export default function OutroSlide() {
                                 }} />
                                 <span className="flex items-center" style={{ gap: 'clamp(6px, 0.6vw, 10px)' }}>
                                     <a
-                                        href="https://bimotech.marc27.com"
+                                        href="https://bimomaterials.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         style={{
@@ -115,7 +115,7 @@ export default function OutroSlide() {
                                         onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--c-gold)')}
                                         onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'transparent')}
                                     >
-                                        bimotech.marc27.com
+                                        bimomaterials.com
                                     </a>
                                     <span style={{
                                         fontFamily: 'var(--font-mono)',
@@ -143,7 +143,7 @@ export default function OutroSlide() {
                                 textAlign: 'center',
                             }}>{'\u25A0'}</span>
                             <span style={{ fontSize: 'clamp(13px, 1.1vw, 20px)', color: 'var(--c-muted)' }}>
-                                Wroc{'\u0142'}aw Technology Park, Poland
+                                Giessen, Hessen, Germany
                             </span>
                         </div>
                     </div>

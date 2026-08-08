@@ -39,7 +39,7 @@ export default function ProblemSlide() {
                             maxWidth: '100%',
                         }}
                     >
-                        The materials innovation cycle is fundamentally broken.
+                        Prediction has outrun validation by three orders of magnitude.
                     </h1>
 
                     <p
@@ -65,7 +65,7 @@ export default function ProblemSlide() {
                         <div>
                             <div style={{
                                 fontFamily: 'var(--font-display)',
-                                fontSize: 'clamp(40px, 5vw, 96px)',
+                                fontSize: 'clamp(32px, 4vw, 76px)',
                                 fontWeight: 800,
                                 lineHeight: 1,
                                 letterSpacing: '-0.03em',
@@ -89,7 +89,7 @@ export default function ProblemSlide() {
                         <div>
                             <div style={{
                                 fontFamily: 'var(--font-display)',
-                                fontSize: 'clamp(40px, 5vw, 96px)',
+                                fontSize: 'clamp(32px, 4vw, 76px)',
                                 fontWeight: 800,
                                 lineHeight: 1,
                                 letterSpacing: '-0.03em',
@@ -112,13 +112,13 @@ export default function ProblemSlide() {
                         <div>
                             <div style={{
                                 fontFamily: 'var(--font-display)',
-                                fontSize: 'clamp(40px, 5vw, 96px)',
+                                fontSize: 'clamp(32px, 4vw, 76px)',
                                 fontWeight: 800,
                                 lineHeight: 1,
                                 letterSpacing: '-0.03em',
                                 color: 'var(--c-blue)',
                             }}>
-                                {'\u20AC'}49B
+                                {'\u20AC'}170.7B
                             </div>
                             <div style={{
                                 fontFamily: 'var(--font-mono)',
@@ -127,7 +127,7 @@ export default function ProblemSlide() {
                                 marginTop: '8px',
                                 letterSpacing: '0.05em',
                             }}>
-                                AEROSPACE MATERIALS TAM
+                                EU AEROSPACE TURNOVER &middot; EUROSTAT 2023
                             </div>
                         </div>
                     </div>

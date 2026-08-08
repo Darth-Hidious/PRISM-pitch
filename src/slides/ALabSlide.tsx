@@ -38,7 +38,7 @@ export default function ALabSlide() {
                     color: 'var(--c-muted)',
                     marginBottom: 'clamp(20px, 2.5vw, 40px)',
                 }}>
-                    Closing the loop: the real-world reward signal that trains the AI.
+                    Physical synthesis supplies the reward signal the models train on.
                 </p>
 
                 {/* Content: SVG + Pipeline */}

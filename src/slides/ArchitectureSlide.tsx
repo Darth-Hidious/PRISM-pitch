@@ -34,14 +34,14 @@ export default function ArchitectureSlide() {
                         marginBottom: 'clamp(8px, 1vw, 16px)',
                     }}
                 >
-                    Four Integrated Modules
+                    Four Modules, One Loop
                 </h1>
                 <p className="anim-in anim-d3" style={{
                     fontSize: 'clamp(12px, 0.95vw, 16px)',
                     color: 'var(--c-muted)',
                     marginBottom: 'clamp(16px, 2vw, 32px)',
                 }}>
-                    Dual-loop workflow: computational inner loop for rapid optimization, physical outer loop for validation.
+                    Dual-loop workflow: computational inner loop for optimization, physical outer loop for validation.
                 </p>
 
                 {/* Content: SVG + descriptions */}
@@ -127,23 +127,23 @@ export default function ArchitectureSlide() {
                         {[
                             {
                                 color: '#C9A84C',
-                                name: 'The Evolver (ACE Brain)',
-                                desc: 'Strategic reasoning engine implementing Agentic Context Engineering. Generator proposes, Reflector analyzes, Curator maintains the discovery playbook.',
+                                name: 'The Evolver',
+                                desc: 'Plans each campaign using Agentic Context Engineering. Generator proposes candidates, Reflector scores the last batch, Curator updates the playbook.',
                             },
                             {
                                 color: '#34D399',
                                 name: 'Mutator Fleet',
-                                desc: 'Specialized sub-agents using GFlowNet and flow matching to generate diverse candidates across the entire Pareto front.',
+                                desc: 'Specialised sub-agents run generative samplers over composition space. Sampling is diversity-weighted, so each batch spans the Pareto front.',
                             },
                             {
                                 color: '#4A8FD4',
                                 name: 'Evaluator & A-Lab',
-                                desc: 'Multi-tiered fitness scoring: GNN surrogates (MACE-MH-1), DFT/CALPHAD checks, then robotic synthesis for ground-truth validation.',
+                                desc: 'Multi-tiered fitness scoring: learned interatomic potentials, first-principles and thermodynamic feasibility checks, then robotic synthesis for ground-truth validation.',
                             },
                             {
                                 color: '#9CA3AF',
                                 name: 'Materials Knowledge Graph',
-                                desc: 'Dynamic external brain ingesting literature, patents, and instrument data. Triggers information-seeking loops when search stagnates.',
+                                desc: 'Ingests literature, patents and instrument data. Triggers information-seeking loops when the search stagnates.',
                             },
                         ].map((mod) => (
                             <div key={mod.name} className="glass-card" style={{ padding: 'clamp(12px, 1.2vw, 20px)', display: 'flex', gap: 'clamp(10px, 1vw, 16px)', alignItems: 'flex-start' }}>

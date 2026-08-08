@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import VideoBackground from '../components/VideoBackground';
-import AnimatedBimoLogo from '../components/AnimatedBimoLogo';
+import MirdyneMark from '../components/MirdyneMark';
 
-const INSTALL_CMD = 'curl -fsSL https://prism.marc27.com/install.sh | bash';
+const INSTALL_CMD = 'curl -fsSL https://prism.mirdyne.com/install.sh | bash';
 
 export default function CoverSlide() {
     const [copied, setCopied] = useState(false);
@@ -22,15 +22,28 @@ export default function CoverSlide() {
                 {/* Top bar */}
                 <header className="flex items-center justify-between anim-in anim-d1">
                     <div className="flex items-center" style={{ gap: 'clamp(8px, 0.8vw, 14px)' }}>
-                        <AnimatedBimoLogo style={{ height: 'clamp(22px, 2.2vw, 36px)', width: 'clamp(22px, 2.2vw, 36px)' }} />
-                        <span style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: 'clamp(10px, 0.85vw, 13px)',
-                            letterSpacing: '0.15em',
-                            color: 'var(--c-muted)',
-                        }}>
-                            BIMO TECH
-                        </span>
+                        <MirdyneMark style={{ height: 'clamp(22px, 2.2vw, 36px)', width: 'clamp(22px, 2.2vw, 36px)', color: 'var(--c-text)' }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                            <span style={{
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'clamp(10px, 0.85vw, 13px)',
+                                letterSpacing: '0.15em',
+                                color: 'var(--c-muted)',
+                                lineHeight: 1,
+                            }}>
+                                MIRDYNE
+                            </span>
+                            <span style={{
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'clamp(8px, 0.62vw, 10px)',
+                                letterSpacing: '0.12em',
+                                color: 'var(--c-gold)',
+                                lineHeight: 1,
+                                opacity: 0.85,
+                            }}>
+                                SELECTED BY ESA BIC HESSEN
+                            </span>
+                        </div>
                     </div>
                     <span style={{
                         fontFamily: 'var(--font-mono)',
@@ -96,7 +109,7 @@ export default function CoverSlide() {
                             letterSpacing: '0.2em',
                         }}
                     >
-                        AI-NATIVE AUTONOMOUS MATERIALS DISCOVERY
+                        COMPUTATIONAL SCREENING + ROBOTIC SYNTHESIS LOOP
                     </p>
 
                     {/* Install command */}
@@ -162,7 +175,7 @@ export default function CoverSlide() {
                     color: 'var(--c-dim)',
                     letterSpacing: '0.1em',
                 }}>
-                    ESA SPARK PRIME CONTRACTOR &middot; ITER SUPPLIER
+                    INITIAL DEVELOPMENT OF PRISM FUNDED UNDER ESA FLPP &middot; FIRST! SIMULATION &amp; INTELLIGENCE
                 </footer>
             </div>
         </div>

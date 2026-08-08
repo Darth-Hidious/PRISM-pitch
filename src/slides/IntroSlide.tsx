@@ -11,7 +11,7 @@ export default function IntroSlide() {
                 <header className="flex items-center justify-between" style={{ fontSize: 'clamp(12px, 1.05vw, 20px)', opacity: 0.8 }}>
                     <svg width="129" height="40" viewBox="0 0 129 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="24" height="24" y="8" fill="white" />
-                        <text x="32" y="26" fill="white" fontWeight="bold" fontSize="18" fontFamily="Plus Jakarta Sans">BIMO TECH</text>
+                        <text x="32" y="26" fill="white" fontWeight="bold" fontSize="18" fontFamily="Plus Jakarta Sans">MIRDYNE</text>
                     </svg>
                     <div className="font-medium">The Problem</div>
                     <div>Page 001</div>
