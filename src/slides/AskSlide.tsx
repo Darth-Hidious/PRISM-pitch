@@ -1,10 +1,19 @@
 import VideoBackground from '../components/VideoBackground';
 
+// Weights are the model's own cost mix over the years that need funding
+// (2026-2032, P&L cost lines + capex), not a guess: team 66.2%, go-to-market
+// 10.3%, facilities 6.4%, compute 6.1%, tools & probe capex 5.4%, G&A 3.8%,
+// legal/IP 1.9%. Consolidated into four buckets and rounded.
+//
+// There is no lab line because the plan does not build one. Assumptions row 54
+// sets centralised frontier-lab construction to EUR0: "base plan uses
+// customer-funded equipment, partner labs and modular nodes rather than
+// imitating competitor factory capex."
 const allocations = [
-    { label: 'AI and Materials Hiring', pct: 40, color: 'var(--c-gold)', desc: 'ML engineers + materials scientists' },
-    { label: 'Autonomous A-Lab', pct: 30, color: 'var(--c-blue)', desc: 'Robotic synthesis & characterization hardware' },
-    { label: 'Compute Infrastructure', pct: 15, color: 'var(--c-green)', desc: 'Dedicated GPU cluster for training' },
-    { label: 'IP & Market Dev', pct: 15, color: '#9CA3AF', desc: 'Patents, BD, conference presence' },
+    { label: 'Team', pct: 65, color: 'var(--c-gold)', desc: 'Delivery, materials science, product and security headcount' },
+    { label: 'Go-to-market, IP & export control', pct: 16, color: '#9CA3AF', desc: 'Bids, consortia, field selling, patents, dual-use compliance' },
+    { label: 'Compute, infrastructure & lab access', pct: 13, color: 'var(--c-green)', desc: 'Controlled core, per-site secure compute, partner-lab access' },
+    { label: 'Probe hardware, tools & testing', pct: 6, color: 'var(--c-blue)', desc: 'Probe builds, calibration, R&D tooling' },
 ];
 
 const phases = [
@@ -49,7 +58,7 @@ export default function AskSlide() {
                             lineHeight: 0.85,
                             letterSpacing: '-0.04em',
                         }}>
-                            {'\u20AC'}10M
+                            {'\u20AC'}4M
                         </div>
                         <div style={{
                             fontFamily: 'var(--font-display)',
@@ -68,6 +77,17 @@ export default function AskSlide() {
                             marginTop: 'clamp(6px, 0.8vw, 12px)',
                         }}>
                             CLOSING 15 NOVEMBER 2026
+                        </div>
+                        <div style={{
+                            fontSize: 'clamp(11px, 0.85vw, 15px)',
+                            color: 'var(--c-muted)',
+                            marginTop: 'clamp(8px, 1vw, 14px)',
+                            lineHeight: 1.5,
+                            maxWidth: '30ch',
+                        }}>
+                            The plan needs {'\u20AC'}2.91M to never run out of cash. We are raising
+                            {' '}{'\u20AC'}4M so the number survives being wrong, and so the
+                            downside gate closes before the money does.
                         </div>
                     </div>
 
