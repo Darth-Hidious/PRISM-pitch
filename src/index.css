@@ -52,6 +52,18 @@ body,
 }
 
 /* ── Grain overlay ── */
+.application-update {
+  margin-left: calc(clamp(14px, 1.2vw, 20px) + clamp(10px, 1vw, 16px));
+  max-width: 650px;
+}
+
+.application-status {
+  color: var(--c-muted);
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 0.85vw, 13px);
+  line-height: 1.6;
+}
+
 #root::after {
   content: '';
   position: fixed;

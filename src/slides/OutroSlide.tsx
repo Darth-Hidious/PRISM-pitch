@@ -146,6 +146,9 @@ export default function OutroSlide() {
                                 Giessen, Hessen, Germany
                             </span>
                         </div>
+                        <div className="application-update">
+                            <p className="application-status">Rejected by ESA BIC Hessen</p>
+                        </div>
                     </div>
 
                     {/* CTAs row */}

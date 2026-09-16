@@ -33,16 +33,6 @@ export default function CoverSlide() {
                             }}>
                                 MIRDYNE
                             </span>
-                            <span style={{
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: 'clamp(8px, 0.62vw, 10px)',
-                                letterSpacing: '0.12em',
-                                color: 'var(--c-gold)',
-                                lineHeight: 1,
-                                opacity: 0.85,
-                            }}>
-                                REJECTED BY ESA BIC HESSEN
-                            </span>
                         </div>
                     </div>
                     <span style={{
