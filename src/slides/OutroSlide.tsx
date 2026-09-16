@@ -1,5 +1,6 @@
 import VideoBackground from '../components/VideoBackground';
 import AnimatedBimoLogo from '../components/AnimatedBimoLogo';
+import ApplicationNote from '../components/ApplicationNote';
 
 const FORMS_URL = 'https://forms.office.com/r/6jHPzeKYYT';
 
@@ -146,9 +147,6 @@ export default function OutroSlide() {
                                 Giessen, Hessen, Germany
                             </span>
                         </div>
-                        <div className="application-update">
-                            <p className="application-status">Rejected by ESA BIC Hessen</p>
-                        </div>
                     </div>
 
                     {/* CTAs row */}
@@ -208,6 +206,9 @@ export default function OutroSlide() {
                             </svg>
                             GITHUB
                         </a>
+                    </div>
+                    <div className="application-update anim-in anim-d6">
+                        <ApplicationNote />
                     </div>
                 </main>
 

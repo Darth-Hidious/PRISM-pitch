@@ -31,6 +31,7 @@ export default function Presentation({ slides }: PresentationProps) {
     // Keyboard navigation
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
+            if (document.querySelector('dialog[open]')) return;
             switch (e.key) {
                 case 'ArrowRight':
                 case 'ArrowDown':
@@ -89,12 +90,14 @@ export default function Presentation({ slides }: PresentationProps) {
         let touchStartTime = 0;
 
         const onTouchStart = (e: TouchEvent) => {
+            if (document.querySelector('dialog[open]')) return;
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
         };
 
         const onTouchEnd = (e: TouchEvent) => {
+            if (document.querySelector('dialog[open]')) return;
             const dx = e.changedTouches[0].clientX - touchStartX;
             const dy = e.changedTouches[0].clientY - touchStartY;
             const dt = Date.now() - touchStartTime;
