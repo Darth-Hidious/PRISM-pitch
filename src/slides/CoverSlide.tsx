@@ -41,7 +41,7 @@ export default function CoverSlide() {
                                 lineHeight: 1,
                                 opacity: 0.85,
                             }}>
-                                SELECTED BY ESA BIC HESSEN
+                                REJECTED BY ESA BIC HESSEN
                             </span>
                         </div>
                     </div>
