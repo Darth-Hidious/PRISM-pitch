@@ -99,7 +99,8 @@ body,
 .application-note-dialog footer { border-top: 1px solid #38383f; margin-top: 28px; padding-top: 20px; font-size: 14px; }
 .application-note-dialog footer p { margin-bottom: 8px; }
 .application-note-dialog footer a { color: var(--c-gold); text-decoration: underline; text-underline-offset: 4px; }
-.application-note-trigger:focus-visible, .application-note-dialog :focus-visible { outline: 2px solid var(--c-gold); outline-offset: 4px; }
+.application-note-trigger:focus-visible { outline: none; color: #fff; text-decoration-thickness: 3px; text-underline-offset: 6px; }
+.application-note-dialog :focus-visible { outline: 2px solid #dedee2; outline-offset: 4px; }
 
 /* ── Grain overlay ── */
 

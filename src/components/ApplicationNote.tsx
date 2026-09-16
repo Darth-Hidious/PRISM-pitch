@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 
 const BLOG_URL = import.meta.env.DEV
-    ? 'http://127.0.0.1:3100/blog'
-    : import.meta.env.VITE_PUBLIC_BLOG_URL;
+    ? 'http://127.0.0.1:3100/blog/four-euros-a-minute'
+    : 'https://siddharthayashkovid.com/blog/four-euros-a-minute';
+const BLOG_AVAILABLE = import.meta.env.DEV || import.meta.env.VITE_BLOG_PUBLISHED === 'true';
 
 export default function ApplicationNote() {
     const dialogRef = useRef<HTMLDialogElement>(null);
@@ -30,10 +31,10 @@ export default function ApplicationNote() {
                     <p>I will continue the technical work on PRISM. I will not personally lead another application to this programme. The company remains free to pursue it with someone else leading that work.</p>
                     <footer>
                         <p>By Siddhartha Yash Kovid</p>
-                        {BLOG_URL ? (
+                        {BLOG_AVAILABLE ? (
                             <a href={BLOG_URL} target="_blank" rel="noopener noreferrer">More on my blog ↗</a>
                         ) : (
-                            <p>Longer essay forthcoming.</p>
+                            <p>More on my blog — forthcoming.</p>
                         )}
                     </footer>
                 </article>
