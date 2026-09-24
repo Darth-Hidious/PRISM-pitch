@@ -1,13 +1,27 @@
+import { useEffect, useRef } from 'react';
+import type { ReactNode } from 'react';
 import MirdyneMark from '../components/MirdyneMark';
+import Disclosure from './Disclosure';
 import NebulaCanvas from './NebulaCanvas';
-import { company, contact, credentials, footer, goal, hero, links, questions, steps } from './content';
-import type { Credential } from './content';
+import UtcClock from './UtcClock';
+import designArt from './art/design.jpg';
+import makeArt from './art/make.jpg';
+import qualifyArt from './art/qualify.jpg';
+import { company, contact, credentials, faq, footer, goal, hero, links, mission, steps, strip } from './content';
+import type { Step } from './content';
+
+/** Each step's image is 2:1; its three cards show different horizontal slices of it. */
+const stepArt: Record<Step['id'], { src: string; positions: [number, number, number] }> = {
+    design: { src: designArt, positions: [0, 50, 100] },
+    make: { src: makeArt, positions: [55, 80, 100] },
+    qualify: { src: qualifyArt, positions: [0, 30, 60] },
+};
 
 function Pending({ what }: { what: string }) {
     return <span className="pending">To confirm: {what}</span>;
 }
 
-function ExternalLink({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) {
+function ExternalLink({ href, className, children }: { href: string; className?: string; children: ReactNode }) {
     return (
         <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
             {children}
@@ -15,173 +29,206 @@ function ExternalLink({ href, className, children }: { href: string; className?:
     );
 }
 
-function Brand() {
+function Divider() {
+    return <div className="divider" aria-hidden="true" />;
+}
+
+/** Centred heading, divider and text, the pattern Genesis uses for its intro sections. */
+function CentredSection({ id, heading, children }: { id: string; heading: string; children: ReactNode }) {
     return (
-        <a href="#top" className="flex items-center gap-3 text-text no-underline" aria-label="PRISM by Mirdyne, back to top">
-            <MirdyneMark className="h-5 w-5" />
-            <span className="font-display text-lg font-bold tracking-[0.08em]">{company.product}</span>
-            <span className="hidden font-mono text-[11px] tracking-[0.14em] text-faint uppercase sm:inline">by {company.name}</span>
-        </a>
+        <section id={id} className="section-tight" aria-labelledby={`${id}-title`}>
+            <div className="container-x text-center" data-reveal>
+                <h2 id={`${id}-title`} className="section-title">{heading}</h2>
+                <Divider />
+                {children}
+            </div>
+        </section>
     );
 }
 
-function CredentialList({ label, items }: { label: string; items: Credential[] }) {
+function StepSection({ step }: { step: Step }) {
+    const art = stepArt[step.id];
     return (
-        <div>
-            <h3 className="eyebrow mb-5">{label}</h3>
-            <ul className="grid gap-px overflow-hidden rounded-sm border border-line bg-line sm:grid-cols-2">
-                {items.map((item) => (
-                    <li key={item.name} className="bg-ink p-6">
-                        <p className="font-display text-xl font-semibold">{item.name}</p>
-                        <p className="mt-2 text-muted">{item.detail}</p>
-                        {item.pending && <Pending what={item.pending} />}
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <section id={step.id} className="section-tight" aria-labelledby={`${step.id}-title`}>
+            <div className="container-x">
+                <div className="text-center" data-reveal>
+                    <h2 id={`${step.id}-title`} className="section-title">{step.name}</h2>
+                    <Divider />
+                    <p className="mx-auto max-w-xl text-lg text-muted">{step.description}</p>
+                </div>
+                <div className="mt-12 grid gap-4 md:grid-cols-3">
+                    {step.stories.map((story, i) => (
+                        <article key={story.label} className="story-card" data-reveal>
+                            <div
+                                className="story-card-bg"
+                                style={{ backgroundImage: `url(${art.src})`, backgroundPosition: `${art.positions[i]}% 50%` }}
+                                aria-hidden="true"
+                            />
+                            <div className="story-card-shade" aria-hidden="true" />
+                            <div className="story-card-content">
+                                <h3 className="text-2xl font-bold">{story.label}</h3>
+                                <div>
+                                    <Disclosure summary={story.title} buttonClassName="story-card-toggle">
+                                        <p className="pt-3 text-sm leading-relaxed text-muted">{story.text}</p>
+                                    </Disclosure>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            </div>
+        </section>
     );
 }
 
 export default function Overview() {
+    const heroArtRef = useRef<HTMLDivElement>(null);
+
+    // Reveal-on-scroll and a slow parallax on the hero background.
+    useEffect(() => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const revealables = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        if (reduceMotion) {
+            revealables.forEach((el) => el.classList.add('is-visible'));
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                }
+            },
+            { rootMargin: '0px 0px -8% 0px' },
+        );
+        revealables.forEach((el) => observer.observe(el));
+
+        let frame = 0;
+        const onScroll = () => {
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(() => {
+                const y = window.scrollY;
+                if (heroArtRef.current && y < window.innerHeight * 1.2) {
+                    heroArtRef.current.style.transform = `translate3d(0, ${y * 0.35}px, 0)`;
+                }
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener('scroll', onScroll);
+            cancelAnimationFrame(frame);
+        };
+    }, []);
+
     return (
         <>
             <a href="#main" className="skip-link">Skip to content</a>
 
-            <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-ink/70 backdrop-blur-md">
-                <div className="container-x flex h-16 items-center justify-between">
-                    <Brand />
-                    <nav aria-label="Page" className="flex items-center gap-6">
-                        <a href="#loop" className="nav-link hidden md:inline">How it works</a>
-                        <a href="#faq" className="nav-link hidden md:inline">FAQ</a>
-                        <ExternalLink href={links.briefing} className="button button-small">Request a briefing</ExternalLink>
-                    </nav>
+            <div className="top-strip">
+                <div className="container-x flex h-9 items-center justify-between gap-4">
+                    <span className="flex items-center gap-2 font-semibold tracking-[0.2em]">
+                        <MirdyneMark className="h-3 w-3" />
+                        {company.name.toUpperCase()}
+                    </span>
+                    <span className="hidden font-semibold tracking-[0.2em] uppercase sm:block">{strip.statement}</span>
+                    <UtcClock className="font-mono tracking-[0.08em] text-muted" />
                 </div>
-            </header>
+            </div>
 
             <main id="main">
-                <section id="top" className="hero relative flex min-h-[100svh] items-end overflow-hidden" aria-labelledby="hero-title">
-                    <NebulaCanvas className="absolute inset-0 h-full w-full" />
+                <section id="top" className="relative min-h-[100svh] overflow-hidden" aria-labelledby="hero-title">
+                    <div ref={heroArtRef} className="hero-art absolute inset-0" aria-hidden="true">
+                        <NebulaCanvas className="h-full w-full" />
+                    </div>
                     <div className="hero-fade absolute inset-0" aria-hidden="true" />
-                    <div className="container-x relative pt-32 pb-20 md:pb-28">
-                        <p className="eyebrow mb-6">{hero.eyebrow}</p>
-                        <h1 id="hero-title" className="max-w-5xl font-display text-[clamp(2.6rem,7vw,6.25rem)] leading-[0.95] font-bold tracking-[-0.03em] text-balance">
+                    <div className="container-x relative pt-[16vh] pb-24" data-reveal>
+                        <p className="flex items-center gap-3 text-[28px] font-bold md:text-[36px]">
+                            <span className="grid h-11 w-11 place-items-center rounded-full border border-white/40 md:h-12 md:w-12">
+                                <MirdyneMark className="h-4 w-4 md:h-5 md:w-5" />
+                            </span>
+                            {company.product}
+                        </p>
+                        <h1 id="hero-title" className="mt-6 max-w-[21ch] text-[38px] leading-[1.06] font-bold tracking-[-0.02em] text-balance md:text-[56px] lg:text-[60px]">
                             {hero.title}
                         </h1>
-                        <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted md:text-xl">{hero.intro}</p>
                         <div className="mt-10 flex flex-wrap items-center gap-4">
                             <ExternalLink href={links.briefing} className="button">Request a briefing</ExternalLink>
-                            <a href="#loop" className="button button-ghost">How it works</a>
+                            <a href="#design" className="button button-ghost">How it works</a>
                         </div>
+                    </div>
+                    <div className="container-x absolute inset-x-0 bottom-0 flex items-center justify-end pb-8 font-mono text-[11px] tracking-[0.12em] text-faint uppercase sm:justify-between">
+                        <span className="hidden sm:inline">{hero.caption}</span>
+                        <a href="#mission" className="scroll-cue">Scroll</a>
                     </div>
                 </section>
 
-                <section className="section" aria-labelledby="goal-title">
-                    <div className="container-x grid gap-8 md:grid-cols-[200px_1fr]">
-                        <h2 id="goal-title" className="eyebrow pt-2">Goal</h2>
-                        <div>
-                            <p className="font-display text-[clamp(1.75rem,3.6vw,3rem)] leading-[1.1] font-semibold tracking-[-0.02em] text-balance">
-                                {goal.statement}
-                            </p>
-                            <p className="mt-8 flex gap-3 text-lg text-muted">
-                                <span className="mt-[0.6em] h-px w-6 shrink-0 bg-accent" aria-hidden="true" />
-                                {goal.firstTarget}
-                            </p>
-                        </div>
-                    </div>
-                </section>
+                <CentredSection id="mission" heading={mission.heading}>
+                    <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted">{mission.text}</p>
+                </CentredSection>
 
-                <section className="section pt-0" aria-labelledby="credentials-title">
-                    <div className="container-x">
-                        <h2 id="credentials-title" className="sr-only">Funding, recognition and partners</h2>
-                        <div className="grid gap-12 lg:grid-cols-2">
-                            <CredentialList label="Funding and recognition" items={credentials.funding} />
-                            <CredentialList label="Partners" items={credentials.partners} />
-                        </div>
-                    </div>
-                </section>
+                <CentredSection id="goal" heading={goal.heading}>
+                    <p className="mx-auto max-w-2xl text-2xl leading-snug font-semibold text-balance md:text-[28px]">{goal.text}</p>
+                    <p className="mx-auto mt-6 max-w-2xl text-base text-muted">{goal.firstTarget}</p>
+                </CentredSection>
 
-                <section id="loop" className="section border-t border-line" aria-labelledby="loop-title">
-                    <div className="container-x">
-                        <p className="eyebrow mb-5">How it works</p>
-                        <h2 id="loop-title" className="max-w-3xl font-display text-[clamp(2rem,4.5vw,3.75rem)] leading-[1.02] font-bold tracking-[-0.03em]">
-                            One loop, three steps.
-                        </h2>
+                <CentredSection id="credentials" heading={credentials.heading}>
+                    <ul className="mt-2 grid gap-px overflow-hidden rounded-md border border-line bg-line text-left sm:grid-cols-2 lg:grid-cols-4">
+                        {credentials.items.map((item) => (
+                            <li key={item.name} className="bg-black p-6">
+                                <p className="text-lg font-semibold">{item.name}</p>
+                                <p className="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
+                                {item.pending && <Pending what={item.pending} />}
+                            </li>
+                        ))}
+                    </ul>
+                </CentredSection>
 
-                        <div className="mt-16 grid gap-20">
-                            {steps.map((step) => (
-                                <article key={step.id} id={step.id} className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16" aria-labelledby={`${step.id}-title`}>
-                                    <header>
-                                        <p className="font-mono text-sm text-accent">{step.number}</p>
-                                        <h3 id={`${step.id}-title`} className="mt-3 font-display text-[clamp(2.25rem,4vw,3.5rem)] leading-none font-bold tracking-[-0.03em]">
-                                            {step.name}
-                                        </h3>
-                                        <p className="mt-4 max-w-md text-xl text-muted">{step.lead}</p>
-                                    </header>
-                                    <ul className="divide-y divide-line border-y border-line">
-                                        {step.stories.map((story) => (
-                                            <li key={story.title} className="py-6">
-                                                <h4 className="font-display text-xl font-semibold">{story.title}</h4>
-                                                <p className="mt-2 text-muted">{story.text}</p>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </article>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                {steps.map((step) => (
+                    <StepSection key={step.id} step={step} />
+                ))}
 
                 <section id="faq" className="section border-t border-line" aria-labelledby="faq-title">
                     <div className="container-x grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
-                        <div>
-                            <p className="eyebrow mb-5">FAQ</p>
-                            <h2 id="faq-title" className="font-display text-[clamp(2rem,4.5vw,3.75rem)] leading-[1.02] font-bold tracking-[-0.03em]">
-                                Essential information
-                            </h2>
-                        </div>
-                        <div className="border-t border-line">
-                            {questions.map((item) => (
-                                <details key={item.q} className="faq border-b border-line">
-                                    <summary className="flex cursor-pointer items-center justify-between gap-6 py-6 font-display text-xl font-semibold">
-                                        {item.q}
-                                        <span className="faq-icon" aria-hidden="true" />
-                                    </summary>
-                                    <div className="pb-6">
-                                        <p className="max-w-2xl text-muted">{item.a}</p>
-                                        {item.pending && <Pending what={item.pending} />}
-                                    </div>
-                                </details>
+                        <h2 id="faq-title" className="section-title lg:max-w-[10ch]" data-reveal>{faq.heading}</h2>
+                        <div className="border-t border-line" data-reveal>
+                            {faq.questions.map((item, i) => (
+                                <div key={item.q} className="border-b border-line">
+                                    <Disclosure summary={item.q} heading="h3" defaultOpen={i === 0} buttonClassName="faq-toggle">
+                                        <div className="pb-6">
+                                            <p className="max-w-2xl text-base leading-relaxed text-muted">{item.a}</p>
+                                            {item.pending && <Pending what={item.pending} />}
+                                        </div>
+                                    </Disclosure>
+                                </div>
                             ))}
                         </div>
-                    </div>
-                </section>
-
-                <section id="contact" className="section contact border-t border-line" aria-labelledby="contact-title">
-                    <div className="container-x">
-                        <h2 id="contact-title" className="font-display text-[clamp(2.5rem,6vw,5rem)] leading-none font-bold tracking-[-0.03em]">
-                            {contact.title}
-                        </h2>
-                        <p className="mt-6 max-w-xl text-xl text-muted">{contact.text}</p>
-                        <ExternalLink href={links.briefing} className="button mt-10">{contact.cta}</ExternalLink>
                     </div>
                 </section>
             </main>
 
-            <footer className="border-t border-line py-12">
-                <div className="container-x grid gap-10 md:grid-cols-3">
-                    <div>
-                        <p className="flex items-center gap-3 font-display text-lg font-bold">
-                            <MirdyneMark className="h-5 w-5" />
-                            {company.name}
-                        </p>
-                        <p className="mt-3 text-sm text-faint">{company.location}</p>
-                    </div>
-                    <ul className="grid gap-2 text-sm text-faint">
+            <footer className="footer border-t border-line">
+                <div className="container-x py-20" data-reveal>
+                    <h2 className="text-[30px] leading-tight font-bold md:text-[40px]">{contact.heading}</h2>
+                    <p className="mt-3 text-lg font-bold text-muted">{contact.subheading}</p>
+                    <ExternalLink href={links.briefing} className="button mt-8">{contact.cta}</ExternalLink>
+                </div>
+                <div className="container-x grid gap-8 border-t border-line py-10 text-xs md:grid-cols-3">
+                    <p className="flex items-center gap-2 font-semibold tracking-[0.2em]">
+                        <MirdyneMark className="h-3 w-3" />
+                        {company.name.toUpperCase()}
+                        <span className="font-normal tracking-normal text-faint">· {company.location}</span>
+                    </p>
+                    <ul className="grid gap-1 text-faint">
                         {footer.notes.map((note) => (
                             <li key={note}>{note}</li>
                         ))}
                     </ul>
-                    <ul className="grid content-start gap-2 text-sm md:justify-items-end">
+                    <ul className="grid content-start gap-1 md:justify-items-end">
                         <li><ExternalLink href={links.briefing} className="footer-link">Request a briefing</ExternalLink></li>
                         <li><ExternalLink href={links.github} className="footer-link">PRISM on GitHub</ExternalLink></li>
                         <li className="text-faint">© {new Date().getFullYear()} {company.name}</li>

@@ -7,15 +7,16 @@
  */
 
 export interface Story {
+    /** One-word card label, e.g. "Recipes". */
+    label: string;
     title: string;
     text: string;
 }
 
 export interface Step {
-    id: string;
-    number: string;
+    id: 'design' | 'make' | 'qualify';
     name: string;
-    lead: string;
+    description: string;
     stories: Story[];
 }
 
@@ -42,22 +43,30 @@ export const company = {
     location: 'Giessen, Hessen, Germany',
 };
 
+export const strip = {
+    statement: 'Alloy design · Synthesis · Qualification',
+};
+
 export const hero = {
-    eyebrow: 'PRISM by Mirdyne',
     title: 'Alloy design, synthesis and qualification in one loop.',
-    intro:
-        'PRISM is Mirdyne’s platform for developing new alloys. It screens candidate compositions before any powder is weighed, so most failures happen in simulation, not in the lab. Then it learns from every lab result that comes back.',
+    caption: 'Materials discovery platform by Mirdyne',
+};
+
+export const mission = {
+    heading: 'PRISM',
+    text: 'PRISM is Mirdyne’s platform for developing new alloys. It screens candidate compositions before any powder is weighed, so most failures happen in simulation, not in the lab. Then it learns from every lab result that comes back.',
 };
 
 export const goal = {
-    statement:
-        'Replace trial-and-error in materials development with a closed loop that learns from each batch.',
+    heading: 'Goal',
+    text: 'Replace trial-and-error in materials development with a closed loop that learns from each batch.',
     firstTarget:
         'First target: refractory high-entropy alloys for liquid-rocket-engine preburners, replacing legacy Monel K500.',
 };
 
-export const credentials: { funding: Credential[]; partners: Credential[] } = {
-    funding: [
+export const credentials: { heading: string; items: Credential[] } = {
+    heading: 'Funding, recognition and partners',
+    items: [
         {
             name: 'European Space Agency',
             detail: 'Initial development of PRISM funded under the Future Launchers Preparatory Programme (FLPP), FIRST! Simulation & Intelligence.',
@@ -67,11 +76,9 @@ export const credentials: { funding: Credential[]; partners: Credential[] } = {
             detail: 'AI special prize, 2026.',
             pending: 'exact award name and wording',
         },
-    ],
-    partners: [
         {
             name: 'Fraunhofer IAPT',
-            detail: 'Additive manufacturing calibration.',
+            detail: 'Partner for additive manufacturing calibration.',
             pending: 'permission to name publicly',
         },
         {
@@ -85,19 +92,21 @@ export const credentials: { funding: Credential[]; partners: Credential[] } = {
 export const steps: Step[] = [
     {
         id: 'design',
-        number: '01',
         name: 'Design',
-        lead: 'Search the composition space in simulation first.',
+        description: 'Search the composition space in simulation first.',
         stories: [
             {
+                label: 'Simulation',
                 title: 'Failures happen in simulation',
                 text: 'PRISM screens millions of candidate compositions before any powder is weighed, so most dead ends are ruled out before they reach the lab.',
             },
             {
+                label: 'Metastable',
                 title: 'Beyond conventional screening',
                 text: 'It can reach metastable alloys that equilibrium-based screening rules out.',
             },
             {
+                label: 'Knowledge',
                 title: 'Grounded in what is already known',
                 text: 'Each campaign draws on published literature, patents and instrument data.',
             },
@@ -105,19 +114,21 @@ export const steps: Step[] = [
     },
     {
         id: 'make',
-        number: '02',
         name: 'Make',
-        lead: 'Turn the best candidates into recipes a lab can run.',
+        description: 'Turn the best candidates into recipes a lab can run.',
         stories: [
             {
+                label: 'Recipes',
                 title: 'Recipes, not just rankings',
                 text: 'For each candidate, PRISM specifies precursors, temperatures and thermal profiles.',
             },
             {
+                label: 'Automation',
                 title: 'Built for automated labs',
                 text: 'Recipes are structured for robotic synthesis and automated characterisation.',
             },
             {
+                label: 'Feedback',
                 title: 'Every result feeds back',
                 text: 'Each lab result becomes training data for the next round, so the loop improves with every batch.',
             },
@@ -125,19 +136,21 @@ export const steps: Step[] = [
     },
     {
         id: 'qualify',
-        number: '03',
         name: 'Qualify',
-        lead: 'Prove the material against your requirements.',
+        description: 'Prove the material against your requirements.',
         stories: [
             {
+                label: 'Requirements',
                 title: 'Measured against your requirements',
                 text: 'Every campaign is defined and accepted against the customer’s own requirements.',
             },
             {
+                label: 'Traceability',
                 title: 'Traceable data',
                 text: 'Results stay traceable to the data behind them, with versioned releases.',
             },
             {
+                label: 'Transfer',
                 title: 'Handed to your team',
                 text: 'Qualified process documents are handed over to your own engineers.',
             },
@@ -145,41 +158,44 @@ export const steps: Step[] = [
     },
 ];
 
-export const questions: Question[] = [
-    {
-        q: 'What is PRISM?',
-        a: 'PRISM is Mirdyne’s materials discovery platform. It designs candidate alloys in simulation, turns the best ones into lab recipes, and learns from every result, so new materials reach qualification with fewer physical trial runs.',
-    },
-    {
-        q: 'Who is behind PRISM?',
-        a: 'Mirdyne, based in Giessen, Germany, develops and operates PRISM. Its initial development was funded by the European Space Agency under FLPP (FIRST! Simulation & Intelligence). The technology concept originated at MARC27.',
-        pending: 'whether to mention Bimo Tech',
-    },
-    {
-        q: 'Why now?',
-        a: 'Prediction has outrun validation. AI models have proposed more than 2.2 million potentially stable compositions, but only 736 have been verified in physical labs, and new alloys still take 10 to 20 years to reach the market. The bottleneck is no longer finding candidates. It is making and qualifying them.',
-    },
-    {
-        q: 'How does it work?',
-        a: 'One loop with three steps: design in simulation, make in the lab, qualify against your requirements. Every lab result improves the next round of designs. We walk through the technical approach in a private briefing.',
-    },
-    {
-        q: 'Does PRISM replace materials engineers?',
-        a: 'No. It takes the trial-and-error off their desks. Your engineers set the requirements and sign off every result.',
-    },
-    {
-        q: 'How do we work together?',
-        a: 'Most engagements start with a program: one experimental campaign against your requirements. From there: a pilot with calibration and a reference run, deployment on your hardware under your sign-off process, ongoing support, and transfer of qualified process documents to your team.',
-    },
-    {
-        q: 'Is PRISM open source?',
-        a: 'The prediction and ranking tools are open source and free to use. Mirdyne earns revenue by running programs, pilots and deployments with customers.',
-    },
-];
+export const faq: { heading: string; questions: Question[] } = {
+    heading: 'Essential information',
+    questions: [
+        {
+            q: 'What is PRISM?',
+            a: 'PRISM is Mirdyne’s materials discovery platform. It designs candidate alloys in simulation, turns the best ones into lab recipes, and learns from every result, so new materials reach qualification with fewer physical trial runs.',
+        },
+        {
+            q: 'Who is behind PRISM?',
+            a: 'Mirdyne, based in Giessen, Germany, develops and operates PRISM. Its initial development was funded by the European Space Agency under FLPP (FIRST! Simulation & Intelligence). The technology concept originated at MARC27.',
+            pending: 'whether to mention Bimo Tech',
+        },
+        {
+            q: 'Why now?',
+            a: 'Prediction has outrun validation. AI models have proposed more than 2.2 million potentially stable compositions, but only 736 have been verified in physical labs, and new alloys still take 10 to 20 years to reach the market. The bottleneck is no longer finding candidates. It is making and qualifying them.',
+        },
+        {
+            q: 'How does it work?',
+            a: 'One loop with three steps: design in simulation, make in the lab, qualify against your requirements. Every lab result improves the next round of designs. We walk through the technical approach in a private briefing.',
+        },
+        {
+            q: 'Does PRISM replace materials engineers?',
+            a: 'No. It takes the trial-and-error off their desks. Your engineers set the requirements and sign off every result.',
+        },
+        {
+            q: 'How do we work together?',
+            a: 'Most engagements start with a program: one experimental campaign against your requirements. From there: a pilot with calibration and a reference run, deployment on your hardware under your sign-off process, ongoing support, and transfer of qualified process documents to your team.',
+        },
+        {
+            q: 'Is PRISM open source?',
+            a: 'The prediction and ranking tools are open source and free to use. Mirdyne earns revenue by running programs, pilots and deployments with customers.',
+        },
+    ],
+};
 
 export const contact = {
-    title: 'Work with us',
-    text: 'Most engagements start with a program: one experimental campaign against your requirements.',
+    heading: 'Work with us.',
+    subheading: 'Start with one campaign against your requirements.',
     cta: 'Request a briefing',
 };
 

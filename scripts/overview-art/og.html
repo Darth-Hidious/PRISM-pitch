@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: Geist; src: url(../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2) format('woff2'); font-weight: 100 900; }
+  @font-face { font-family: GeistMono; src: url(../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2) format('woff2'); font-weight: 100 900; }
+  html, body { margin: 0; background: #000; }
+  #card { position: relative; width: 1200px; height: 630px; overflow: hidden; color: #fff; font-family: Geist, sans-serif; }
+  canvas { position: absolute; inset: 0; }
+  .content { position: absolute; left: 72px; top: 150px; right: 72px; }
+  .product { display: flex; align-items: center; gap: 16px; font-size: 40px; font-weight: 700; }
+  .ring { display: grid; place-items: center; width: 56px; height: 56px; border: 1.5px solid rgb(255 255 255 / 0.4); border-radius: 50%; }
+  h1 { margin: 28px 0 0; max-width: 20ch; font-size: 64px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; }
+  .foot { position: absolute; left: 72px; right: 72px; bottom: 44px; display: flex; justify-content: space-between; font-family: GeistMono, monospace; font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; color: rgb(255 255 255 / 0.6); }
+</style>
+</head>
+<body>
+<!-- Link-preview image for /overview (1200x630). Rendered by render.mjs. -->
+<div id="card">
+  <canvas id="c" width="1200" height="630"></canvas>
+  <div class="content">
+    <div class="product">
+      <span class="ring">
+        <svg viewBox="0 0 100 100" width="22" height="22" fill="#fff" aria-hidden="true">
+          <path d="M0 0h45.14v35.98l-10 5.66V100H0V0Z" /><path d="M58.57 0H100v100H65.43V58.64L46 44.48v-5.67l12.57-8.5V0Z" />
+        </svg>
+      </span>
+      PRISM
+    </div>
+    <h1>Alloy design, synthesis and qualification in one loop.</h1>
+  </div>
+  <div class="foot"><span>by Mirdyne</span><span>prism.mirdyne.com</span></div>
+</div>
+<script>
+// Same starfield and nebula as the page hero (src/overview/NebulaCanvas.tsx), at a fixed time.
+const frag = `
+precision highp float;
+uniform vec2 uRes; uniform float uTime;
+float hash(vec2 p){ p = fract(p*vec2(123.34,456.21)); p += dot(p,p+45.32); return fract(p.x*p.y); }
+float noise(vec2 p){ vec2 i=floor(p), f=fract(p); vec2 u=f*f*(3.-2.*f);
+  return mix(mix(hash(i),hash(i+vec2(1,0)),u.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x), u.y); }
+float fbm(vec2 p){ float v=0., a=.5; mat2 m=mat2(1.6,1.2,-1.2,1.6); for(int i=0;i<5;i++){ v+=a*noise(p); p=m*p; a*=.5; } return v; }
+float stars(vec2 uv, float scale, float density, float radius, float t){
+  vec2 g=uv*scale; vec2 id=floor(g); float h=hash(id);
+  vec2 o=vec2(hash(id+3.1),hash(id+7.7))-.5; float d=length(fract(g)-.5-o*.6);
+  float core=smoothstep(radius,0.,d); float halo=smoothstep(radius*4.,0.,d)*.25;
+  return (core+halo)*step(1.-density,h)*(.65+.35*sin(t*(.8+h*2.5)+h*60.)); }
+void main(){
+  vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y; float t=uTime*.02;
+  vec2 q=vec2(fbm(uv*.9+t),fbm(uv*.9-t+5.2)); float n=fbm(uv*1.4+2.6*q+vec2(t*.6,-t*.4));
+  float side=.3+.7*smoothstep(-.9,.5,uv.x);
+  vec3 col=vec3(.004,.006,.014);
+  col+=vec3(.14,.20,.48)*smoothstep(.28,.80,n)*side;
+  col+=vec3(.46,.20,.58)*pow(smoothstep(.45,.90,n),2.)*side*.75;
+  col+=vec3(1.,.76,.44)*pow(smoothstep(.60,.98,n),4.)*side*1.2;
+  vec3 s=vec3(.82,.88,1.);
+  col+=s*stars(uv,55.,.10,.10,uTime)*.8; col+=s*stars(uv+11.3,22.,.06,.07,uTime*.8)*1.1; col+=s*stars(uv+27.9,9.,.035,.045,uTime*.6)*1.5;
+  col*=smoothstep(1.9,.2,length(uv*vec2(.7,1.)));
+  gl_FragColor=vec4(col,1.); }`;
+const canvas = document.getElementById('c');
+const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true });
+function sh(type, src){ const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
+const prog = gl.createProgram();
+gl.attachShader(prog, sh(gl.VERTEX_SHADER, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));
+gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, frag));
+gl.linkProgram(prog); gl.useProgram(prog);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+gl.uniform2f(gl.getUniformLocation(prog, 'uRes'), canvas.width, canvas.height);
+gl.uniform1f(gl.getUniformLocation(prog, 'uTime'), 40);
+gl.viewport(0, 0, canvas.width, canvas.height);
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+document.fonts.ready.then(() => { document.title = 'done'; });
+</script>
+</body>
+</html>

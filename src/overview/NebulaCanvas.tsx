@@ -38,25 +38,40 @@ float fbm(vec2 p) {
     return v;
 }
 
+// One layer of stars: at most one per grid cell, jittered, twinkling.
+float stars(vec2 uv, float scale, float density, float radius, float t) {
+    vec2 g = uv * scale;
+    vec2 id = floor(g);
+    float h = hash(id);
+    vec2 offset = vec2(hash(id + 3.1), hash(id + 7.7)) - 0.5;
+    float d = length(fract(g) - 0.5 - offset * 0.6);
+    float core = smoothstep(radius, 0.0, d);
+    float halo = smoothstep(radius * 4.0, 0.0, d) * 0.25;
+    float twinkle = 0.65 + 0.35 * sin(t * (0.8 + h * 2.5) + h * 60.0);
+    return (core + halo) * step(1.0 - density, h) * twinkle;
+}
+
 void main() {
     vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
-    float t = uTime * 0.03;
+    float t = uTime * 0.02;
 
-    vec2 q = vec2(fbm(uv * 1.4 + t), fbm(uv * 1.4 - t + 3.1));
-    float n = fbm(uv * 2.0 + 2.2 * q + vec2(t * 0.5, -t * 0.3));
+    vec2 q = vec2(fbm(uv * 0.9 + t), fbm(uv * 0.9 - t + 5.2));
+    float n = fbm(uv * 1.4 + 2.6 * q + vec2(t * 0.6, -t * 0.4));
 
-    vec3 col = vec3(0.012, 0.016, 0.028);
-    col += vec3(0.09, 0.16, 0.30) * smoothstep(0.35, 0.95, n);
-    col += vec3(0.42, 0.30, 0.12) * pow(smoothstep(0.55, 1.0, n), 3.0) * 0.55;
+    // Brightest on the right; the headline sits on the left.
+    float side = 0.3 + 0.7 * smoothstep(-0.9, 0.5, uv.x);
 
-    vec2 g = uv * 16.0;
-    vec2 cell = floor(g);
-    float d = length(fract(g) - 0.5);
-    float pick = hash(cell);
-    float twinkle = 0.25 + 0.25 * sin(uTime * 0.6 + pick * 40.0);
-    col += vec3(0.62, 0.78, 1.0) * smoothstep(0.07, 0.0, d) * step(0.92, pick) * twinkle * smoothstep(0.3, 0.8, n);
+    vec3 col = vec3(0.004, 0.006, 0.014);
+    col += vec3(0.14, 0.20, 0.48) * smoothstep(0.28, 0.80, n) * side;
+    col += vec3(0.46, 0.20, 0.58) * pow(smoothstep(0.45, 0.90, n), 2.0) * side * 0.75;
+    col += vec3(1.00, 0.76, 0.44) * pow(smoothstep(0.60, 0.98, n), 4.0) * side * 1.2;
 
-    col *= smoothstep(1.5, 0.15, length(uv * vec2(0.9, 1.2)));
+    vec3 starlight = vec3(0.82, 0.88, 1.0);
+    col += starlight * stars(uv, 55.0, 0.10, 0.10, uTime) * 0.8;
+    col += starlight * stars(uv + 11.3, 22.0, 0.06, 0.07, uTime * 0.8) * 1.1;
+    col += starlight * stars(uv + 27.9, 9.0, 0.035, 0.045, uTime * 0.6) * 1.5;
+
+    col *= smoothstep(1.9, 0.2, length(uv * vec2(0.7, 1.0)));
     gl_FragColor = vec4(col, 1.0);
 }
 `;
