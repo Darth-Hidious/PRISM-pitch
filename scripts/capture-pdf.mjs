@@ -10,8 +10,7 @@ import { PDFDocument } from 'pdf-lib';
 import { writeFileSync } from 'fs';
 import { spawn, execFileSync } from 'child_process';
 
-const DEV_URL = 'http://localhost:5173';
-const TOTAL_SLIDES = 10;
+const DEV_URL = 'http://localhost:5173/deck/';
 const WIDTH = 1920;
 const HEIGHT = 1080;
 const OUTPUT = 'PRISM-Pitch-Deck.pdf';
@@ -42,16 +41,28 @@ async function main() {
     });
     const page = await context.newPage();
 
-    console.log('Loading app…');
+    console.log('Loading deck…');
     await page.goto(DEV_URL, { waitUntil: 'networkidle' });
     await page.waitForTimeout(2500);
+    const TOTAL_SLIDES = await page.evaluate(() => document.querySelectorAll('.deck-slide').length);
 
     const screenshots = [];
     const slideLinks = [];
 
     for (let i = 0; i < TOTAL_SLIDES; i++) {
         console.log(`Capturing slide ${i + 1}/${TOTAL_SLIDES}…`);
-        await page.waitForTimeout(1800);
+        await page.waitForTimeout(900);
+        // Painted images lay their strokes on over ~2 s; wait until they are finished.
+        await page
+            .waitForFunction(
+                () =>
+                    [...document.querySelectorAll('.deck-slide--current .pm-painting')].every(
+                        (p) => p.dataset.paintingDone === 'true',
+                    ),
+                null,
+                { timeout: 15000 },
+            )
+            .catch(() => {});
 
         // JPEG at quality 85 — much smaller than PNG
         const buf = await page.screenshot({ type: 'jpeg', quality: 85 });
@@ -59,19 +70,7 @@ async function main() {
 
         // Extract link bounding boxes from the visible slide
         const links = await page.evaluate(() => {
-            const allSlides = document.querySelectorAll(
-                '.absolute.inset-0.w-full.h-full',
-            );
-            let visibleSlide = null;
-            for (const s of allSlides) {
-                if (
-                    getComputedStyle(s).opacity === '1' &&
-                    getComputedStyle(s).pointerEvents === 'auto'
-                ) {
-                    visibleSlide = s;
-                    break;
-                }
-            }
+            const visibleSlide = document.querySelector('.deck-slide--current');
             if (!visibleSlide) return [];
 
             const anchors = visibleSlide.querySelectorAll('a[href]');
@@ -148,8 +147,8 @@ async function main() {
         }
     }
 
-    pdf.setTitle('PRISM — Pitch Deck');
-    pdf.setAuthor('Bimo Tech');
+    pdf.setTitle('PRISM — Investor briefing');
+    pdf.setAuthor('Mirdyne');
     pdf.setSubject('Platform for Research in Intelligent Synthesis of Materials');
     pdf.setCreator('PRISM Pitch Generator');
 

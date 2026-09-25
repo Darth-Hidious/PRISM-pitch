@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# PRISM — website and investor briefing
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+`prism.mirdyne.com`: what PRISM is, how it works and where it stands.
 
-Currently, two official plugins are available:
+| Path | What | Source |
+| --- | --- | --- |
+| `/` | The website: a scrolling page from the problem to the stacks, evidence and IP, programmes, business model and company | `src/site/` |
+| `/deck/` | The investor briefing: 12 slides on a 1440 × 810 stage, `/deck/#5` opens slide 5 | `src/deck/` |
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Both are built from the same component library in `src/ds/` and the tokens in
+`src/styles/`, which are also published as the PRISM design system.
 
-## React Compiler
+## Develop
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev        # http://localhost:5173/ and /deck/
+npm run build      # type-check and build both pages into dist/
+npm run lint
+node scripts/capture-pdf.mjs   # rebuild PRISM-Pitch-Deck.pdf from /deck/
+node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design system
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## How the pieces fit
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Tokens** (`src/styles/tokens.css`): colours, type families, spacing and
+  radii from the Professor Briefing deck. Two themes, `paper` and `navy`; set
+  `data-theme` on any section.
+- **Components** (`src/ds/`): kicker, button, status and maturity pills, stat,
+  process chain, timeline, status table, source line, footer band, and the
+  evidence components (rights state, object card, evidence lineage, rights
+  manifest, manufacturing window, capability stack).
+- **Paintings** (`src/ds/paint.ts`, `src/ds/Painting.tsx`): photographs and
+  scenes repainted as brush strokes in the browser, deterministic per seed.
+  Scenes drawn in code live in `src/site/illustrations.ts`.
+- **Fonts**: Manrope and Geist Mono, self-hosted through Fontsource (no calls
+  to Google Fonts).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Writing for the site
+
+Every number carries a source line. Every capability carries its maturity:
+*In use*, *Prototype* (PRISM software at TRL 3 → 4), *In development* or
+*Target*. Illustrative graphics say so. Partners under NDA are not named.

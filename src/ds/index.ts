@@ -1,0 +1,19 @@
+/** PRISM component library: shared by the website, the deck and the design system. */
+export { default as Button } from './Button';
+export { default as CapabilityStack } from './CapabilityStack';
+export { default as EvidenceLineage } from './EvidenceLineage';
+export { default as FooterBand } from './FooterBand';
+export { default as Kicker } from './Kicker';
+export { default as MaturityPill } from './MaturityPill';
+export { default as MirdyneMark } from './MirdyneMark';
+export { default as ObjectCard } from './ObjectCard';
+export { default as Painting } from './Painting';
+export { default as ProcessChain } from './ProcessChain';
+export { default as RightsManifest } from './RightsManifest';
+export { default as RightsState } from './RightsState';
+export { default as SourceLine } from './SourceLine';
+export { default as Stat } from './Stat';
+export { default as StatusPill } from './StatusPill';
+export { default as StatusTable } from './StatusTable';
+export { default as Timeline } from './Timeline';
+export { default as WindowPlot } from './WindowPlot';

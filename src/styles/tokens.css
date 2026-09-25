@@ -1,0 +1,174 @@
+/*
+ * PRISM design tokens.
+ *
+ * Source: the Mirdyne PRISM Professor Briefing deck (29 Aug 2026), mapped from
+ * its 960 × 540 pt slide to a 1440 px canvas (× 1.5). Two themes, as in the
+ * deck: `paper` for narrative, `navy` for the dark slides and the evidence
+ * console. Set `data-theme` on any element; everything below it follows.
+ *
+ * Text-only variants (`--teal-text`, `--crimson-text`) exist because the deck's
+ * own teal and crimson miss 4.5:1 as small text on their tints. The brand
+ * values stay exact for fills and marks.
+ */
+@import '@fontsource-variable/manrope';
+@import '@fontsource-variable/geist-mono';
+
+:root,
+[data-theme='paper'] {
+    --ground: #f8f7f1;
+    --surface: #ffffff;
+    --ink: #161714;
+    --ink-2: #5f625e;
+    --ink-3: #777b76;
+    --rule: #d4cfc4;
+    --rule-soft: #eae7de;
+    --accent: #1d4c86;
+    --accent-tint: #edf2f8;
+    --steel: #6f91ba;
+    --teal: #2e8781;
+    --teal-text: #297873;
+    --teal-tint: #edf7f5;
+    --crimson: #d12f49;
+    --crimson-text: #c72d45;
+    --crimson-tint: #fcedef;
+    --emphasis: #061832;
+    --on-emphasis: #ffffff;
+    --focus: #1d4c86;
+    color-scheme: light;
+}
+
+[data-theme='navy'] {
+    --ground: #061832;
+    --surface: #152333;
+    --ink: #ffffff;
+    --ink-2: #c2cbd7;
+    --ink-3: #8d9cae;
+    --rule: #4b6381;
+    --rule-soft: #324157;
+    --accent: #a8b7c9;
+    --accent-tint: #0c274a;
+    --steel: #6f91ba;
+    --teal: #2e8781;
+    --teal-text: #73afab;
+    --teal-tint: #113748;
+    --crimson: #d12f49;
+    --crimson-text: #e27a8b;
+    --crimson-tint: #3f1e38;
+    --emphasis: #ffffff;
+    --on-emphasis: #061832;
+    --focus: #a8b7c9;
+    color-scheme: dark;
+}
+
+:root {
+    /* Theme-independent brand values */
+    --navy: #061832;
+    --chrome: #061832;
+    --on-chrome: #ffffff;
+    --on-chrome-2: #b6c1cf;
+
+    --font-sans: 'Manrope Variable', Manrope, ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    /* 4 px base. The deck's 41 pt slide margin lands on space-16. */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-24: 96px;
+    --space-32: 128px;
+
+    --radius-card: 4px;
+    --radius-panel: 5px;
+    --radius-pill: 9px;
+    --radius-dot: 9999px;
+
+    --hairline: 1px;
+    --chrome-height: 38px;
+    --layout-max: 1320px;
+    --layout-gutter: clamp(20px, 4.4vw, 64px);
+
+    --ease-rise: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme] {
+    background-color: var(--ground);
+    color: var(--ink);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 1.55;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ol,
+ul,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+img,
+video,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+}
+
+.pm-visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}
