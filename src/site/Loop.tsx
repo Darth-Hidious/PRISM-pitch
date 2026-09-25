@@ -110,7 +110,7 @@ export default function Loop({ n = '02' }: { n?: string }) {
                         ))}
                     </ol>
                     <figure className="loop__figure">
-                        <div className="scroll-x">
+                        <div className="drawing">
                             <ProcedureDiagram active={active} onPick={pick} />
                         </div>
                     </figure>

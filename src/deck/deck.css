@@ -51,36 +51,37 @@
     padding: 0;
 }
 
-/* Fixed stage sizes: the site's fluid type classes, pinned to their stage values. */
-.deck-stage .pm-display {
+/* Fixed stage sizes: the site's fluid type classes, pinned to their stage values. The reader
+   (phones, upright tablets) keeps the site's fluid sizes, so a big word never outgrows a phone. */
+:where(.deck:not(.deck--reader)) .deck-stage .pm-display {
     font-size: 88px;
 }
 
-.deck-stage .pm-title {
+:where(.deck:not(.deck--reader)) .deck-stage .pm-title {
     font-size: 52px;
 }
 
-.deck-stage .pm-subtitle {
+:where(.deck:not(.deck--reader)) .deck-stage .pm-subtitle {
     font-size: 30px;
 }
 
-.deck-stage .pm-numeral {
+:where(.deck:not(.deck--reader)) .deck-stage .pm-numeral {
     font-size: 96px;
 }
 
-.deck-stage .pm-lead {
+:where(.deck:not(.deck--reader)) .deck-stage .pm-lead {
     font-size: 24px;
 }
 
-.deck-stage .pm-emphasis {
+:where(.deck:not(.deck--reader)) .deck-stage .pm-emphasis {
     font-size: 24px;
 }
 
-.deck-stage .pm-row {
+:where(.deck:not(.deck--reader)) .deck-stage .pm-row {
     font-size: 21px;
 }
 
-.deck-stage .pm-status-table__statement p:first-child {
+:where(.deck:not(.deck--reader)) .deck-stage .pm-status-table__statement p:first-child {
     font-size: 19px;
 }
 
@@ -208,6 +209,8 @@
 .deck--reader {
     position: static;
     display: block;
+    /* The stage fills the width: newer browsers apply the centring below to block layout too. */
+    place-items: normal;
 }
 
 .deck-body--reader {
@@ -216,7 +219,7 @@
 }
 
 .deck--reader .deck-stage {
-    width: auto;
+    width: 100%;
     height: auto;
     transform: none !important;
     overflow: visible;
@@ -701,6 +704,7 @@
 .d-close {
     position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     align-content: center;
     gap: 28px;
     height: 100%;
@@ -738,7 +742,8 @@
     width: auto;
 }
 
-@media (max-width: 760px) {
+/* The reader: the same query Deck.tsx uses to switch to it. */
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
     .d-cover,
     .d-loop,
     .d-lab,
@@ -782,6 +787,10 @@
 
     .d-ask__figure .pm-numeral {
         font-size: 120px;
+    }
+
+    .d-market__wallet {
+        flex-wrap: wrap;
     }
 
     .d-market__wallet .pm-numeral {

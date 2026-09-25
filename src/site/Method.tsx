@@ -742,7 +742,7 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                 </p>
                             </div>
                             <figure className="exhibit__stage">
-                                <div className="scroll-x wide-only">
+                                <div className="drawing wide-only">
                                     <LadderDiagram />
                                 </div>
                                 <LadderList />

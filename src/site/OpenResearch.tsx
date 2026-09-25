@@ -35,7 +35,7 @@ export default function OpenResearch({ n = '02' }: { n?: string }) {
                 </dl>
 
                 <figure className="open__figure rv">
-                    <div className="scroll-x wide-only">
+                    <div className="drawing wide-only">
                         <KnownAnswer />
                     </div>
                     <KnownAnswerList />
