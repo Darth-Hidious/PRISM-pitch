@@ -6,7 +6,12 @@
       "permanent": false
     },
     {
-      "source": "/evidence/:path*",
+      "source": "/evidence/",
+      "destination": "/method/#proof",
+      "permanent": false
+    },
+    {
+      "source": "/evidence/:path+",
       "destination": "/method/#proof",
       "permanent": false
     }
