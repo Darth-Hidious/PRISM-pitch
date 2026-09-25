@@ -1,6 +1,7 @@
-import { useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { MaturityPill } from '../ds';
 import type { Maturity } from '../ds/MaturityPill';
+import { useMediaQuery } from './hooks';
 import { Grain, Idx } from './ui';
 
 interface Layer {
@@ -214,107 +215,259 @@ const STACKS: StackDef[] = [
     },
 ];
 
-/* ── Isometric stack ──────────────────────────────────────────────────── */
+/* ── The stack drawing ────────────────────────────────────────────────── */
 
-const PLATE_W = 300;
-const PLATE_H = 150;
-const THICK = 12;
-const GAP = 76;
+/*
+ * Five isometric plates, Research on top and Evidence as the foundation. Scrolling drives them: they
+ * start as one block (one system), come apart into five stacks as the first one is read, and the
+ * plate being read slides forward with room opened above it, its parts standing up on it.
+ */
 
-/** Five plates, Research on top and Evidence as the foundation. */
-function IsoStack({
-    active,
-    onPick,
-    compact = false,
-}: {
-    active: number;
-    onPick?: (i: number) => void;
-    compact?: boolean;
-}) {
-    const cx = PLATE_W / 2 + 10;
-    const top = PLATE_H / 2 + 26;
-    const height = top + GAP * (STACKS.length - 1) + PLATE_H / 2 + THICK + 30;
-    const width = compact ? PLATE_W + 20 : PLATE_W + 250;
+const PW = 300; // plate width, in drawing units
+const PH = 150; // plate depth, as drawn
+const T = 12; // plate thickness
+const W2 = PW / 2;
+const H2 = PH / 2;
+const LAST = STACKS.length - 1;
+
+interface Geom {
+    /** Distance between plates when apart, and when together as one block. */
+    open: number;
+    shut: number;
+    /** Room opened above the plate being read, so all of its top shows. */
+    room: number;
+    /** How far that plate slides forward, to the lower left. */
+    slide: number;
+    pad: number;
+    /** Width kept on the right for the names; 0 draws none. */
+    names: number;
+}
+
+const GEOMS = {
+    full: { open: 62, shut: T + 2, room: 124, slide: 36, pad: 14, names: 206 },
+    /** Phones held sideways: the same drawing, without names too small to read. */
+    bare: { open: 62, shut: T + 2, room: 124, slide: 36, pad: 14, names: 0 },
+    /** Upright phones: a small drawing in the strip above the text. */
+    mini: { open: 34, shut: T + 2, room: 66, slide: 22, pad: 6, names: 0 },
+} satisfies Record<string, Geom>;
+type Variant = keyof typeof GEOMS;
+
+function frame(g: Geom) {
+    const cx = g.pad + g.slide + W2;
+    const y0 = g.pad + H2 + g.room / 2;
+    const width = cx + W2 + (g.names ? 22 + g.names : g.pad);
+    const height = y0 + LAST * g.open + H2 + T + g.room / 2 + g.slide / 2 + g.pad;
+    return { cx, y0, width, height };
+}
+
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const smooth = (a: number, b: number, x: number) => {
+    const t = clamp01((x - a) / (b - a));
+    return t * t * (3 - 2 * t);
+};
+
+interface Place {
+    dx: number;
+    cy: number;
+    /** How much this plate is the one being read, 0 to 1. */
+    s: number;
+}
+
+/**
+ * Where each plate sits. `apart`: 0 is one block, 1 is five plates. `at`: the plate being read,
+ * fractional while moving from one to the next. `still` (reduced motion): nothing moves, only lights.
+ */
+function layout(g: Geom, apart: number, at: number, still: boolean): Place[] {
+    const { y0 } = frame(g);
+    const mid = y0 + (LAST / 2) * g.open;
+    const gap = g.shut + (g.open - g.shut) * apart;
+    return STACKS.map((_, i) => {
+        const s = apart * Math.max(0, 1 - Math.abs(at - i));
+        if (still) return { dx: 0, cy: y0 + i * g.open, s };
+        // Plates above the one being read move up to open room over it; the stack stays centred.
+        const lift = apart * g.room * (0.5 * Math.min(at, 1) - clamp01(at - i));
+        return { dx: -g.slide * s, cy: mid + (i - LAST / 2) * gap + lift + (g.slide / 2) * s, s };
+    });
+}
+
+/** A point on a plate's top face: `a` runs to its right corner, `b` to its left, both 0 to 1. */
+function onPlate(cx: number, a: number, b: number, up = 0) {
+    return `${(cx + (a - b) * W2).toFixed(1)},${(-H2 + (a + b) * H2 - up).toFixed(1)}`;
+}
+
+/** The three faces of a box standing on a plate. */
+function box(cx: number, a: number, b: number, da: number, db: number, h: number) {
+    const p = (aa: number, bb: number, up = 0) => onPlate(cx, aa, bb, up);
+    return {
+        top: [p(a, b, h), p(a + da, b, h), p(a + da, b + db, h), p(a, b + db, h)].join(' '),
+        left: [p(a, b + db), p(a + da, b + db), p(a + da, b + db, h), p(a, b + db, h)].join(' '),
+        right: [p(a + da, b), p(a + da, b + db), p(a + da, b + db, h), p(a + da, b, h)].join(' '),
+    };
+}
+
+/** How tall a part stands: built parts tallest, goals only drawn on the plate. */
+const TALL: Record<Maturity, number> = { 'in-use': 30, prototype: 21, development: 13, target: 0 };
+
+/** Where a stack's parts stand on its plate: rows of three, drawn back to front. */
+function slots(layers: Layer[]) {
+    return layers
+        .map((l, k) => ({ l, k, a: 0.1 + (k % 3) * 0.28, b: 0.14 + Math.floor(k / 3) * 0.4, da: 0.2, db: 0.28 }))
+        .sort((x, y) => x.a + x.b - (y.a + y.b));
+}
+
+function IsoStack({ variant, onPick }: { variant: Variant; onPick?: (i: number) => (e: MouseEvent) => void }) {
+    const g = GEOMS[variant];
+    const { cx, width, height, y0 } = frame(g);
+    const start = layout(g, 0, 0, false);
+    const parts = variant !== 'mini';
+    const named = g.names > 0;
+    // Bottom plate first, so upper plates overlap lower ones.
+    const order = STACKS.map((_, k) => LAST - k);
+    const plate = {
+        top: `${cx},${-H2} ${cx + W2},0 ${cx},${H2} ${cx - W2},0`,
+        left: `${cx - W2},0 ${cx},${H2} ${cx},${H2 + T} ${cx - W2},${T}`,
+        right: `${cx},${H2} ${cx + W2},0 ${cx + W2},${T} ${cx},${H2 + T}`,
+    };
     return (
         <svg
-            className={`iso${compact ? ' iso--compact' : ''}`}
-            viewBox={`0 0 ${width} ${height}`}
-            role={compact ? undefined : 'img'}
-            aria-hidden={compact ? true : undefined}
-            aria-label={compact ? undefined : 'The five PRISM stacks as layers: Research, Harness, Autonomy, Manufacturing and test, and Evidence as the foundation.'}
+            className={`iso iso--${variant}`}
+            viewBox={`0 0 ${width.toFixed(0)} ${height.toFixed(0)}`}
+            data-variant={variant}
+            role={named ? 'group' : parts ? 'img' : undefined}
+            aria-label={parts ? 'The five PRISM stacks, Research on top and Evidence as the foundation' : undefined}
+            aria-hidden={parts ? undefined : true}
         >
-            {STACKS.map((_, k) => {
-                // Draw from the bottom plate up so upper plates overlap lower ones.
-                const i = STACKS.length - 1 - k;
+            {order.map((i) => {
                 const st = STACKS[i];
-                const cy = top + i * GAP;
-                const on = i === active;
-                const w2 = PLATE_W / 2;
-                const h2 = PLATE_H / 2;
-                const topFace = `${cx},${cy - h2} ${cx + w2},${cy} ${cx},${cy + h2} ${cx - w2},${cy}`;
-                const left = `${cx - w2},${cy} ${cx},${cy + h2} ${cx},${cy + h2 + THICK} ${cx - w2},${cy + THICK}`;
-                const right = `${cx},${cy + h2} ${cx + w2},${cy} ${cx + w2},${cy + THICK} ${cx},${cy + h2 + THICK}`;
-                const grid = [];
-                for (let g = 1; g < 6; g++) {
-                    const f = g / 6;
-                    grid.push(
-                        <line key={`a${g}`} x1={cx - w2 + w2 * f} y1={cy - h2 * f} x2={cx + w2 * f} y2={cy + h2 - h2 * f} />,
-                        <line key={`b${g}`} x1={cx + w2 - w2 * f} y1={cy - h2 * f} x2={cx - w2 * f} y2={cy + h2 - h2 * f} />,
-                    );
-                }
                 return (
-                    <g
-                        key={st.id}
-                        className={`iso__plate${on ? ' is-on' : ''}`}
-                        onClick={onPick ? () => onPick(i) : undefined}
-                    >
-                        <polygon className="iso__side iso__side--l" points={left} />
-                        <polygon className="iso__side iso__side--r" points={right} />
-                        <polygon className="iso__top" points={topFace} />
-                        <g className="iso__grid">{grid}</g>
-                        {!compact && (
-                            <g className="iso__label">
-                                <line x1={cx + w2 + 6} y1={cy} x2={cx + w2 + 44} y2={cy} />
-                                <text className="iso__num" x={cx + w2 + 54} y={cy - 6}>
-                                    {String(i + 1).padStart(2, '0')}
-                                </text>
-                                <text className="iso__name" x={cx + w2 + 54} y={cy + 16}>
-                                    {st.short}
-                                </text>
-                            </g>
-                        )}
+                    <g key={st.id} className="iso__plate" data-i={i} transform={`translate(0 ${start[i].cy.toFixed(2)})`}>
+                        <g className="iso__drop" style={{ '--k': LAST - i } as CSSProperties}>
+                            <polygon className="iso__side iso__side--l" points={plate.left} />
+                            <polygon className="iso__side iso__side--r" points={plate.right} />
+                            <polygon className="iso__top" points={plate.top} />
+                            {parts && (
+                                <g className="iso__parts" style={{ opacity: 0.3 }}>
+                                    {slots(st.layers).map(({ l, k, a, b, da, db }) => {
+                                        const f = box(cx, a, b, da, db, 0);
+                                        return (
+                                            <g
+                                                key={l.name}
+                                                className={`iso__part iso__part--${l.maturity}`}
+                                                data-k={k}
+                                                data-a={a}
+                                                data-b={b}
+                                                data-da={da}
+                                                data-db={db}
+                                                data-h={TALL[l.maturity]}
+                                            >
+                                                <polygon className="iso__part-l" points={f.left} />
+                                                <polygon className="iso__part-r" points={f.right} />
+                                                <polygon className="iso__part-t" points={f.top} />
+                                            </g>
+                                        );
+                                    })}
+                                </g>
+                            )}
+                        </g>
                     </g>
                 );
             })}
+            {named &&
+                STACKS.map((st, i) => {
+                    const x = cx + W2 + 22;
+                    return (
+                        <a
+                            key={st.id}
+                            href={`#${st.id}`}
+                            className="iso__label is-faded"
+                            data-i={i}
+                            style={{ opacity: 0 }}
+                            onClick={onPick?.(i)}
+                        >
+                            <g transform={`translate(0 ${start[i].cy.toFixed(2)})`}>
+                                <line className="iso__lead" x1={cx + W2 + 6} y1={0} x2={x - 6} y2={0} />
+                                <text className="iso__num" x={x} y={-8}>
+                                    {String(i + 1).padStart(2, '0')}
+                                </text>
+                                <text className="iso__name" x={x} y={13}>
+                                    {st.short}
+                                </text>
+                            </g>
+                        </a>
+                    );
+                })}
+            {named && (
+                <g className="iso__whole" aria-hidden="true">
+                    <line className="iso__lead" x1={cx + W2 + 6} y1={y0 + (LAST / 2) * g.open} x2={cx + W2 + 16} y2={y0 + (LAST / 2) * g.open} />
+                    <text className="iso__name" x={cx + W2 + 22} y={y0 + (LAST / 2) * g.open + 6}>
+                        One system
+                    </text>
+                </g>
+            )}
         </svg>
     );
 }
 
-/* ── One stack at a time ──────────────────────────────────────────────── */
+/** Moves one drawing to where scrolling has got to. */
+function draw(svg: SVGSVGElement, apart: number, at: number, still: boolean) {
+    const g = GEOMS[svg.dataset.variant as Variant];
+    const { cx } = frame(g);
+    const places = layout(g, apart, at, still);
+    svg.querySelectorAll<SVGGElement>('.iso__plate').forEach((el) => {
+        const p = places[Number(el.dataset.i)];
+        el.setAttribute('transform', `translate(${p.dx.toFixed(2)} ${p.cy.toFixed(2)})`);
+        el.classList.toggle('is-on', p.s > 0.5);
+        const parts = el.querySelector<SVGGElement>('.iso__parts');
+        if (!parts) return;
+        // The parts stand up as their plate comes forward; with reduced motion they simply stand.
+        const up = still ? (p.s > 0.5 ? 1 : 0) : smooth(0.35, 1, p.s);
+        if (Math.abs(Number(parts.dataset.up ?? -1) - up) < 0.002) return;
+        parts.dataset.up = String(up);
+        parts.style.opacity = String(0.3 + 0.7 * up);
+        parts.querySelectorAll<SVGGElement>('.iso__part').forEach((part) => {
+            const d = part.dataset;
+            const f = box(cx, Number(d.a), Number(d.b), Number(d.da), Number(d.db), Number(d.h) * up);
+            const [l, r, t] = Array.from(part.children);
+            l.setAttribute('points', f.left);
+            r.setAttribute('points', f.right);
+            t.setAttribute('points', f.top);
+        });
+    });
+    const names = smooth(0.35, 0.85, apart);
+    svg.querySelectorAll<SVGAElement>('.iso__label').forEach((el) => {
+        const p = places[Number(el.dataset.i)];
+        el.querySelector('g')?.setAttribute('transform', `translate(0 ${p.cy.toFixed(2)})`);
+        el.style.opacity = names.toFixed(3);
+        el.classList.toggle('is-faded', names < 0.5);
+        el.classList.toggle('is-on', p.s > 0.5);
+        el.querySelector('line')?.setAttribute('x1', (cx + W2 + p.dx + 6).toFixed(1));
+    });
+    const whole = svg.querySelector<SVGGElement>('.iso__whole');
+    if (whole) whole.style.opacity = (1 - smooth(0.1, 0.5, apart)).toFixed(3);
+}
 
-function Chapter({ stack, index }: { stack: StackDef; index: number }) {
+/* ── One stack ────────────────────────────────────────────────────────── */
+
+function Chapter({ stack, index, level }: { stack: StackDef; index: number; level: 'h2' | 'h3' }) {
+    const H = level;
     return (
-        <div className="chapter">
-            <div className="chapter__text">
-                <p className="w-label chapter__index">
-                    Stack {String(index + 1).padStart(2, '0')} / {String(STACKS.length).padStart(2, '0')}
-                </p>
-                <h3 className="chapter__name">{stack.name}</h3>
-                <p className="q chapter__q">{stack.question}</p>
-                <p className="a chapter__a">
-                    <b>{stack.lead}</b> {stack.answer}
-                </p>
-                {stack.photo && (
-                    <figure className="chapter__photo">
-                        <img src={stack.photo.src} alt={stack.photo.alt} width={1200} height={800} loading="lazy" />
-                        <figcaption>{stack.photo.caption}</figcaption>
-                    </figure>
-                )}
-                <p className="limit">
-                    <span className="w-label">Limit</span>
-                    {stack.limit}
-                </p>
-            </div>
+        <article id={stack.id} className="chapter" aria-labelledby={`${stack.id}-name`}>
+            <p className="w-label chapter__index">
+                Stack {String(index + 1).padStart(2, '0')} / {String(STACKS.length).padStart(2, '0')}
+            </p>
+            <H id={`${stack.id}-name`} className="chapter__name">
+                {stack.name}
+            </H>
+            <p className="q chapter__q">{stack.question}</p>
+            <p className="a chapter__a">
+                <b>{stack.lead}</b> {stack.answer}
+            </p>
+            {stack.photo && (
+                <figure className="chapter__photo">
+                    <img src={stack.photo.src} alt={stack.photo.alt} width={1200} height={800} loading="lazy" />
+                    <figcaption>{stack.photo.caption}</figcaption>
+                </figure>
+            )}
             <ol className="layers" aria-label={`${stack.name} layers`}>
                 {stack.layers.map((l, k) => (
                     <li key={l.name}>
@@ -327,94 +480,153 @@ function Chapter({ stack, index }: { stack: StackDef; index: number }) {
                     </li>
                 ))}
             </ol>
-        </div>
+            <p className="limit">
+                <span className="w-label">Limit</span>
+                {stack.limit}
+            </p>
+        </article>
     );
 }
 
-/** The stack named in the address (for example /platform#autonomy), else the first. */
-const fromHash = () => {
-    const i = typeof window === 'undefined' ? -1 : STACKS.findIndex((s) => `#${s.id}` === window.location.hash);
-    return i >= 0 ? i : 0;
-};
+/* ── Section ──────────────────────────────────────────────────────────── */
 
+const two = (i: number) => String(i + 1).padStart(2, '0');
+
+/**
+ * The platform: scroll through the five stacks. Beside the text (or in a strip above it on upright
+ * phones) the drawing takes the system apart and brings forward the stack being read. Clicking a
+ * stack's name, or its number, goes straight to it.
+ */
 export default function Stacks({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
     const H = h1 ? 'h1' : 'h2';
-    const [active, setActive] = useState(fromHash);
-    const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+    const section = useRef<HTMLElement>(null);
+    const [active, setActive] = useState(0);
+    const short = useMediaQuery('(max-height: 500px)');
 
-    const pick = (i: number) => {
-        setActive(i);
+    const go = (i: number) => (e: MouseEvent) => {
+        e.preventDefault();
+        const el = document.getElementById(STACKS[i].id);
+        if (!el) return;
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
         window.history.replaceState(null, '', `#${STACKS[i].id}`);
     };
-    // Arrow keys move between the tabs, as in any tab list.
-    const onKey = (e: KeyboardEvent) => {
-        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-        if (!d) return;
-        e.preventDefault();
-        const next = (active + d + STACKS.length) % STACKS.length;
-        pick(next);
-        tabs.current[next]?.focus();
-    };
+
+    useEffect(() => {
+        const sec = section.current;
+        if (!sec) return;
+        const chapters = STACKS.map((s) => document.getElementById(s.id)).filter((el): el is HTMLElement => !!el);
+        if (chapters.length !== STACKS.length) return;
+        const strip = sec.querySelector<HTMLElement>('.stacks__strip');
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let raf = 0;
+        let shown = 0;
+
+        const update = () => {
+            raf = 0;
+            const nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 0;
+            const top = nav + (strip?.offsetHeight ?? 0);
+            const focus = top + (window.innerHeight - top) * 0.42;
+            // Where reading has got to: below 0 before the first stack, i + fraction inside stack i.
+            let pos = -1;
+            const first = chapters[0].getBoundingClientRect();
+            if (focus < first.top) pos = Math.max(-1, (focus - first.top) / Math.max(1, first.height));
+            else
+                for (let i = 0; i < chapters.length; i++) {
+                    const r = chapters[i].getBoundingClientRect();
+                    if (focus < r.bottom || i === LAST) {
+                        pos = i + Math.min(1, (focus - r.top) / Math.max(1, r.height));
+                        break;
+                    }
+                }
+            const still = reduced.matches;
+            // One block while the first stack is below the screen; five plates once it is being read.
+            const vh = window.innerHeight;
+            const apart = still ? 1 : smooth(0.08, 0.92, (vh - first.top) / Math.max(1, vh - focus));
+            let at = 0;
+            if (still) at = Math.min(LAST, Math.max(0, Math.floor(pos)));
+            else for (let b = 1; b <= LAST; b++) at += smooth(b - 0.12, b + 0.12, pos);
+            for (const svg of sec.querySelectorAll<SVGSVGElement>('svg[data-variant]'))
+                if (svg.getBoundingClientRect().width > 0) draw(svg, apart, at, still);
+            const now = Math.min(LAST, Math.max(0, Math.floor(pos)));
+            if (now !== shown) {
+                shown = now;
+                setActive(now);
+            }
+        };
+        const schedule = () => {
+            if (!raf) raf = requestAnimationFrame(update);
+        };
+        const ro = new ResizeObserver(schedule);
+        ro.observe(sec);
+        window.addEventListener('scroll', schedule, { passive: true });
+        reduced.addEventListener('change', schedule);
+        update();
+        return () => {
+            ro.disconnect();
+            window.removeEventListener('scroll', schedule);
+            reduced.removeEventListener('change', schedule);
+            cancelAnimationFrame(raf);
+        };
+    }, []);
 
     return (
-        <section id="platform" className="stacks" data-theme="navy" data-nav="navy" aria-labelledby="platform-title">
+        <section ref={section} id="platform" className="stacks" data-theme="navy" data-nav="navy" aria-labelledby="platform-title">
             <Grain />
-            <div className="wrap sec stacks__intro">
-                <header className="stacks__head rv">
-                    <Idx n={n}>The platform</Idx>
-                    <H id="platform-title" className="w-h2">
-                        Five stacks. One system.
-                    </H>
-                    <p className="w-lead">Five layers, each with one job. Every part is labelled with how ready it is.</p>
-                    <ul className="stacks__legend" aria-label="Maturity">
-                        <li>
-                            <MaturityPill maturity="in-use" /> Used in our projects today
-                        </li>
-                        <li>
-                            <MaturityPill maturity="prototype" /> Working, being improved
-                        </li>
-                        <li>
-                            <MaturityPill maturity="development" /> Being built
-                        </li>
-                        <li>
-                            <MaturityPill maturity="target" /> The goal
-                        </li>
-                    </ul>
-                </header>
-                <div className="stacks__iso rv">
-                    <IsoStack active={active} onPick={pick} />
+            <div className="wrap stacks__scroll">
+                <div className="stacks__rail">
+                    <IsoStack variant={short ? 'bare' : 'full'} onPick={go} />
                 </div>
-            </div>
-
-            <div className="wrap stacks__body">
-                <div className="stacks__tabs" role="tablist" aria-label="The five stacks" onKeyDown={onKey}>
+                <div className="stacks__main">
+                    <header className="stacks__head rv">
+                        <Idx n={n}>The platform</Idx>
+                        <H id="platform-title" className="w-h2">
+                            Five stacks. One system.
+                        </H>
+                        <p className="w-lead">Five layers, each with one job. Every part is labelled with how ready it is.</p>
+                        <ul className="stacks__legend" aria-label="Maturity">
+                            <li>
+                                <MaturityPill maturity="in-use" /> Used in our projects today
+                            </li>
+                            <li>
+                                <MaturityPill maturity="prototype" /> Working, being improved
+                            </li>
+                            <li>
+                                <MaturityPill maturity="development" /> Being built
+                            </li>
+                            <li>
+                                <MaturityPill maturity="target" /> The goal
+                            </li>
+                        </ul>
+                        <p className="stacks__cue" aria-hidden="true">
+                            Scroll to take it apart
+                        </p>
+                    </header>
+                    <div className="stacks__strip">
+                        <IsoStack variant="mini" />
+                        <p className="stacks__now">
+                            <span className="w-label">
+                                Stack {two(active)} / {two(LAST)}
+                            </span>
+                            <b>{STACKS[active].short}</b>
+                        </p>
+                        <nav className="stacks__jump" aria-label="The five stacks">
+                            {STACKS.map((st, i) => (
+                                <a
+                                    key={st.id}
+                                    href={`#${st.id}`}
+                                    aria-label={st.name}
+                                    aria-current={i === active ? 'step' : undefined}
+                                    onClick={go(i)}
+                                >
+                                    {two(i)}
+                                </a>
+                            ))}
+                        </nav>
+                    </div>
                     {STACKS.map((st, i) => (
-                        <button
-                            key={st.id}
-                            ref={(el) => {
-                                tabs.current[i] = el;
-                            }}
-                            type="button"
-                            role="tab"
-                            id={`stack-tab-${st.id}`}
-                            aria-selected={i === active}
-                            aria-controls="stack-panel"
-                            tabIndex={i === active ? 0 : -1}
-                            className="stacks__tab"
-                            onClick={() => pick(i)}
-                        >
-                            <span className="stacks__tab-num">{String(i + 1).padStart(2, '0')}</span>
-                            <span>{st.short}</span>
-                        </button>
+                        <Chapter key={st.id} stack={st} index={i} level={h1 ? 'h2' : 'h3'} />
                     ))}
-                </div>
-                <div
-                    id="stack-panel"
-                    className="stacks__panel"
-                    role="tabpanel"
-                    aria-labelledby={`stack-tab-${STACKS[active].id}`}
-                >
-                    <Chapter key={STACKS[active].id} stack={STACKS[active]} index={active} />
                 </div>
             </div>
         </section>

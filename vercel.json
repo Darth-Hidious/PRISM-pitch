@@ -1,4 +1,16 @@
 {
+  "redirects": [
+    {
+      "source": "/evidence",
+      "destination": "/method/#proof",
+      "permanent": false
+    },
+    {
+      "source": "/evidence/:path*",
+      "destination": "/method/#proof",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/platform",
@@ -7,10 +19,6 @@
     {
       "source": "/method",
       "destination": "/method/index.html"
-    },
-    {
-      "source": "/evidence",
-      "destination": "/evidence/index.html"
     },
     {
       "source": "/company",

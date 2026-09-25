@@ -4,12 +4,11 @@ import { CREDITS } from './credits';
 import { LINKS } from './links';
 
 /** The site's pages. Home is `/`; each other page is its own HTML entry (see vite.config.ts). */
-export type PageId = 'home' | 'platform' | 'method' | 'evidence' | 'company' | 'news';
+export type PageId = 'home' | 'platform' | 'method' | 'company' | 'news';
 
 const NAV: { id: PageId; href: string; label: string }[] = [
     { id: 'platform', href: '/platform/', label: 'Platform' },
     { id: 'method', href: '/method/', label: 'Method' },
-    { id: 'evidence', href: '/evidence/', label: 'Evidence and IP' },
     { id: 'company', href: '/company/', label: 'Company' },
     { id: 'news', href: '/news/', label: 'News' },
 ];
@@ -151,7 +150,7 @@ export function SiteFooter({ page }: { page: PageId }) {
                                 <a href="/method/">The method</a>
                             </li>
                             <li>
-                                <a href="/evidence/">Evidence and IP</a>
+                                <a href="/method/#proof">Proof, built in</a>
                             </li>
                         </ul>
                     </nav>

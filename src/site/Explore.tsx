@@ -16,11 +16,11 @@ const PAGES = [
         text: 'Four live demos, and Forager, our open research.',
     },
     {
-        href: '/evidence/',
+        href: '/method/#proof',
         img: '/img/spark-button-wide.webp',
-        label: 'Evidence and IP',
-        title: 'Every result keeps its proof.',
-        text: 'Who can see what, a real lineage, and what a part gives away.',
+        label: 'Proof, built in',
+        title: 'Every result carries its own proof.',
+        text: 'A live map of who sees what, a real lineage, and what a part gives away.',
     },
     {
         href: '/company/',

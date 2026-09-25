@@ -43,7 +43,8 @@ export const CREDITS: Partial<Record<PageId, ReactNode>> = {
     ),
     method: (
         <>
-            {vinci}, resized · Fruit-fly brain map: MaleCNS v1.0, FlyEM, HHMI Janelia, {licence(CC_BY_4, 'CC BY 4.0')}.
+            {vinci}, resized · Fruit-fly brain map: MaleCNS v1.0, FlyEM, HHMI Janelia, {licence(CC_BY_4, 'CC BY 4.0')} · All
+            other photos: Mirdyne.
         </>
     ),
     news: <>Award photo: Hessen Ideen · All other photos: Mirdyne.</>,

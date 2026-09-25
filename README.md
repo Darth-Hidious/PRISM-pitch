@@ -5,15 +5,15 @@
 | Path | What | Source |
 | --- | --- | --- |
 | `/` | Home: the problem PRISM solves, why Europe, the loop, links to the other pages | `src/site/pages/home.tsx` |
-| `/platform/` | The five stacks (one at a time, `/platform/#autonomy` opens one) and progress | `src/site/pages/platform.tsx` |
-| `/method/` | Four live demos of the method (`/method/#al` opens one) and open research | `src/site/pages/method.tsx` |
-| `/evidence/` | Evidence and IP: who sees what, a real lineage (NIST's CAMEO), what a part gives away | `src/site/pages/evidence.tsx` |
+| `/platform/` | The five stacks, taken apart as you scroll (`/platform/#autonomy` goes to one), and progress | `src/site/pages/platform.tsx` |
+| `/method/` | Four live demos of the method (`/method/#al` opens one), open research, and Proof, built in (`#proof`): a live map of who sees what, a real lineage (NIST's CAMEO), what a part gives away | `src/site/pages/method.tsx` |
 | `/company/` | Mirdyne and Bimo Tech, the founders, working with us | `src/site/pages/company.tsx` |
 | `/news/` | News, with the photographs | `src/site/pages/news.tsx` |
 | `/deck/` | The investor briefing: 12 slides on a 1440 × 810 stage, `/deck/#5` opens slide 5 | `src/deck/` |
 
 Each page is its own HTML file (`index.html`, `platform/index.html`, …), listed
-in `vite.config.ts`; `vercel.json` also serves them without the trailing slash.
+in `vite.config.ts`; `vercel.json` also serves them without the trailing slash,
+and sends the old `/evidence/` address to `/method/#proof`.
 
 Both are built from the same component library in `src/ds/` and the tokens in
 `src/styles/`, which are also published as the PRISM design system.
