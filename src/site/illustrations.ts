@@ -214,3 +214,121 @@ export function evidenceLineage(w: number, h: number) {
     }
     return c;
 }
+
+/** Space propulsion: an engine bell firing, plume and shock diamonds against a night sky. */
+export function plumeScene(w: number, h: number) {
+    const c = canvas(w, h);
+    const ctx = c.getContext('2d')!;
+    const u = Math.min(w, h) / 100;
+
+    const sky = ctx.createLinearGradient(0, 0, 0, h);
+    sky.addColorStop(0, '#040f22');
+    sky.addColorStop(0.55, '#0c2442');
+    sky.addColorStop(1, '#1b2635');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, w, h);
+
+    const cx = w * 0.64;
+    const exitW = 30 * u;
+    const throatW = 8 * u;
+    const y0 = h * 0.06;
+    const y1 = y0 + 30 * u;
+
+    // Engine block and feed lines above the bell.
+    ctx.fillStyle = '#243650';
+    ctx.fillRect(cx - 9 * u, y0 - 14 * u, 18 * u, 15 * u);
+    ctx.strokeStyle = '#6f91ba';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 2.2 * u;
+    ctx.beginPath();
+    ctx.moveTo(cx - 9 * u, y0 - 8 * u);
+    ctx.bezierCurveTo(cx - 20 * u, y0 - 6 * u, cx - 18 * u, y0 + 6 * u, cx - 7 * u, y0 + 8 * u);
+    ctx.moveTo(cx + 9 * u, y0 - 11 * u);
+    ctx.bezierCurveTo(cx + 22 * u, y0 - 9 * u, cx + 19 * u, y0 + 9 * u, cx + 8 * u, y0 + 11 * u);
+    ctx.stroke();
+
+    // Glow around the exit and the plume, painted first so it sits behind.
+    glow(ctx, cx, y1 + 30 * u, 70 * u, [
+        [0, 'rgba(255,196,120,0.55)'],
+        [0.35, 'rgba(255,120,60,0.25)'],
+        [1, 'rgba(209,47,73,0)'],
+    ]);
+
+    // Bell nozzle.
+    const metal = ctx.createLinearGradient(cx - exitW / 2, 0, cx + exitW / 2, 0);
+    metal.addColorStop(0, '#111a26');
+    metal.addColorStop(0.3, '#6f7f93');
+    metal.addColorStop(0.47, '#d7dee7');
+    metal.addColorStop(0.62, '#5f6b78');
+    metal.addColorStop(1, '#0e1520');
+    ctx.fillStyle = metal;
+    ctx.beginPath();
+    ctx.moveTo(cx - throatW / 2, y0);
+    ctx.quadraticCurveTo(cx - throatW / 2 - 2 * u, y0 + 20 * u, cx - exitW / 2, y1);
+    ctx.lineTo(cx + exitW / 2, y1);
+    ctx.quadraticCurveTo(cx + throatW / 2 + 2 * u, y0 + 20 * u, cx + throatW / 2, y0);
+    ctx.closePath();
+    ctx.fill();
+    // Hot lip.
+    ctx.strokeStyle = '#ffb36b';
+    ctx.lineWidth = 1.4 * u;
+    ctx.beginPath();
+    ctx.ellipse(cx, y1, exitW / 2, 2.2 * u, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Outer plume.
+    const outer = ctx.createLinearGradient(0, y1, 0, h);
+    outer.addColorStop(0, 'rgba(255,236,200,0.95)');
+    outer.addColorStop(0.18, 'rgba(255,170,90,0.85)');
+    outer.addColorStop(0.5, 'rgba(226,90,70,0.5)');
+    outer.addColorStop(1, 'rgba(120,120,140,0.15)');
+    ctx.fillStyle = outer;
+    ctx.beginPath();
+    ctx.moveTo(cx - exitW * 0.47, y1);
+    ctx.bezierCurveTo(cx - exitW * 0.7, y1 + 20 * u, cx - exitW * 1.1, h * 0.8, cx - exitW * 1.8, h);
+    ctx.lineTo(cx + exitW * 1.8, h);
+    ctx.bezierCurveTo(cx + exitW * 1.1, h * 0.8, cx + exitW * 0.7, y1 + 20 * u, cx + exitW * 0.47, y1);
+    ctx.closePath();
+    ctx.fill();
+
+    // Blue base just below the exit.
+    glow(ctx, cx, y1 + 3 * u, 16 * u, [
+        [0, 'rgba(170,205,255,0.95)'],
+        [0.5, 'rgba(111,145,186,0.55)'],
+        [1, 'rgba(111,145,186,0)'],
+    ]);
+
+    // White core with shock diamonds.
+    const core = ctx.createLinearGradient(0, y1, 0, y1 + 60 * u);
+    core.addColorStop(0, 'rgba(255,255,255,1)');
+    core.addColorStop(1, 'rgba(255,220,160,0)');
+    ctx.fillStyle = core;
+    ctx.beginPath();
+    ctx.moveTo(cx - exitW * 0.3, y1);
+    ctx.lineTo(cx - 3 * u, y1 + 60 * u);
+    ctx.lineTo(cx + 3 * u, y1 + 60 * u);
+    ctx.lineTo(cx + exitW * 0.3, y1);
+    ctx.closePath();
+    ctx.fill();
+    for (let i = 0; i < 4; i++) {
+        const y = y1 + (9 + i * 12) * u;
+        const s = (1 - i * 0.18) * 5 * u;
+        glow(ctx, cx, y, s * 2.6, [
+            [0, 'rgba(255,255,255,0.95)'],
+            [0.5, 'rgba(255,214,150,0.5)'],
+            [1, 'rgba(255,214,150,0)'],
+        ]);
+    }
+
+    // Exhaust cloud rolling out at the bottom.
+    for (let i = 0; i < 9; i++) {
+        const x = cx + (i - 4) * 16 * u;
+        const y = h - (4 + (i % 3) * 5) * u;
+        glow(ctx, x, y, (16 + (i % 4) * 5) * u, [
+            [0, 'rgba(210,205,200,0.5)'],
+            [0.6, 'rgba(150,150,160,0.25)'],
+            [1, 'rgba(150,150,160,0)'],
+        ]);
+    }
+    return c;
+}

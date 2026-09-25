@@ -4,7 +4,7 @@
 
 | Path | What | Source |
 | --- | --- | --- |
-| `/` | The website: a scrolling page from the problem to the stacks, evidence and IP, programmes, business model and company | `src/site/` |
+| `/` | The website: the gap PRISM closes, the loop, the five stacks, live exhibits of the method, evidence and IP, the business, the roadmap, the company and news | `src/site/` |
 | `/deck/` | The investor briefing: 12 slides on a 1440 × 810 stage, `/deck/#5` opens slide 5 | `src/deck/` |
 
 Both are built from the same component library in `src/ds/` and the tokens in
@@ -33,11 +33,20 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
 - **Paintings** (`src/ds/paint.ts`, `src/ds/Painting.tsx`): photographs and
   scenes repainted as brush strokes in the browser, deterministic per seed.
   Scenes drawn in code live in `src/site/illustrations.ts`.
+- **Website** (`src/site/`): one component per section. The web type scale,
+  sticky scroll stages and exhibit styles are in `site.css`. The live pieces
+  compute in the browser: the dot field in `Gap.tsx` (one dot per 100
+  predicted structures), the process map and the Gaussian-process loop in
+  `Method.tsx`, the rights explorer in `Evidence.tsx` and the event cascade in
+  `Roadmap.tsx`. Each says on the page what is illustrative.
 - **Fonts**: Manrope and Geist Mono, self-hosted through Fontsource (no calls
   to Google Fonts).
 
 ## Writing for the site
 
 Every number carries a source line. Every capability carries its maturity:
-*In use*, *Prototype* (PRISM software at TRL 3 → 4), *In development* or
+*In use*, *Prototype* (working software, being matured), *In development* or
 *Target*. Illustrative graphics say so. Partners under NDA are not named.
+Data from ongoing projects (schedules, benchmarks, candidate counts, test
+conditions, consortium roles) stays off the website; programmes appear only
+as short news items.

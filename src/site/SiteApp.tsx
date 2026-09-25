@@ -1,26 +1,33 @@
 import { useEffect } from 'react';
+import Business from './Business';
 import { SiteFooter, SiteNav } from './Chrome';
-import { Business, Company, Contact, Evidence, Hero, Loop, Modules, Programmes, Roadmap, Why } from './Sections';
+import { Company, Contact, News } from './Company';
+import Evidence from './Evidence';
+import { Gap, Precedent } from './Gap';
+import Hero from './Hero';
+import Loop from './Loop';
+import Method from './Method';
+import Roadmap from './Roadmap';
 import Stacks from './Stacks';
 
-/** Adds `reveal--in` to `.reveal` elements as they scroll into view. */
+/** Adds `in` to `.rv` elements as they scroll into view, once. */
 function useReveal() {
     useEffect(() => {
-        const els = Array.from(document.querySelectorAll<HTMLElement>('.reveal'));
+        const els = Array.from(document.querySelectorAll<HTMLElement>('.rv'));
         if (!('IntersectionObserver' in window)) {
-            els.forEach((el) => el.classList.add('reveal--in'));
+            els.forEach((el) => el.classList.add('in'));
             return;
         }
         const io = new IntersectionObserver(
             (entries) => {
                 for (const e of entries) {
                     if (e.isIntersecting) {
-                        e.target.classList.add('reveal--in');
+                        e.target.classList.add('in');
                         io.unobserve(e.target);
                     }
                 }
             },
-            { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+            { rootMargin: '0px 0px -6% 0px', threshold: 0.04 },
         );
         els.forEach((el) => io.observe(el));
         return () => io.disconnect();
@@ -37,15 +44,16 @@ export default function SiteApp() {
             <SiteNav />
             <main id="main">
                 <Hero />
-                <Why />
-                <Stacks />
+                <Gap />
+                <Precedent />
                 <Loop />
-                <Modules />
+                <Stacks />
+                <Method />
                 <Evidence />
-                <Programmes />
                 <Business />
                 <Roadmap />
                 <Company />
+                <News />
                 <Contact />
             </main>
             <SiteFooter />

@@ -6,72 +6,109 @@ const NAV = [
     { href: '#platform', label: 'Platform' },
     { href: '#loop', label: 'How it works' },
     { href: '#evidence', label: 'Evidence and IP' },
-    { href: '#programmes', label: 'Programmes' },
     { href: '#company', label: 'Company' },
+    { href: '#news', label: 'News' },
 ];
 
+type Over = 'hero' | 'navy' | 'paper';
+
+/**
+ * Reads which section sits under the bar. Sections declare `data-nav` as
+ * `hero` (transparent bar), `navy` or `paper`.
+ */
+function useNavOver(): Over {
+    const [over, setOver] = useState<Over>('hero');
+    useEffect(() => {
+        let raf = 0;
+        const probe = 36;
+        const update = () => {
+            raf = 0;
+            let found: Over = 'paper';
+            for (const el of document.querySelectorAll<HTMLElement>('[data-nav]')) {
+                const r = el.getBoundingClientRect();
+                if (r.top <= probe && r.bottom > probe) {
+                    found = (el.dataset.nav as Over) ?? 'paper';
+                    break;
+                }
+            }
+            setOver((prev) => (prev === found ? prev : found));
+        };
+        const schedule = () => {
+            if (!raf) raf = requestAnimationFrame(update);
+        };
+        schedule();
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule);
+        return () => {
+            window.removeEventListener('scroll', schedule);
+            window.removeEventListener('resize', schedule);
+            cancelAnimationFrame(raf);
+        };
+    }, []);
+    return over;
+}
+
 export function SiteNav() {
-    const [scrolled, setScrolled] = useState(false);
+    const over = useNavOver();
     const [open, setOpen] = useState(false);
+    const theme = open ? 'navy' : over === 'paper' ? 'paper' : 'navy';
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 8);
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
+        if (!open) return;
+        const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [open]);
 
     return (
-        <header className={`site-nav${scrolled ? ' site-nav--scrolled' : ''}`}>
-            <div className="site-container site-nav__inner">
-                <a className="site-brand" href="#top" aria-label="PRISM by Mirdyne, back to top">
+        <header className="nav" data-over={open ? 'navy' : over} data-theme={theme}>
+            <div className="wrap nav__inner">
+                <a className="nav__brand" href="#top" aria-label="PRISM by Mirdyne, back to top">
                     <MirdyneMark title="" />
-                    <span className="site-brand__name">PRISM</span>
-                    <span className="site-brand__by">by Mirdyne</span>
+                    <span className="nav__name">PRISM</span>
+                    <span className="nav__by">by Mirdyne</span>
                 </a>
-                <ul className="site-nav__links">
+                <ul className="nav__links">
                     {NAV.map((n) => (
                         <li key={n.href}>
                             <a href={n.href}>{n.label}</a>
                         </li>
                     ))}
                 </ul>
-                <div className="site-nav__actions">
-                    <Button variant="link" href={LINKS.deck} arrow={false}>
-                        Investor briefing
-                    </Button>
+                <div className="nav__cta">
                     <Button href={LINKS.interest} external>
                         Register interest
                     </Button>
                 </div>
                 <button
                     type="button"
-                    className="site-nav__menu"
+                    className="nav__menu"
                     aria-expanded={open}
                     aria-controls="site-menu"
                     onClick={() => setOpen((o) => !o)}
                 >
-                    <span />
+                    <span aria-hidden="true" />
                     <span className="pm-visually-hidden">{open ? 'Close menu' : 'Open menu'}</span>
                 </button>
             </div>
             <nav
                 id="site-menu"
-                className={`site-nav__panel${open ? ' site-nav__panel--open' : ''}`}
+                className={`nav__panel${open ? ' nav__panel--open' : ''}`}
                 aria-label="Site"
                 onClick={(e) => {
                     if ((e.target as HTMLElement).closest('a')) setOpen(false);
                 }}
             >
-                {NAV.map((n) => (
-                    <a key={n.href} href={n.href}>
-                        {n.label}
-                    </a>
-                ))}
-                <a href={LINKS.deck}>Investor briefing</a>
-                <Button href={LINKS.interest} external>
-                    Register interest
-                </Button>
+                <div className="wrap">
+                    {NAV.map((n) => (
+                        <a key={n.href} href={n.href}>
+                            {n.label}
+                        </a>
+                    ))}
+                    <Button href={LINKS.interest} external>
+                        Register interest
+                    </Button>
+                </div>
             </nav>
         </header>
     );
@@ -79,10 +116,10 @@ export function SiteNav() {
 
 export function SiteFooter() {
     return (
-        <footer className="site-footer" data-theme="navy">
-            <div className="site-container">
-                <div className="site-footer__grid">
-                    <div className="site-footer__brand">
+        <footer className="footer" data-theme="navy" data-nav="navy">
+            <div className="wrap">
+                <div className="footer__grid">
+                    <div className="footer__brand">
                         <img src="/brand/mirdyne-lockup-white.png" alt="Mirdyne" width={150} height={41} />
                         <p>
                             PRISM · Freedom to build.
@@ -101,10 +138,10 @@ export function SiteFooter() {
                                 <a href="#loop">How it works</a>
                             </li>
                             <li>
-                                <a href="#evidence">Evidence and IP</a>
+                                <a href="#method">The method</a>
                             </li>
                             <li>
-                                <a href="#programmes">Programmes</a>
+                                <a href="#evidence">Evidence and IP</a>
                             </li>
                         </ul>
                     </nav>
@@ -112,10 +149,10 @@ export function SiteFooter() {
                         <h2>Company</h2>
                         <ul>
                             <li>
-                                <a href="#company">About Mirdyne</a>
+                                <a href="#company">Mirdyne and Bimo Tech</a>
                             </li>
                             <li>
-                                <a href={LINKS.deck}>Investor briefing</a>
+                                <a href="#news">News</a>
                             </li>
                             <li>
                                 <a href={LINKS.interest} target="_blank" rel="noopener noreferrer">
@@ -145,9 +182,9 @@ export function SiteFooter() {
                         </ul>
                     </nav>
                 </div>
-                <div className="site-footer__legal">
+                <div className="footer__legal">
                     <span>© 2026 Mirdyne · Giessen, Germany · A spin-off of Bimo Tech</span>
-                    <a className="site-footer__credit" href={LINKS.marc27} target="_blank" rel="noopener noreferrer">
+                    <a className="footer__credit" href={LINKS.marc27} target="_blank" rel="noopener noreferrer">
                         Technology concept by marc27
                     </a>
                 </div>
