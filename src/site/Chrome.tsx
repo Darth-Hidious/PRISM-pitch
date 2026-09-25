@@ -133,8 +133,8 @@ export function SiteFooter({ page }: { page: PageId }) {
                         <p>
                             PRISM · Freedom to build.
                             <br />
-                            Initial development of PRISM funded under the ESA Future Launchers Preparatory Programme,
-                            FIRST! Simulation &amp; Intelligence.
+                            Initial deployment of PRISM, for its first use cases, funded under the ESA Future Launchers
+                            Preparatory Programme, FIRST! Simulation &amp; Intelligence.
                         </p>
                     </div>
                     <nav aria-label="Platform">

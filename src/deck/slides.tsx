@@ -28,7 +28,7 @@ export function Cover() {
                 </p>
                 <div className="d-cover__meta">
                     <img src="/brand/mirdyne-lockup-ink.png" alt="Mirdyne" width={170} height={46} />
-                    <SourceLine label="">Initial development of PRISM funded under ESA FLPP, FIRST! Simulation &amp; Intelligence.</SourceLine>
+                    <SourceLine label="">Initial deployment of PRISM, for its first use cases, funded under ESA FLPP, FIRST! Simulation &amp; Intelligence.</SourceLine>
                 </div>
             </div>
             <figure className="d-cover__media" style={{ margin: 0 }}>
@@ -381,9 +381,9 @@ const CONTEXT = [
 const PAID = [
     { name: 'Programme', desc: 'Experimental campaign accepted against customer requirements.' },
     { name: 'Pilot', desc: 'Probe deployment, calibration and a reference run.' },
-    { name: 'Deployment', desc: 'PRISM on customer hardware, under their sign-off process.' },
+    { name: 'Deployment', desc: 'PRISM run by us for the customer’s programme, under their sign-off.' },
     { name: 'Support', desc: 'Recalibration, traceability and versioned releases.' },
-    { name: 'Transfer', desc: 'Process documents handed to the customer’s own team.' },
+    { name: 'Supply', desc: 'The qualified material, made at scale by Bimo Tech.' },
 ];
 
 export function Market() {

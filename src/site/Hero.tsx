@@ -44,7 +44,7 @@ export default function Hero() {
                     <li>
                         <span className="w-label">Funded by</span>
                         <strong>The European Space Agency</strong>
-                        <span>Initial development of PRISM</span>
+                        <span>Initial deployment of PRISM, for its first use cases</span>
                     </li>
                     <li>
                         <span className="w-label">First application</span>

@@ -5,9 +5,9 @@ const LADDER = [
     { name: 'Open source', text: 'Tools anyone can use and check.', tag: 'Free' },
     { name: 'Project', text: 'We solve your requirement. You judge the test results.' },
     { name: 'Pilot', text: 'A first trial on your problem, with our sensors.' },
-    { name: 'Deployment', text: 'PRISM on your own machines.' },
+    { name: 'Deployment', text: 'PRISM at work on your programme, run by us.' },
     { name: 'Support', text: 'Updates, recalibration, traceable data.' },
-    { name: 'Transfer', text: 'The proven process, handed to your team.' },
+    { name: 'Supply', text: 'The qualified material, made at scale by Bimo Tech.' },
 ];
 
 export default function Business({ n = '02' }: { n?: string }) {
@@ -22,7 +22,7 @@ export default function Business({ n = '02' }: { n?: string }) {
                     <p className="w-lead">Our prediction tools are free and open source. We are paid when a material has to exist.</p>
                 </header>
 
-                <ol className="ladder rv" aria-label="How Mirdyne works with you, from open source to transfer">
+                <ol className="ladder rv" aria-label="How Mirdyne works with you, from open source to supply">
                     {LADDER.map((s, i) => (
                         <li key={s.name} className={`ladder__step${i === 0 ? ' ladder__step--open' : ''}`} style={{ ['--i' as string]: i }}>
                             <span className="ladder__num">{String(i + 1).padStart(2, '0')}</span>
