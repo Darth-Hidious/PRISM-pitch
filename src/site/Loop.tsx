@@ -93,6 +93,22 @@ export default function Loop({ n = '02' }: { n?: string }) {
                     </h2>
                 </header>
                 <div ref={ref} className="loop__body rv">
+                    {/* Phones: every step in a list, the highlight moving down it. */}
+                    <ol className="loop__list">
+                        {STEPS.map((s, i) => (
+                            <li key={s.name} className={i === active ? 'is-on' : undefined}>
+                                <span className="loop__list-num">{String(i + 1).padStart(2, '0')}</span>
+                                <div>
+                                    <p className="loop__list-name">
+                                        {s.name} <MaturityPill maturity={s.maturity} />
+                                    </p>
+                                    <p className="loop__list-text">
+                                        <b>{s.lead}</b> {s.text}
+                                    </p>
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
                     <figure className="loop__figure">
                         <div className="scroll-x">
                             <ProcedureDiagram active={active} onPick={pick} />

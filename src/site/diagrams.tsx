@@ -294,6 +294,31 @@ export function LadderDiagram() {
 
 /* ── What a part gives away, and what it cannot carry ─────────────────── */
 
+/** The ladder for phones: the same rungs, top to bottom, each bar as long as the ideas that reach it. */
+export function LadderList() {
+    const most = RUNGS[0].n;
+    return (
+        <ol className="ladder-m" aria-label="The ladder, step by step. Counts are illustrative.">
+            {RUNGS.map((g, i) => (
+                <li key={g.q}>
+                    <p className="ladder-m__q">
+                        <span>{i}</span> {g.q.charAt(0).toUpperCase() + g.q.slice(1)}
+                    </p>
+                    <p className="ladder-m__how">
+                        {g.how} · {g.time}
+                    </p>
+                    <span className="ladder-m__bar" style={{ ['--w' as string]: `${(g.n / most) * 100}%` }}>
+                        <i style={{ ['--p' as string]: `${(g.pass / g.n) * 100}%` }} />
+                    </span>
+                    <p className="ladder-m__n">
+                        {g.n} in, {g.pass} {i === RUNGS.length - 1 ? 'chosen' : 'pass'}
+                    </p>
+                </li>
+            ))}
+        </ol>
+    );
+}
+
 function wave(x0: number, y0: number, x1: number, y1: number) {
     const n = Math.round(Math.hypot(x1 - x0, y1 - y0) / 7);
     const nx = -(y1 - y0) / Math.hypot(x1 - x0, y1 - y0);
@@ -465,5 +490,40 @@ export function KnownAnswer() {
                 agreed before the run: a pass if it lands between 500 and 2600 K
             </T>
         </svg>
+    );
+}
+
+/** The known answer for phones: one scale, the pass band agreed first, both results placed on it. */
+export function KnownAnswerList() {
+    const at = (t: number) => `${(t / 3000) * 100}%`;
+    return (
+        <div className="known-m" role="img" aria-label="A known answer, checked: for a 50/50 mix of molybdenum and tantalum, Forager gives 1149 plus or minus 114 kelvin, inside the pass band of 500 to 2600 kelvin agreed before the run. The published value is 2020 kelvin.">
+            <p className="known-m__head">
+                <span aria-hidden="true">✓</span> A known answer, checked first: a 50/50 mix of molybdenum and tantalum
+            </p>
+            <div className="known-m__scale" aria-hidden="true">
+                <span className="known-m__band" style={{ left: at(500), width: at(2100) }} />
+                <span className="known-m__dot known-m__dot--ours" style={{ left: at(1149) }} />
+                <span className="known-m__dot" style={{ left: at(2020) }} />
+                <span className="known-m__tick" style={{ left: '0%' }}>0</span>
+                <span className="known-m__tick" style={{ left: at(1000) }}>1000</span>
+                <span className="known-m__tick" style={{ left: at(2000) }}>2000</span>
+                <span className="known-m__tick" style={{ left: '100%' }}>3000 K</span>
+            </div>
+            <dl className="known-m__list" aria-hidden="true">
+                <div>
+                    <dt><i className="known-m__key known-m__key--ours" /> This model</dt>
+                    <dd>1149 ± 114 K</dd>
+                </div>
+                <div>
+                    <dt><i className="known-m__key" /> Published</dt>
+                    <dd>2020 ± 545 K</dd>
+                </div>
+                <div>
+                    <dt><i className="known-m__key known-m__key--band" /> Pass, agreed before the run</dt>
+                    <dd>500 to 2600 K</dd>
+                </div>
+            </dl>
+        </div>
     );
 }

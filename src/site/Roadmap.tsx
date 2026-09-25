@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { seeded, useInView, useReducedMotion } from './hooks';
+import { seeded, useInView, useMediaQuery, useReducedMotion } from './hooks';
 import { Grain, Idx, Note, Rails, Words } from './ui';
 
 type TrackState = 'done' | 'current' | 'next';
@@ -75,6 +75,17 @@ function buildNet(): Net {
 
 const NET = buildNet();
 
+/** Phones: the same network turned on its side, flowing down the screen instead of across it. */
+const VW = 360;
+const ROW = 132;
+const VH = 64 + ROW * (COLUMNS.length - 1) + 40;
+const Y_MIN = 91;
+const Y_MAX = 339;
+const upright = (n: Net['nodes'][number]) => ({
+    x: 36 + ((n.y - Y_MIN) / (Y_MAX - Y_MIN)) * (VW - 72),
+    y: 64 + n.col * ROW,
+});
+
 function EventNetwork() {
     const net = NET;
     const [ref, inView] = useInView<HTMLDivElement>('-10% 0px');
@@ -116,34 +127,49 @@ function EventNetwork() {
         };
     }, [inView, reduce, net]);
 
-    const byId = (id: string) => net.nodes.find((n) => n.id === id)!;
+    const vertical = useMediaQuery('(max-width: 760px) and (max-aspect-ratio: 1/1)');
+    const at = (id: string) => {
+        const n = net.nodes.find((m) => m.id === id)!;
+        return vertical ? upright(n) : n;
+    };
     return (
         <div ref={ref} className="net">
-            <svg ref={svgRef} className="net__svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Illustrative network: an event at a supplier propagating through materials and processes to components and programmes.">
-                {COLUMNS.map((c, i) => (
-                    <text key={c} className="net__col" x={90 + i * 255} y="22" textAnchor="middle">
-                        {c}
-                    </text>
-                ))}
+            <svg
+                ref={svgRef}
+                className={`net__svg${vertical ? ' net__svg--upright' : ''}`}
+                viewBox={vertical ? `0 0 ${VW} ${VH}` : `0 0 ${W} ${H}`}
+                role="img"
+                aria-label="Illustrative network: an event at a supplier propagating through materials and processes to components and programmes."
+            >
+                {COLUMNS.map((c, i) =>
+                    vertical ? (
+                        <text key={c} className="net__col" x={0} y={64 + i * ROW - 30} textAnchor="start">
+                            {c}
+                        </text>
+                    ) : (
+                        <text key={c} className="net__col" x={90 + i * 255} y="22" textAnchor="middle">
+                            {c}
+                        </text>
+                    ),
+                )}
                 {net.edges.map((e) => {
-                    const a = byId(e.from);
-                    const b = byId(e.to);
-                    const mx = (a.x + b.x) / 2;
+                    const a = at(e.from);
+                    const b = at(e.to);
+                    const m = vertical ? (a.y + b.y) / 2 : (a.x + b.x) / 2;
+                    const d = vertical
+                        ? `M${a.x},${a.y} C${a.x},${m} ${b.x},${m} ${b.x},${b.y}`
+                        : `M${a.x},${a.y} C${m},${a.y} ${m},${b.y} ${b.x},${b.y}`;
+                    return <path key={e.id} data-edge={e.id} className="net__edge" d={d} />;
+                })}
+                {net.nodes.map((n) => {
+                    const p = at(n.id);
                     return (
-                        <path
-                            key={e.id}
-                            data-edge={e.id}
-                            className="net__edge"
-                            d={`M${a.x},${a.y} C${mx},${a.y} ${mx},${b.y} ${b.x},${b.y}`}
-                        />
+                        <g key={n.id} data-node={n.id} className="net__node">
+                            <circle className="net__halo" cx={p.x} cy={p.y} r="22" />
+                            <circle className="net__dot" cx={p.x} cy={p.y} r="7" />
+                        </g>
                     );
                 })}
-                {net.nodes.map((n) => (
-                    <g key={n.id} data-node={n.id} className="net__node">
-                        <circle className="net__halo" cx={n.x} cy={n.y} r="22" />
-                        <circle className="net__dot" cx={n.x} cy={n.y} r="7" />
-                    </g>
-                ))}
             </svg>
         </div>
     );

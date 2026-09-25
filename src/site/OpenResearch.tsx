@@ -1,5 +1,5 @@
 import { Button } from '../ds';
-import { KnownAnswer } from './diagrams';
+import { KnownAnswer, KnownAnswerList } from './diagrams';
 import { LINKS } from './links';
 import { Idx, Note, Words } from './ui';
 
@@ -35,9 +35,10 @@ export default function OpenResearch({ n = '02' }: { n?: string }) {
                 </dl>
 
                 <figure className="open__figure rv">
-                    <div className="scroll-x">
+                    <div className="scroll-x wide-only">
                         <KnownAnswer />
                     </div>
+                    <KnownAnswerList />
                     <figcaption>
                         <p className="fig-cap">Before a check is trusted, it has to reproduce a known answer.</p>
                         <Note>

@@ -1544,20 +1544,17 @@ body {
     }
 }
 
-/* Small screens: the tabs scroll sideways rather than squeeze. */
+/* Phones: the tabs in two columns, every one of them on screen. */
 @media (max-width: 760px) {
     .stacks__tabs {
-        display: flex;
-        overflow-x: auto;
-        margin-inline: calc(-1 * var(--layout-gutter));
-        padding-inline: var(--layout-gutter);
-        scrollbar-width: none;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 16px;
     }
 
     .stacks__tab {
-        flex: none;
-        padding-inline: 0 18px;
-        white-space: nowrap;
+        padding: 12px 2px 10px;
+        font-size: 15px;
+        box-shadow: inset 0 -1px 0 var(--rule-soft);
     }
 }
 
@@ -1638,19 +1635,17 @@ body {
     animation: rise 0.6s var(--ease-rise, cubic-bezier(0.16, 1, 0.3, 1)) both;
 }
 
+/* Phones: the four demos two by two, all on screen. */
 @media (max-width: 760px) {
     .method__tabs {
-        display: flex;
-        overflow-x: auto;
-        margin-inline: calc(-1 * var(--layout-gutter));
-        padding-inline: var(--layout-gutter);
-        scrollbar-width: none;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 16px;
     }
 
     .method__tab {
-        flex: none;
-        padding-inline: 0 20px;
-        white-space: nowrap;
+        padding: 12px 2px 10px;
+        font-size: 15.5px;
+        box-shadow: inset 0 -1px 0 var(--rule-soft);
     }
 }
 
@@ -3294,16 +3289,11 @@ body {
     }
 }
 
-@media (max-width: 760px) {
-    .net {
-        overflow-x: auto;
-        margin-inline: calc(-1 * var(--layout-gutter));
-        padding-inline: var(--layout-gutter);
-    }
-
-    .net__svg {
-        min-width: 720px;
-    }
+/* Phones draw the network upright (see Roadmap.tsx), so it fits the screen as it is. */
+.net__svg--upright {
+    display: block;
+    max-width: 420px;
+    margin-inline: auto;
 }
 
 /* ── 08 Company ───────────────────────────────────────────────────────── */
@@ -4896,3 +4886,254 @@ body {
         object-position: 50% 78%;
     }
 }
+
+/* ── Drawings on phones ───────────────────────────────────────────────── */
+
+/*
+ * The wide drawings do not fit a phone, and shrunk to fit their labels would be unreadable. Phones get
+ * the same content laid out top to bottom instead; wider screens keep the drawings.
+ */
+.loop__list,
+.ladder-m,
+.known-m {
+    display: none;
+}
+
+@media (max-width: 760px), (max-height: 500px) and (min-aspect-ratio: 1 / 1) {
+    .wide-only,
+    .loop__figure,
+    .loop__panel {
+        display: none;
+    }
+
+    .loop__list,
+    .ladder-m,
+    .known-m {
+        display: grid;
+    }
+}
+
+/* Phones held sideways: the ladder and the loop list in two columns, so they fit the short screen. */
+@media (max-height: 500px) and (min-aspect-ratio: 1 / 1) {
+    .loop__list,
+    .ladder-m {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 28px;
+    }
+
+    .known-m {
+        max-width: 560px;
+    }
+}
+
+/* The loop as a list; the highlight moves down it on its own, as the drawing does on wider screens. */
+.loop__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+}
+
+.loop__list li {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    column-gap: 10px;
+    padding: 14px 0 14px 10px;
+    border-bottom: 1px solid var(--rule-soft);
+    box-shadow: inset 2px 0 0 transparent;
+    transition:
+        box-shadow 0.4s ease,
+        background-color 0.4s ease;
+}
+
+.loop__list li.is-on {
+    background: var(--accent-tint);
+    box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.loop__list-num {
+    padding-top: 3px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-3);
+}
+
+.loop__list li.is-on .loop__list-num {
+    color: var(--accent);
+}
+
+.loop__list-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-right: 10px;
+    font-size: 17px;
+    font-weight: 650;
+}
+
+.loop__list-text {
+    margin-top: 4px;
+    padding-right: 10px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.loop__list-text b {
+    font-weight: 650;
+    color: var(--ink);
+}
+
+/* The ladder as a funnel: each bar as long as the ideas that reach the step, the light part passing. */
+.ladder-m {
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ladder-m li {
+    display: grid;
+    gap: 3px;
+}
+
+.ladder-m__q {
+    font-size: 15.5px;
+    font-weight: 650;
+}
+
+.ladder-m__q span {
+    margin-right: 4px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+}
+
+.ladder-m__how,
+.ladder-m__n {
+    font-size: 13px;
+    color: var(--ink-2);
+}
+
+.ladder-m__bar {
+    display: block;
+    width: var(--w);
+    min-width: 12px;
+    height: 12px;
+    margin-top: 6px;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+}
+
+.ladder-m__bar i {
+    display: block;
+    width: var(--p);
+    height: 100%;
+    background: #fff;
+}
+
+/* The known answer: one scale, the pass band hatched, both results placed on it. */
+.known-m {
+    gap: 14px;
+    padding: 18px 18px 16px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-panel);
+}
+
+.known-m__head {
+    font-size: 14.5px;
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+.known-m__scale {
+    position: relative;
+    height: 40px;
+    margin: 6px 10px 22px;
+    border-bottom: 1px solid var(--ink);
+}
+
+.known-m__band,
+.known-m__key--band {
+    background: repeating-linear-gradient(135deg, var(--ink-2) 0 1px, transparent 1px 5px);
+    border: 1px solid var(--ink-2);
+}
+
+.known-m__band {
+    position: absolute;
+    bottom: 0;
+    height: 12px;
+}
+
+.known-m__dot {
+    position: absolute;
+    bottom: 20px;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+}
+
+.known-m__dot--ours {
+    background: var(--ink);
+}
+
+.known-m__tick {
+    position: absolute;
+    top: 100%;
+    margin-top: 5px;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    white-space: nowrap;
+    color: var(--ink-3);
+}
+
+.known-m__list {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+}
+
+.known-m__list div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13.5px;
+}
+
+.known-m__list dt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-2);
+}
+
+.known-m__list dd {
+    margin: 0;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.known-m__key {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+}
+
+.known-m__key--ours {
+    background: var(--ink);
+}
+
+.known-m__key--band {
+    border-radius: 0;
+}
+

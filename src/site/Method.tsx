@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
-import { LadderDiagram } from './diagrams';
+import { LadderDiagram, LadderList } from './diagrams';
 import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
 import { Idx, Note } from './ui';
 
@@ -742,9 +742,10 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                 </p>
                             </div>
                             <figure className="exhibit__stage">
-                                <div className="scroll-x">
+                                <div className="scroll-x wide-only">
                                     <LadderDiagram />
                                 </div>
+                                <LadderList />
                                 <figcaption>
                                     <Note label="Illustrative">
                                         Drawn for this site. The counts show the shape, not real results. Times are typical per
