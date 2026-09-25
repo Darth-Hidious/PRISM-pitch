@@ -1,21 +1,20 @@
-import { Button, LivePainting } from '../ds';
+import { Button } from '../ds';
 import { LINKS } from './links';
-import { furnaceScene } from './scenes';
 import { Grain } from './ui';
 
 export default function Hero() {
     return (
         <section id="top" className="hero" data-theme="navy" data-nav="hero" aria-labelledby="hero-title">
-            <div className="hero__art">
-                <LivePainting
-                    scene={furnaceScene}
-                    reveal="load"
-                    alt="Painted view through the window of a vacuum-arc melting furnace: a glowing alloy button on the hearth, cooled buttons from earlier melts beside it, the electrode above."
-                    fallback={{ src: '/img/spark-furnace.webp', seed: 7, direction: -16, motion: 0.5, focusX: 0.5, focusY: 0.84 }}
-                    poster={5}
+            <figure className="hero__photo">
+                <img
+                    src="/img/spark-furnace.webp"
+                    alt="View through the window of a vacuum-arc melting furnace in Project SPARK: a glowing alloy button on the hearth, cooled buttons from earlier melts beside it, the electrode above."
+                    width={989}
+                    height={1144}
+                    fetchPriority="high"
                 />
-            </div>
-            <div className="hero__shade" aria-hidden="true" />
+                <figcaption>Vacuum-arc melting, Project SPARK. Photograph: Bimo Tech.</figcaption>
+            </figure>
             <Grain />
             <div className="wrap hero__content">
                 <p className="hero__kicker rise">PRISM by Mirdyne</p>
@@ -54,7 +53,6 @@ export default function Hero() {
                     </li>
                 </ul>
             </div>
-            <p className="hero__caption">Vacuum-arc melting, Project SPARK. Photograph repainted and animated in code.</p>
         </section>
     );
 }

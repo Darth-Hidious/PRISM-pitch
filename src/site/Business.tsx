@@ -18,12 +18,12 @@ const MARKETS = [
     { name: 'Key technologies', text: 'Semiconductors and lightweight polymers.' },
 ];
 
-export default function Business() {
+export default function Business({ n = '02' }: { n?: string }) {
     return (
         <section id="business" className="sec business" data-theme="paper" data-nav="paper" aria-labelledby="business-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="06">Working with us</Idx>
+                    <Idx n={n}>Working with us</Idx>
                     <h2 id="business-title" className="w-h2">
                         The software is open. We earn when the material is real.
                     </h2>

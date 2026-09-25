@@ -354,17 +354,18 @@ const KEEPS = [
     ['The proof', 'The test results, and the proven ability to make it again'],
 ];
 
-export default function Evidence() {
+export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
+    const H = h1 ? 'h1' : 'h2';
     return (
         <section id="evidence" className="sec evidence" data-theme="navy" data-nav="navy" aria-labelledby="evidence-title">
             <Rails />
             <Grain />
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="05">Evidence and IP</Idx>
-                    <h2 id="evidence-title" className="w-h2">
+                    <Idx n={n}>Evidence and IP</Idx>
+                    <H id="evidence-title" className="w-h2">
                         Every result keeps its proof, its owner and its rules.
-                    </h2>
+                    </H>
                     <p className="w-lead">
                         <b>Who can see what? Only what the owner allows.</b> Companies share data only if they stay in
                         control of it. So in PRISM, every requirement, design, sample, test and decision records where
@@ -373,7 +374,13 @@ export default function Evidence() {
                     </p>
                 </header>
 
-                <div className="rv">
+                <nav className="onpage rv" aria-label="On this page">
+                    <a href="#sharing">Who sees what</a>
+                    <a href="#lineage">A real lineage</a>
+                    <a href="#ip">What a part gives away</a>
+                </nav>
+
+                <div id="sharing" className="rv">
                     <OntologyExplorer />
                     <div className="evidence__src">
                         <SourceLine label="Illustrative">
@@ -410,7 +417,7 @@ export default function Evidence() {
 
                 <CameoLineage />
 
-                <div className="ip rv" aria-labelledby="ip-title">
+                <div id="ip" className="ip rv" aria-labelledby="ip-title">
                     <div className="ip__head">
                         <p className="w-label trust__label">IP</p>
                         <h3 id="ip-title" className="w-h2 ip__title">

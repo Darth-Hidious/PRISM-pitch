@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { PointerEvent as ReactPointerEvent } from 'react';
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
 import { SourceLine } from '../ds';
 import { LadderDiagram } from './diagrams';
 import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
@@ -651,122 +651,178 @@ function CoreModules() {
 
 /* ── Section ──────────────────────────────────────────────────────────── */
 
-export default function Method() {
+/** The four demos, one shown at a time; `id` is the address fragment (for example /method#al). */
+const EXHIBITS = [
+    { id: 'ladder', tag: 'A', name: 'The ladder' },
+    { id: 'window', tag: 'B', name: 'Safe settings' },
+    { id: 'al', tag: 'C', name: 'Smart experiments' },
+    { id: 'core', tag: 'D', name: 'Reuse' },
+];
+
+const demoFromHash = () => {
+    const i = typeof window === 'undefined' ? -1 : EXHIBITS.findIndex((x) => `#${x.id}` === window.location.hash);
+    return i >= 0 ? i : 0;
+};
+
+export default function Method({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
+    const H = h1 ? 'h1' : 'h2';
+    const [active, setActive] = useState(demoFromHash);
+    const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+    const pick = (i: number) => {
+        setActive(i);
+        window.history.replaceState(null, '', `#${EXHIBITS[i].id}`);
+    };
+    const onKey = (e: ReactKeyboardEvent) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        const next = (active + d + EXHIBITS.length) % EXHIBITS.length;
+        pick(next);
+        tabs.current[next]?.focus();
+    };
     return (
         <section id="method" className="sec method" data-theme="paper" data-nav="paper" aria-labelledby="method-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="04">The method</Idx>
-                    <h2 id="method-title" className="w-h2">
+                    <Idx n={n}>The method</Idx>
+                    <H id="method-title" className="w-h2">
                         Every experiment has to earn its place.
-                    </h2>
+                    </H>
                     <p className="w-lead">
                         <b>Why not just make everything?</b> Because real experiments are slow and expensive. PRISM
-                        spends them where they teach the most. The four demos below run live in your browser.
+                        spends them where they teach the most. Pick a demo below. Each one runs live in your browser.
                     </p>
                 </header>
 
-                <article className="exhibit exhibit--wide rv" aria-labelledby="ex-ladder">
-                    <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit A · The ladder</p>
-                        <h3 id="ex-ladder" className="w-h3">
-                            Cheap checks first. Expensive ones last.
-                        </h3>
-                        <p className="q">How can you check so many ideas?</p>
-                        <p className="a">
-                            <b>By stopping most of them early, where stopping is cheap.</b> A quick simulation takes
-                            seconds. A real test takes weeks. Only the ideas that pass every cheap check reach the
-                            furnace.
-                        </p>
-                    </div>
-                    <figure className="exhibit__stage">
-                        <div className="scroll-x">
-                            <LadderDiagram />
-                        </div>
-                        <figcaption>
-                            <SourceLine label="Illustrative">
-                                Drawn for this site. The counts show the shape, not real results. Times are typical per
-                                idea.
-                            </SourceLine>
-                        </figcaption>
-                    </figure>
-                </article>
-
-                <article className="exhibit rv" aria-labelledby="ex-window">
-                    <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit B · Safe settings</p>
-                        <h3 id="ex-window" className="w-h3">
-                            A safe range of settings, not one perfect recipe.
-                        </h3>
-                        <p className="q">Will the recipe work on a real machine?</p>
-                        <p className="a">
-                            <b>Only if it has room to spare.</b> When you 3D-print metal, the powder, the laser power
-                            and the gas all vary a little. Drag the dot across the map. The hatched area is what we look
-                            for: settings that still give solid metal when things drift.
-                        </p>
-                        <p className="exhibit__note">
-                            Why not use one number, such as energy? Because the lines where printing fails do not follow
-                            it. So we map the whole range.
-                        </p>
-                        <SourceLine label="Illustrative">
-                            Boundaries follow standard scaling rules: lack of fusion with P/v, keyholing with P/√v,
-                            balling at high speed. Hatch 0.1 mm, layer 30 µm. Not measured data.
-                        </SourceLine>
-                    </div>
-                    <div className="exhibit__stage">
-                        <ProcessWindow />
-                    </div>
-                </article>
-
-                <article className="exhibit rv" aria-labelledby="ex-al">
-                    <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit C · Smart experiments</p>
-                        <h3 id="ex-al" className="w-h3">
-                            Each experiment is picked for what it will teach.
-                        </h3>
-                        <p className="q">Which experiment should we run next?</p>
-                        <p className="a">
-                            <b>The one the model is least sure about, near the best answer.</b> Press Run. Watch the
-                            shaded band, how unsure the model is, shrink around the best point long before every point
-                            is measured.
-                        </p>
-                        <dl className="exhibit__stats">
-                            <div>
-                                <dt>19</dt>
-                                <dd>measurements for NIST’s CAMEO system to find the best material</dd>
+                <div className="method__tabs rv" role="tablist" aria-label="Demos" onKeyDown={onKey}>
+                    {EXHIBITS.map((x, i) => (
+                        <button
+                            key={x.id}
+                            ref={(el) => {
+                                tabs.current[i] = el;
+                            }}
+                            type="button"
+                            role="tab"
+                            id={`demo-tab-${x.id}`}
+                            aria-selected={i === active}
+                            aria-controls="demo-panel"
+                            tabIndex={i === active ? 0 : -1}
+                            className="method__tab"
+                            onClick={() => pick(i)}
+                        >
+                            <span className="method__tab-tag">Exhibit {x.tag}</span>
+                            <span>{x.name}</span>
+                        </button>
+                    ))}
+                </div>
+                <div id="demo-panel" role="tabpanel" aria-labelledby={`demo-tab-${EXHIBITS[active].id}`} className="method__panel">
+                    {active === 0 && (
+                        <article className="exhibit exhibit--wide" aria-labelledby="ex-ladder">
+                            <div className="exhibit__text">
+                                <p className="w-label exhibit__tag">Exhibit A · The ladder</p>
+                                <h3 id="ex-ladder" className="w-h3">
+                                    Cheap checks first. Expensive ones last.
+                                </h3>
+                                <p className="q">How can you check so many ideas?</p>
+                                <p className="a">
+                                    <b>By stopping most of them early, where stopping is cheap.</b> A quick simulation takes
+                                    seconds. A real test takes weeks. Only the ideas that pass every cheap check reach the
+                                    furnace.
+                                </p>
                             </div>
-                            <div>
-                                <dt>177</dt>
-                                <dd>points on the full map, most of which it never had to measure</dd>
+                            <figure className="exhibit__stage">
+                                <div className="scroll-x">
+                                    <LadderDiagram />
+                                </div>
+                                <figcaption>
+                                    <SourceLine label="Illustrative">
+                                        Drawn for this site. The counts show the shape, not real results. Times are typical per
+                                        idea.
+                                    </SourceLine>
+                                </figcaption>
+                            </figure>
+                        </article>
+                    )}
+                    {active === 1 && (
+                        <article className="exhibit" aria-labelledby="ex-window">
+                            <div className="exhibit__text">
+                                <p className="w-label exhibit__tag">Exhibit B · Safe settings</p>
+                                <h3 id="ex-window" className="w-h3">
+                                    A safe range of settings, not one perfect recipe.
+                                </h3>
+                                <p className="q">Will the recipe work on a real machine?</p>
+                                <p className="a">
+                                    <b>Only if it has room to spare.</b> When you 3D-print metal, the powder, the laser power
+                                    and the gas all vary a little. Drag the dot across the map. The hatched area is what we look
+                                    for: settings that still give solid metal when things drift.
+                                </p>
+                                <p className="exhibit__note">
+                                    Why not use one number, such as energy? Because the lines where printing fails do not follow
+                                    it. So we map the whole range.
+                                </p>
+                                <SourceLine label="Illustrative">
+                                    Boundaries follow standard scaling rules: lack of fusion with P/v, keyholing with P/√v,
+                                    balling at high speed. Hatch 0.1 mm, layer 30 µm. Not measured data.
+                                </SourceLine>
                             </div>
-                        </dl>
-                        <SourceLine label="Sources">
-                            Kusne et al., Nature Communications 11, 5966 (2020): about 10 hours instead of more than 90.
-                            The demo is a real learning loop (a Gaussian process) on a test function, not material data.
-                        </SourceLine>
-                    </div>
-                    <div className="exhibit__stage">
-                        <ActiveLearning />
-                    </div>
-                </article>
-
-                <article className="exhibit rv" aria-labelledby="ex-core">
-                    <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit D · Reuse</p>
-                        <h3 id="ex-core" className="w-h3">
-                            One core. Swappable modules.
-                        </h3>
-                        <p className="q">What changes when the material changes?</p>
-                        <p className="a">
-                            <b>Only the modules.</b> The planner, the idea generator, the scorer and the records stay the
-                            same. The requirement, the physics and the tests change. That is how one platform moves from
-                            alloys to polymers.
-                        </p>
-                    </div>
-                    <div className="exhibit__stage">
-                        <CoreModules />
-                    </div>
-                </article>
+                            <div className="exhibit__stage">
+                                <ProcessWindow />
+                            </div>
+                        </article>
+                    )}
+                    {active === 2 && (
+                        <article className="exhibit" aria-labelledby="ex-al">
+                            <div className="exhibit__text">
+                                <p className="w-label exhibit__tag">Exhibit C · Smart experiments</p>
+                                <h3 id="ex-al" className="w-h3">
+                                    Each experiment is picked for what it will teach.
+                                </h3>
+                                <p className="q">Which experiment should we run next?</p>
+                                <p className="a">
+                                    <b>The one the model is least sure about, near the best answer.</b> Press Run. Watch the
+                                    shaded band, how unsure the model is, shrink around the best point long before every point
+                                    is measured.
+                                </p>
+                                <dl className="exhibit__stats">
+                                    <div>
+                                        <dt>19</dt>
+                                        <dd>measurements for NIST’s CAMEO system to find the best material</dd>
+                                    </div>
+                                    <div>
+                                        <dt>177</dt>
+                                        <dd>points on the full map, most of which it never had to measure</dd>
+                                    </div>
+                                </dl>
+                                <SourceLine label="Sources">
+                                    Kusne et al., Nature Communications 11, 5966 (2020): about 10 hours instead of more than 90.
+                                    The demo is a real learning loop (a Gaussian process) on a test function, not material data.
+                                </SourceLine>
+                            </div>
+                            <div className="exhibit__stage">
+                                <ActiveLearning />
+                            </div>
+                        </article>
+                    )}
+                    {active === 3 && (
+                        <article className="exhibit" aria-labelledby="ex-core">
+                            <div className="exhibit__text">
+                                <p className="w-label exhibit__tag">Exhibit D · Reuse</p>
+                                <h3 id="ex-core" className="w-h3">
+                                    One core. Swappable modules.
+                                </h3>
+                                <p className="q">What changes when the material changes?</p>
+                                <p className="a">
+                                    <b>Only the modules.</b> The planner, the idea generator, the scorer and the records stay the
+                                    same. The requirement, the physics and the tests change. That is how one platform moves from
+                                    alloys to polymers.
+                                </p>
+                            </div>
+                            <div className="exhibit__stage">
+                                <CoreModules />
+                            </div>
+                        </article>
+                    )}
+                </div>
             </div>
         </section>
     );

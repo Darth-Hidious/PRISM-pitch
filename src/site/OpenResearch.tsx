@@ -4,12 +4,12 @@ import { LINKS } from './links';
 import { Idx } from './ui';
 
 /** Forager: the team's open research, built with PRISM. Every figure here is from Forager's public record. */
-export default function OpenResearch() {
+export default function OpenResearch({ n = '02' }: { n?: string }) {
     return (
         <section id="open-research" className="sec open" data-theme="paper" data-nav="paper" aria-labelledby="open-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="08">Open research</Idx>
+                    <Idx n={n}>Open research</Idx>
                     <h2 id="open-title" className="w-h2">
                         Forager: a fruit fly’s brain, searching for new alloys.
                     </h2>

@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 import { Button, PrismMark } from '../ds';
 import { LINKS } from './links';
 
-const NAV = [
-    { href: '#platform', label: 'Platform' },
-    { href: '#loop', label: 'How it works' },
-    { href: '#evidence', label: 'Evidence and IP' },
-    { href: '#open-research', label: 'Open research' },
-    { href: '#company', label: 'Company' },
-    { href: '#news', label: 'News' },
+/** The site's pages. Home is `/`; each other page is its own HTML entry (see vite.config.ts). */
+export type PageId = 'home' | 'platform' | 'method' | 'evidence' | 'company' | 'news';
+
+const NAV: { id: PageId; href: string; label: string }[] = [
+    { id: 'platform', href: '/platform/', label: 'Platform' },
+    { id: 'method', href: '/method/', label: 'Method' },
+    { id: 'evidence', href: '/evidence/', label: 'Evidence and IP' },
+    { id: 'company', href: '/company/', label: 'Company' },
+    { id: 'news', href: '/news/', label: 'News' },
 ];
 
 type Over = 'hero' | 'navy' | 'paper';
@@ -49,7 +51,7 @@ function useNavOver(): Over {
     return over;
 }
 
-export function SiteNav() {
+export function SiteNav({ page }: { page: PageId }) {
     const over = useNavOver();
     const [open, setOpen] = useState(false);
     const theme = open ? 'navy' : over === 'paper' ? 'paper' : 'navy';
@@ -64,7 +66,7 @@ export function SiteNav() {
     return (
         <header className="nav" data-over={open ? 'navy' : over} data-theme={theme}>
             <div className="wrap nav__inner">
-                <a className="nav__brand" href="#top" aria-label="PRISM by Mirdyne, back to top">
+                <a className="nav__brand" href="/" aria-label="PRISM by Mirdyne, home" aria-current={page === 'home' ? 'page' : undefined}>
                     <PrismMark title="" weight={20} />
                     <span className="nav__name">PRISM</span>
                     <span className="nav__by">by Mirdyne</span>
@@ -72,7 +74,9 @@ export function SiteNav() {
                 <ul className="nav__links">
                     {NAV.map((n) => (
                         <li key={n.href}>
-                            <a href={n.href}>{n.label}</a>
+                            <a href={n.href} aria-current={n.id === page ? 'page' : undefined}>
+                                {n.label}
+                            </a>
                         </li>
                     ))}
                 </ul>
@@ -101,8 +105,11 @@ export function SiteNav() {
                 }}
             >
                 <div className="wrap">
+                    <a href="/" aria-current={page === 'home' ? 'page' : undefined}>
+                        Home
+                    </a>
                     {NAV.map((n) => (
-                        <a key={n.href} href={n.href}>
+                        <a key={n.href} href={n.href} aria-current={n.id === page ? 'page' : undefined}>
                             {n.label}
                         </a>
                     ))}
@@ -133,16 +140,16 @@ export function SiteFooter() {
                         <h2>Platform</h2>
                         <ul>
                             <li>
-                                <a href="#platform">The stacks</a>
+                                <a href="/#loop">How it works</a>
                             </li>
                             <li>
-                                <a href="#loop">How it works</a>
+                                <a href="/platform/">The stacks</a>
                             </li>
                             <li>
-                                <a href="#method">The method</a>
+                                <a href="/method/">The method</a>
                             </li>
                             <li>
-                                <a href="#evidence">Evidence and IP</a>
+                                <a href="/evidence/">Evidence and IP</a>
                             </li>
                         </ul>
                     </nav>
@@ -150,10 +157,10 @@ export function SiteFooter() {
                         <h2>Company</h2>
                         <ul>
                             <li>
-                                <a href="#company">Mirdyne and Bimo Tech</a>
+                                <a href="/company/">Mirdyne and Bimo Tech</a>
                             </li>
                             <li>
-                                <a href="#news">News</a>
+                                <a href="/news/">News</a>
                             </li>
                             <li>
                                 <a href={LINKS.interest} target="_blank" rel="noopener noreferrer">

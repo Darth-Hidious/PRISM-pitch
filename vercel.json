@@ -1,6 +1,29 @@
 {
   "rewrites": [
-    { "source": "/deck", "destination": "/deck/index.html" },
+    {
+      "source": "/platform",
+      "destination": "/platform/index.html"
+    },
+    {
+      "source": "/method",
+      "destination": "/method/index.html"
+    },
+    {
+      "source": "/evidence",
+      "destination": "/evidence/index.html"
+    },
+    {
+      "source": "/company",
+      "destination": "/company/index.html"
+    },
+    {
+      "source": "/news",
+      "destination": "/news/index.html"
+    },
+    {
+      "source": "/deck",
+      "destination": "/deck/index.html"
+    },
     {
       "source": "/install.sh",
       "destination": "https://raw.githubusercontent.com/Darth-Hidious/PRISM/main/install.sh"

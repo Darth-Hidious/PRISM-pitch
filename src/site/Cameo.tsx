@@ -335,7 +335,7 @@ const HOURS = [
 
 export default function CameoLineage() {
     return (
-        <div className="cameo" aria-labelledby="cameo-title">
+        <div id="lineage" className="cameo" aria-labelledby="cameo-title">
             <header className="cameo__head rv">
                 <p className="w-label trust__label">A real lineage</p>
                 <h3 id="cameo-title" className="w-h2 cameo__title">

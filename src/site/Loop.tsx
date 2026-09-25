@@ -65,7 +65,7 @@ const STEPS: Step[] = [
     },
 ];
 
-export default function Loop() {
+export default function Loop({ n = '02' }: { n?: string }) {
     const [active, setActive] = useState(0);
     const [paused, setPaused] = useState(false);
     const [ref, inView] = useInView<HTMLDivElement>('-20% 0px');
@@ -87,7 +87,7 @@ export default function Loop() {
         <section id="loop" className="sec loop" data-theme="paper" data-nav="paper" aria-labelledby="loop-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="02">How it works</Idx>
+                    <Idx n={n}>How it works</Idx>
                     <h2 id="loop-title" className="w-h2">
                         One loop: design, make, test, learn.
                     </h2>

@@ -4,8 +4,16 @@
 
 | Path | What | Source |
 | --- | --- | --- |
-| `/` | The website: the problem PRISM solves, a precedent, why Europe, the loop, the five stacks, live exhibits of the method, evidence and IP, the business, progress, open research, the company and news | `src/site/` |
+| `/` | Home: the problem PRISM solves, why Europe, the loop, links to the other pages | `src/site/pages/home.tsx` |
+| `/platform/` | The five stacks (one at a time, `/platform/#autonomy` opens one) and progress | `src/site/pages/platform.tsx` |
+| `/method/` | Four live demos of the method (`/method/#al` opens one) and open research | `src/site/pages/method.tsx` |
+| `/evidence/` | Evidence and IP: who sees what, a real lineage (NIST's CAMEO), what a part gives away | `src/site/pages/evidence.tsx` |
+| `/company/` | Mirdyne and Bimo Tech, the founders, working with us | `src/site/pages/company.tsx` |
+| `/news/` | News, with the photographs | `src/site/pages/news.tsx` |
 | `/deck/` | The investor briefing: 12 slides on a 1440 × 810 stage, `/deck/#5` opens slide 5 | `src/deck/` |
+
+Each page is its own HTML file (`index.html`, `platform/index.html`, …), listed
+in `vite.config.ts`; `vercel.json` also serves them without the trailing slash.
 
 Both are built from the same component library in `src/ds/` and the tokens in
 `src/styles/`, which are also published as the PRISM design system.
@@ -14,8 +22,8 @@ Both are built from the same component library in `src/ds/` and the tokens in
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173/ and /deck/
-npm run build      # type-check and build both pages into dist/
+npm run dev        # http://localhost:5173/, /platform/, … and /deck/
+npm run build      # type-check and build every page into dist/
 npm run lint
 node scripts/capture-pdf.mjs   # rebuild PRISM-Pitch-Deck.pdf from /deck/
 node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design system
@@ -30,20 +38,15 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
   process chain, timeline, status table, source line, footer band, and the
   evidence components (rights state, object card, evidence lineage, rights
   manifest, manufacturing window, capability stack).
-- **Live paintings** (`src/ds/livepaint.ts`, `src/ds/LivePainting.tsx`): real
-  photographs painted on the GPU every frame (structure tensor, anisotropic
-  Kuwahara filter, strokes swept along the forms, paint relief), with the
-  photograph's fine detail carried through. They resolve from noise as you
-  scroll, like a diffusion model, and the scenes move: the furnace photograph
-  drifts slowly, gas runs along the Raptor plume, light moves on the sample. Scenes are
-  in `src/site/scenes.ts`; the globe that turns to Europe is `src/site/globe.ts`.
-  On devices without a real GPU they fall back to the stroke painter
-  (`src/ds/paint.ts`, `src/ds/Painting.tsx`); `?paint=live` forces the live
-  renderer for testing.
+- **Photographs**: the website shows real photographs as taken, with no
+  painting or retouching: the SPARK furnace, the SPARK lab, the Hessen Ideen
+  award and ESA's mosaic of Europe. The painters in `src/ds/` (`LivePainting`,
+  `Painting`) stay in the design system but are not used on the website.
 - **Brand**: the PRISM mark is `src/ds/PrismMark.tsx` (follows the text colour)
   and `public/brand/prism-logo-light-mode.svg` / `prism-logo-dark-mode.svg`.
-- **Website** (`src/site/`): one component per section. The web type scale,
-  sticky scroll stages and exhibit styles are in `site.css`. The live pieces
+- **Website** (`src/site/`): one component per section, composed into pages
+  in `src/site/pages/` with the shared shell in `SitePage.tsx`. The web type
+  scale, tabs and exhibit styles are in `site.css`. The live pieces
   compute in the browser: the dot field in `Gap.tsx` (one dot per 20,000
   possible alloys, from plain arithmetic), the process map and the Gaussian-process loop in
   `Method.tsx`, the rights explorer in `Evidence.tsx` and the event cascade in
@@ -56,11 +59,16 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
 | File | What | Rights |
 | --- | --- | --- |
 | `spark-*.webp` | Project SPARK photographs (furnace, sample, lab) | Bimo Tech, project photographs |
-| `raptor-test.webp` | Raptor's first test firing, 25 September 2016 | SpaceX, CC0 1.0 (Wikimedia Commons: Raptor-test-9-25-2016.jpg) |
-| `earth-blue-marble.webp`, `globe-europe.webp` | Blue Marble with topography and bathymetry, and a render of it | NASA, public domain (via the three-globe package) |
-| `src/site/europe-outline.ts` | EU and ESA member-state outlines | Natural Earth 1:110m, public domain (via world-atlas) |
+| `esa-europe-1280.webp`, `esa-europe-2400.webp` | Envisat MERIS true-colour mosaic of Europe, resized | ESA, CC BY-SA 3.0 IGO ([source](https://www.esa.int/ESA_Multimedia/Images/2010/09/MERIS_mosaic_of_Europe)) |
 | `search-manifold.webp`, `event-network.webp` | Illustrations from the Mirdyne briefing deck | Mirdyne |
 | `news-hessen-ideen-2026.webp` | Team PRISM receiving the KI-Sonderpreis at Hessen Ideen 2026 | Supplied by the team; confirm the photographer's credit before launch |
+
+ESA images: use only those whose page says **CC BY-SA 3.0 IGO**, credit them
+as the page says, link the licence and say if they were changed. Images under
+the ESA Standard Licence only (most launch and engine photographs, such as
+Ariane 6 liftoffs and Prometheus tests) need ESA's written permission for
+commercial use (spaceinimages@esa.int). No image may suggest that ESA endorses
+PRISM.
 
 ## Writing for the site
 

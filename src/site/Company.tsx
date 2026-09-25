@@ -1,19 +1,19 @@
-import { Button, LivePainting, SourceLine } from '../ds';
+import { Button } from '../ds';
 import { LINKS } from './links';
-import { contactScene } from './scenes';
 import { Arrow, Idx } from './ui';
 
 /* ── Company: Mirdyne, Bimo Tech and PRISM ────────────────────────────── */
 
-export function Company() {
+export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
+    const H = h1 ? 'h1' : 'h2';
     return (
         <section id="company" className="sec company" data-theme="paper" data-nav="paper" aria-labelledby="company-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="09">Company</Idx>
-                    <h2 id="company-title" className="w-h2">
+                    <Idx n={n}>Company</Idx>
+                    <H id="company-title" className="w-h2">
                         Mirdyne discovers. Bimo Tech delivers.
-                    </h2>
+                    </H>
                     <p className="w-lead">
                         Finding a new material is half the job. Someone also has to make it in quantity and supply it
                         for years. So the work is split between two companies: one finds and proves the material, the
@@ -66,20 +66,6 @@ export function Company() {
                         </span>
                     </p>
                 </div>
-
-                <figure className="strip rv">
-                    <img
-                        src="/img/spark-lab.webp"
-                        alt="Four photographs from Project SPARK: powder preparation, a powder container, melting equipment and sample polishing."
-                        width={1080}
-                        height={270}
-                        loading="lazy"
-                    />
-                    <figcaption>
-                        <SourceLine label="Project SPARK">Preparing powder, melting and polishing. Real photographs from the project.</SourceLine>
-                    </figcaption>
-                </figure>
-
                 <div className="founders rv">
                     <p className="w-label">Founders</p>
                     <div className="founders__grid">
@@ -121,7 +107,7 @@ interface NewsItem {
     tag: string;
     title: string;
     text: string;
-    image?: { src: string; alt: string; width: number; height: number };
+    image?: { src: string; alt: string; width: number; height: number; credit?: string };
 }
 
 const NEWS: NewsItem[] = [
@@ -153,19 +139,27 @@ const NEWS: NewsItem[] = [
         when: 'Ongoing',
         tag: 'Project',
         title: 'Project SPARK: our first alloys are real',
-        text: 'In SPARK, an ESA project led by Bimo Tech, the first alloys from our early screening were made as real metal: powder, melting and polishing. We are still testing them, and two or three look promising. The photographs on this site come from the project.',
+        text: 'In SPARK, an ESA project led by Bimo Tech, the first alloys from our early screening were made as real metal: powder, melting and polishing. We are still testing them, and two or three look promising.',
+        image: {
+            src: '/img/spark-lab.webp',
+            alt: 'Four photographs from Project SPARK: powder preparation, a powder container, melting equipment and sample polishing.',
+            width: 1080,
+            height: 270,
+            credit: 'Project SPARK: preparing powder, melting and polishing. Photographs: Bimo Tech.',
+        },
     },
 ];
 
-export function News() {
+export function News({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
+    const H = h1 ? 'h1' : 'h2';
     return (
         <section id="news" className="sec news" data-theme="paper" data-nav="paper" aria-labelledby="news-title">
             <div className="wrap">
                 <header className="news__head rv">
-                    <Idx n="10">News</Idx>
-                    <h2 id="news-title" className="w-h2">
+                    <Idx n={n}>News</Idx>
+                    <H id="news-title" className="w-h2">
                         Latest from Mirdyne.
-                    </h2>
+                    </H>
                 </header>
                 <ol className="news__list">
                     {NEWS.map((n, i) => (
@@ -175,14 +169,17 @@ export function News() {
                             style={{ ['--d' as string]: `${i * 90}ms` }}
                         >
                             {n.image && (
-                                <img
-                                    className="news__img"
-                                    src={n.image.src}
-                                    alt={n.image.alt}
-                                    width={n.image.width}
-                                    height={n.image.height}
-                                    loading="lazy"
-                                />
+                                <figure className="news__figure">
+                                    <img
+                                        className="news__img"
+                                        src={n.image.src}
+                                        alt={n.image.alt}
+                                        width={n.image.width}
+                                        height={n.image.height}
+                                        loading="lazy"
+                                    />
+                                    {n.image.credit && <figcaption>{n.image.credit}</figcaption>}
+                                </figure>
                             )}
                             <div className="news__body">
                                 <p className="news__meta">
@@ -205,31 +202,24 @@ export function News() {
 export function Contact() {
     return (
         <section id="contact" className="cta" data-theme="paper" data-nav="paper" aria-labelledby="contact-title">
-            <div className="cta__art">
-                <LivePainting
-                    scene={contactScene}
-                    alt="Painted materials search landscape: basins, measured points and a path descending to the best point."
-                    fallback={{ src: '/img/search-manifold.webp', seed: 29, direction: -10, motion: 0.4, focusX: 0.7, focusY: 0.5 }}
-                />
-            </div>
-            <div className="cta__shade" aria-hidden="true" />
             <div className="wrap cta__inner rv">
                 <p className="w-label cta__kicker">Start</p>
-                <h2 id="contact-title" className="w-mega cta__title">
+                <h2 id="contact-title" className="w-h2 cta__title">
                     Tell us what your part must survive.
                 </h2>
-                <p className="w-lead">
-                    We will tell you what PRISM can search for, how we would prove it and what it would take.
-                </p>
-                <div className="cta__actions">
-                    <Button href={LINKS.interest} external>
-                        Register interest
-                    </Button>
-                    <Button variant="secondary" href={LINKS.github} external>
-                        Open-source layer on GitHub
-                    </Button>
+                <div className="cta__side">
+                    <p className="w-lead">
+                        We will tell you what PRISM can search for, how we would prove it and what it would take.
+                    </p>
+                    <div className="cta__actions">
+                        <Button href={LINKS.interest} external>
+                            Register interest
+                        </Button>
+                        <Button variant="secondary" href={LINKS.github} external>
+                            Open-source layer on GitHub
+                        </Button>
+                    </div>
                 </div>
-                <p className="cta__caption">Illustrative search landscape, repainted in code.</p>
             </div>
         </section>
     );

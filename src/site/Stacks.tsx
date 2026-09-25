@@ -1,9 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { LivePainting, MaturityPill } from '../ds';
-import type { LiveScene } from '../ds/livepaint';
+import { useRef, useState, type KeyboardEvent } from 'react';
+import { MaturityPill } from '../ds';
 import type { Maturity } from '../ds/MaturityPill';
-import { useMediaQuery } from './hooks';
-import { couponScene, melterScene, millScene, polisherScene, researchScene } from './scenes';
 import { Grain, Idx } from './ui';
 
 interface Layer {
@@ -21,7 +18,6 @@ interface StackDef {
     answer: string;
     limit: string;
     layers: Layer[];
-    art: { scene: LiveScene; photo: string; alt: string; caption: string };
 }
 
 const STACKS: StackDef[] = [
@@ -60,12 +56,6 @@ const STACKS: StackDef[] = [
                 maturity: 'prototype',
             },
         ],
-        art: {
-            scene: researchScene,
-            photo: '/img/search-manifold.webp',
-            alt: 'Painted rendering of a materials search landscape: basins, measured points lighting up, and a red path walking down to the best point.',
-            caption: 'Illustrative search landscape, repainted and animated in code.',
-        },
     },
     {
         id: 'harness',
@@ -102,12 +92,6 @@ const STACKS: StackDef[] = [
                 maturity: 'prototype',
             },
         ],
-        art: {
-            scene: millScene,
-            photo: '/img/spark-mill.webp',
-            alt: 'Painted from a photograph of a planetary ball mill preparing alloy powder in the Project SPARK laboratory.',
-            caption: 'Planetary ball mill, Project SPARK. Photograph repainted in code.',
-        },
     },
     {
         id: 'autonomy',
@@ -149,12 +133,6 @@ const STACKS: StackDef[] = [
                 maturity: 'development',
             },
         ],
-        art: {
-            scene: melterScene,
-            photo: '/img/spark-melter.webp',
-            alt: 'Painted from a photograph of the melting equipment used in Project SPARK: a control cabinet beside a tall melting chamber.',
-            caption: 'Melting equipment, Project SPARK. Photograph repainted in code.',
-        },
     },
     {
         id: 'manufacturing',
@@ -191,12 +169,6 @@ const STACKS: StackDef[] = [
                 maturity: 'target',
             },
         ],
-        art: {
-            scene: couponScene,
-            photo: '/img/spark-coupon.webp',
-            alt: 'Painted from a photograph of a polished alloy sample held in a hand in the laboratory, light moving across its face.',
-            caption: 'Alloy sample from Project SPARK, repainted and animated in code.',
-        },
     },
     {
         id: 'evidence-stack',
@@ -233,12 +205,6 @@ const STACKS: StackDef[] = [
                 maturity: 'in-use',
             },
         ],
-        art: {
-            scene: polisherScene,
-            photo: '/img/spark-polisher.webp',
-            alt: 'Painted from a photograph of a polishing machine that prepares samples for inspection in the Project SPARK laboratory.',
-            caption: 'Sample polishing for inspection, Project SPARK. Photograph repainted in code.',
-        },
     },
 ];
 
@@ -318,32 +284,25 @@ function IsoStack({
     );
 }
 
-/* ── Chapters ─────────────────────────────────────────────────────────── */
+/* ── One stack at a time ──────────────────────────────────────────────── */
 
-function StackPainting({ stack, className }: { stack: StackDef; className?: string }) {
-    const { art } = stack;
-    return <LivePainting className={className} scene={art.scene} alt={art.alt} fallback={{ src: art.photo, motion: 0.4 }} />;
-}
-
-function Chapter({ stack, index, inline }: { stack: StackDef; index: number; inline: boolean }) {
+function Chapter({ stack, index }: { stack: StackDef; index: number }) {
     return (
-        <article id={stack.id} className="chapter" data-index={index} aria-labelledby={`${stack.id}-title`}>
-            {inline && (
-                <figure className="chapter__media">
-                    <StackPainting stack={stack} />
-                    <figcaption>{stack.art.caption}</figcaption>
-                </figure>
-            )}
-            <p className="w-label chapter__index">
-                Stack {String(index + 1).padStart(2, '0')} / {String(STACKS.length).padStart(2, '0')}
-            </p>
-            <h3 id={`${stack.id}-title`} className="chapter__name">
-                {stack.name}
-            </h3>
-            <p className="q chapter__q">{stack.question}</p>
-            <p className="a chapter__a">
-                <b>{stack.lead}</b> {stack.answer}
-            </p>
+        <div className="chapter">
+            <div className="chapter__text">
+                <p className="w-label chapter__index">
+                    Stack {String(index + 1).padStart(2, '0')} / {String(STACKS.length).padStart(2, '0')}
+                </p>
+                <h3 className="chapter__name">{stack.name}</h3>
+                <p className="q chapter__q">{stack.question}</p>
+                <p className="a chapter__a">
+                    <b>{stack.lead}</b> {stack.answer}
+                </p>
+                <p className="limit">
+                    <span className="w-label">Limit</span>
+                    {stack.limit}
+                </p>
+            </div>
             <ol className="layers" aria-label={`${stack.name} layers`}>
                 {stack.layers.map((l, k) => (
                     <li key={l.name}>
@@ -356,47 +315,44 @@ function Chapter({ stack, index, inline }: { stack: StackDef; index: number; inl
                     </li>
                 ))}
             </ol>
-            <p className="limit">
-                <span className="w-label">Limit</span>
-                {stack.limit}
-            </p>
-        </article>
+        </div>
     );
 }
 
-export default function Stacks() {
-    const wide = useMediaQuery('(min-width: 1024px)');
-    const [active, setActive] = useState(0);
-    const chaptersRef = useRef<HTMLDivElement>(null);
+/** The stack named in the address (for example /platform#autonomy), else the first. */
+const fromHash = () => {
+    const i = typeof window === 'undefined' ? -1 : STACKS.findIndex((s) => `#${s.id}` === window.location.hash);
+    return i >= 0 ? i : 0;
+};
 
-    // The chapter crossing the middle of the viewport is the active one.
-    useEffect(() => {
-        const root = chaptersRef.current;
-        if (!root) return;
-        const io = new IntersectionObserver(
-            (entries) => {
-                for (const e of entries) {
-                    if (!e.isIntersecting) continue;
-                    setActive(Number((e.target as HTMLElement).dataset.index));
-                }
-            },
-            { rootMargin: '-50% 0px -50% 0px' },
-        );
-        root.querySelectorAll('.chapter').forEach((el) => io.observe(el));
-        return () => io.disconnect();
-    }, [wide]);
+export default function Stacks({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
+    const H = h1 ? 'h1' : 'h2';
+    const [active, setActive] = useState(fromHash);
+    const tabs = useRef<(HTMLButtonElement | null)[]>([]);
 
-    const goTo = (i: number) => document.getElementById(STACKS[i].id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const pick = (i: number) => {
+        setActive(i);
+        window.history.replaceState(null, '', `#${STACKS[i].id}`);
+    };
+    // Arrow keys move between the tabs, as in any tab list.
+    const onKey = (e: KeyboardEvent) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        const next = (active + d + STACKS.length) % STACKS.length;
+        pick(next);
+        tabs.current[next]?.focus();
+    };
 
     return (
         <section id="platform" className="stacks" data-theme="navy" data-nav="navy" aria-labelledby="platform-title">
             <Grain />
             <div className="wrap sec stacks__intro">
                 <header className="stacks__head rv">
-                    <Idx n="03">The platform</Idx>
-                    <h2 id="platform-title" className="w-h2">
+                    <Idx n={n}>The platform</Idx>
+                    <H id="platform-title" className="w-h2">
                         Five stacks. One system.
-                    </h2>
+                    </H>
                     <p className="w-lead">
                         PRISM is built in five layers, called stacks. Each does one job, from finding ideas to proving
                         results. Every part is labelled with how ready it is, because we would rather show you than
@@ -418,32 +374,39 @@ export default function Stacks() {
                     </ul>
                 </header>
                 <div className="stacks__iso rv">
-                    <IsoStack active={active} onPick={goTo} />
+                    <IsoStack active={active} onPick={pick} />
                 </div>
             </div>
 
-            <div className={`explorer${wide ? ' explorer--wide' : ''}`}>
-                {wide && (
-                    <div className="explorer__media">
-                        {/* One painting: moving between stacks dissolves it to noise and resolves the next. */}
-                        <StackPainting stack={STACKS[active]} className="explorer__art is-on" />
-                        <div className="explorer__shade" aria-hidden="true" />
-                        <div className="explorer__hud">
-                            <IsoStack active={active} compact />
-                            <div>
-                                <p className="w-label">
-                                    Stack {String(active + 1).padStart(2, '0')} / {String(STACKS.length).padStart(2, '0')}
-                                </p>
-                                <p className="explorer__hud-name">{STACKS[active].short}</p>
-                                <p className="explorer__caption">{STACKS[active].art.caption}</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                <div ref={chaptersRef} className="explorer__chapters">
-                    {STACKS.map((s, i) => (
-                        <Chapter key={s.id} stack={s} index={i} inline={!wide} />
+            <div className="wrap stacks__body">
+                <div className="stacks__tabs" role="tablist" aria-label="The five stacks" onKeyDown={onKey}>
+                    {STACKS.map((st, i) => (
+                        <button
+                            key={st.id}
+                            ref={(el) => {
+                                tabs.current[i] = el;
+                            }}
+                            type="button"
+                            role="tab"
+                            id={`stack-tab-${st.id}`}
+                            aria-selected={i === active}
+                            aria-controls="stack-panel"
+                            tabIndex={i === active ? 0 : -1}
+                            className="stacks__tab"
+                            onClick={() => pick(i)}
+                        >
+                            <span className="stacks__tab-num">{String(i + 1).padStart(2, '0')}</span>
+                            <span>{st.short}</span>
+                        </button>
                     ))}
+                </div>
+                <div
+                    id="stack-panel"
+                    className="stacks__panel"
+                    role="tabpanel"
+                    aria-labelledby={`stack-tab-${STACKS[active].id}`}
+                >
+                    <Chapter key={STACKS[active].id} stack={STACKS[active]} index={active} />
                 </div>
             </div>
         </section>

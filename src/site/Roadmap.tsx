@@ -150,14 +150,14 @@ function EventNetwork() {
     );
 }
 
-export default function Roadmap() {
+export default function Roadmap({ n = '02' }: { n?: string }) {
     return (
         <section id="roadmap" className="sec roadmap" data-theme="navy" data-nav="navy" aria-labelledby="roadmap-title">
             <Rails />
             <Grain />
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="07">Progress</Idx>
+                    <Idx n={n}>Progress</Idx>
                     <h2 id="roadmap-title" className="w-h2">
                         Where PRISM stands, and where it goes.
                     </h2>

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { LivePainting, SourceLine } from '../ds';
-import { fitCanvas, seeded, useMediaQuery, useReducedMotion, useStickyValue } from './hooks';
-import { raptorScene } from './scenes';
+import { SourceLine } from '../ds';
+import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
 import { Grain, Idx, Rails } from './ui';
 
 /* ── The problem: far too many alloys to make them all ────────────────── */
@@ -22,24 +21,6 @@ const N = Math.round(ALLOYS / PER_DOT); // 23,716
 const YEARS_PER_DOT = PER_DOT / PER_DAY / 365.25; // about 5.5
 
 const fmt = (v: number) => v.toLocaleString('en-GB');
-
-const STEPS = [
-    {
-        value: ALLOYS,
-        approx: false,
-        label: 'possible alloys, from five of nine high-melting metals mixed in steps of 1%.',
-    },
-    {
-        value: PER_DAY,
-        approx: false,
-        label: 'alloys a fast lab can make in a day.',
-    },
-    {
-        value: YEARS_SHOWN,
-        approx: true,
-        label: `years to make every one of them once. Start today and you finish around the year ${fmt(FINISH)}.`,
-    },
-];
 
 interface Field {
     x: Float32Array;
@@ -146,7 +127,6 @@ const HOP_MS = 150;
 function DotField({ step }: { step: number }) {
     const ref = useRef<HTMLCanvasElement>(null);
     const reduce = useReducedMotion();
-    const compact = useMediaQuery('(max-width: 900px)');
     const api = useRef<{ go: (s: number) => void } | null>(null);
     const stepRef = useRef(step);
 
@@ -173,10 +153,7 @@ function DotField({ step }: { step: number }) {
         const DUR = reduce ? 0 : 1400;
         const PATH_MS = reduce ? 0 : HOP_MS * f.path.length + 600;
 
-        const box = (w: number, h: number) =>
-            compact
-                ? { x0: w * 0.04, y0: h * 0.46, bw: w * 0.92, bh: h * 0.48 }
-                : { x0: w * 0.5, y0: h * 0.1, bw: w * 0.47, bh: h * 0.8 };
+        const box = (w: number, h: number) => ({ x0: w * 0.02, y0: h * 0.03, bw: w * 0.96, bh: h * 0.94 });
 
         const draw = (now: number) => {
             raf = 0;
@@ -321,7 +298,7 @@ function DotField({ step }: { step: number }) {
             ro.disconnect();
             cancelAnimationFrame(raf);
         };
-    }, [reduce, compact]);
+    }, [reduce]);
 
     useEffect(() => {
         stepRef.current = step;
@@ -355,108 +332,82 @@ function Counter({ value }: { value: number }) {
     return <>{fmt(shown)}</>;
 }
 
-const stepFor = (p: number) => (p < 0.13 ? 0 : p < 0.33 ? 1 : p < 0.53 ? 2 : p < 0.73 ? 3 : 4);
+/** Seconds after the section comes into view at which the field moves to each step. */
+const PLAY: [number, number][] = [
+    [1, 0.15],
+    [2, 2.4],
+    [4, 6],
+];
 
-export function Gap() {
-    const [ref, step] = useStickyValue<HTMLElement, number>(stepFor, 0);
-    const shownStep = Math.min(Math.max(step, 1), STEPS.length);
-    const active = STEPS[shownStep - 1];
+export function Gap({ n = '01' }: { n?: string }) {
+    const [ref, inView] = useInView<HTMLElement>('0px 0px -25% 0px', true);
+    const reduce = useReducedMotion();
+    const [played, setPlayed] = useState(0);
+
+    // Once on screen, play the field through once: dots in, one dot singled out, then a guided search.
+    useEffect(() => {
+        if (!inView || reduce) return;
+        const ids = PLAY.map(([s, at]) => window.setTimeout(() => setPlayed(s), at * 1000));
+        return () => ids.forEach((id) => window.clearTimeout(id));
+    }, [inView, reduce]);
+    const step = reduce ? (inView ? 4 : 0) : played;
+
     return (
-        <section id="gap" ref={ref} className="gap" data-theme="navy" data-nav="navy" aria-labelledby="gap-title">
-            <div className="gap__stage">
-                <Rails />
-                <DotField step={step} />
-                <Grain />
-                <div className="wrap gap__inner">
-                    <Idx n="01" tail={<span className="gap__legend"><i /> = {fmt(PER_DOT)} possible alloys</span>}>
-                        The problem
-                    </Idx>
-                    <div className="gap__copy">
-                        <div className={`gap__intro${step === 0 ? ' is-on' : ''}`}>
-                            <h2 id="gap-title" className="w-h2">
-                                Materials decide what engineers can build.
-                            </h2>
-                            <p className="w-lead">
-                                A rocket engine can work on paper and still be impossible to build, because no material
-                                survives inside it. A new material usually takes ten to twenty years to reach service.
-                            </p>
-                        </div>
-                        <div className={`gap__figure${step > 0 ? ' is-on' : ''}`} aria-hidden="true">
-                            <p className="w-num gap__num">
-                                {active.approx && <span className="gap__approx">about</span>}
-                                <Counter key={shownStep} value={active.value} />
-                            </p>
-                            <p className="gap__label">{active.label}</p>
-                            <p className="gap__sum">
-                                <span className={step >= 1 ? 'is-on' : ''}>{fmt(ALLOYS)} alloys</span>
-                                <span className={step >= 2 ? 'is-on' : ''}>÷ {PER_DAY} a day</span>
-                                <span className={step >= 3 ? 'is-on' : ''}>≈ {fmt(YEARS_SHOWN)} years</span>
-                            </p>
-                            <p className={`gap__close${step === 4 ? ' is-on' : ''}`}>
-                                <b>Nobody can make them all.</b> The skill is choosing the few worth making, then
-                                proving they work. That is what PRISM is for.
-                            </p>
-                        </div>
+        <section id="gap" ref={ref} className="sec gap" data-theme="navy" data-nav="navy" aria-labelledby="gap-title">
+            <Rails />
+            <Grain />
+            <div className="wrap gap__inner">
+                <Idx n={n} tail={<span className="gap__legend"><i /> = {fmt(PER_DOT)} possible alloys</span>}>
+                    The problem
+                </Idx>
+                <div className="gap__grid">
+                    <div className="gap__copy rv">
+                        <h2 id="gap-title" className="w-h2">
+                            Materials decide what engineers can build.
+                        </h2>
+                        <p className="w-lead">
+                            A rocket engine can work on paper and still be impossible to build, because no material
+                            survives inside it. A new material usually takes ten to twenty years to reach service.
+                        </p>
+                        <dl className="gap__stats">
+                            <div>
+                                <dt>
+                                    <Counter key={String(inView)} value={ALLOYS} />
+                                </dt>
+                                <dd>possible alloys, from five of nine high-melting metals mixed in steps of 1%</dd>
+                            </div>
+                            <div>
+                                <dt>
+                                    <span className="gap__op">÷</span>
+                                    {PER_DAY}
+                                </dt>
+                                <dd>alloys a fast lab can make in a day</dd>
+                            </div>
+                            <div>
+                                <dt>
+                                    <span className="gap__op">≈</span>
+                                    {fmt(YEARS_SHOWN)}
+                                </dt>
+                                <dd>
+                                    years to make every one of them once. Start today and you finish around the year{' '}
+                                    {fmt(FINISH)}.
+                                </dd>
+                            </div>
+                        </dl>
+                        <p className="gap__close">
+                            <b>Nobody can make them all.</b> The skill is choosing the few worth making, then proving
+                            they work. That is what PRISM is for.
+                        </p>
                     </div>
-                    <div className="gap__foot">
-                        <SourceLine label="Arithmetic">
-                            126 ways to pick five of nine metals that all melt above 1,650&nbsp;°C (Ti, V, Cr, Zr, Nb,
-                            Mo, Hf, Ta, W) × 3,764,376 ways to mix five in whole percent. Ten a day, every day. Dot
-                            positions and the search path are illustrative.
-                        </SourceLine>
+                    <div className="gap__field" aria-hidden="true">
+                        <DotField step={step} />
                     </div>
                 </div>
-                <ul className="pm-visually-hidden">
-                    <li>{fmt(ALLOYS)} possible alloys, from five of nine high-melting metals mixed in steps of 1%.</li>
-                    <li>A fast lab makes about {PER_DAY} alloys a day.</li>
-                    <li>
-                        Making every one of them once would take about {fmt(YEARS_SHOWN)} years. Nobody can make them
-                        all; the skill is choosing the few worth making, then proving they work.
-                    </li>
-                </ul>
-            </div>
-        </section>
-    );
-}
-
-/* ── A precedent: the foundry behind an engine ────────────────────────── */
-
-export function Precedent() {
-    return (
-        <section className="precedent" data-theme="navy" data-nav="navy" aria-labelledby="precedent-title">
-            <div className="precedent__art">
-                <LivePainting
-                    scene={raptorScene}
-                    alt="Painted from a photograph of SpaceX's first Raptor test firing at night: a long pink-white plume runs from the engine across a gravel field into clouds of orange smoke."
-                    fallback={{ src: '/img/raptor-test.webp', seed: 19, direction: 2, motion: 0.5, focusX: 0.5, focusY: 0 }}
-                />
-            </div>
-            <div className="precedent__shade" aria-hidden="true" />
-            <Grain />
-            <div className="wrap precedent__inner">
-                <div className="precedent__copy rv">
-                    <p className="w-label precedent__kicker">A precedent</p>
-                    <h2 id="precedent-title" className="w-h2">
-                        SpaceX built its own foundry. Europe needs the same.
-                    </h2>
-                    <p className="w-lead">
-                        No existing alloy could survive the hot, oxygen-rich gas inside SpaceX’s Raptor engine. So SpaceX
-                        invented its own, SX500, and built a foundry to make it. Europe needs the same ability. PRISM
-                        builds it, for any programme that needs it.
-                    </p>
-                    <dl className="precedent__figs">
-                        <div>
-                            <dt>SX500</dt>
-                            <dd>SpaceX’s own alloy, made in its own foundry</dd>
-                        </div>
-                        <div>
-                            <dt>~12,000&nbsp;psi</dt>
-                            <dd>About 830 bar of hot, oxygen-rich gas that the alloy has to survive</dd>
-                        </div>
-                    </dl>
-                    <SourceLine>
-                        Elon Musk, 23 December 2018 and 25 May 2019. Photograph: Raptor’s first test firing, SpaceX,
-                        25 September 2016 (CC0), repainted and animated in code.
+                <div className="gap__foot">
+                    <SourceLine label="Arithmetic">
+                        126 ways to pick five of nine metals that all melt above 1,650&nbsp;°C (Ti, V, Cr, Zr, Nb, Mo, Hf,
+                        Ta, W) × 3,764,376 ways to mix five in whole percent. Ten a day, every day. Dot positions and the
+                        search path are illustrative.
                     </SourceLine>
                 </div>
             </div>

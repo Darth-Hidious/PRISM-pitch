@@ -34,45 +34,6 @@ export function useInView<T extends Element>(rootMargin = '0px', once = false) {
     return [ref, inView] as const;
 }
 
-/**
- * Scroll position through a tall element whose child is `position: sticky`,
- * mapped through `map` (for example to a step index). The component only
- * re-renders when the mapped value changes.
- */
-export function useStickyValue<T extends HTMLElement, V>(map: (progress: number) => V, initial: V) {
-    const ref = useRef<T>(null);
-    const mapRef = useRef(map);
-    const [value, setValue] = useState<V>(initial);
-    useEffect(() => {
-        mapRef.current = map;
-    });
-    useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
-        let raf = 0;
-        const update = () => {
-            raf = 0;
-            const r = el.getBoundingClientRect();
-            const total = r.height - window.innerHeight;
-            const p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
-            const next = mapRef.current(p);
-            setValue((prev) => (Object.is(prev, next) ? prev : next));
-        };
-        const schedule = () => {
-            if (!raf) raf = requestAnimationFrame(update);
-        };
-        schedule();
-        window.addEventListener('scroll', schedule, { passive: true });
-        window.addEventListener('resize', schedule);
-        return () => {
-            window.removeEventListener('scroll', schedule);
-            window.removeEventListener('resize', schedule);
-            cancelAnimationFrame(raf);
-        };
-    }, []);
-    return [ref, value] as const;
-}
-
 /** mulberry32: a small seeded generator, so generated figures are the same on every visit. */
 export function seeded(seed: number) {
     let a = seed >>> 0;
