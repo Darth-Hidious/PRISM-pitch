@@ -23,6 +23,22 @@ const licence = (href: string, text: string) => (
     </a>
 );
 
+const AESTUS = 'https://www.dlr.de/de/bilder/2016/4/triebwerkstests-beim-dlr_25044';
+const EJ200 = 'https://commons.wikimedia.org/wiki/File:Afterburner_Eurojet_EJ200_turbofan_engine_for_Eurofighter_Typhoon_ILA_Berlin_2016_01.jpg';
+const W7X = 'https://commons.wikimedia.org/wiki/File:W7-X_tile_installation.jpg';
+const TUNGSTEN = 'https://commons.wikimedia.org/wiki/File:Wolfram_evaporated_crystals_and_1cm3_cube.jpg';
+const FAL = 'https://artlibre.org/licence/lal/en/';
+
+/** The market cards' photographs (the PTFE parts and the wafer are public domain and need no credit). */
+const markets = (
+    <>
+        {source(AESTUS, 'Aestus engine in test stand P4.2')}: DLR, {licence(CC_BY, 'CC BY 3.0')}, cropped ·{' '}
+        {source(EJ200, 'EJ200 afterburner')}: Julian Herzog, {licence(CC_BY_4, 'CC BY 4.0')}, cropped ·{' '}
+        {source(W7X, 'Wendelstein 7-X wall tiles')}: Christopher Roux, EUROfusion, {licence(CC_BY_4, 'CC BY 4.0')}, cropped ·{' '}
+        {source(TUNGSTEN, 'Tungsten crystals')}: Alchemist-hp (pse-mendelejew.de), {licence(FAL, 'Free Art License')}, cropped
+    </>
+);
+
 const vinci = (
     <>
         {source(VINCI, 'Vinci engine in test stand P4.1')}: DLR, {licence(CC_BY, 'CC BY 3.0')}
@@ -37,8 +53,8 @@ export const CREDITS: Partial<Record<PageId, ReactNode>> = {
     home: (
         <>
             {source(VULCAIN, 'Vulcain 2 on test stand P5')}: DLR, {licence(CC_BY, 'CC BY 3.0')}, cropped · {vinci}, cropped ·{' '}
-            {source(MERIS, 'Europe from Envisat')}: ESA, {licence(CC_BY_SA_IGO, 'CC BY-SA 3.0 IGO')}, resized · Award:
-            Hessen Ideen.
+            {source(MERIS, 'Europe from Envisat')}: ESA, {licence(CC_BY_SA_IGO, 'CC BY-SA 3.0 IGO')}, resized · {markets} ·
+            Award: Hessen Ideen.
         </>
     ),
     method: (
@@ -47,4 +63,5 @@ export const CREDITS: Partial<Record<PageId, ReactNode>> = {
         </>
     ),
     news: <>Award photo: Hessen Ideen.</>,
+    company: <>{markets}.</>,
 };

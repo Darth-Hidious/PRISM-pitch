@@ -787,6 +787,13 @@
         display: none;
     }
 
+    /* One partner per row: the row rules replace the dividers between columns. */
+    .d-consortium li + li {
+        padding-left: 0;
+        border-left: 0;
+        border-top: var(--hairline) solid var(--rule-soft);
+    }
+
     .d-ask__figure .pm-numeral {
         font-size: 120px;
     }

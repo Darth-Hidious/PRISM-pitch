@@ -1,3 +1,4 @@
+import { MarketCards } from './Markets';
 import { Idx, Words } from './ui';
 
 const LADDER = [
@@ -7,15 +8,6 @@ const LADDER = [
     { name: 'Deployment', text: 'PRISM on your own machines.' },
     { name: 'Support', text: 'Updates, recalibration, traceable data.' },
     { name: 'Transfer', text: 'The proven process, handed to your team.' },
-];
-
-const MARKETS = [
-    { name: 'Space propulsion', text: 'Alloys for rocket engines. Our first application.' },
-    { name: 'Defence', text: 'Materials and test systems, with export rules built in.' },
-    { name: 'Fusion and energy', text: 'Fusion reactors, turbines and batteries.' },
-    { name: 'Supply independence', text: 'Replacements for hard-to-get metals.' },
-    { name: 'Replacing harmful substances', text: 'Alternatives to substances of very high concern, starting with PFAS.' },
-    { name: 'Key technologies', text: 'Semiconductors and lightweight polymers.' },
 ];
 
 export default function Business({ n = '02' }: { n?: string }) {
@@ -46,17 +38,9 @@ export default function Business({ n = '02' }: { n?: string }) {
                     <span>Materials on your line</span>
                 </p>
 
-                <div className="markets rv">
-                    <p className="w-label">Where PRISM goes first</p>
-                    <ul className="markets__grid">
-                        {MARKETS.map((m, i) => (
-                            <li key={m.name}>
-                                <span className="markets__num">{String(i + 1).padStart(2, '0')}</span>
-                                <h3>{m.name}</h3>
-                                <p>{m.text}</p>
-                            </li>
-                        ))}
-                    </ul>
+                <div className="markets">
+                    <p className="w-label markets__label rv">Where PRISM goes first</p>
+                    <MarketCards />
                 </div>
             </div>
         </section>

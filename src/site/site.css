@@ -3632,56 +3632,140 @@ body {
     margin-top: clamp(88px, 10vw, 144px);
 }
 
-.markets__grid {
+.markets__label {
+    margin-bottom: 20px;
+}
+
+/* ── Where PRISM goes first: photo cards ──────────────────────────────── */
+
+.markets-home {
+    background: #050d1a;
+}
+
+.mcards {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin: 20px 0 0;
+    gap: 12px;
+    margin: 0;
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--rule);
 }
 
-.markets__grid li {
-    display: grid;
-    align-content: start;
-    gap: 10px;
-    padding: 28px 28px 34px;
-    border-bottom: 1px solid var(--rule);
-    transition: background-color 0.3s;
+.mcard {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--radius-panel);
+    background: #0c1b30;
+    color: #ffffff;
 }
 
-.markets__grid li:hover {
-    background: var(--surface);
+.mcard__img {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease-rise, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
-.markets__grid li:not(:nth-child(3n)) {
-    border-right: 1px solid var(--rule);
+.mcard::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+        180deg,
+        rgba(5, 13, 26, 0.4) 0%,
+        rgba(5, 13, 26, 0) 24%,
+        rgba(5, 13, 26, 0) 42%,
+        rgba(5, 13, 26, 0.9) 100%
+    );
 }
 
-.markets__grid li:nth-child(3n + 1) {
-    padding-left: 0;
+.mcard:hover .mcard__img {
+    transform: scale(1.04);
 }
 
-.markets__grid li:nth-child(3n + 1):hover {
-    padding-left: 0;
-}
-
-.markets__num {
+.mcard__chip {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 4px;
+    background: rgba(5, 13, 26, 0.7);
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ink-2);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
 }
 
-.markets__grid h3 {
-    font-size: 22px;
+.mcard__chip--now {
+    border-color: #5fd08a;
+}
+
+.mcard__chip--signed {
+    border-color: #73afab;
+}
+
+.mcard__body {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 18px 18px 20px;
+}
+
+.mcard__title {
+    font-size: clamp(19px, 1.7vw, 24px);
     font-weight: 650;
-    letter-spacing: -0.015em;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
 }
 
-.markets__grid p {
-    font-size: 16px;
-    line-height: 1.55;
-    color: var(--ink-2);
+.mcard__text {
+    margin-top: 6px;
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.84);
+}
+
+@media (max-width: 900px) and (min-aspect-ratio: 1 / 1), (max-width: 760px) {
+    .mcards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Phones: one card to a row, wide, so the words stay large. */
+@media (max-width: 560px) {
+    .mcards {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .mcard {
+        aspect-ratio: 16 / 11;
+    }
+}
+
+/* Phones held sideways: three to a row, never taller than the screen. */
+@media (max-height: 500px) and (min-aspect-ratio: 1 / 1) {
+    .mcards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mcard {
+        aspect-ratio: auto;
+        height: calc(100svh - var(--nav-h) - 40px);
+    }
+
+    .mcard__text {
+        font-size: 13px;
+    }
 }
 
 @media (max-width: 1100px) {
@@ -3696,18 +3780,6 @@ body {
 
     .ladder__axis {
         display: none;
-    }
-}
-
-@media (max-width: 860px) {
-    .markets__grid {
-        grid-template-columns: 1fr;
-    }
-
-    .markets__grid li,
-    .markets__grid li:nth-child(3n + 1) {
-        padding: 22px 0 24px;
-        border-right: 0 !important;
     }
 }
 
@@ -5392,8 +5464,7 @@ body {
 /* On a phone people skim. Lists keep their names; the one-line details stay for wider screens. */
 @media (max-width: 600px) {
     .layers li span:not(.layers__num):not(.pm-pill),
-    .ip__col li span,
-    .markets__grid p {
+    .ip__col li span {
         display: none;
     }
 }
@@ -5750,6 +5821,225 @@ body {
 
     .known-m {
         max-width: 560px;
+    }
+}
+
+/* The loop as a ring on phones: the section holds still and scrolling takes it round. */
+.loopring {
+    display: none;
+}
+
+@media (max-width: 760px), (max-height: 500px) and (min-aspect-ratio: 1 / 1) {
+    @media (prefers-reduced-motion: no-preference) {
+        .loopring {
+            display: block;
+        }
+
+        .loop__list {
+            display: none;
+        }
+    }
+}
+
+.loopring__stage {
+    position: sticky;
+    top: var(--nav-h);
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 14px;
+    min-height: calc(100svh - var(--nav-h));
+    padding-block: 12px;
+}
+
+.loopring__step {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 12px;
+    margin: 0;
+    text-align: center;
+}
+
+.loopring__num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+}
+
+.loopring__step b {
+    font-size: clamp(26px, 8vw, 34px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.loopring__svg {
+    display: block;
+    width: min(100%, 440px);
+    height: auto;
+    max-height: 52svh;
+    overflow: visible;
+}
+
+.loopring__text {
+    max-width: 30em;
+    min-height: 3em;
+    margin: 0;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.loopring__text b {
+    font-weight: 650;
+    color: var(--ink);
+}
+
+.loopring__track {
+    fill: none;
+    stroke: var(--rule);
+    stroke-width: 2;
+}
+
+.loopring__arc {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3.5;
+    stroke-linecap: round;
+}
+
+.loopring__tick {
+    fill: none;
+    stroke: var(--ink-3);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.loopring__glyph {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+}
+
+.loopring__glyph .fill {
+    fill: currentColor;
+    stroke: none;
+}
+
+.loopring__node,
+.loopring__middle {
+    color: var(--ink-3);
+    transition: color 0.35s;
+}
+
+.loopring__node > circle,
+.loopring__middle > circle {
+    fill: var(--ground);
+    stroke: var(--rule);
+    stroke-width: 1.5;
+    transition:
+        fill 0.35s,
+        stroke 0.35s;
+}
+
+.loopring__node text {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 650;
+    fill: var(--ink-3);
+    transition: fill 0.35s;
+}
+
+.loopring__middle text {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    fill: var(--ink-2);
+}
+
+.loopring__node.is-on {
+    color: var(--accent);
+}
+
+.loopring__node.is-on > circle {
+    fill: var(--accent-tint);
+    stroke: var(--accent);
+}
+
+.loopring__node.is-on text {
+    fill: var(--ink);
+}
+
+.loopring__node.is-now,
+.loopring__middle.is-now {
+    color: #ffffff;
+}
+
+.loopring__node.is-now > circle,
+.loopring__middle.is-now > circle {
+    fill: var(--accent);
+    stroke: var(--accent);
+}
+
+.loopring__middle.is-now text {
+    fill: #ffffff;
+}
+
+.loopring__head {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.loopring__head.is-on {
+    opacity: 1;
+}
+
+.loopring__head circle {
+    fill: var(--accent);
+}
+
+.loopring__head .loopring__halo {
+    opacity: 0.18;
+}
+
+/* Phones held sideways: the ring beside its words. */
+@media (max-height: 500px) and (min-aspect-ratio: 1 / 1) {
+    .loopring__stage {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        align-content: center;
+        column-gap: 28px;
+        row-gap: 10px;
+    }
+
+    .loopring__svg {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        max-height: calc(100svh - var(--nav-h) - 24px);
+    }
+
+    .loopring__step,
+    .loopring__text {
+        grid-column: 2;
+        justify-content: flex-start;
+        justify-self: start;
+        text-align: left;
+    }
+
+    .loopring__step {
+        align-self: end;
+    }
+
+    .loopring__text {
+        align-self: start;
     }
 }
 

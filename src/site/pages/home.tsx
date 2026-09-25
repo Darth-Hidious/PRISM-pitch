@@ -6,6 +6,7 @@ import { Gap } from '../Gap';
 import Hero from '../Hero';
 import Loop from '../Loop';
 import Made from '../Made';
+import Markets from '../Markets';
 import SitePage from '../SitePage';
 
 mount(
@@ -15,7 +16,8 @@ mount(
         <Made n="02" />
         <Europe />
         <Loop n="03" />
-        <Explore n="04" />
+        <Markets n="04" />
+        <Explore n="05" />
         <Contact />
     </SitePage>,
 );
