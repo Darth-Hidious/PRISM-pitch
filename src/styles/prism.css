@@ -191,6 +191,18 @@
     color: var(--ink);
 }
 
+/* ── Partner logo ─────────────────────────────────────────────────────── */
+
+/* A partner's own artwork, shown in the colour of the text around it. */
+.plogo {
+    display: block;
+    height: calc(var(--logo-h, 26px) * var(--size, 1));
+    aspect-ratio: var(--ratio);
+    background: currentColor;
+    -webkit-mask: var(--src) center / contain no-repeat;
+    mask: var(--src) center / contain no-repeat;
+}
+
 /* ── Status pill ──────────────────────────────────────────────────────── */
 
 .pm-pill {

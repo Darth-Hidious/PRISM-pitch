@@ -44,8 +44,9 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
   run by the university), our own photos of raw metals, melting and parts, the
   Hessen Ideen award and ESA's mosaic of Europe. The painters in `src/ds/`
   (`LivePainting`, `Painting`) stay in the design system but are used nowhere.
-- **Credits and sources**: photo credits sit once per page in the footer
-  (`src/site/credits.tsx`), not under each picture. Sources for facts and
+- **Credits and sources**: credits for other people's images sit once per page in
+  the footer (`src/site/credits.tsx`), not under each picture; our own photos
+  need none. Sources for facts and
   "illustrative" notes fold away under a small toggle (`Note` in `ui.tsx`).
 - **Brand**: the PRISM mark is `src/ds/PrismMark.tsx` (follows the text colour)
   and `public/brand/prism-logo-light-mode.svg` / `prism-logo-dark-mode.svg`.
@@ -54,7 +55,7 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
   scale, tabs and exhibit styles are in `site.css`. The live pieces
   compute in the browser: the dot field in `Gap.tsx` (one dot per 20,000
   possible alloys, from plain arithmetic), the process map and the Gaussian-process loop in
-  `Method.tsx`, the rights explorer in `Evidence.tsx` and the event cascade in
+  `Method.tsx`, the record map in `RecordMap.tsx` and the event cascade in
   `Roadmap.tsx`. Each says on the page what is illustrative.
 - **Fonts**: Manrope and Geist Mono, self-hosted through Fontsource (no calls
   to Google Fonts).
@@ -63,17 +64,15 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
 
 | File | What | Rights |
 | --- | --- | --- |
-| `spark-furnace.webp` | Project SPARK photograph: vacuum-arc melting, seen through the viewport (deck cover only) | Project photograph; photographer to be confirmed |
-| `spark-charge.webp`, `spark-hearth-charge*.webp`, `spark-hearth-column*.webp`, `spark-furnace-wide.webp`, `spark-melt.webp`, `spark-button*.webp`, `machining.webp` | Raw metals, the loaded hearth, the arc furnace, an alloy melting, a cast button, machining; cropped only (an equipment label and a reflection cropped out). No element or composition is named anywhere they are used | Our own photographs, supplied by the team |
-| `lab-arc-melter.webp`, `lab-melt-spinner*.webp` | The arc melter and the melt spinner in the materials science lab at WUST, Wrocław (run by the university; we rent the equipment); cropped only, the arc melter's ignition-current label cropped out | Our own photographs, supplied by the team |
+| `spark-furnace.webp` | Project SPARK photograph: vacuum-arc melting, seen through the viewport (deck cover only) | Our own photograph |
+| `spark-charge.webp`, `spark-hearth-charge*.webp`, `spark-hearth-column*.webp`, `spark-furnace-wide.webp`, `spark-melt.webp`, `spark-button*.webp`, `machining.webp` | Raw metals, the loaded hearth, the arc furnace, an alloy melting, a cast button, machining; cropped only (an equipment label and a reflection cropped out). No element or composition is named anywhere they are used | Our own photographs |
+| `lab-arc-melter.webp`, `lab-melt-spinner*.webp` | The arc melter and the melt spinner in the materials science lab at WUST, Wrocław (run by the university; we rent the equipment); cropped only, the arc melter's ignition-current label cropped out | Our own photographs |
+| `partners/*` | The PRISM Alpha consortium's logos: ESA, Bimo Tech, ArianeGroup, Fraunhofer IAPT, amsight, each from its own website, shown in one colour (Fraunhofer's mark as its one-colour version) | The partners' trademarks, shown as members of PRISM Alpha |
 | `esa-europe-1280.webp` | Envisat MERIS true-colour mosaic of Europe, resized; shown only where WebGL 2 is unavailable, in place of the globe | ESA, CC BY-SA 3.0 IGO ([source](https://www.esa.int/ESA_Multimedia/Images/2010/09/MERIS_mosaic_of_Europe)) |
 | `earth-s2cloudless-4096.webp` | The whole Earth, cloudless, for the globe in "Why Europe" (the 2016 edition, the only CC BY one that covers the world; 2018 onwards is non-commercial) | EOxCloudless by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016), CC BY 4.0 ([source](https://cloudless.eox.at)); credited on the globe itself, as EOX asks |
 | `news-hessen-ideen-2026.webp` | Team PRISM receiving the KI-Sonderpreis at Hessen Ideen 2026 | Hessen Ideen (the organisers' photograph), supplied by the team |
 | `dlr-vulcain2-p5.webp` | Vulcain 2 engine on test stand P5, DLR Lampoldshausen (the home page's first screen) | DLR, CC BY 3.0 ([source](https://www.dlr.de/en/images/2011/3/vulcain-2-engine-on-test-facility-p5-at-dlr-lampoldshausen_3149)) |
 | `dlr-vinci-p41-1200.webp`, `dlr-vinci-p41-2000.webp`, `dlr-vinci-p41-wide.webp` | Vinci engine in altitude test stand P4.1, resized (the `-wide` card version also cropped to 3:2) | DLR, CC BY 3.0 ([source](https://www.dlr.de/de/bilder/2016/2/vinci-triebwerk-im-pruefstand-p4-1_23249)) |
-
-The earlier powder-metallurgy and coupon-in-hand photos were taken at IPPT PAN
-(Warsaw), not by Bimo Tech as first credited. They are no longer used anywhere.
 
 ESA images: use only those whose page says **CC BY-SA 3.0 IGO**, credit them
 as the page says, link the licence and say if they were changed. Images under

@@ -1,5 +1,6 @@
 import { Button } from '../ds';
 import { LINKS } from './links';
+import { CONSORTIUM, PartnerLogo } from './partners';
 import { Grain } from './ui';
 
 /**
@@ -56,6 +57,16 @@ export default function Hero() {
                         <span>Replacing “forever chemicals”, with an industrial partner</span>
                     </li>
                 </ul>
+                <div className="wrap proof__partners">
+                    <p className="w-label">PRISM Alpha, with</p>
+                    <ul aria-label="PRISM Alpha consortium">
+                        {CONSORTIUM.map((p) => (
+                            <li key={p.id}>
+                                <PartnerLogo p={p} />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </aside>
         </>
     );

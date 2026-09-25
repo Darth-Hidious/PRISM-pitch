@@ -38,14 +38,13 @@ export const CREDITS: Partial<Record<PageId, ReactNode>> = {
         <>
             {source(VULCAIN, 'Vulcain 2 on test stand P5')}: DLR, {licence(CC_BY, 'CC BY 3.0')}, cropped · {vinci}, cropped ·{' '}
             {source(MERIS, 'Europe from Envisat')}: ESA, {licence(CC_BY_SA_IGO, 'CC BY-SA 3.0 IGO')}, resized · Award:
-            Hessen Ideen · All other photos: Mirdyne.
+            Hessen Ideen.
         </>
     ),
     method: (
         <>
-            {vinci}, resized · Fruit-fly brain map: MaleCNS v1.0, FlyEM, HHMI Janelia, {licence(CC_BY_4, 'CC BY 4.0')} · All
-            other photos: Mirdyne.
+            {vinci}, resized · Fruit-fly brain map: MaleCNS v1.0, FlyEM, HHMI Janelia, {licence(CC_BY_4, 'CC BY 4.0')}.
         </>
     ),
-    news: <>Award photo: Hessen Ideen · All other photos: Mirdyne.</>,
+    news: <>Award photo: Hessen Ideen.</>,
 };

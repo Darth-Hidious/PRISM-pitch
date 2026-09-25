@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { seeded, useInView, useMediaQuery, useReducedMotion } from './hooks';
+import { CONSORTIUM, PartnerLogo } from './partners';
 import { Grain, Idx, Note, Rails, Words } from './ui';
 
 type TrackState = 'done' | 'current' | 'next';
@@ -188,6 +189,42 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                     </h2>
                 </header>
 
+                <article className="alpha rv" aria-labelledby="alpha-title">
+                    <div className="alpha__head">
+                        <p className="w-label alpha__kicker">Running now · funded by ESA</p>
+                        <h3 id="alpha-title" className="w-h3 alpha__title">
+                            PRISM Alpha
+                        </h3>
+                        <p className="alpha__lead">
+                            The first project built around the full PRISM loop, for European space transport.
+                        </p>
+                        <dl className="alpha__facts">
+                            <div>
+                                <dt>12 months</dt>
+                                <dd>TRL 3 to 4</dd>
+                            </div>
+                            <div>
+                                <dt>3+</dt>
+                                <dd>candidate alloys</dd>
+                            </div>
+                            <div>
+                                <dt>1</dt>
+                                <dd>complete closed loop</dd>
+                            </div>
+                        </dl>
+                        <p className="alpha__when">Kicked off in July 2026. Award ceremony in October.</p>
+                    </div>
+                    <ul className="alpha__team" aria-label="PRISM Alpha consortium">
+                        {CONSORTIUM.map((p) => (
+                            <li key={p.id}>
+                                <PartnerLogo p={p} />
+                                <span className="alpha__name">{p.name}</span>
+                                <span className="alpha__role">{p.role}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </article>
+
                 <div className="stands rv" aria-labelledby="stands-title">
                     <h3 id="stands-title" className="w-h3">
                         Where it stands
@@ -196,8 +233,8 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                         <div>
                             <p className="w-label">Done so far</p>
                             <ul>
-                                <li>Our first alloys have been made as real metal, in Project SPARK.</li>
-                                <li>ESA has awarded PRISM Alpha, a project to run the full loop for European space transport.</li>
+                                <li>Project SPARK: eight candidate alloys narrowed to two, made as real metal.</li>
+                                <li>PRISM Alpha, funded by ESA, kicked off in July 2026.</li>
                                 <li>Our first privately funded project, for PFAS‑free polymers, is signed.</li>
                                 <li>PRISM won the AI special prize (KI‑Sonderpreis) at Hessen Ideen 2026.</li>
                             </ul>

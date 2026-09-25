@@ -140,14 +140,14 @@ const NEWS: NewsItem[] = [
     {
         when: 'July 2026',
         tag: 'Programme',
-        title: 'ESA awards PRISM Alpha',
-        text: 'The European Space Agency has awarded PRISM Alpha to a team led by Bimo Tech. It is the first project built around the full PRISM loop, for European space transport.',
+        title: 'PRISM Alpha kicks off',
+        text: 'The ESA-funded project PRISM Alpha has started, led by Bimo Tech with ArianeGroup, Fraunhofer IAPT and amsight. It is the first project built around the full PRISM loop, for European space transport. The award ceremony follows in October.',
     },
     {
         when: 'Ongoing',
         tag: 'Project',
         title: 'Project SPARK: our first alloys are real',
-        text: 'In SPARK, an ESA project led by Bimo Tech, the first alloys from our early screening were made as real metal. Testing continues.',
+        text: 'In SPARK, an ESA project led by Bimo Tech, eight candidate alloys from our early screening were narrowed to two and made as real metal. Testing continues.',
         image: {
             src: '/img/spark-hearth-charge.webp',
             alt: 'Close-up of a copper hearth: small pieces of raw metal loaded into its hollows, ready to be melted.',

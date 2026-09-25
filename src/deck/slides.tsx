@@ -1,6 +1,7 @@
 import { Button, CapabilityStack, EvidenceLineage, Kicker, ObjectCard, ProcessChain, RightsState, SourceLine, Stat, StatusTable } from '../ds';
 import VideoBackground from '../components/VideoBackground';
 import { LINKS } from '../site/links';
+import { CONSORTIUM, PartnerLogo } from '../site/partners';
 
 function Head({ kicker, title, lead }: { kicker: string; title: string; lead?: string }) {
     return (
@@ -299,6 +300,15 @@ export function EvidenceSlide() {
 
 /* ── 08 Traction ──────────────────────────────────────────────────────── */
 
+/** Each partner's part in PRISM Alpha, in the deck's own terms. */
+const DECK_ROLES: Record<string, string> = {
+    esa: 'Customer · FLPP',
+    bimo: 'Prime contractor',
+    ariane: 'Requirements and validation',
+    iapt: 'LPBF process',
+    amsight: 'Manufacturing data',
+};
+
 export function Traction() {
     return (
         <>
@@ -315,7 +325,7 @@ export function Traction() {
                         {
                             entity: 'PRISM Alpha',
                             entityNote: 'ESA FLPP · FIRST! Simulation & Intelligence',
-                            status: { label: 'Awarded', tone: 'accent' },
+                            status: { label: 'Running', tone: 'accent' },
                             statement: ['12 months, TRL 3 to 4: at least three candidates and one complete closed loop, with ArianeGroup, Fraunhofer IAPT and amsight.'],
                         },
                         {
@@ -336,26 +346,12 @@ export function Traction() {
             <div className="d-consortium" aria-label="PRISM Alpha consortium">
                 <p className="pm-column">PRISM Alpha consortium</p>
                 <ul>
-                    <li>
-                        <b>European Space Agency</b>
-                        <span>Customer · FLPP</span>
-                    </li>
-                    <li>
-                        <b>Bimo Tech</b>
-                        <span>Prime contractor</span>
-                    </li>
-                    <li>
-                        <b>ArianeGroup</b>
-                        <span>Requirements and validation</span>
-                    </li>
-                    <li>
-                        <b>Fraunhofer IAPT</b>
-                        <span>LPBF process</span>
-                    </li>
-                    <li>
-                        <b>amsight</b>
-                        <span>Manufacturing data</span>
-                    </li>
+                    {CONSORTIUM.map((p) => (
+                        <li key={p.id}>
+                            <PartnerLogo p={p} />
+                            <span>{DECK_ROLES[p.id]}</span>
+                        </li>
+                    ))}
                 </ul>
             </div>
             <div className="d-foot">
