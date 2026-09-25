@@ -2482,6 +2482,278 @@ body {
     }
 }
 
+/* A real lineage: NIST's CAMEO, step by step */
+
+.cameo {
+    margin-top: clamp(96px, 11vw, 168px);
+    padding-top: clamp(48px, 6vw, 88px);
+    border-top: 1px solid var(--rule);
+}
+
+.cameo__head {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: 22px;
+}
+
+.cameo__head .trust__label {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.cameo__title {
+    grid-column: 1 / span 9;
+}
+
+.cameo__head .w-lead {
+    grid-column: 1 / span 8;
+}
+
+.cameo__plate {
+    margin: clamp(36px, 4.5vw, 56px) 0 0;
+    padding: clamp(20px, 3vw, 40px);
+    border-radius: var(--radius-panel);
+}
+
+.cameo__steps {
+    --gap: clamp(18px, 2vw, 30px);
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--gap);
+    list-style: none;
+}
+
+.cameo__step {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cameo__icon {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.eg--icon {
+    max-width: 240px;
+}
+
+.eg-spot {
+    fill: var(--eg-ink);
+    stroke: none;
+    opacity: 0.72;
+}
+
+.cameo__arrow {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: var(--gap);
+    height: 10px;
+    overflow: visible;
+    transform: translateY(-50%);
+}
+
+.cameo__arrow path {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.2;
+}
+
+.cameo__arrow .cameo__tip {
+    fill: var(--ink);
+    stroke: none;
+}
+
+.cameo__n {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.cameo__text {
+    margin-top: 8px;
+    font-size: 15.5px;
+    font-weight: 650;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+}
+
+.cameo__meta {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    text-wrap: pretty;
+}
+
+.cameo__where {
+    margin-top: auto;
+    padding-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.35;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+}
+
+/* Room for two lines, so the source notes line up across the row. */
+.cameo__step .cameo__where {
+    min-height: calc(2 * 1.35em + 12px);
+}
+
+/* Time taken: the bars fill at speeds in proportion to the hours. */
+
+.cameo__time {
+    display: grid;
+    gap: 12px;
+    margin-top: clamp(28px, 3.5vw, 44px);
+    padding-top: clamp(20px, 2.5vw, 28px);
+    border-top: 1px solid var(--rule);
+}
+
+.cameo__row {
+    display: grid;
+    grid-template-columns: minmax(140px, 180px) minmax(130px, 160px) minmax(0, 1fr);
+    align-items: center;
+    gap: 18px;
+}
+
+.cameo__label {
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.cameo__track {
+    position: relative;
+    height: 14px;
+    margin-right: 10px;
+}
+
+.cameo__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--w);
+    border: 1px solid var(--ink);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M-1,1 l2,-2 M0,6 l6,-6 M5,7 l2,-2' stroke='%231d1f24' stroke-width='0.75'/%3E%3C/svg%3E");
+}
+
+.cameo__row--all .cameo__fill {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2' stroke='%231d1f24' stroke-width='0.75'/%3E%3C/svg%3E");
+}
+
+/* More than 90 hours: the bar runs on past its end. */
+.cameo__row--all .cameo__fill::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -10px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid var(--ink);
+    transform: translateY(-50%);
+}
+
+.cameo__val {
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+}
+
+.cameo__time .cameo__where {
+    padding-top: 0;
+}
+
+.js .cameo__time.rv .cameo__fill {
+    width: 0;
+    transition: width var(--t) linear 0.6s;
+}
+
+.js .cameo__time.rv.in .cameo__fill {
+    width: var(--w);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .cameo__time.rv .cameo__fill {
+        width: var(--w);
+        transition: none;
+    }
+}
+
+@media (max-width: 1180px) {
+    .cameo__steps {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        row-gap: 44px;
+    }
+
+    .cameo__step:nth-child(3n) .cameo__arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 860px) {
+    .cameo__title,
+    .cameo__head .w-lead {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 640px) {
+    .cameo__steps {
+        grid-template-columns: 1fr;
+        row-gap: 0;
+    }
+
+    /* A timeline: a rule down the left joins the steps. */
+    .cameo__step {
+        position: relative;
+        padding: 0 0 36px 22px;
+        border-left: 1px solid var(--rule);
+    }
+
+    .cameo__step:last-child {
+        padding-bottom: 0;
+    }
+
+    .cameo__step::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -4px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--ink);
+    }
+
+    .cameo__arrow {
+        display: none;
+    }
+
+    .cameo__row {
+        grid-template-columns: 1fr auto;
+        row-gap: 6px;
+    }
+
+    .cameo__val {
+        text-align: right;
+    }
+
+    .cameo__track {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .cameo__step .cameo__where {
+        min-height: 0;
+    }
+}
+
 /* ── 06 Working with us ───────────────────────────────────────────────── */
 
 .ladder {
@@ -3054,7 +3326,7 @@ body {
 
 .founders__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
 }
 
@@ -3125,7 +3397,7 @@ body {
     }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 960px) {
     .founders__grid {
         grid-template-columns: 1fr;
     }
@@ -3159,11 +3431,34 @@ body {
 }
 
 .news__item {
+    padding-top: 20px;
+    border-top: 2px solid var(--ink);
+}
+
+.news__body {
     display: grid;
     align-content: start;
     gap: 12px;
-    padding-top: 20px;
-    border-top: 2px solid var(--ink);
+}
+
+/* The lead story spans the row: photograph beside the text. */
+.news__item--lead {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: start;
+    gap: clamp(20px, 3vw, 40px);
+}
+
+.news__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-panel);
+}
+
+.news__item--lead h3 {
+    font-size: clamp(24px, 2.2vw, 32px);
 }
 
 .news__meta {
@@ -3198,6 +3493,10 @@ body {
     .news__list {
         grid-template-columns: 1fr;
         gap: 40px;
+    }
+
+    .news__item--lead {
+        grid-template-columns: 1fr;
     }
 }
 

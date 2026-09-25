@@ -65,15 +65,10 @@ function missing(ctx: CanvasRenderingContext2D, w: number, h: number) {
 
 /* ── The furnace: vacuum-arc melting, Project SPARK photograph ────────── */
 
-/** The arc strikes every 6.5 s for about 0.9 s; returns its strength, 0 to 1. */
-function arcAt(t: number) {
-    const c = t % 6.5;
-    if (c < 4.6 || c > 5.5) return 0;
-    const x = (c - 4.6) / 0.9;
-    // A fast strike, a flickering hold and a slower fade.
-    return Math.min(1, x * 8) * (1 - smooth((x - 0.55) / 0.45)) * (0.82 + 0.18 * Math.sin(t * 90));
-}
-
+/**
+ * The photograph as taken, drifting slowly: the glowing button is in the
+ * photograph itself. Nothing is drawn on top of it.
+ */
 export const furnaceScene: LiveScene = {
     images: ['/img/spark-furnace.webp'],
     animated: true,
@@ -81,80 +76,7 @@ export const furnaceScene: LiveScene = {
     detail: 0.65,
     draw(ctx, w, h, t, [img]) {
         if (!img) return missing(ctx, w, h);
-        const { s, at } = cover(ctx, img, w, h, 0.5, 0.84, t, 0.8);
-        const arc = arcAt(t);
-        const fl = flicker(t);
-        const [bx, by] = at(352, 668);
-        const [ex, ey] = at(438, 470);
-        ctx.globalCompositeOperation = 'lighter';
-        // The molten button breathes, and flares while the arc is on it.
-        glow(ctx, bx, by, 120 * s, [
-            [0, `rgba(255,176,96,${0.3 * fl + 0.45 * arc})`],
-            [0.35, `rgba(255,96,40,${0.16 * fl + 0.3 * arc})`],
-            [1, 'rgba(255,70,30,0)'],
-        ]);
-        glow(ctx, bx, by, 48 * s, [
-            [0, `rgba(255,236,190,${0.22 * fl + 0.5 * arc})`],
-            [1, 'rgba(255,200,120,0)'],
-        ]);
-        if (arc > 0.01) {
-            // The chamber lights up blue-white.
-            glow(ctx, (ex + bx) / 2, (ey + by) / 2, 560 * s, [
-                [0, `rgba(170,200,255,${0.42 * arc})`],
-                [0.5, `rgba(120,160,230,${0.14 * arc})`],
-                [1, 'rgba(120,160,230,0)'],
-            ]);
-            // The arc itself: a jagged path from the electrode tip to the button, re-drawn 24 times a second.
-            const key = Math.floor(t * 24);
-            const n = 9;
-            const pts: [number, number][] = [];
-            for (let i = 0; i <= n; i++) {
-                const f = i / n;
-                const j = i === 0 || i === n ? 0 : (rnd(key * 31 + i) - 0.5) * 26 * s * Math.sin(f * Math.PI);
-                const x = ex + (bx - ex) * f;
-                const y = ey + (by - 22 * s - ey) * f;
-                const len = Math.hypot(bx - ex, by - ey) || 1;
-                pts.push([x + ((by - ey) / len) * j, y - ((bx - ex) / len) * j]);
-            }
-            for (const [width, a] of [
-                [14, 0.16],
-                [6, 0.42],
-                [2.2, 0.95],
-            ] as const) {
-                ctx.strokeStyle = `rgba(215,232,255,${a * arc})`;
-                ctx.lineWidth = width * s;
-                ctx.lineJoin = 'round';
-                ctx.lineCap = 'round';
-                ctx.beginPath();
-                pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
-                ctx.stroke();
-            }
-            glow(ctx, ex, ey, 70 * s, [
-                [0, `rgba(235,244,255,${0.95 * arc})`],
-                [0.3, `rgba(160,200,255,${0.45 * arc})`],
-                [1, 'rgba(160,200,255,0)'],
-            ]);
-        }
-        // Sparks thrown off the melt, each on its own ballistic path.
-        for (let i = 0; i < 16; i++) {
-            const life = 0.9 + rnd(i) * 0.9;
-            const age = (t + rnd(i + 50) * 7) % 3.2;
-            if (age > life) continue;
-            const f = age / life;
-            const vx = (rnd(i + 100) - 0.5) * 220;
-            const vy = -120 - rnd(i + 200) * 160;
-            const x = bx + (vx * age) * s;
-            const y = by - 30 * s + (vy * age + 260 * age * age) * s;
-            const a = (1 - f) * (0.35 + 0.65 * arc + 0.25 * fl - 0.25);
-            if (a <= 0.02) continue;
-            ctx.strokeStyle = `rgba(255,${190 + Math.round(50 * (1 - f))},120,${a})`;
-            ctx.lineWidth = 2.4 * s;
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x - vx * 0.018 * s, y - (vy + 520 * age) * 0.018 * s);
-            ctx.stroke();
-        }
-        ctx.globalCompositeOperation = 'source-over';
+        cover(ctx, img, w, h, 0.5, 0.84, t, 0.8);
     },
 };
 

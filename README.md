@@ -34,8 +34,8 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
   photographs painted on the GPU every frame (structure tensor, anisotropic
   Kuwahara filter, strokes swept along the forms, paint relief), with the
   photograph's fine detail carried through. They resolve from noise as you
-  scroll, like a diffusion model, and the scenes move: the arc and the melt
-  in the furnace, gas along the Raptor plume, light on the sample. Scenes are
+  scroll, like a diffusion model, and the scenes move: the furnace photograph
+  drifts slowly, gas runs along the Raptor plume, light moves on the sample. Scenes are
   in `src/site/scenes.ts`; the globe that turns to Europe is `src/site/globe.ts`.
   On devices without a real GPU they fall back to the stroke painter
   (`src/ds/paint.ts`, `src/ds/Painting.tsx`); `?paint=live` forces the live
@@ -60,6 +60,7 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
 | `earth-blue-marble.webp`, `globe-europe.webp` | Blue Marble with topography and bathymetry, and a render of it | NASA, public domain (via the three-globe package) |
 | `src/site/europe-outline.ts` | EU and ESA member-state outlines | Natural Earth 1:110m, public domain (via world-atlas) |
 | `search-manifold.webp`, `event-network.webp` | Illustrations from the Mirdyne briefing deck | Mirdyne |
+| `news-hessen-ideen-2026.webp` | Team PRISM receiving the KI-Sonderpreis at Hessen Ideen 2026 | Supplied by the team; confirm the photographer's credit before launch |
 
 ## Writing for the site
 

@@ -99,6 +99,14 @@ export function Company() {
                                 data science, MIT Professional Education; biomedical engineering, THM.
                             </p>
                         </article>
+                        <article className="founder">
+                            <h3>Marcin Orzechowski</h3>
+                            <p className="founder__role">Co-founder, Mirdyne</p>
+                            <p>
+                                CEO and Head of R&amp;D at Bimo Tech, which supplies special metals and precision parts for
+                                space, energy and science. Wrocław University of Technology.
+                            </p>
+                        </article>
                     </div>
                 </div>
             </div>
@@ -108,12 +116,26 @@ export function Company() {
 
 /* ── News ─────────────────────────────────────────────────────────────── */
 
-const NEWS = [
+interface NewsItem {
+    when: string;
+    tag: string;
+    title: string;
+    text: string;
+    image?: { src: string; alt: string; width: number; height: number };
+}
+
+const NEWS: NewsItem[] = [
     {
         when: '2026',
         tag: 'Award',
         title: 'PRISM wins the AI special prize at Hessen Ideen',
         text: 'Team PRISM, from Justus Liebig University Giessen, won the KI‑Sonderpreis, the special prize for artificial intelligence, in the Hessen Ideen competition 2026.',
+        image: {
+            src: '/img/news-hessen-ideen-2026.webp',
+            alt: 'Team PRISM on stage at the Hessen Ideen awards, holding the KI-Sonderpreis certificate, with the organisers.',
+            width: 1600,
+            height: 1066,
+        },
     },
     {
         when: 'August 2026',
@@ -147,13 +169,29 @@ export function News() {
                 </header>
                 <ol className="news__list">
                     {NEWS.map((n, i) => (
-                        <li key={n.title} className="news__item rv" style={{ ['--d' as string]: `${i * 90}ms` }}>
-                            <p className="news__meta">
-                                <span>{n.when}</span>
-                                <span className="news__tag">{n.tag}</span>
-                            </p>
-                            <h3>{n.title}</h3>
-                            <p>{n.text}</p>
+                        <li
+                            key={n.title}
+                            className={`news__item rv${n.image ? ' news__item--lead' : ''}`}
+                            style={{ ['--d' as string]: `${i * 90}ms` }}
+                        >
+                            {n.image && (
+                                <img
+                                    className="news__img"
+                                    src={n.image.src}
+                                    alt={n.image.alt}
+                                    width={n.image.width}
+                                    height={n.image.height}
+                                    loading="lazy"
+                                />
+                            )}
+                            <div className="news__body">
+                                <p className="news__meta">
+                                    <span>{n.when}</span>
+                                    <span className="news__tag">{n.tag}</span>
+                                </p>
+                                <h3>{n.title}</h3>
+                                <p>{n.text}</p>
+                            </div>
                         </li>
                     ))}
                 </ol>

@@ -10,7 +10,7 @@ export default function Hero() {
                 <LivePainting
                     scene={furnaceScene}
                     reveal="load"
-                    alt="Painted view into a vacuum-arc melting furnace: an arc strikes a glowing alloy button on the hearth, beside cooled buttons from earlier melts."
+                    alt="Painted view through the window of a vacuum-arc melting furnace: a glowing alloy button on the hearth, cooled buttons from earlier melts beside it, the electrode above."
                     fallback={{ src: '/img/spark-furnace.webp', seed: 7, direction: -16, motion: 0.5, focusX: 0.5, focusY: 0.84 }}
                     poster={5}
                 />

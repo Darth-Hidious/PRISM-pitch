@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { RightsState, SourceLine } from '../ds';
 import type { Visibility } from '../ds/RightsState';
+import CameoLineage from './Cameo';
 import { PartDiagram } from './diagrams';
 import { useMediaQuery } from './hooks';
 import { Grain, Idx, Rails } from './ui';
@@ -406,6 +407,8 @@ export default function Evidence() {
                         </ol>
                     </div>
                 </div>
+
+                <CameoLineage />
 
                 <div className="ip rv" aria-labelledby="ip-title">
                     <div className="ip__head">
