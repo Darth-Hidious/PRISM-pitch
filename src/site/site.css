@@ -662,6 +662,63 @@ body {
     gap: clamp(28px, 3.5vw, 48px);
 }
 
+/* The engine photograph that opens the problem: shown at its own size, never stretched. */
+.gap__photo {
+    margin: 0 0 clamp(8px, 2vw, 24px);
+}
+
+.gap__photo img {
+    display: block;
+    width: 100%;
+    max-width: 1348px;
+    aspect-ratio: 16 / 7;
+    height: auto;
+    object-fit: cover;
+    object-position: 50% 62%;
+    border-radius: var(--radius-panel);
+}
+
+.gap__photo figcaption,
+.method__photo figcaption {
+    max-width: 52em;
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.gap__photo figcaption b,
+.method__photo figcaption b {
+    color: var(--ink);
+    font-weight: 650;
+}
+
+.gap__photo a,
+.method__photo a {
+    color: inherit;
+}
+
+.method__photo {
+    margin: 0 0 clamp(40px, 5vw, 64px);
+}
+
+.method__photo img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    height: auto;
+    object-fit: cover;
+    object-position: 50% 45%;
+    border-radius: var(--radius-panel);
+}
+
+@media (max-width: 760px) {
+    .gap__photo img,
+    .method__photo img {
+        aspect-ratio: 4 / 3;
+    }
+}
+
 .gap__legend i {
     display: inline-block;
     width: 3px;

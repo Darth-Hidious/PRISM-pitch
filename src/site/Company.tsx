@@ -121,6 +121,7 @@ const NEWS: NewsItem[] = [
             alt: 'Team PRISM on stage at the Hessen Ideen awards, holding the KI-Sonderpreis certificate, with the organisers.',
             width: 1600,
             height: 1066,
+            credit: 'Photo: Hessen Ideen.',
         },
     },
     {

@@ -357,6 +357,23 @@ export function Gap({ n = '01' }: { n?: string }) {
             <Rails />
             <Grain />
             <div className="wrap gap__inner">
+                <figure className="gap__photo rv">
+                    <img
+                        src="/img/dlr-vulcain2-p5.webp"
+                        alt="A Vulcain 2 rocket engine firing on a test stand: flame pours out beneath the ribbed metal nozzle."
+                        width={1348}
+                        height={758}
+                        loading="lazy"
+                    />
+                    <figcaption>
+                        <b>What the material has to survive.</b> A Vulcain 2 engine firing on test stand P5 at DLR
+                        Lampoldshausen, where Ariane’s main-stage engines are tested. Photo: DLR,{' '}
+                        <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer license">
+                            CC BY 3.0
+                        </a>
+                        , cropped.
+                    </figcaption>
+                </figure>
                 <Idx n={n} tail={<span className="gap__legend"><i /> = {fmt(PER_DOT)} possible alloys</span>}>
                     The problem
                 </Idx>

@@ -694,6 +694,26 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                     </p>
                 </header>
 
+                <figure className="method__photo rv">
+                    <img
+                        src="/img/dlr-vinci-p41-2000.webp"
+                        srcSet="/img/dlr-vinci-p41-1200.webp 1200w, /img/dlr-vinci-p41-2000.webp 2000w"
+                        sizes="(max-width: 1400px) 100vw, 1320px"
+                        alt="The Vinci upper-stage engine mounted in an altitude test stand: its dark nozzle hangs below a tangle of pipes and cables."
+                        width={2000}
+                        height={1125}
+                        loading="lazy"
+                    />
+                    <figcaption>
+                        <b>A real test takes months.</b> The Vinci engine in DLR’s altitude test stand P4.1, which fires it
+                        in a vacuum, as in space. This campaign ran from May to September 2016. Photo: DLR,{' '}
+                        <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer license">
+                            CC BY 3.0
+                        </a>
+                        , resized.
+                    </figcaption>
+                </figure>
+
                 <div className="method__tabs rv" role="tablist" aria-label="Demos" onKeyDown={onKey}>
                     {EXHIBITS.map((x, i) => (
                         <button
