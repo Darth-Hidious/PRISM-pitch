@@ -6,6 +6,7 @@ const NAV = [
     { href: '#platform', label: 'Platform' },
     { href: '#loop', label: 'How it works' },
     { href: '#evidence', label: 'Evidence and IP' },
+    { href: '#open-research', label: 'Open research' },
     { href: '#company', label: 'Company' },
     { href: '#news', label: 'News' },
 ];
@@ -164,6 +165,11 @@ export function SiteFooter() {
                     <nav aria-label="Elsewhere">
                         <h2>Elsewhere</h2>
                         <ul>
+                            <li>
+                                <a href={LINKS.forager} target="_blank" rel="noopener noreferrer">
+                                    Forager, open research
+                                </a>
+                            </li>
                             <li>
                                 <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
                                     Open-source layer on GitHub

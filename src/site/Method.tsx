@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import { SourceLine } from '../ds';
+import { LadderDiagram } from './diagrams';
 import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
 import { Idx } from './ui';
 
@@ -660,22 +661,49 @@ export default function Method() {
                         Every experiment has to earn its place.
                     </h2>
                     <p className="w-lead">
-                        Physical experiments are the expensive part. PRISM spends them where they teach the most, and
-                        aims for a region that can be made repeatably rather than a single perfect point. Try it: these
-                        exhibits run live in your browser.
+                        <b>Why not simply make everything?</b> Because physical experiments are the expensive part.
+                        PRISM spends them where they teach the most and aims for a region that can be made repeatably,
+                        not a single perfect point. The exhibits below run live in your browser.
                     </p>
                 </header>
 
+                <article className="exhibit exhibit--wide rv" aria-labelledby="ex-ladder">
+                    <div className="exhibit__text">
+                        <p className="w-label exhibit__tag">Exhibit A · The ladder</p>
+                        <h3 id="ex-ladder" className="w-h3">
+                            Every candidate climbs a ladder of rising cost.
+                        </h3>
+                        <p className="q">How do you afford to check so many candidates?</p>
+                        <p className="a">
+                            <b>By stopping most of them where stopping is cheap.</b> A learned potential answers in
+                            seconds; a physical test takes weeks. Each rung adds physics the one below cannot see, so
+                            only the few that survive every cheaper question reach the furnace.
+                        </p>
+                    </div>
+                    <figure className="exhibit__stage">
+                        <div className="scroll-x">
+                            <LadderDiagram />
+                        </div>
+                        <figcaption>
+                            <SourceLine label="Illustrative">
+                                The ladder, drawn for this site. Counts show the shape of a campaign, not a result;
+                                times are typical orders of magnitude per candidate.
+                            </SourceLine>
+                        </figcaption>
+                    </figure>
+                </article>
+
                 <article className="exhibit rv" aria-labelledby="ex-window">
                     <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit A · Manufacturing window</p>
+                        <p className="w-label exhibit__tag">Exhibit B · Manufacturing window</p>
                         <h3 id="ex-window" className="w-h3">
                             A manufacturing window, not a single recipe.
                         </h3>
-                        <p>
-                            A predicted optimum only matters if it survives real variation in powder, machine energy and
-                            atmosphere. Drag the probe across the laser powder-bed fusion map. The answer PRISM looks
-                            for is the hatched region: settings that stay dense even when the machine drifts.
+                        <p className="q">Will the recipe survive a real machine?</p>
+                        <p className="a">
+                            <b>Only if it sits inside a window.</b> Powder, laser power and atmosphere all drift. Drag the
+                            probe across the laser powder-bed fusion map: the hatched region is what PRISM looks for,
+                            settings that stay dense when the machine moves.
                         </p>
                         <p className="exhibit__note">
                             Energy density alone does not decide the outcome: the keyholing boundary cuts across the
@@ -694,13 +722,15 @@ export default function Method() {
 
                 <article className="exhibit rv" aria-labelledby="ex-al">
                     <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit B · Active learning</p>
+                        <p className="w-label exhibit__tag">Exhibit C · Active learning</p>
                         <h3 id="ex-al" className="w-h3">
                             Each experiment is chosen for what it will teach.
                         </h3>
-                        <p>
-                            A model of what is known, and of how uncertain it is, picks the next measurement. Watch the
-                            uncertainty collapse around the optimum long before every point is measured.
+                        <p className="q">Which experiment teaches the most?</p>
+                        <p className="a">
+                            <b>The one the model is least sure of, where it matters.</b> A model of what is known, and of
+                            how uncertain it is, picks the next measurement. Watch the uncertainty collapse around the
+                            optimum long before every point is measured.
                         </p>
                         <dl className="exhibit__stats">
                             <div>
@@ -724,14 +754,15 @@ export default function Method() {
 
                 <article className="exhibit rv" aria-labelledby="ex-core">
                     <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit C · Reuse</p>
+                        <p className="w-label exhibit__tag">Exhibit D · Reuse</p>
                         <h3 id="ex-core" className="w-h3">
                             A reusable core. Material-specific modules.
                         </h3>
-                        <p>
-                            Orchestration, sampling, evaluation and provenance stay the same from one programme to the
-                            next. Requirements, material physics and test criteria change with each application. That
-                            is how one platform moves from alloys to polymers.
+                        <p className="q">What changes when the material does?</p>
+                        <p className="a">
+                            <b>Only the modules.</b> Orchestration, sampling, evaluation and provenance stay the same from
+                            one programme to the next. Requirements, material physics and test criteria change with each
+                            application. That is how one platform moves from alloys to polymers.
                         </p>
                     </div>
                     <div className="exhibit__stage">

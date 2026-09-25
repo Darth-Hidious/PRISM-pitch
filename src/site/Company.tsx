@@ -9,7 +9,7 @@ export function Company() {
         <section id="company" className="sec company" data-theme="paper" data-nav="paper" aria-labelledby="company-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="08">Company</Idx>
+                    <Idx n="09">Company</Idx>
                     <h2 id="company-title" className="w-h2">
                         A platform company, born inside a manufacturer.
                     </h2>
@@ -134,7 +134,7 @@ export function News() {
         <section id="news" className="sec news" data-theme="paper" data-nav="paper" aria-labelledby="news-title">
             <div className="wrap">
                 <header className="news__head rv">
-                    <Idx n="09">News</Idx>
+                    <Idx n="10">News</Idx>
                     <h2 id="news-title" className="w-h2">
                         Latest from Mirdyne.
                     </h2>

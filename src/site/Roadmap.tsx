@@ -168,6 +168,30 @@ export default function Roadmap() {
                     </p>
                 </header>
 
+                <div className="stands rv" aria-labelledby="stands-title">
+                    <h3 id="stands-title" className="w-h3">
+                        Where it stands
+                    </h3>
+                    <div className="stands__cols">
+                        <div>
+                            <p className="w-label">What PRISM has shown</p>
+                            <ul>
+                                <li>Computer-designed refractory high-entropy alloys, made and tested as real alloys (Project SPARK).</li>
+                                <li>An ESA activity awarded to run the complete loop for European space transportation (PRISM Alpha).</li>
+                                <li>A privately funded programme, contracted, for PFAS-free polymers.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p className="w-label">What it has to show next</p>
+                            <ul>
+                                <li>One complete closed loop, from requirement to coupon evidence. That is PRISM Alpha’s job.</li>
+                                <li>Robotic synthesis and instrument control working on the line.</li>
+                                <li>A material taken from coupon to component, with the evidence a qualification process needs.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="branches rv">
                     {BRANCHES.map((b) => (
                         <div key={b.name} className="branch">

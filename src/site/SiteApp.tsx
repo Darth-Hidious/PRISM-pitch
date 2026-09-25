@@ -7,6 +7,7 @@ import { Gap, Precedent } from './Gap';
 import Hero from './Hero';
 import Loop from './Loop';
 import Method from './Method';
+import OpenResearch from './OpenResearch';
 import Roadmap from './Roadmap';
 import Stacks from './Stacks';
 
@@ -52,6 +53,7 @@ export default function SiteApp() {
                 <Evidence />
                 <Business />
                 <Roadmap />
+                <OpenResearch />
                 <Company />
                 <News />
                 <Contact />

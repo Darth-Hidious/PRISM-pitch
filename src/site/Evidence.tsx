@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { RightsState, SourceLine } from '../ds';
 import type { Visibility } from '../ds/RightsState';
+import { PartDiagram } from './diagrams';
 import { useMediaQuery } from './hooks';
 import { Grain, Idx, Rails } from './ui';
 
@@ -364,9 +365,10 @@ export default function Evidence() {
                         Every claim keeps its evidence, its owner and its rights attached.
                     </h2>
                     <p className="w-lead">
-                        Industrial partners share data only when they stay in control of it. In PRISM, provenance and
-                        data rights are part of the material: every requirement, design, build, specimen, test and
-                        decision records where it came from, who owns it and what it may be used for.
+                        <b>Who can see what? Only what its owner has released.</b> Industrial partners share data only
+                        when they stay in control of it. In PRISM, provenance and rights are part of the material: every
+                        requirement, design, build, specimen, test and decision records where it came from, who owns it
+                        and what it may be used for.
                     </p>
                 </header>
 
@@ -412,11 +414,15 @@ export default function Evidence() {
                             A part reveals its chemistry. It does not reveal the evidence.
                         </h3>
                         <p className="w-lead">
-                            Anyone holding a part can analyse it, and may even work out a way to make something like
-                            it. What they cannot take from the part is the proof that it works and the demonstrated
-                            ability to make it again. In PRISM that evidence is the asset, and it stays with its owner.
+                            <b>What does a part give away? Its chemistry, not its evidence.</b> Anyone holding a part can
+                            analyse it, and may even work out a way to make something like it. What the part cannot
+                            give them is the proof that it works and the demonstrated ability to make it again. In PRISM
+                            that evidence is the asset, and it stays with its owner.
                         </p>
                     </div>
+                    <figure className="ip__plate" data-theme="paper">
+                        <PartDiagram />
+                    </figure>
                     <div className="ip__grid">
                         <div className="ip__col">
                             <p className="w-label">What a part gives away</p>
@@ -429,26 +435,8 @@ export default function Evidence() {
                                 ))}
                             </ul>
                         </div>
-                        <div className="ip__coupon" aria-hidden="true">
-                            <svg viewBox="0 0 120 220">
-                                <defs>
-                                    <linearGradient id="ip-metal" x1="0" x2="1">
-                                        <stop offset="0" stopColor="#4b5b6e" />
-                                        <stop offset="0.45" stopColor="#c2cbd7" />
-                                        <stop offset="0.6" stopColor="#8d9cae" />
-                                        <stop offset="1" stopColor="#324157" />
-                                    </linearGradient>
-                                </defs>
-                                <rect x="30" y="20" width="60" height="180" rx="6" fill="url(#ip-metal)" />
-                                {Array.from({ length: 14 }, (_, i) => (
-                                    <line key={i} x1="30" x2="90" y1={32 + i * 12} y2={32 + i * 12} className="ip__track" />
-                                ))}
-                                <rect className="ip__scan" x="22" y="20" width="76" height="3" />
-                            </svg>
-                            <p>Coupon</p>
-                        </div>
                         <div className="ip__col ip__col--keep">
-                            <p className="w-label">What stays in PRISM</p>
+                            <p className="w-label">What stays with its owner</p>
                             <ul>
                                 {KEEPS.map(([k, v]) => (
                                     <li key={k}>

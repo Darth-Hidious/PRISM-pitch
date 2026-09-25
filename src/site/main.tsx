@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../styles/tokens.css';
 import '../styles/prism.css';
+import '@fontsource-variable/newsreader/wght-italic.css';
 import './site.css';
 import SiteApp from './SiteApp';
 

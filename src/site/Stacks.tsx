@@ -16,8 +16,10 @@ interface StackDef {
     id: string;
     name: string;
     short: string;
-    promise: string;
-    problem: string;
+    question: string;
+    lead: string;
+    answer: string;
+    limit: string;
     layers: Layer[];
     art: { src?: string; source?: (w: number, h: number) => HTMLCanvasElement; alt: string; caption: string } & PaintOptions;
 }
@@ -27,9 +29,10 @@ const STACKS: StackDef[] = [
         id: 'research',
         name: 'Research stack',
         short: 'Research',
-        promise: 'Finds the few candidates worth making.',
-        problem:
-            'The design space for alloys and polymers is effectively infinite, and almost all of it fails in the real world. Screening by intuition and literature takes years.',
+        question: 'Which of an effectively infinite set of compositions are worth making?',
+        lead: 'A short list, ranked, with its uncertainty.',
+        answer: 'Generative samplers propose candidates across the whole space. Learned potentials, first principles and thermodynamics remove what cannot work, before any powder is weighed.',
+        limit: 'It cannot see what a real machine will do to the alloy. The manufacturing and test stack answers that.',
         layers: [
             {
                 name: 'Materials knowledge graph',
@@ -71,9 +74,10 @@ const STACKS: StackDef[] = [
         id: 'harness',
         name: 'Harness stack',
         short: 'Harness',
-        promise: 'Runs the science as one system.',
-        problem:
-            'Models on their own only propose. They do not plan campaigns, call tools, check their own work or remember what failed.',
+        question: 'Who runs the science between the models?',
+        lead: 'The harness.',
+        answer: 'Models on their own only propose. The harness plans each campaign, calls the tools, scores every batch against the requirement and keeps what failed, so the next campaign starts where the last one stopped.',
+        limit: 'It does not make the final call. Models propose; a named engineer signs off what leaves the loop.',
         layers: [
             {
                 name: 'Campaign planner',
@@ -114,9 +118,10 @@ const STACKS: StackDef[] = [
         id: 'autonomy',
         name: 'Autonomy stack',
         short: 'Autonomy',
-        promise: 'Takes the human out of the sequence, not out of the loop.',
-        problem:
-            'Experiments are the bottleneck. Manual synthesis and characterisation take days per sample, and data is lost between instruments.',
+        question: 'How do experiments stop being the bottleneck?',
+        lead: 'By taking the person out of the sequence, not out of the loop.',
+        answer: 'Manual synthesis and characterisation take days per sample, and data is lost between instruments. Here candidates become recipes, robots dose and heat, instruments read the result on the line and the data goes straight back.',
+        limit: 'Most of it is still being built. Recipe translation runs as a prototype; the rest is in development.',
         layers: [
             {
                 name: 'Recipe translation',
@@ -162,9 +167,10 @@ const STACKS: StackDef[] = [
         id: 'manufacturing',
         name: 'Manufacturing and test stack',
         short: 'Manufacturing and test',
-        promise: 'Turns candidates into parts and physical evidence.',
-        problem:
-            'A composition is not a material until it survives manufacture and test. That is where most computer-designed materials stop.',
+        question: 'Does the material exist, and does it hold?',
+        lead: 'Only a physical test can say.',
+        answer: 'A composition is not a material until it survives manufacture and test, which is where most computer-designed materials stop. Candidates are melted and printed in industrial processes, then measured against the requirement.',
+        limit: 'A coupon is not a component. Qualification is the target, not a claim.',
         layers: [
             {
                 name: 'Powder and melting',
@@ -205,9 +211,10 @@ const STACKS: StackDef[] = [
         id: 'evidence-stack',
         name: 'Evidence stack',
         short: 'Evidence',
-        promise: 'Keeps every claim provable and every partner in control.',
-        problem:
-            'Partners will not share data they cannot control, and engineers cannot act on results they cannot trace back to a specimen and a test.',
+        question: 'Can every claim be traced to a specimen and a test, and who may see it?',
+        lead: 'Every result carries its inputs, its owner and its rights.',
+        answer: 'Partners will not share data they cannot control, and engineers cannot act on results they cannot trace. Requirements, designs, builds, specimens, tests and decisions are linked objects, not files.',
+        limit: 'Provenance and export classification run today. Machine-enforced rights and controlled release are in development.',
         layers: [
             {
                 name: 'Provenance',
@@ -356,11 +363,10 @@ function Chapter({ stack, index, inline }: { stack: StackDef; index: number; inl
             <h3 id={`${stack.id}-title`} className="chapter__name">
                 {stack.name}
             </h3>
-            <p className="w-h3 chapter__promise">{stack.promise}</p>
-            <div className="chapter__problem">
-                <p className="w-label">The problem it solves</p>
-                <p>{stack.problem}</p>
-            </div>
+            <p className="q chapter__q">{stack.question}</p>
+            <p className="a chapter__a">
+                <b>{stack.lead}</b> {stack.answer}
+            </p>
             <ol className="layers" aria-label={`${stack.name} layers`}>
                 {stack.layers.map((l, k) => (
                     <li key={l.name}>
@@ -373,6 +379,10 @@ function Chapter({ stack, index, inline }: { stack: StackDef; index: number; inl
                     </li>
                 ))}
             </ol>
+            <p className="limit">
+                <span className="w-label">Limit</span>
+                {stack.limit}
+            </p>
         </article>
     );
 }
