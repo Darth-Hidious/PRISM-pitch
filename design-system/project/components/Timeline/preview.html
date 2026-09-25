@@ -1,0 +1,27 @@
+<!-- @dsCard group="Data" height=260 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Timeline — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad','data-theme':'navy'},h(P.Timeline,{label:'Materials programmes',items:[
+  {date:'Active',title:'Project SPARK',detail:'Refractory high-entropy alloys'},
+  {date:'Awarded',title:'PRISM Alpha',detail:'The first complete loop',state:'current'},
+  {date:'Contracted',title:'PFAS-free polymers',detail:'First polymer class',state:'next'},
+  {date:'Next',title:'Polymers and bio-based materials',state:'next'}]}))
+  );
+</script>
+</body>
+</html>

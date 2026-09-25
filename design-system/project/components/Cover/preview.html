@@ -1,0 +1,78 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PRISM Design System</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--ground); color:var(--ink); font-family:var(--font-sans); overflow:hidden; }
+  .cover { position:relative; width:960px; height:288px; overflow:hidden; }
+  .band { position:absolute; top:0; left:0; width:960px; height:112px; }
+  .band svg { display:block; width:960px; height:112px; }
+  .emph { fill:var(--emphasis); }
+  .accent { fill:var(--accent); }
+  .teal { fill:var(--teal); }
+  .steel { fill:var(--steel); }
+  .blk { rx:var(--radius-card); }
+  .line { stroke:var(--ground); stroke-width:1; }
+  .dot { fill:var(--ground); }
+  .dot.now { fill:var(--crimson); }
+  .words { position:absolute; left:var(--space-6); right:var(--space-6); bottom:var(--space-6); max-width:912px; }
+  .name { margin:0; font-size:64px; line-height:.95; font-weight:700; letter-spacing:-.03em; color:var(--ink); white-space:nowrap; }
+  .tag { margin:var(--space-2) 0 0 2px; font-size:14px; line-height:20px; color:var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="band" aria-hidden="true">
+<svg viewBox="0 0 960 112" width="960" height="112">
+<!--
+  blocks      emphasis 432x112 (the deck's navy band, the largest) · accent 216x112 · teal 120x112 · steel 168x112 — 39% of 960x288; crimson only as one dot, since it only ever means "current"
+  arrangement a strip of unequal bands across the top, the Briefing's footer band moved up; the name is too wide for the side zone, so the top-band skeleton
+  pattern     the Timeline: one hairline in the ground colour with dots cut out of the blocks at a space-8 pitch and one crimson dot for the current item, from "Timeline dots: steel filled for done, crimson for current"
+  scales      widths in space-6 multiples (432, 216, 120, 168), gaps space-2, height 112 (7 x space-4), dot pitch space-8, dot radius 9 (half the 18 px timeline dot), corners radius-card
+-->
+<rect class="emph blk" x="0" y="0" width="432" height="112" rx="4"/>
+<rect class="accent blk" x="440" y="0" width="216" height="112" rx="4"/>
+<rect class="teal blk" x="664" y="0" width="120" height="112" rx="4"/>
+<rect class="steel blk" x="792" y="0" width="168" height="112" rx="4"/>
+<line class="line" x1="0" y1="76" x2="960" y2="76"/>
+<circle class="dot" cx="24" cy="76" r="9"/>
+<circle class="dot" cx="56" cy="76" r="9"/>
+<circle class="dot" cx="88" cy="76" r="9"/>
+<circle class="dot" cx="120" cy="76" r="9"/>
+<circle class="dot" cx="152" cy="76" r="9"/>
+<circle class="dot" cx="184" cy="76" r="9"/>
+<circle class="dot" cx="216" cy="76" r="9"/>
+<circle class="dot" cx="248" cy="76" r="9"/>
+<circle class="dot" cx="280" cy="76" r="9"/>
+<circle class="dot" cx="312" cy="76" r="9"/>
+<circle class="dot now" cx="344" cy="76" r="9"/>
+<circle class="dot" cx="376" cy="76" r="9"/>
+<circle class="dot" cx="408" cy="76" r="9"/>
+<circle class="dot" cx="440" cy="76" r="9"/>
+<circle class="dot" cx="472" cy="76" r="9"/>
+<circle class="dot" cx="504" cy="76" r="9"/>
+<circle class="dot" cx="536" cy="76" r="9"/>
+<circle class="dot" cx="568" cy="76" r="9"/>
+<circle class="dot" cx="600" cy="76" r="9"/>
+<circle class="dot" cx="632" cy="76" r="9"/>
+<circle class="dot" cx="664" cy="76" r="9"/>
+<circle class="dot" cx="696" cy="76" r="9"/>
+<circle class="dot" cx="728" cy="76" r="9"/>
+<circle class="dot" cx="760" cy="76" r="9"/>
+<circle class="dot" cx="792" cy="76" r="9"/>
+<circle class="dot" cx="824" cy="76" r="9"/>
+<circle class="dot" cx="856" cy="76" r="9"/>
+<circle class="dot" cx="888" cy="76" r="9"/>
+<circle class="dot" cx="920" cy="76" r="9"/>
+</svg>
+</div>
+<div class="words">
+<h1 class="name">PRISM Design System</h1>
+<p class="tag">Specify the capability. We deliver the material.</p>
+</div>
+</div>
+</body>
+</html>

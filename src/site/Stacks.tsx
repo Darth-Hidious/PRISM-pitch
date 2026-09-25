@@ -93,7 +93,7 @@ const STACKS: StackDef[] = [
             {
                 name: 'Sign-off gates',
                 detail: 'Language models propose; engineers decide. Uncited candidates are rejected and a named expert approves what leaves the loop.',
-                maturity: 'in-use',
+                maturity: 'prototype',
             },
         ],
         art: {
@@ -171,12 +171,12 @@ const STACKS: StackDef[] = [
             },
             {
                 name: 'Laser powder-bed fusion',
-                detail: 'Process windows calibrated with Fraunhofer IAPT; industrial synthesis on Bimo Tech lines.',
+                detail: 'Industrial LPBF on Bimo Tech lines; Fraunhofer IAPT calibrates the process window for each lead candidate.',
                 maturity: 'in-use',
             },
             {
                 name: 'Test and characterisation',
-                detail: 'Density, metallography and CT on every build. Oxygen-compatibility testing of coupons within PRISM Alpha.',
+                detail: 'Density and metallography on every build, CT on a subset. Oxygen-compatibility testing of coupons within PRISM Alpha.',
                 maturity: 'in-use',
             },
             {

@@ -1,0 +1,24 @@
+<!-- @dsCard group="Evidence" height=260 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>RightsManifest — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad',style:{maxWidth:560}},h(P.RightsManifest,{caption:'Rights manifest',note:'Illustrative',rows:[
+  ['owner','Customer A'],['custodian','Mirdyne'],['purpose','programme-x material development'],['aggregate properties',{allow:'permitted'}],['raw composition',{deny:'prohibited'}],['model training','explicit approval required']]}))
+  );
+</script>
+</body>
+</html>

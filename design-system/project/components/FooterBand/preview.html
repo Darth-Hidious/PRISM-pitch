@@ -1,0 +1,23 @@
+<!-- @dsCard group="Brand" height=80 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>FooterBand — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad'},h(P.FooterBand,{right:'03 / 12'}))
+  );
+</script>
+</body>
+</html>

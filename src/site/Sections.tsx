@@ -13,9 +13,10 @@ export function Hero() {
                     Specify the capability. We deliver the material.
                 </h1>
                 <p className="pm-lead pm-rise" style={{ animationDelay: '160ms', maxWidth: 640 }}>
-                    PRISM is a closed-loop materials platform. It designs candidate alloys and polymers, screens them
-                    against physics and manufacturability, has them made in real processes and tested against your
-                    requirement. Every result feeds the next round, with its evidence attached.
+                    PRISM is a closed-loop materials platform. It designs candidate materials, refractory alloys today
+                    and polymers next, screens them against physics and manufacturability, has them made in real
+                    processes and tested against your requirement. Every result feeds the next round, with its
+                    evidence attached.
                 </p>
                 <div className="hero__actions pm-rise" style={{ animationDelay: '240ms' }}>
                     <Button href={LINKS.interest} external>
@@ -106,7 +107,7 @@ export function Why() {
                             When no available alloy survived the oxygen-rich side of Raptor, SpaceX developed SX500 and
                             built its own superalloy foundry, so materials could iterate at the speed of the engine
                             programme. European propulsion faces the same bottleneck. PRISM is building that
-                            capability in Europe, and making it available to every programme that needs it.
+                            capability in Europe, for any programme that needs it.
                         </p>
                         <SourceLine>Elon Musk, 23 December 2018 and 25 May 2019.</SourceLine>
                     </div>
@@ -522,7 +523,7 @@ const OFFERS = [
 
 const MARKETS = [
     { name: 'Space propulsion', text: 'Refractory alloys for oxygen-rich rocket engine environments. Our first application.' },
-    { name: 'Defence and dual-use', text: 'Materials, robotics and test systems for defence programmes, with export control built into the data layer.' },
+    { name: 'Defence and dual-use', text: 'Materials, robotics and test systems for defence programmes, with export control designed into the data layer.' },
     { name: 'Fusion and energy', text: 'Plasma-facing materials, efficient turbines and batteries.' },
     { name: 'Strategic autonomy', text: 'Substitutes for critical inputs such as tungsten and permanent magnets.' },
     { name: 'Regulatory replacement', text: 'Alternatives for more than 250 materials under EU REACH, starting with PFAS.' },

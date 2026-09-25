@@ -1,0 +1,25 @@
+<!-- @dsCard group="Imagery" height=440 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Painting — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad',style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}},
+  h(P.Painting,{src:'/_blob/b18a28266a77ec7117920a389dbdadb0',alt:'Vacuum-arc melting furnace, repainted',seed:7,direction:-16,motion:0.55,style:{height:360,borderRadius:5}}),
+  h(P.Painting,{src:'/_blob/b18a28266a77ec7117920a389dbdadb0',alt:'Vacuum-arc melting furnace, repainted with a different seed',seed:19,direction:-40,motion:0.9,style:{height:360,borderRadius:5}}))
+  );
+</script>
+</body>
+</html>

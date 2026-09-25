@@ -1,0 +1,28 @@
+<!-- @dsCard group="Data" height=330 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CapabilityStack — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad'},h(P.CapabilityStack,{label:'PRISM stacks',layers:[
+  {name:'Research',detail:'Knowledge graph, generative samplers, physics funnel and active learning.',maturity:'prototype'},
+  {name:'Harness',detail:'Campaign planner, playbooks, tool adapters and evaluator.',maturity:'prototype'},
+  {name:'Autonomy',detail:'Robotic synthesis, characterisation, Probes and instrument control.',maturity:'development'},
+  {name:'Manufacturing and test',detail:'Powder, melting and laser powder-bed fusion; tests against the incumbent alloy.',maturity:'in-use'},
+  {name:'Evidence',detail:'Provenance and export classification today; machine-enforced rights next.',maturity:'in-use'}]}))
+  );
+</script>
+</body>
+</html>

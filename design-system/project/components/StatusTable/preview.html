@@ -1,0 +1,25 @@
+<!-- @dsCard group="Data" height=330 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>StatusTable — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad'},h(P.StatusTable,{rows:[
+  {entity:'PRISM Alpha',entityNote:'ESA · FLPP FIRST! Simulation & Intelligence',status:{label:'Awarded',tone:'accent'},statement:['The first complete PRISM loop, on an oxygen-rich preburner problem.','Twelve months to take PRISM from TRL 3 to 4.']},
+  {entity:'PFAS-free polymers',entityNote:'Industrial partner · under NDA',status:{label:'Contracted',tone:'teal'},statement:['PRISM\u2019s first privately funded programme.','Contract and NDA signed; work starts next.']}]}))
+  );
+</script>
+</body>
+</html>

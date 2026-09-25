@@ -1,0 +1,25 @@
+<!-- @dsCard group="Brand" height=140 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>MirdyneMark — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'row'},
+  h(P.MirdyneMark,{style:{width:56,height:56,color:'var(--ink)'}}),
+  h('div',{'data-theme':'navy',style:{padding:16,borderRadius:5}},h(P.MirdyneMark,{style:{width:56,height:56,color:'#ffffff'}})))
+  );
+</script>
+</body>
+</html>

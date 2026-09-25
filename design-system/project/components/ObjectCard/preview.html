@@ -1,0 +1,26 @@
+<!-- @dsCard group="Evidence" height=230 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ObjectCard — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad','data-theme':'navy'},h('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}},
+  h(P.ObjectCard,{type:'Module · Evolver',title:'Campaign planner',properties:[['Does','Plans each campaign'],['How','Generator, reflector, curator']]}),
+  h(P.ObjectCard,{type:'Module · Mutator fleet',title:'Generative samplers',properties:[['Does','Explores composition space'],['How','Thermodynamically conditioned']],state:'computable'}),
+  h(P.ObjectCard,{type:'Module · MKG',title:'Materials knowledge graph',emphasis:true,properties:[['Does','Holds what is known'],['How','Literature, patents, instrument data']]})))
+  );
+</script>
+</body>
+</html>

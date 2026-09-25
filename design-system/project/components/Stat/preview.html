@@ -1,0 +1,27 @@
+<!-- @dsCard group="Data" height=190 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Stat — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  .pm-numeral{font-size:56px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad'},h('div',{style:{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:24}},
+  h(P.Stat,{size:'lg',value:'2.2M',label:'Crystal structures predicted'}),
+  h(P.Stat,{size:'lg',value:'381,000',label:'Of them predicted stable'}),
+  h(P.Stat,{size:'lg',value:'736',label:'Independently made in a lab'}),
+  h(P.Stat,{size:'lg',value:h('span',{style:{color:'var(--crimson)'}},'0'),label:'Qualified as engineering materials'})))
+  );
+</script>
+</body>
+</html>

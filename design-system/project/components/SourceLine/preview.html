@@ -1,0 +1,25 @@
+<!-- @dsCard group="Type" height=96 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SourceLine — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'pad',style:{display:'grid',gap:8}},
+  h(P.SourceLine,null,'Merchant et al., \u201cScaling deep learning for materials discovery\u201d, Nature 624, 80\u201385 (2023).'),
+  h(P.SourceLine,{label:'Illustrative'},'An event propagating from supplier to material, manufacturing and component.'))
+  );
+</script>
+</body>
+</html>

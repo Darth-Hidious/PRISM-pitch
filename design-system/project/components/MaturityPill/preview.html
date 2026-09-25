@@ -1,0 +1,23 @@
+<!-- @dsCard group="Status" height=96 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>MaturityPill — preview</title>
+<style>
+  body { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
+  .pad { padding: 24px; }
+  
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var P = window.Prism, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    h('div',{className:'row'},h(P.MaturityPill,{maturity:'in-use'}),h(P.MaturityPill,{maturity:'prototype'}),h(P.MaturityPill,{maturity:'development'}),h(P.MaturityPill,{maturity:'target'}))
+  );
+</script>
+</body>
+</html>

@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Design-system build output (see design-system/README.md)
+design-system/project/components/bundle.*
+design-system/project/components/lib
+design-system/project/fonts
