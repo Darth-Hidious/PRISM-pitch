@@ -241,14 +241,15 @@ export function EvidenceSlide() {
             <Head kicker="Evidence and IP" title="Every claim keeps its evidence, its owner and its rights attached." />
             <div className="d-body d-evidence">
                 <EvidenceLineage
+                    label="Evidence lineage: NIST CAMEO, published work"
                     nodes={[
-                        { type: 'Requirement', title: 'Oxygen-rich preburner environment', state: 'private' },
-                        { type: 'Candidate design', title: 'Refractory high-entropy alloy', state: 'private' },
-                        { type: 'Build', title: 'LPBF coupon build', state: 'computable' },
-                        { type: 'Test', title: 'Oxygen-compatibility test', state: 'computable' },
-                        { type: 'Decision', title: 'Carry forward to the next round', state: 'released' },
+                        { type: 'Question', title: 'Largest optical contrast in Ge–Sb–Te', state: 'public' },
+                        { type: 'Candidates', title: '177 compositions on one wafer', state: 'public' },
+                        { type: 'Measurements', title: '19 closed-loop X-ray rounds', state: 'public' },
+                        { type: 'Result', title: 'Ge₄Sb₆Te₇: ΔEg nearly 3× GST225', state: 'public' },
+                        { type: 'Check', title: 'Electron microscopy and a working device', state: 'public' },
                     ]}
-                    links={['motivates', 'instantiated as', 'measured by', 'justifies']}
+                    links={['posed over', 'sampled by', 'found', 'confirmed by']}
                 />
                 <div style={{ display: 'grid', gap: 16, alignContent: 'start' }}>
                     <p className="pm-lead">
@@ -284,7 +285,8 @@ export function EvidenceSlide() {
             <div className="d-foot">
                 <SourceLine label="Maturity">
                     Provenance and export classification maintained on ESA work today; machine-enforced rights in
-                    development. Lineage shown is illustrative.
+                    development. Lineage shown: NIST's CAMEO, Kusne et al., Nature Communications 11, 5966 (2020),
+                    published work by NIST and partners, not PRISM's.
                 </SourceLine>
             </div>
         </>

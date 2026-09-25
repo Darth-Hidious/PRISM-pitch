@@ -1,4 +1,4 @@
-<!-- @dsCard group="Evidence" height=430 -->
+<!-- @dsCard group="Evidence" height=480 -->
 <!doctype html>
 <html>
 <head>
@@ -7,8 +7,7 @@
 <style>
   body { margin: 0; }
   .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 20px 24px; }
-  .pad { padding: 24px; }
-  
+  .pad { padding: 24px; display: grid; gap: 14px; }
 </style>
 </head>
 <body>
@@ -16,9 +15,12 @@
 <script>
   var P = window.Prism, h = React.createElement;
   ReactDOM.createRoot(document.getElementById('root')).render(
-    h('div',{className:'pad','data-theme':'navy',style:{maxWidth:560}},h(P.EvidenceLineage,{
-  nodes:[{type:'Requirement',title:'Service environment and targets',state:'private'},{type:'Candidate design',title:'Refractory high-entropy alloy',state:'private'},{type:'Build',title:'Sample build',state:'computable'},{type:'Test',title:'Property test',state:'computable'},{type:'Decision',title:'Carry forward to the next round',state:'released'}],
-  links:['motivates','instantiated as','measured by','justifies']}))
+    h('div',{className:'pad','data-theme':'navy',style:{maxWidth:560}},
+      h(P.EvidenceLineage,{
+        label:'Evidence lineage: NIST CAMEO, published work',
+        nodes:[{type:'Question',title:'Largest optical contrast in Ge–Sb–Te',state:'public'},{type:'Candidates',title:'177 compositions on one wafer',state:'public'},{type:'Measurements',title:'19 closed-loop X-ray rounds',state:'public'},{type:'Result',title:'Ge₄Sb₆Te₇: ΔEg nearly 3× GST225',state:'public'},{type:'Check',title:'Electron microscopy and a working device',state:'public'}],
+        links:['posed over','sampled by','found','confirmed by']}),
+      h(P.SourceLine,null,'NIST CAMEO: Kusne et al., Nature Communications 11, 5966 (2020). Published work by NIST and partners, not PRISM’s.'))
   );
 </script>
 </body>
