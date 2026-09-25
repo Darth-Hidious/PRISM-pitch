@@ -64,13 +64,6 @@ export default function Explore({ n = '03' }: { n?: string }) {
                         </li>
                     ))}
                 </ul>
-                <p className="explore__note rv">
-                    Photographs: our own, except Method (DLR,{' '}
-                    <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer license">
-                        CC BY 3.0
-                    </a>
-                    , cropped) and News (Hessen Ideen).
-                </p>
             </div>
         </section>
     );

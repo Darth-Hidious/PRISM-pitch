@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { RightsState, SourceLine } from '../ds';
+import { RightsState } from '../ds';
 import type { Visibility } from '../ds/RightsState';
 import CameoLineage from './Cameo';
 import { PartDiagram } from './diagrams';
 import { useMediaQuery } from './hooks';
-import { Grain, Idx, Rails } from './ui';
+import { Grain, Idx, Note, Rails } from './ui';
 
 /* ── Ontology explorer ────────────────────────────────────────────────── */
 
@@ -334,24 +334,24 @@ const STATES: { state: Visibility; text: string }[] = [
 ];
 
 const RULES = [
-    'Anything made from data keeps the strictest rules of what went into it.',
-    'Training AI is a separate permission. Using a partner’s data never means training on it.',
-    'Export rules belong to the data, and are checked whenever data leaves.',
-    'Partners can take their data and its history with them. No lock-in.',
+    'Anything made from data keeps the strictest rules of its inputs.',
+    'Training AI on a partner’s data needs its own permission.',
+    'Export rules travel with the data.',
+    'Partners can leave with their data. No lock-in.',
 ];
 
 const GIVES = [
     ['What it is made of', 'Standard lab analysis'],
     ['Trace gases', 'Oxygen, nitrogen and carbon'],
     ['Its inner structure', 'X-ray and electron microscopes'],
-    ['Clues about how it was made', 'Melt tracks and pores hint at the process, but do not give it away'],
+    ['Clues about how it was made', 'Hints, not the recipe'],
 ];
 
 const KEEPS = [
-    ['The safe settings', 'What still works when powder, machine and gas vary'],
+    ['The safe settings', 'What still works when things vary'],
     ['The failures', 'Every idea that did not work, and why'],
-    ['The history', 'The chain from requirement to decision, with owners and rights'],
-    ['The proof', 'The test results, and the proven ability to make it again'],
+    ['The history', 'From requirement to decision'],
+    ['The proof', 'Test results, and the ability to make it again'],
 ];
 
 export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
@@ -366,10 +366,7 @@ export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: bo
                     <H id="evidence-title" className="w-h2">
                         Every result keeps its proof, its owner and its rules.
                     </H>
-                    <p className="w-lead">
-                        <b>Who can see what? Only what the owner allows.</b> Every record in PRISM keeps its source, its
-                        owner and its rules. Pick a viewer below.
-                    </p>
+                    <p className="w-lead">Pick a viewer below to see what they are allowed to see.</p>
                 </header>
 
                 <nav className="onpage rv" aria-label="On this page">
@@ -381,10 +378,10 @@ export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: bo
                 <div id="sharing" className="rv">
                     <OntologyExplorer />
                     <div className="evidence__src">
-                        <SourceLine label="Illustrative">
+                        <Note label="Illustrative">
                             Made-up parties and records, not customer data. Tracing and export labels work today;
                             automatic enforcement of sharing rules is being built.
-                        </SourceLine>
+                        </Note>
                     </div>
                 </div>
 
@@ -421,11 +418,6 @@ export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: bo
                         <h3 id="ip-title" className="w-h2 ip__title">
                             Anyone can analyse a part. Nobody can copy the proof.
                         </h3>
-                        <p className="w-lead">
-                            <b>What does a part give away? What it is made of, not the proof.</b> Anyone can test a
-                            part. Nobody gets the proof that it works, or the know-how to make it again. That stays with
-                            its owner.
-                        </p>
                         <figure className="ip__photo">
                             <img
                                 src="/img/spark-button-side.webp"
@@ -434,7 +426,7 @@ export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: bo
                                 height={940}
                                 loading="lazy"
                             />
-                            <figcaption>An alloy button, as cast. Our photograph.</figcaption>
+                            <figcaption>An alloy button, as cast.</figcaption>
                         </figure>
                     </div>
                     <figure className="ip__plate" data-theme="paper">

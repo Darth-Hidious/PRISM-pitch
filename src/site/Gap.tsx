@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { SourceLine } from '../ds';
 import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
-import { Grain, Idx, Rails } from './ui';
+import { Grain, Idx, Note, Rails } from './ui';
 
 /* ── The problem: far too many alloys to make them all ────────────────── */
 
@@ -14,7 +13,6 @@ const ALLOYS = 126 * 3_764_376; // 474,311,376
 const PER_DAY = 10;
 const YEARS = ALLOYS / PER_DAY / 365.25; // 129,859
 const YEARS_SHOWN = Math.round(YEARS / 10_000) * 10_000; // 130,000
-const FINISH = Math.round((new Date().getFullYear() + YEARS) / 1000) * 1000;
 /** One dot stands for 20,000 possible alloys, so the field holds the count to scale. */
 const PER_DOT = 20_000;
 const N = Math.round(ALLOYS / PER_DOT); // 23,716
@@ -357,41 +355,21 @@ export function Gap({ n = '01' }: { n?: string }) {
             <Rails />
             <Grain />
             <div className="wrap gap__inner">
-                <figure className="gap__photo rv">
-                    <img
-                        src="/img/dlr-vulcain2-p5.webp"
-                        alt="A Vulcain 2 rocket engine firing on a test stand: flame pours out beneath the ribbed metal nozzle."
-                        width={1348}
-                        height={758}
-                        loading="lazy"
-                    />
-                    <figcaption>
-                        <b>What the material has to survive.</b> A Vulcain 2 engine firing on test stand P5 at DLR
-                        Lampoldshausen, where Ariane’s main-stage engines are tested. Photo: DLR,{' '}
-                        <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer license">
-                            CC BY 3.0
-                        </a>
-                        , cropped.
-                    </figcaption>
-                </figure>
                 <Idx n={n} tail={<span className="gap__legend"><i /> = {fmt(PER_DOT)} possible alloys</span>}>
                     The problem
                 </Idx>
                 <div className="gap__grid">
                     <div className="gap__copy rv">
                         <h2 id="gap-title" className="w-h2">
-                            Materials decide what engineers can build.
+                            Materials decide what we can build.
                         </h2>
-                        <p className="w-lead">
-                            A rocket engine can work on paper and still be impossible to build, because no material
-                            survives inside it. A new material usually takes ten to twenty years to reach service.
-                        </p>
+                        <p className="w-lead">A new material still takes ten to twenty years to reach service.</p>
                         <dl className="gap__stats">
-                            <div>
+                            <div className="gap__big">
                                 <dt>
                                     <Counter key={String(inView)} value={ALLOYS} />
                                 </dt>
-                                <dd>possible alloys, from five of nine high-melting metals mixed in steps of 1%</dd>
+                                <dd>possible alloys from just five of nine high-melting metals</dd>
                             </div>
                             <div>
                                 <dt>
@@ -405,15 +383,11 @@ export function Gap({ n = '01' }: { n?: string }) {
                                     <span className="gap__op">≈</span>
                                     {fmt(YEARS_SHOWN)}
                                 </dt>
-                                <dd>
-                                    years to make every one of them once. Start today and you finish around the year{' '}
-                                    {fmt(FINISH)}.
-                                </dd>
+                                <dd>years to make them all</dd>
                             </div>
                         </dl>
                         <p className="gap__close">
-                            <b>Nobody can make them all.</b> The skill is choosing the few worth making, then proving
-                            they work. That is what PRISM is for.
+                            <b>Nobody can make them all.</b> PRISM picks the few worth making.
                         </p>
                     </div>
                     <div className="gap__field" aria-hidden="true">
@@ -421,11 +395,11 @@ export function Gap({ n = '01' }: { n?: string }) {
                     </div>
                 </div>
                 <div className="gap__foot">
-                    <SourceLine label="Arithmetic">
-                        126 ways to pick five of nine metals that all melt above 1,650&nbsp;°C (Ti, V, Cr, Zr, Nb, Mo, Hf,
-                        Ta, W) × 3,764,376 ways to mix five in whole percent. Ten a day, every day. Dot positions and the
-                        search path are illustrative.
-                    </SourceLine>
+                    <Note label="How we counted">
+                        126 ways to pick five of nine metals that all melt above 1,650&nbsp;°C, × 3,764,376 ways to mix
+                        five in whole percent. Ten a day, every day. Each dot is 20,000 alloys; their positions are
+                        illustrative.
+                    </Note>
                 </div>
             </div>
         </section>

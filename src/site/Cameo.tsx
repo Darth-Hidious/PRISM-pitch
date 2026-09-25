@@ -2,12 +2,13 @@
  * A real lineage from published work: how NIST's CAMEO found a new
  * phase-change material. Every fact on it comes from Kusne et al., Nature
  * Communications 11, 5966 (2020), or NIST's release of 24 November 2020,
- * and each step names where. Drawn with the engraving kit in engrave.tsx.
+ * both cited in the note under the figure. Drawn with the engraving kit in
+ * engrave.tsx.
  */
 import type { ComponentType, CSSProperties } from 'react';
-import { SourceLine } from '../ds';
 import { arc } from './arc';
 import { Arrow, Ball, Defs, T } from './engrave';
+import { Note } from './ui';
 
 const ID = 'eg-cameo';
 
@@ -278,52 +279,38 @@ function Proof() {
 interface Step {
     title: string;
     text: string;
-    meta: string;
-    where: string;
     Icon: ComponentType;
 }
 
 const STEPS: Step[] = [
     {
         title: 'The question',
-        text: 'Which mix of germanium, antimony and tellurium looks most different to light as glass and as crystal?',
-        meta: 'The score: ΔEg, how much its optical bandgap changes between the two.',
-        where: 'Paper · Results',
+        text: 'Which mix of germanium, antimony and tellurium changes most between glass and crystal?',
         Icon: Question,
     },
     {
         title: 'The options',
         text: '177 different mixes, made side by side on one 3-inch wafer.',
-        meta: 'Sputtered from all three elements at once. Materials from the University of Maryland.',
-        where: 'Paper · Methods · NIST release',
         Icon: Options,
     },
     {
         title: 'What was known',
         text: 'Light scans of every spot, as glass and as crystal, taken before the run.',
-        meta: 'CAMEO used them as a first guess at where the crystal structure changes.',
-        where: 'Paper · Results, Fig. 2c',
         Icon: Known,
     },
     {
         title: 'The measurements',
         text: '19 rounds. In each, CAMEO picked one spot to X-ray and learned from the result.',
-        meta: 'A scientist worked out each ΔEg from the light scans. 20–25 minutes a round, at SLAC’s synchrotron.',
-        where: 'Paper · Fig. 2c, Methods',
         Icon: Measure,
     },
     {
         title: 'The answer',
-        text: 'Ge₄Sb₆Te₇ (GST467), found in round 19.',
-        meta: 'ΔEg of 0.76 eV: nearly three times the 0.23 eV of GST225, the best-known material of its kind.',
-        where: 'Paper · Fig. 3',
+        text: 'Ge₄Sb₆Te₇, found in round 19. About three times the contrast of the best-known material.',
         Icon: Answer,
     },
     {
         title: 'The proof',
         text: 'Checked two more ways: under an electron microscope, and in a working device.',
-        meta: 'The microscope showed why: tiny pockets of a second crystal. The device beat one made of GST225 and stayed stable over 30,000 switches.',
-        where: 'Paper · Fig. 4',
         Icon: Proof,
     },
 ];
@@ -342,15 +329,14 @@ export default function CameoLineage() {
                     Every result should trace back like this.
                 </h3>
                 <p className="w-lead">
-                    <b>What does a result you can trust look like?</b> Here is a public one: in 2020, NIST’s AI system
-                    CAMEO found a better material for memory that works with light. Every step is on record. PRISM keeps
-                    the same record for every result.
+                    In 2020, NIST’s AI system CAMEO found a better memory material, with every step on record. PRISM
+                    keeps the same record for every result.
                 </p>
             </header>
 
             <figure className="cameo__plate" data-theme="paper">
                 <ol className="cameo__steps">
-                    {STEPS.map(({ title, text, meta, where, Icon }, i) => (
+                    {STEPS.map(({ title, text, Icon }, i) => (
                         <li key={title} className="cameo__step rv" style={{ '--d': `${i * 90}ms` } as CSSProperties}>
                             <div className="cameo__icon">
                                 <Icon />
@@ -365,8 +351,6 @@ export default function CameoLineage() {
                                 {String(i + 1).padStart(2, '0')} · {title}
                             </p>
                             <p className="cameo__text">{text}</p>
-                            <p className="cameo__meta">{meta}</p>
-                            <p className="cameo__where">{where}</p>
                         </li>
                     ))}
                 </ol>
@@ -384,16 +368,15 @@ export default function CameoLineage() {
                             </span>
                         </div>
                     ))}
-                    <p className="cameo__where">Paper · Results</p>
                 </div>
             </figure>
 
             <div className="evidence__src">
-                <SourceLine label="Sources">
+                <Note>
                     Kusne et al., Nature Communications 11, 5966 (2020); NIST news release, 24 November 2020. CAMEO is the
                     work of NIST and its partners, not ours. We show it because it is the clearest public example of a
                     full lineage.
-                </SourceLine>
+                </Note>
             </div>
         </div>
     );

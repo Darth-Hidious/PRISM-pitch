@@ -30,11 +30,22 @@ const PHOTOS = [
     },
 ];
 
-/** Home: the ideas are real metal. Five photographs, from raw metal to a machined part. */
+/** Home: the ideas are real metal. The lab, then five photographs from raw metal to a machined part. */
 export default function Made({ n = '02' }: { n?: string }) {
     const [strip, scrolls] = useScrollsSideways<HTMLUListElement>();
     return (
         <section id="made" className="sec made" data-theme="paper" data-nav="paper" aria-labelledby="made-title">
+            <figure className="made__lab">
+                <img
+                    src="/img/lab-melt-spinner.webp"
+                    srcSet="/img/lab-melt-spinner-1200.webp 1200w, /img/lab-melt-spinner.webp 1932w"
+                    sizes="100vw"
+                    alt="A melt spinner in a university materials lab: a steel vacuum sphere with a round window, its power supply and gas bottles beside it."
+                    width={1932}
+                    height={1287}
+                    loading="lazy"
+                />
+            </figure>
             <div className="wrap">
                 <header className="made__head rv">
                     <Idx n={n}>Made for real</Idx>
@@ -61,7 +72,6 @@ export default function Made({ n = '02' }: { n?: string }) {
                         </li>
                     ))}
                 </ul>
-                <p className="made__note rv">Our own photographs.</p>
             </div>
         </section>
     );

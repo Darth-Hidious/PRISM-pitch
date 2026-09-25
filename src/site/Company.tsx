@@ -14,11 +14,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                     <H id="company-title" className="w-h2">
                         Mirdyne discovers. Bimo Tech delivers.
                     </H>
-                    <p className="w-lead">
-                        Finding a new material is half the job. Someone also has to make it in quantity and supply it
-                        for years. So the work is split between two companies: one finds and proves the material, the
-                        other scales it up and supplies it.
-                    </p>
+                    <p className="w-lead">One company finds and proves the material. The other makes it at scale.</p>
                 </header>
 
                 <div className="rel rel--two rv" aria-label="How Mirdyne and Bimo Tech share the work">
@@ -26,10 +22,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                         <p className="w-label">Discovers</p>
                         <img className="rel__logo" src="/brand/mirdyne-lockup-ink.png" alt="Mirdyne" width={183} height={50} />
                         <p className="rel__head">Finds the material and proves it works.</p>
-                        <p>
-                            Designs new materials with PRISM, makes the first samples and tests them against the
-                            requirement. Based in Giessen, Germany.
-                        </p>
+                        <p>Designs materials with PRISM and proves them. Based in Giessen, Germany.</p>
                         <ul className="rel__tags" aria-label="What Mirdyne does">
                             <li>Design with PRISM</li>
                             <li>First samples</li>
@@ -44,11 +37,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                         <p className="w-label">Delivers</p>
                         <img className="rel__logo" src="/bimo-logo.png" alt="Bimo Tech" width={182} height={66} />
                         <p className="rel__head">Makes it at scale and supplies it.</p>
-                        <p>
-                            An industrial manufacturer of high-performance metal parts and high-entropy alloys, and a
-                            supplier to ITER, the international fusion project. It takes a proven material into
-                            production.
-                        </p>
+                        <p>Makes high-performance metal parts and alloys. A supplier to ITER, the fusion project.</p>
                         <ul className="rel__tags" aria-label="What Bimo Tech does">
                             <li>Scale-up</li>
                             <li>Powder and parts</li>
@@ -69,10 +58,10 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                 <figure className="company__photos rv">
                     <div>
                         <img
-                            src="/img/spark-furnace-base.webp"
-                            alt="A vacuum-arc furnace, open: the steel chamber lifted above its round copper hearth."
-                            width={1200}
-                            height={675}
+                            src="/img/lab-arc-melter.webp"
+                            alt="An arc melter in a university materials lab: the steel melting chamber with two round windows on its control cabinet, a chiller and gas bottles beside it."
+                            width={1400}
+                            height={786}
                             loading="lazy"
                         />
                         <img
@@ -83,7 +72,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                             loading="lazy"
                         />
                     </div>
-                    <figcaption>The arc furnace, open, and its hearth loaded with raw metals. Our photographs.</figcaption>
+                    <figcaption>Where our alloys are melted: the materials lab at WUST, Wrocław.</figcaption>
                 </figure>
                 <div className="founders rv">
                     <p className="w-label">Founders</p>
@@ -140,7 +129,6 @@ const NEWS: NewsItem[] = [
             alt: 'Team PRISM on stage at the Hessen Ideen awards, holding the KI-Sonderpreis certificate, with the organisers.',
             width: 1600,
             height: 1066,
-            credit: 'Photo: Hessen Ideen.',
         },
     },
     {
@@ -159,13 +147,12 @@ const NEWS: NewsItem[] = [
         when: 'Ongoing',
         tag: 'Project',
         title: 'Project SPARK: our first alloys are real',
-        text: 'In SPARK, an ESA project led by Bimo Tech, the first alloys from our early screening were made as real metal: powder, melting and polishing. We are still testing them, and two or three look promising.',
+        text: 'In SPARK, an ESA project led by Bimo Tech, the first alloys from our early screening were made as real metal. Testing continues.',
         image: {
             src: '/img/spark-hearth-charge.webp',
             alt: 'Close-up of a copper hearth: small pieces of raw metal loaded into its hollows, ready to be melted.',
             width: 1600,
             height: 1067,
-            credit: 'Raw metals loaded into the copper hearth, before a melt. Our photograph.',
         },
     },
 ];
@@ -228,9 +215,7 @@ export function Contact() {
                     Tell us what your part must survive.
                 </h2>
                 <div className="cta__side">
-                    <p className="w-lead">
-                        We will tell you what PRISM can search for, how we would prove it and what it would take.
-                    </p>
+                    <p className="w-lead">We’ll tell you what PRISM can find, and how we’d prove it.</p>
                     <div className="cta__actions">
                         <Button href={LINKS.interest} external>
                             Register interest

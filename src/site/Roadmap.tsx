@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { SourceLine } from '../ds';
 import { seeded, useInView, useReducedMotion } from './hooks';
-import { Grain, Idx, Rails } from './ui';
+import { Grain, Idx, Note, Rails } from './ui';
 
 type TrackState = 'done' | 'current' | 'next';
 
@@ -161,10 +160,6 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                     <h2 id="roadmap-title" className="w-h2">
                         Where PRISM stands, and where it goes.
                     </h2>
-                    <p className="w-lead">
-                        We would rather show you what is done and what is not. Then two directions: new kinds of
-                        material, and the same tools applied to supply chains.
-                    </p>
                 </header>
 
                 <div className="stands rv" aria-labelledby="stands-title">
@@ -175,10 +170,7 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                         <div>
                             <p className="w-label">Done so far</p>
                             <ul>
-                                <li>
-                                    Our first alloys from early screening have been made as real metal (Project SPARK).
-                                    We are still testing them. Two or three look promising.
-                                </li>
+                                <li>Our first alloys have been made as real metal, in Project SPARK.</li>
                                 <li>ESA has awarded PRISM Alpha, a project to run the full loop for European space transport.</li>
                                 <li>Our first privately funded project, for PFAS‑free polymers, is signed.</li>
                                 <li>PRISM won the AI special prize (KI‑Sonderpreis) at Hessen Ideen 2026.</li>
@@ -215,10 +207,10 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                 <figure className="roadmap__net rv">
                     <EventNetwork />
                     <figcaption>
-                        <SourceLine label="Illustrative">
+                        <Note label="Illustrative">
                             How a change at one supplier spreads to the programmes that depend on it. Method adapted from
                             Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities”, KDD 2021.
-                        </SourceLine>
+                        </Note>
                     </figcaption>
                 </figure>
 

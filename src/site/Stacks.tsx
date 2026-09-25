@@ -145,7 +145,7 @@ const STACKS: StackDef[] = [
         photo: {
             src: '/img/spark-furnace-wide.webp',
             alt: 'A vacuum-arc furnace, open: the steel chamber with its viewports lifted above the round copper hearth.',
-            caption: 'The vacuum-arc furnace, open. Our photograph.',
+            caption: 'The vacuum-arc furnace, open.',
         },
         limit: 'A test sample is not a finished part. Certification is the goal, not a claim.',
         layers: [
@@ -365,11 +365,7 @@ export default function Stacks({ n = '01', h1 = false }: { n?: string; h1?: bool
                     <H id="platform-title" className="w-h2">
                         Five stacks. One system.
                     </H>
-                    <p className="w-lead">
-                        PRISM is built in five layers, called stacks. Each does one job, from finding ideas to proving
-                        results. Every part is labelled with how ready it is, because we would rather show you than
-                        oversell.
-                    </p>
+                    <p className="w-lead">Five layers, each with one job. Every part is labelled with how ready it is.</p>
                     <ul className="stacks__legend" aria-label="Maturity">
                         <li>
                             <MaturityPill maturity="in-use" /> Used in our projects today

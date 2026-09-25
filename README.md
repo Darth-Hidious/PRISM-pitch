@@ -38,10 +38,15 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
   process chain, timeline, status table, source line, footer band, and the
   evidence components (rights state, object card, evidence lineage, rights
   manifest, manufacturing window, capability stack).
-- **Photographs**: the website shows real photographs as taken, with no
-  painting or retouching: the SPARK furnace, the SPARK lab, the Hessen Ideen
-  award and ESA's mosaic of Europe. The painters in `src/ds/` (`LivePainting`,
-  `Painting`) stay in the design system but are not used on the website.
+- **Photographs**: the website and the deck show real photographs as taken,
+  cropped but never painted or retouched: DLR engine tests, the materials lab
+  at WUST in Wrocław where our alloys are melted (we rent its equipment; it is
+  run by the university), our own photos of raw metals, melting and parts, the
+  Hessen Ideen award and ESA's mosaic of Europe. The painters in `src/ds/`
+  (`LivePainting`, `Painting`) stay in the design system but are used nowhere.
+- **Credits and sources**: photo credits sit once per page in the footer
+  (`src/site/credits.tsx`), not under each picture. Sources for facts and
+  "illustrative" notes fold away under a small toggle (`Note` in `ui.tsx`).
 - **Brand**: the PRISM mark is `src/ds/PrismMark.tsx` (follows the text colour)
   and `public/brand/prism-logo-light-mode.svg` / `prism-logo-dark-mode.svg`.
 - **Website** (`src/site/`): one component per section, composed into pages
@@ -58,12 +63,16 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
 
 | File | What | Rights |
 | --- | --- | --- |
-| `spark-furnace.webp` | Project SPARK photograph: vacuum-arc melting, seen through the viewport | Bimo Tech, project photograph |
-| `spark-charge.webp`, `spark-hearth-charge*.webp`, `spark-hearth-column*.webp`, `spark-furnace-base.webp`, `spark-furnace-wide.webp`, `spark-melt.webp`, `spark-button*.webp`, `machining.webp` | Raw metals, the loaded hearth, the arc furnace, an alloy melting, a cast button, machining; cropped only (an equipment label and a reflection cropped out). No element or composition is named anywhere they are used | Our own photographs, supplied by the team |
+| `spark-furnace.webp` | Project SPARK photograph: vacuum-arc melting, seen through the viewport (deck cover only) | Project photograph; photographer to be confirmed |
+| `spark-charge.webp`, `spark-hearth-charge*.webp`, `spark-hearth-column*.webp`, `spark-furnace-wide.webp`, `spark-melt.webp`, `spark-button*.webp`, `machining.webp` | Raw metals, the loaded hearth, the arc furnace, an alloy melting, a cast button, machining; cropped only (an equipment label and a reflection cropped out). No element or composition is named anywhere they are used | Our own photographs, supplied by the team |
+| `lab-arc-melter.webp`, `lab-melt-spinner*.webp` | The arc melter and the melt spinner in the materials science lab at WUST, Wrocław (run by the university; we rent the equipment); cropped only, the arc melter's ignition-current label cropped out | Our own photographs, supplied by the team |
 | `esa-europe-1280.webp`, `esa-europe-2400.webp` | Envisat MERIS true-colour mosaic of Europe, resized | ESA, CC BY-SA 3.0 IGO ([source](https://www.esa.int/ESA_Multimedia/Images/2010/09/MERIS_mosaic_of_Europe)) |
 | `news-hessen-ideen-2026.webp` | Team PRISM receiving the KI-Sonderpreis at Hessen Ideen 2026 | Hessen Ideen (the organisers' photograph), supplied by the team |
-| `dlr-vulcain2-p5.webp` | Vulcain 2 engine on test stand P5, DLR Lampoldshausen | DLR, CC BY 3.0 ([source](https://www.dlr.de/en/images/2011/3/vulcain-2-engine-on-test-facility-p5-at-dlr-lampoldshausen_3149)) |
+| `dlr-vulcain2-p5.webp` | Vulcain 2 engine on test stand P5, DLR Lampoldshausen (the home page's first screen) | DLR, CC BY 3.0 ([source](https://www.dlr.de/en/images/2011/3/vulcain-2-engine-on-test-facility-p5-at-dlr-lampoldshausen_3149)) |
 | `dlr-vinci-p41-1200.webp`, `dlr-vinci-p41-2000.webp`, `dlr-vinci-p41-wide.webp` | Vinci engine in altitude test stand P4.1, resized (the `-wide` card version also cropped to 3:2) | DLR, CC BY 3.0 ([source](https://www.dlr.de/de/bilder/2016/2/vinci-triebwerk-im-pruefstand-p4-1_23249)) |
+
+The earlier powder-metallurgy and coupon-in-hand photos were taken at IPPT PAN
+(Warsaw), not by Bimo Tech as first credited. They are no longer used anywhere.
 
 ESA images: use only those whose page says **CC BY-SA 3.0 IGO**, credit them
 as the page says, link the licence and say if they were changed. Images under

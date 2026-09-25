@@ -19,7 +19,7 @@ const STEPS: Step[] = [
         name: 'Requirement',
         question: 'What must the part survive?',
         lead: 'You tell us.',
-        text: 'How hot, what loads, how it will be made, and the material it has to beat. Every idea is scored against this.',
+        text: 'Heat, loads, and the material it has to beat.',
         stack: 'Evidence stack',
         maturity: 'prototype',
     },
@@ -27,7 +27,7 @@ const STEPS: Step[] = [
         name: 'Design',
         question: 'What could work?',
         lead: 'AI suggests ideas.',
-        text: 'It searches the whole range of possible mixes, not only the well-known ones.',
+        text: 'From the whole range of possible mixes.',
         stack: 'Research stack',
         maturity: 'prototype',
     },
@@ -35,7 +35,7 @@ const STEPS: Step[] = [
         name: 'Screen',
         question: 'What survives the physics?',
         lead: 'Most ideas stop here.',
-        text: 'Fast simulations throw out what cannot work, long before anything is melted.',
+        text: 'Simulations rule them out before anything is melted.',
         stack: 'Research stack',
         maturity: 'prototype',
     },
@@ -43,23 +43,23 @@ const STEPS: Step[] = [
         name: 'Make',
         question: 'Can it be made, and made again?',
         lead: 'Real machines make it.',
-        text: 'We melt and 3D-print the best ideas, with settings that still work when the machine drifts.',
+        text: 'We melt and 3D-print the best ideas.',
         stack: 'Manufacturing and test stack',
         maturity: 'in-use',
     },
     {
         name: 'Test',
         question: 'Does it meet the requirement?',
-        lead: 'The test sample answers.',
-        text: 'We measure density, inner structure and strength, and compare them with your targets.',
+        lead: 'The sample answers.',
+        text: 'We measure it against your targets.',
         stack: 'Manufacturing and test stack',
         maturity: 'in-use',
     },
     {
         name: 'Learn',
         question: 'What should we try next?',
-        lead: 'Whatever teaches us the most.',
-        text: 'Every result, good or bad, goes back into the models. They pick the next experiment.',
+        lead: 'Whatever teaches the most.',
+        text: 'Every result goes back into the models.',
         stack: 'Harness stack',
         maturity: 'prototype',
     },
@@ -91,17 +91,12 @@ export default function Loop({ n = '02' }: { n?: string }) {
                     <h2 id="loop-title" className="w-h2">
                         One loop: design, make, test, learn.
                     </h2>
-                    <p className="w-lead">
-                        <b>Can AI design a material? It can suggest one.</b> The material still has to be made and
-                        tested. PRISM runs all of it as one loop, and every round teaches the next.
-                    </p>
                 </header>
                 <div ref={ref} className="loop__body rv">
                     <figure className="loop__figure">
                         <div className="scroll-x">
                             <ProcedureDiagram active={active} onPick={pick} />
                         </div>
-                        <figcaption className="fig-cap">The loop, drawn for this site. Tap a step to read it.</figcaption>
                     </figure>
                     <div className="loop__panel">
                         <div className="loop__tabs" role="tablist" aria-label="Steps of the loop">
@@ -132,7 +127,6 @@ export default function Loop({ n = '02' }: { n?: string }) {
                                 </p>
                             </div>
                             <div className="loop__detail-meta">
-                                <span className="w-label">{step.stack}</span>
                                 <MaturityPill maturity={step.maturity} />
                             </div>
                         </div>

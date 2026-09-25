@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
-import { SourceLine } from '../ds';
 import { LadderDiagram } from './diagrams';
 import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
-import { Idx } from './ui';
+import { Idx, Note } from './ui';
 
 /* ── Exhibit A: a laser powder-bed fusion process map ────────────────────
  *
@@ -689,8 +688,7 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                         Every experiment has to earn its place.
                     </H>
                     <p className="w-lead">
-                        <b>Why not just make everything?</b> Because real experiments are slow and expensive. PRISM
-                        spends them where they teach the most. Pick a demo below. Each one runs live in your browser.
+                        Real experiments are slow and expensive. PRISM spends them where they teach the most.
                     </p>
                 </header>
 
@@ -705,12 +703,7 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                         loading="lazy"
                     />
                     <figcaption>
-                        <b>A real test takes months.</b> The Vinci engine in DLR’s altitude test stand P4.1, which fires it
-                        in a vacuum, as in space. This campaign ran from May to September 2016. Photo: DLR,{' '}
-                        <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer license">
-                            CC BY 3.0
-                        </a>
-                        , resized.
+                        <b>A real engine test takes months.</b> Vinci, in an altitude test stand at DLR.
                     </figcaption>
                 </figure>
 
@@ -743,11 +736,9 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                 <h3 id="ex-ladder" className="w-h3">
                                     Cheap checks first. Expensive ones last.
                                 </h3>
-                                <p className="q">How can you check so many ideas?</p>
                                 <p className="a">
-                                    <b>By stopping most of them early, where stopping is cheap.</b> A quick simulation takes
-                                    seconds. A real test takes weeks. Only the ideas that pass every cheap check reach the
-                                    furnace.
+                                    <b>Most ideas stop early, where stopping is cheap.</b> A simulation takes seconds. A real
+                                    test takes weeks.
                                 </p>
                             </div>
                             <figure className="exhibit__stage">
@@ -755,10 +746,10 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                     <LadderDiagram />
                                 </div>
                                 <figcaption>
-                                    <SourceLine label="Illustrative">
+                                    <Note label="Illustrative">
                                         Drawn for this site. The counts show the shape, not real results. Times are typical per
                                         idea.
-                                    </SourceLine>
+                                    </Note>
                                 </figcaption>
                             </figure>
                         </article>
@@ -770,20 +761,14 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                 <h3 id="ex-window" className="w-h3">
                                     A safe range of settings, not one perfect recipe.
                                 </h3>
-                                <p className="q">Will the recipe work on a real machine?</p>
                                 <p className="a">
-                                    <b>Only if it has room to spare.</b> When you 3D-print metal, the powder, the laser power
-                                    and the gas all vary a little. Drag the dot across the map. The hatched area is what we look
-                                    for: settings that still give solid metal when things drift.
+                                    <b>Machines drift, so the recipe needs room to spare.</b> Drag the dot. The hatched area
+                                    still gives solid metal when things drift.
                                 </p>
-                                <p className="exhibit__note">
-                                    Why not use one number, such as energy? Because the lines where printing fails do not follow
-                                    it. So we map the whole range.
-                                </p>
-                                <SourceLine label="Illustrative">
+                                <Note label="Illustrative">
                                     Boundaries follow standard scaling rules: lack of fusion with P/v, keyholing with P/√v,
-                                    balling at high speed. Hatch 0.1 mm, layer 30 µm. Not measured data.
-                                </SourceLine>
+                                    balling at high speed. Not measured data.
+                                </Note>
                             </div>
                             <div className="exhibit__stage">
                                 <ProcessWindow />
@@ -797,11 +782,9 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                 <h3 id="ex-al" className="w-h3">
                                     Each experiment is picked for what it will teach.
                                 </h3>
-                                <p className="q">Which experiment should we run next?</p>
                                 <p className="a">
-                                    <b>The one the model is least sure about, near the best answer.</b> Press Run. Watch the
-                                    shaded band, how unsure the model is, shrink around the best point long before every point
-                                    is measured.
+                                    <b>Test where the model is least sure, near the best answer.</b> Press Run and watch the
+                                    uncertainty shrink.
                                 </p>
                                 <dl className="exhibit__stats">
                                     <div>
@@ -813,10 +796,10 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                         <dd>points on the full map, most of which it never had to measure</dd>
                                     </div>
                                 </dl>
-                                <SourceLine label="Sources">
+                                <Note>
                                     Kusne et al., Nature Communications 11, 5966 (2020): about 10 hours instead of more than 90.
                                     The demo is a real learning loop (a Gaussian process) on a test function, not material data.
-                                </SourceLine>
+                                </Note>
                             </div>
                             <div className="exhibit__stage">
                                 <ActiveLearning />
@@ -830,11 +813,9 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                 <h3 id="ex-core" className="w-h3">
                                     One core. Swappable modules.
                                 </h3>
-                                <p className="q">What changes when the material changes?</p>
                                 <p className="a">
-                                    <b>Only the modules.</b> The planner, the idea generator, the scorer and the records stay the
-                                    same. The requirement, the physics and the tests change. That is how one platform moves from
-                                    alloys to polymers.
+                                    <b>New material, new modules. Same core.</b> That is how one platform moves from alloys to
+                                    polymers.
                                 </p>
                             </div>
                             <div className="exhibit__stage">

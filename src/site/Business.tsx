@@ -1,20 +1,20 @@
 import { Idx } from './ui';
 
 const LADDER = [
-    { name: 'Open source', text: 'Prediction and data tools that anyone can use and check.', tag: 'Free' },
-    { name: 'Project', text: 'We run a project against your requirement. You judge it on the test results.' },
-    { name: 'Pilot', text: 'We install our sensors, calibrate them and run a first trial on your problem.' },
-    { name: 'Deployment', text: 'PRISM on your own machines, under your own approval process.' },
-    { name: 'Support', text: 'Recalibration, traceable data and regular updates.' },
-    { name: 'Transfer', text: 'The proven process, written down and handed to your team.' },
+    { name: 'Open source', text: 'Tools anyone can use and check.', tag: 'Free' },
+    { name: 'Project', text: 'We solve your requirement. You judge the test results.' },
+    { name: 'Pilot', text: 'A first trial on your problem, with our sensors.' },
+    { name: 'Deployment', text: 'PRISM on your own machines.' },
+    { name: 'Support', text: 'Updates, recalibration, traceable data.' },
+    { name: 'Transfer', text: 'The proven process, handed to your team.' },
 ];
 
 const MARKETS = [
     { name: 'Space propulsion', text: 'Alloys for rocket engines. Our first application.' },
-    { name: 'Defence', text: 'Materials, robots and test systems for defence, with export rules built into the data.' },
-    { name: 'Fusion and energy', text: 'Materials for fusion reactors, efficient turbines and batteries.' },
-    { name: 'Supply independence', text: 'Replacements for hard-to-get materials such as tungsten and magnet metals.' },
-    { name: 'Replacing harmful substances', text: 'Alternatives for more than 250 substances the EU lists as of very high concern (REACH), starting with PFAS.' },
+    { name: 'Defence', text: 'Materials and test systems, with export rules built in.' },
+    { name: 'Fusion and energy', text: 'Fusion reactors, turbines and batteries.' },
+    { name: 'Supply independence', text: 'Replacements for hard-to-get metals.' },
+    { name: 'Replacing harmful substances', text: 'Alternatives to substances of very high concern, starting with PFAS.' },
     { name: 'Key technologies', text: 'Semiconductors and lightweight polymers.' },
 ];
 
@@ -27,10 +27,7 @@ export default function Business({ n = '02' }: { n?: string }) {
                     <h2 id="business-title" className="w-h2">
                         The software is open. We earn when the material is real.
                     </h2>
-                    <p className="w-lead">
-                        Our prediction and data tools are free and open source. We are paid when a material has to
-                        exist: in a project, a pilot or on your own machines.
-                    </p>
+                    <p className="w-lead">Our prediction tools are free and open source. We are paid when a material has to exist.</p>
                 </header>
 
                 <ol className="ladder rv" aria-label="How Mirdyne works with you, from open source to transfer">

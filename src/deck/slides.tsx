@@ -1,6 +1,5 @@
-import { Button, CapabilityStack, EvidenceLineage, Kicker, ObjectCard, Painting, ProcessChain, RightsState, SourceLine, Stat, StatusTable } from '../ds';
+import { Button, CapabilityStack, EvidenceLineage, Kicker, ObjectCard, ProcessChain, RightsState, SourceLine, Stat, StatusTable } from '../ds';
 import VideoBackground from '../components/VideoBackground';
-import { autonomyScene } from '../site/illustrations';
 import { LINKS } from '../site/links';
 
 function Head({ kicker, title, lead }: { kicker: string; title: string; lead?: string }) {
@@ -32,15 +31,14 @@ export function Cover() {
                 </div>
             </div>
             <figure className="d-cover__media" style={{ margin: 0 }}>
-                <Painting
+                <img
+                    className="d-photo"
                     src="/img/spark-furnace.webp"
-                    alt="Painted rendering of a vacuum-arc melting furnace with a glowing alloy button, from Project SPARK."
-                    seed={7}
-                    direction={-16}
-                    motion={0.55}
-                    focusY={0.55}
+                    alt="View through the window of a vacuum-arc melting furnace: a glowing alloy button on the hearth."
+                    width={989}
+                    height={1144}
                 />
-                <figcaption className="d-cover__caption">Vacuum-arc melting, Project SPARK. Repainted in code.</figcaption>
+                <figcaption className="d-cover__caption">Vacuum-arc melting, Project SPARK.</figcaption>
             </figure>
         </div>
     );
@@ -213,7 +211,13 @@ export function Lab() {
     ];
     return (
         <div className="d-lab">
-            <Painting source={autonomyScene} alt="Painted illustration of a laboratory robot arm lifting a glowing crucible towards a furnace." seed={23} direction={-14} motion={0.5} />
+            <img
+                className="d-photo d-lab__photo"
+                src="/img/lab-melt-spinner-tall.webp"
+                alt="A melt spinner in a university materials lab: a steel vacuum sphere with a round window above its control cabinet."
+                width={900}
+                height={1260}
+            />
             <div style={{ display: 'grid', alignContent: 'center', gap: 24 }}>
                 <Head kicker="Autonomous laboratory" title="Physical synthesis supplies the reward signal the models train on." />
                 <ol className="d-steps">

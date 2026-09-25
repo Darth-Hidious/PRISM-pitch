@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, PrismMark } from '../ds';
+import { CREDITS } from './credits';
 import { LINKS } from './links';
 
 /** The site's pages. Home is `/`; each other page is its own HTML entry (see vite.config.ts). */
@@ -122,7 +123,8 @@ export function SiteNav({ page }: { page: PageId }) {
     );
 }
 
-export function SiteFooter() {
+export function SiteFooter({ page }: { page: PageId }) {
+    const credits = CREDITS[page];
     return (
         <footer className="footer" data-theme="navy" data-nav="navy">
             <div className="wrap">
@@ -195,6 +197,11 @@ export function SiteFooter() {
                         </ul>
                     </nav>
                 </div>
+                {credits && (
+                    <p className="footer__credits">
+                        <span>Credits</span> {credits}
+                    </p>
+                )}
                 <div className="footer__legal">
                     <span>© 2026 Mirdyne · Giessen, Germany · A spin-off of Bimo Tech</span>
                     <a className="footer__credit" href={LINKS.marc27} target="_blank" rel="noopener noreferrer">

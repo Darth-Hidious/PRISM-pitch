@@ -56,7 +56,7 @@ export default function SitePage({ page, children }: { page: PageId; children: R
             <main id="main" className={`page page--${page}`}>
                 {children}
             </main>
-            <SiteFooter />
+            <SiteFooter page={page} />
         </>
     );
 }

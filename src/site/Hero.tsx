@@ -2,29 +2,31 @@ import { Button } from '../ds';
 import { LINKS } from './links';
 import { Grain } from './ui';
 
+/**
+ * The first screen: one clear line over what the material has to survive. The photograph runs edge to
+ * edge where the screen is wider than tall; on upright screens it sits whole above the text. Credited in
+ * the footer.
+ */
 export default function Hero() {
     return (
-        <section id="top" className="hero" data-theme="navy" data-nav="hero" aria-labelledby="hero-title">
-            <figure className="hero__photo">
-                <img
-                    src="/img/spark-furnace.webp"
-                    alt="View through the window of a vacuum-arc melting furnace in Project SPARK: a glowing alloy button on the hearth, cooled buttons from earlier melts beside it, the electrode above."
-                    width={989}
-                    height={1144}
-                    fetchPriority="high"
-                />
-                <figcaption>Vacuum-arc melting, Project SPARK. Photograph: Bimo Tech.</figcaption>
-            </figure>
-            <Grain />
-            <div className="wrap hero__content">
-                <p className="hero__kicker rise">PRISM by Mirdyne</p>
-                <h1 id="hero-title" className="w-mega rise" style={{ animationDelay: '90ms' }}>
-                    Tell us what your part must survive. We&nbsp;deliver the material.
-                </h1>
-                <div className="hero__row">
-                    <p className="w-lead rise" style={{ animationDelay: '180ms' }}>
-                        PRISM uses AI to design new alloys and polymers. Then we make them, test them and hand you the
-                        proof.
+        <>
+            <section id="top" className="hero" data-theme="navy" data-nav="hero" aria-labelledby="hero-title">
+                <figure className="hero__media">
+                    <img
+                        src="/img/dlr-vulcain2-p5.webp"
+                        alt="A Vulcain 2 rocket engine firing on a test stand: flame pours out beneath the ribbed metal nozzle."
+                        width={1348}
+                        height={758}
+                        fetchPriority="high"
+                    />
+                </figure>
+                <Grain />
+                <div className="wrap hero__content">
+                    <h1 id="hero-title" className="w-mega rise" style={{ animationDelay: '90ms' }}>
+                        Materials built for the&nbsp;extreme.
+                    </h1>
+                    <p className="w-lead hero__lead rise" style={{ animationDelay: '180ms' }}>
+                        Designed with AI. Made and tested in Europe.
                     </p>
                     <div className="hero__actions rise" style={{ animationDelay: '260ms' }}>
                         <Button href={LINKS.interest} external>
@@ -35,7 +37,9 @@ export default function Hero() {
                         </Button>
                     </div>
                 </div>
-                <ul className="hero__facts rise" style={{ animationDelay: '340ms' }}>
+            </section>
+            <aside className="proof" data-theme="navy" data-nav="navy" aria-label="PRISM in brief">
+                <ul className="wrap proof__list">
                     <li>
                         <span className="w-label">Funded by</span>
                         <strong>The European Space Agency</strong>
@@ -52,7 +56,7 @@ export default function Hero() {
                         <span>Replacing “forever chemicals”, with an industrial partner</span>
                     </li>
                 </ul>
-            </div>
-        </section>
+            </aside>
+        </>
     );
 }

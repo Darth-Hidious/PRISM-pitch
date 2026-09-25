@@ -1,7 +1,7 @@
-import { Button, SourceLine } from '../ds';
+import { Button } from '../ds';
 import { KnownAnswer } from './diagrams';
 import { LINKS } from './links';
-import { Idx } from './ui';
+import { Idx, Note } from './ui';
 
 /** Forager: the team's open research, built with PRISM. Every figure here is from Forager's public record. */
 export default function OpenResearch({ n = '02' }: { n?: string }) {
@@ -14,25 +14,23 @@ export default function OpenResearch({ n = '02' }: { n?: string }) {
                         Forager: a fruit fly’s brain, searching for new alloys.
                     </h2>
                     <p className="w-lead">
-                        <b>Can a fly’s brain help find a new alloy?</b> Forager is our open research project, built with
-                        PRISM. The complete wiring map of a fruit fly’s brain steers an AI that suggests alloys. The
-                        question: is there a high-melting alloy that keeps one simple crystal structure from −183&nbsp;°C
-                        to 727&nbsp;°C? Five checks, each more expensive than the last, decide which ideas pass.
+                        Our open research project. The wiring map of a fruit fly’s brain steers an AI that suggests
+                        high-melting alloys.
                     </p>
                 </header>
 
                 <dl className="facts rv">
                     <div>
                         <dt>164,506</dt>
-                        <dd>brain cells and 25.1 million connections in the wiring map that steers the search</dd>
+                        <dd>brain cells in the wiring map that steers the search</dd>
                     </div>
                     <div>
                         <dt>5 checks</dt>
-                        <dd>from a quick estimate to full quantum calculations, each asking one plain question</dd>
+                        <dd>from a quick estimate to full quantum calculations</dd>
                     </div>
                     <div>
                         <dt>240+</dt>
-                        <dd>experiments in the public log, each with its question, a prediction written before the run, the result and a verdict</dd>
+                        <dd>experiments in the public log, each with its prediction written first</dd>
                     </div>
                 </dl>
 
@@ -41,11 +39,11 @@ export default function OpenResearch({ n = '02' }: { n?: string }) {
                         <KnownAnswer />
                     </div>
                     <figcaption>
-                        <SourceLine label="Sources">
-                            Before a check is trusted, it has to reproduce a known answer. Forager, experiment E242;
-                            published value from Kim and Widom, Phys. Rev. Materials 7, 063803 (2023), with Forager’s own
-                            error rule applied to it. Brain map: MaleCNS v1.0 (FlyEM, HHMI Janelia), CC BY 4.0.
-                        </SourceLine>
+                        <p className="fig-cap">Before a check is trusted, it has to reproduce a known answer.</p>
+                        <Note>
+                            Forager, experiment E242; published value from Kim and Widom, Phys. Rev. Materials 7, 063803
+                            (2023), with Forager’s own error rule applied to it.
+                        </Note>
                     </figcaption>
                 </figure>
 

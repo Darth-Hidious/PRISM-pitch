@@ -1,10 +1,8 @@
-import { SourceLine } from '../ds';
-
-const CC = 'https://creativecommons.org/licenses/by-sa/3.0/igo/';
+import { Note } from './ui';
 
 /**
- * Why Europe: the case for making materials here, over ESA's true-colour
- * mosaic of Europe from the Envisat satellite (CC BY-SA 3.0 IGO).
+ * Why Europe: the case for making materials here, over ESA's true-colour mosaic of Europe from the
+ * Envisat satellite (CC BY-SA 3.0 IGO; credited in the footer).
  */
 export default function Europe() {
     return (
@@ -24,41 +22,29 @@ export default function Europe() {
             <div className="wrap europe__inner rv">
                 <p className="w-label europe__kicker">Why Europe</p>
                 <h2 id="europe-title" className="w-h2">
-                    Materials are a question of sovereignty.
+                    Europe can’t build what it can’t make.
                 </h2>
                 <p className="w-lead europe__lead">
-                    What a country can build depends on what it can make. For some raw materials, the EU depends almost
-                    entirely on a single country.
+                    For some critical raw materials, the EU relies almost entirely on one country.
                 </p>
                 <dl className="europe__facts">
                     <div>
                         <dt>65%</dt>
-                        <dd>
-                            The most that any one country outside the EU should supply of a strategic raw material, by
-                            2030. That is the EU’s own target.
-                        </dd>
+                        <dd>The most of any strategic raw material the EU wants from one outside country by 2030.</dd>
                     </div>
                     <div>
                         <dt>SX500</dt>
-                        <dd>
-                            No existing alloy could survive inside SpaceX’s Raptor engine. So SpaceX invented its own,
-                            and built a foundry to make it.
-                        </dd>
+                        <dd>No existing alloy could survive inside SpaceX’s Raptor engine, so SpaceX made its own.</dd>
                     </div>
                 </dl>
                 <p className="europe__close">
-                    <b>Europe needs the same ability. PRISM builds it here:</b> designed in Giessen, Germany, made and
-                    scaled up by Bimo Tech.
+                    <b>PRISM builds that ability in Europe:</b> designed in Giessen, made by Bimo Tech.
                 </p>
                 <div className="europe__foot">
-                    <SourceLine label="Sources">
+                    <Note>
                         EU Critical Raw Materials Act, Regulation (EU) 2024/1252, recital 12 and Article 5. SX500: Elon
-                        Musk, 23 December 2018 and 25 May 2019. Image: ESA, Envisat MERIS mosaic of Europe,{' '}
-                        <a href={CC} target="_blank" rel="noopener noreferrer license">
-                            CC BY-SA 3.0 IGO
-                        </a>
-                        , resized.
-                    </SourceLine>
+                        Musk, 23 December 2018 and 25 May 2019.
+                    </Note>
                 </div>
             </div>
         </section>

@@ -12,6 +12,16 @@ export function Idx({ n, children, tail }: { n: string; children: ReactNode; tai
     );
 }
 
+/** Sources and fine print, folded away: one small word on the page, the detail one tap away. */
+export function Note({ label = 'Sources', children }: { label?: string; children: ReactNode }) {
+    return (
+        <details className="note">
+            <summary>{label}</summary>
+            <p>{children}</p>
+        </details>
+    );
+}
+
 /** Faint vertical rails at the column quarters of the container, for dark sections. */
 export function Rails() {
     return (

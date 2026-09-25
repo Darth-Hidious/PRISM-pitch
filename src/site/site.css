@@ -8,9 +8,20 @@
 
 /* ── Base ─────────────────────────────────────────────────────────────── */
 
+:root {
+    --nav-h: 72px;
+}
+
+/* Phones held sideways: every pixel of height counts, so the bar is slimmer. */
+@media (max-height: 500px) and (min-aspect-ratio: 1 / 1) {
+    :root {
+        --nav-h: 56px;
+    }
+}
+
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 72px;
+    scroll-padding-top: var(--nav-h);
     background: var(--navy);
 }
 
@@ -340,7 +351,7 @@ body {
     display: flex;
     align-items: center;
     gap: 32px;
-    height: 72px;
+    height: var(--nav-h);
 }
 
 .nav__brand {
@@ -487,100 +498,88 @@ body {
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
 
-/* Text on navy at the left, the furnace photograph as taken at the right. */
+/*
+ * One line over what the material has to survive. Where the screen is wider than tall, the photograph
+ * runs edge to edge and the text sits low on the left; on upright screens it sits whole above the text.
+ */
 .hero {
-    --photo-w: min(42vw, 720px);
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--photo-w);
+    align-items: end;
     min-height: 100vh;
     min-height: 100svh;
     overflow: hidden;
     isolation: isolate;
+    background: #050d1a;
 }
 
-.hero__photo {
-    position: relative;
-    grid-column: 2;
-    grid-row: 1;
-    margin: 0;
-    background: #0b1a2e;
-}
-
-.hero__photo img {
+.hero__media {
     position: absolute;
     inset: 0;
+    z-index: -1;
+    margin: 0;
+}
+
+.hero__media img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 40% 58%;
+    object-position: 50% 42%;
 }
 
-/* Shade at the top for the navigation, and a short fade where the photograph meets the navy. */
-.hero__photo::before {
+/* Shade under the navigation, and under the text at the lower left. */
+.hero__media::after {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 1;
     background:
-        linear-gradient(180deg, rgba(4, 15, 34, 0.6) 0%, rgba(4, 15, 34, 0) 16%),
-        linear-gradient(90deg, #061832 0%, rgba(6, 24, 50, 0) 14%);
+        linear-gradient(180deg, rgba(3, 10, 22, 0.6) 0%, rgba(3, 10, 22, 0) 20%),
+        radial-gradient(125% 100% at 0% 100%, rgba(3, 10, 22, 0.92) 0%, rgba(3, 10, 22, 0.62) 40%, rgba(3, 10, 22, 0) 74%),
+        linear-gradient(0deg, #050d1a 0%, rgba(5, 13, 26, 0) 16%);
     pointer-events: none;
 }
 
-.hero__photo figcaption {
+.hero__media figcaption {
     position: absolute;
-    right: 16px;
+    right: var(--layout-gutter);
     bottom: 14px;
-    left: 16px;
-    z-index: 2;
+    z-index: 1;
+    max-width: 34em;
     font-size: 11.5px;
     line-height: 1.4;
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 255, 255, 0.66);
     text-align: right;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.hero__media figcaption a {
+    color: inherit;
 }
 
 .hero .grain {
-    right: var(--photo-w);
+    opacity: 0.14;
 }
 
 .hero__content {
     position: relative;
     z-index: 2;
-    grid-column: 1;
-    grid-row: 1;
-    align-self: end;
     display: grid;
-    gap: 28px;
-    max-width: none;
-    margin: 0;
-    padding: 140px 48px 40px max(var(--layout-gutter), calc((100vw - var(--layout-max)) / 2));
-}
-
-.hero__kicker {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-2);
+    justify-items: start;
+    gap: 24px;
+    padding-top: 140px;
+    padding-bottom: clamp(64px, 10vh, 112px);
 }
 
 .hero h1 {
-    max-width: 13em;
-    font-size: clamp(42px, 4.9vw, 84px);
+    max-width: 12.5em;
+    font-size: clamp(44px, 5.6vw, 100px);
     text-wrap: balance;
+    text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
 }
 
-.hero__row {
-    display: grid;
-    gap: 24px;
-}
-
-.hero__row .w-lead {
-    max-width: 34em;
-    color: var(--ink-2);
+.hero__lead {
+    max-width: 30em;
+    color: rgba(255, 255, 255, 0.86);
 }
 
 .hero__actions {
@@ -589,63 +588,119 @@ body {
     gap: 12px;
 }
 
-.hero__facts {
+/* The photograph settles as the page opens, then falls back and darkens as you scroll on. */
+@media (prefers-reduced-motion: no-preference) {
+    .hero__media img {
+        animation: hero-settle 2.6s var(--ease-rise, cubic-bezier(0.16, 1, 0.3, 1)) both;
+    }
+
+    @supports (animation-timeline: view()) {
+        .hero__media {
+            animation: hero-drift linear both;
+            animation-timeline: view();
+            animation-range: exit 0% exit 100%;
+        }
+    }
+}
+
+@keyframes hero-settle {
+    from {
+        opacity: 0;
+        transform: scale(1.08);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes hero-drift {
+    to {
+        filter: brightness(0.45);
+        transform: translateY(16%);
+    }
+}
+
+/* Upright screens: the photograph whole under the navigation, the text below it. */
+@media (max-aspect-ratio: 1 / 1) {
+    .hero {
+        align-items: start;
+        align-content: start;
+        min-height: 0;
+        padding-top: var(--nav-h);
+    }
+
+    .hero__media {
+        position: relative;
+        inset: auto;
+        z-index: 0;
+        grid-row: 1;
+        aspect-ratio: 1348 / 758;
+    }
+
+    .hero__media::after {
+        background: linear-gradient(0deg, #050d1a 0%, rgba(5, 13, 26, 0) 34%);
+    }
+
+    .hero__media figcaption {
+        bottom: 8px;
+        font-size: 10.5px;
+    }
+
+    .hero__content {
+        grid-row: 2;
+        padding-top: 20px;
+        padding-bottom: 44px;
+        gap: 20px;
+    }
+
+    .hero h1 {
+        font-size: clamp(36px, 9.6vw, 72px);
+    }
+}
+
+/* ── In brief: under the first screen ─────────────────────────────────── */
+
+.proof {
+    background: #050d1a;
+    border-bottom: 1px solid rgba(194, 203, 215, 0.14);
+}
+
+.proof__list {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
-    margin-top: 12px;
-    padding: 20px 0 0;
+    margin: 0 auto;
+    padding-top: 28px;
+    padding-bottom: 32px;
     list-style: none;
+}
+
+.proof__list li {
+    display: grid;
+    align-content: start;
+    gap: 4px;
+    padding-top: 16px;
     border-top: 1px solid rgba(194, 203, 215, 0.24);
 }
 
-.hero__facts li {
-    display: grid;
-    gap: 4px;
-    align-content: start;
-}
-
-.hero__facts strong {
+.proof__list strong {
     margin-top: 6px;
     font-size: 17px;
     font-weight: 650;
 }
 
-.hero__facts li > span:last-child {
+.proof__list li > span:last-child {
     font-size: 15px;
     color: var(--ink-2);
 }
 
-/* Narrow screens: the photograph on top, the text below it. */
-@media (max-width: 900px) {
-    .hero {
+@media (max-width: 600px) {
+    .proof__list {
         grid-template-columns: 1fr;
-        min-height: 0;
-    }
-
-    .hero__photo {
-        grid-column: 1;
-        aspect-ratio: 989 / 1144;
-        max-height: 78svh;
-    }
-
-    .hero__photo::before {
-        background: linear-gradient(180deg, rgba(4, 15, 34, 0.6) 0%, rgba(4, 15, 34, 0) 18%, rgba(6, 24, 50, 0) 90%, #061832 100%);
-    }
-
-    .hero .grain {
-        right: 0;
-    }
-
-    .hero__content {
-        grid-column: 1;
-        grid-row: 2;
-        padding: 12px var(--layout-gutter) 48px;
-    }
-
-    .hero__facts {
-        grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 16px;
+        padding-top: 8px;
     }
 }
 
@@ -663,23 +718,6 @@ body {
     gap: clamp(28px, 3.5vw, 48px);
 }
 
-/* The engine photograph that opens the problem: shown at its own size, never stretched. */
-.gap__photo {
-    margin: 0 0 clamp(8px, 2vw, 24px);
-}
-
-.gap__photo img {
-    display: block;
-    width: 100%;
-    max-width: 1348px;
-    aspect-ratio: 2 / 1;
-    height: auto;
-    object-fit: cover;
-    object-position: 50% 62%;
-    border-radius: var(--radius-panel);
-}
-
-.gap__photo figcaption,
 .method__photo figcaption {
     max-width: 52em;
     margin-top: 12px;
@@ -688,13 +726,11 @@ body {
     color: var(--ink-2);
 }
 
-.gap__photo figcaption b,
 .method__photo figcaption b {
     color: var(--ink);
     font-weight: 650;
 }
 
-.gap__photo a,
 .method__photo a {
     color: inherit;
 }
@@ -714,7 +750,6 @@ body {
 }
 
 @media (max-width: 760px) {
-    .gap__photo img,
     .method__photo img {
         aspect-ratio: auto;
     }
@@ -781,14 +816,21 @@ body {
     color: var(--ink-3);
 }
 
-.gap__approx {
-    margin-right: 0.35em;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-3);
+.gap__stats > .gap__big {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 6px 0 18px;
+}
+
+.gap__big dt {
+    font-size: clamp(48px, 6.4vw, 104px);
+    font-weight: 250;
+    line-height: 1;
+    letter-spacing: -0.045em;
+}
+
+.gap__big dd {
+    font-size: 16px;
 }
 
 .gap__close {
@@ -1493,12 +1535,6 @@ body {
 
 .exhibit__tag {
     color: var(--accent);
-}
-
-.exhibit__note {
-    padding-top: 16px;
-    border-top: 1px solid var(--rule-soft);
-    font-size: 15.5px !important;
 }
 
 .exhibit__stats {
@@ -2580,29 +2616,6 @@ body {
     text-wrap: pretty;
 }
 
-.cameo__meta {
-    margin-top: 8px;
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--ink-2);
-    text-wrap: pretty;
-}
-
-.cameo__where {
-    margin-top: auto;
-    padding-top: 12px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    line-height: 1.35;
-    letter-spacing: 0.04em;
-    color: var(--ink-3);
-}
-
-/* Room for two lines, so the source notes line up across the row. */
-.cameo__step .cameo__where {
-    min-height: calc(2 * 1.35em + 12px);
-}
-
 /* Time taken: the bars fill at speeds in proportion to the hours. */
 
 .cameo__time {
@@ -2661,10 +2674,6 @@ body {
     color: var(--ink-2);
 }
 
-.cameo__time .cameo__where {
-    padding-top: 0;
-}
-
 .js .cameo__time.rv .cameo__fill {
     width: 0;
     transition: width var(--t) linear 0.6s;
@@ -2699,7 +2708,8 @@ body {
     }
 }
 
-@media (max-width: 640px) {
+/* Upright phones: the steps as a timeline. Sideways, they stay three to a row. */
+@media (max-width: 640px) and (max-aspect-ratio: 1 / 1) {
     .cameo__steps {
         grid-template-columns: 1fr;
         row-gap: 0;
@@ -2756,9 +2766,6 @@ body {
         grid-row: 2;
     }
 
-    .cameo__step .cameo__where {
-        min-height: 0;
-    }
 }
 
 /* ── 06 Working with us ───────────────────────────────────────────────── */
@@ -3311,15 +3318,15 @@ body {
     width: calc((100% - 150px) / 2 + 150px);
 }
 
-/* The furnace, wide, beside its hearth, tall. Each column is as wide as its photograph's shape
-   (16:9 and 3:4), so both come out the same height and neither is cropped. */
+/* The arc melter, wide, beside its hearth, tall. Each column is as wide as its photograph's shape
+   (1400:786 and 3:4), so both come out the same height and neither is cropped. */
 .company__photos {
     margin: clamp(56px, 7vw, 96px) 0 0;
 }
 
 .company__photos > div {
     display: grid;
-    grid-template-columns: minmax(0, 1.7778fr) minmax(0, 0.75fr);
+    grid-template-columns: minmax(0, 1.7812fr) minmax(0, 0.75fr);
     gap: 12px;
 }
 
@@ -3585,6 +3592,31 @@ body {
 
 /* ── Made for real: our own photographs ───────────────────────────────── */
 
+/* The lab, edge to edge, where the section begins. Upright screens show the whole photograph. */
+.made {
+    padding-top: 0;
+}
+
+.made__lab {
+    margin: 0 0 clamp(56px, 7vw, 104px);
+}
+
+.made__lab img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 21 / 9;
+    object-fit: cover;
+    object-position: 50% 42%;
+    background: var(--rule-soft);
+}
+
+@media (max-aspect-ratio: 1 / 1) {
+    .made__lab img {
+        aspect-ratio: 1932 / 1287;
+    }
+}
+
 .made__head {
     display: grid;
     gap: 28px;
@@ -3631,12 +3663,7 @@ body {
     color: var(--accent);
 }
 
-.made__note,
-.explore__note {
-    margin-top: 18px;
-    font-size: 12.5px;
-    color: var(--ink-2);
-}
+
 
 /* Tablets and phones: one row of whole photographs that scrolls sideways, out to the screen edges. */
 @media (max-width: 900px) {
@@ -3881,6 +3908,75 @@ body {
 .footer__legal .footer__credit {
     font-size: 13px;
     color: var(--ink-2);
+}
+
+/* Photo credits for the page, once, small, above the legal line. */
+.footer__credits {
+    max-width: 72em;
+    margin-top: 56px;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--ink-3);
+}
+
+.footer__credits span {
+    margin-right: 6px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.footer__credits a {
+    color: inherit;
+}
+
+.footer__credits + .footer__legal {
+    margin-top: 20px;
+}
+
+/* ── Sources, folded away ─────────────────────────────────────────────── */
+
+.note {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.note summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+
+.note summary::-webkit-details-marker {
+    display: none;
+}
+
+.note summary::after {
+    content: '+';
+    font-size: 13px;
+}
+
+.note[open] summary::after {
+    content: '−';
+}
+
+.note summary:hover {
+    color: var(--ink-2);
+}
+
+.note p {
+    max-width: 52em;
+    margin-top: 6px;
 }
 
 @media (max-width: 860px) {
@@ -4336,3 +4432,222 @@ body {
     }
 }
 
+
+/* ── Phones: headlines and names, not every detail ────────────────────── */
+
+/* On a phone people skim. Lists keep their names; the one-line details stay for wider screens. */
+@media (max-width: 600px) {
+    .layers li span:not(.layers__num):not(.pm-pill),
+    .ip__col li span,
+    .markets__grid p {
+        display: none;
+    }
+}
+
+/* ── Phones held sideways ─────────────────────────────────────────────── */
+
+/*
+ * A phone turned sideways is wide but only 360–430 px tall. The first screen fits on one screen, every
+ * photograph fits the screen whole, and sections sit side by side as they do on a desktop.
+ */
+@media (max-height: 500px) and (min-aspect-ratio: 1 / 1) {
+    .sec {
+        padding-block: 56px;
+    }
+
+    .made {
+        padding-top: 0;
+    }
+
+    /* The menu scrolls if it must, with the links in two columns. */
+    .nav__panel--open {
+        max-height: calc(100svh - var(--nav-h));
+        overflow-y: auto;
+        padding-block: 4px 16px;
+    }
+
+    .nav__panel .wrap {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 28px;
+    }
+
+    .nav__panel a:not(.pm-btn) {
+        padding: 10px 0;
+        font-size: 17px;
+    }
+
+    /* First screen: all of it on one screen, over the photograph. */
+    .hero {
+        min-height: 100svh;
+    }
+
+    .hero__content {
+        gap: 12px;
+        padding-top: calc(var(--nav-h) + 12px);
+        padding-bottom: 24px;
+    }
+
+    .hero h1 {
+        max-width: 15em;
+        font-size: clamp(26px, 9svh, 46px);
+    }
+
+    .hero__lead {
+        font-size: 15px;
+    }
+
+    .proof__list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        padding-block: 12px 20px;
+    }
+
+    .proof__list strong {
+        font-size: 15px;
+    }
+
+    .proof__list li > span:last-child {
+        font-size: 13px;
+    }
+
+    /* Photographs: whole, and never taller than the screen. */
+    .made__lab img,
+    .method__photo img,
+    .chapter__photo img,
+    .ip__photo img,
+    .news__img {
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: calc(100svh - var(--nav-h) - 32px);
+        aspect-ratio: auto;
+        object-fit: contain;
+    }
+
+    .made__lab img {
+        margin-inline: auto;
+    }
+
+    .made__lab {
+        margin-bottom: 40px;
+        background: var(--rule-soft);
+    }
+
+    .made__grid {
+        grid-auto-columns: min(40%, calc(100svh - var(--nav-h) - 110px));
+    }
+
+    .company__photos > div {
+        max-width: calc(2.5312 * (100svh - var(--nav-h) - 48px) + 12px);
+    }
+
+    /* The problem: the numbers beside the field, the field no taller than the screen. */
+    .gap__grid {
+        grid-template-columns: minmax(0, 11fr) minmax(0, 10fr);
+    }
+
+    .gap__field {
+        max-height: calc(100svh - var(--nav-h) - 40px);
+    }
+
+    /* Europe: the whole mosaic on the screen, the argument under it. */
+    .europe {
+        display: block;
+        min-height: 0;
+    }
+
+    .europe__photo {
+        position: relative;
+        inset: auto;
+        z-index: 0;
+        aspect-ratio: auto;
+        background: #0b1a2e;
+    }
+
+    .europe__photo img {
+        display: block;
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: calc(100svh - var(--nav-h));
+        margin-inline: auto;
+        object-fit: contain;
+    }
+
+    .europe__shade {
+        display: none;
+    }
+
+    .europe__inner {
+        padding-block: 32px 48px;
+    }
+
+    .europe__facts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Platform: the text beside the stack drawing, the drawing no taller than the screen. */
+    .stacks__intro {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .stacks__iso {
+        justify-self: center;
+    }
+
+    .iso {
+        max-height: calc(100svh - var(--nav-h) - 40px);
+    }
+
+    /* News: the photograph beside the story. */
+    .news__list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 24px;
+    }
+
+    .news__item--lead {
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+
+    /* Other pages: a small photo beside each title, two to a row. */
+    .explore__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .explore__card {
+        grid-template-columns: 38% minmax(0, 1fr);
+        grid-template-rows: auto auto 1fr;
+        align-items: start;
+        column-gap: 14px;
+        row-gap: 6px;
+        padding: 0;
+    }
+
+    .explore__img {
+        grid-column: 1;
+        grid-row: 1 / -1;
+        margin: 0;
+    }
+
+    .explore__card > :not(.explore__img) {
+        grid-column: 2;
+        margin-inline: 0 12px;
+    }
+
+    .explore__card .w-label {
+        margin-top: 12px;
+    }
+
+    .explore__card strong {
+        font-size: 16px;
+    }
+
+    .explore__text {
+        display: none;
+    }
+
+    .explore__go {
+        margin: 0 0 12px;
+    }
+}
