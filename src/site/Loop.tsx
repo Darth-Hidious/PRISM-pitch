@@ -3,7 +3,7 @@ import { MaturityPill } from '../ds';
 import type { Maturity } from '../ds/MaturityPill';
 import { ProcedureDiagram } from './diagrams';
 import { useInView, useReducedMotion } from './hooks';
-import { Idx } from './ui';
+import { Idx, Words } from './ui';
 
 interface Step {
     name: string;
@@ -89,7 +89,7 @@ export default function Loop({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>How it works</Idx>
                     <h2 id="loop-title" className="w-h2">
-                        One loop: design, make, test, learn.
+                        <Words>One loop: design, make, test, learn.</Words>
                     </h2>
                 </header>
                 <div ref={ref} className="loop__body rv">

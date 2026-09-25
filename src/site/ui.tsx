@@ -22,6 +22,24 @@ export function Note({ label = 'Sources', children }: { label?: string; children
     );
 }
 
+/**
+ * A headline whose words light up one after another as it scrolls into view (see `.words` in
+ * site.css). Where the browser cannot tie animation to scrolling, the words simply show.
+ */
+export function Words({ children }: { children: string }) {
+    const list = children.split(' ');
+    return (
+        <span className="words">
+            {list.map((w, i) => (
+                <span key={i} className="wd" style={{ ['--i' as string]: i }}>
+                    {w}
+                    {i < list.length - 1 ? ' ' : ''}
+                </span>
+            ))}
+        </span>
+    );
+}
+
 /** Faint vertical rails at the column quarters of the container, for dark sections. */
 export function Rails() {
     return (

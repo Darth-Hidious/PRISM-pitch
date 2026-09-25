@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
-import { Grain, Idx, Note, Rails } from './ui';
+import { Grain, Idx, Note, Rails, Words } from './ui';
 
 /* ── The problem: far too many alloys to make them all ────────────────── */
 
@@ -361,7 +361,7 @@ export function Gap({ n = '01' }: { n?: string }) {
                 <div className="gap__grid">
                     <div className="gap__copy rv">
                         <h2 id="gap-title" className="w-h2">
-                            Materials decide what we can build.
+                            <Words>Materials decide what we can build.</Words>
                         </h2>
                         <p className="w-lead">A new material still takes ten to twenty years to reach service.</p>
                         <dl className="gap__stats">

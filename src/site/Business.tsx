@@ -1,4 +1,4 @@
-import { Idx } from './ui';
+import { Idx, Words } from './ui';
 
 const LADDER = [
     { name: 'Open source', text: 'Tools anyone can use and check.', tag: 'Free' },
@@ -25,7 +25,7 @@ export default function Business({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>Working with us</Idx>
                     <h2 id="business-title" className="w-h2">
-                        The software is open. We earn when the material is real.
+                        <Words>The software is open. We earn when the material is real.</Words>
                     </h2>
                     <p className="w-lead">Our prediction tools are free and open source. We are paid when a material has to exist.</p>
                 </header>

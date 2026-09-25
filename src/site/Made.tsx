@@ -1,5 +1,5 @@
 import { useScrollsSideways } from './hooks';
-import { Idx } from './ui';
+import { Idx, Words } from './ui';
 
 /** Our own photographs, as taken: cropped, never retouched. In order, from raw metal to a part. */
 const PHOTOS = [
@@ -50,7 +50,7 @@ export default function Made({ n = '02' }: { n?: string }) {
                 <header className="made__head rv">
                     <Idx n={n}>Made for real</Idx>
                     <h2 id="made-title" className="w-h2">
-                        An idea only counts once it is metal.
+                        <Words>An idea only counts once it is metal.</Words>
                     </h2>
                 </header>
                 {/* On phones the row scrolls sideways; then it takes keyboard focus so it can be scrolled without a mouse. */}

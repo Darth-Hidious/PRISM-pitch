@@ -508,7 +508,7 @@ body {
     align-items: end;
     min-height: 100vh;
     min-height: 100svh;
-    overflow: hidden;
+    overflow: clip;
     isolation: isolate;
     background: #050d1a;
 }
@@ -708,7 +708,7 @@ body {
 
 .gap {
     background: var(--ground);
-    overflow: hidden;
+    overflow: clip;
 }
 
 .gap__inner {
@@ -876,51 +876,142 @@ body {
     }
 }
 
-/* ── Why Europe: ESA's mosaic of Europe ───────────────────────────────── */
+/* ── Why Europe: the Earth turns to Europe ────────────────────────────── */
 
+/*
+ * Upright phones and phones held sideways: the Earth in its own box, turning as it scrolls past.
+ * Wider screens (below): the Earth beside the text; with motion allowed, the scene is pinned and
+ * scroll turns it.
+ */
 .europe {
     position: relative;
-    display: flex;
-    align-items: center;
-    min-height: 100vh;
-    min-height: 100svh;
-    overflow: hidden;
-    isolation: isolate;
+    padding-bottom: 56px;
+    background: radial-gradient(120% 80% at 50% 20%, #0c2548 0%, #061832 55%, #040f22 100%);
 }
 
-.europe__photo {
+.europe__stage {
+    display: grid;
+}
+
+.europe__globe {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 78svh;
+    overflow: hidden;
+}
+
+.europe__canvas {
     position: absolute;
     inset: 0;
-    z-index: -2;
-    margin: 0;
-    background: #0b2a5c;
-}
-
-.europe__photo img {
+    display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: 72% 50%;
 }
 
-/* The text sits over the Atlantic; the shade keeps it readable without hiding the land. */
-.europe__shade {
+/* Without WebGL 2: ESA's photograph of Europe instead. */
+.europe__flat {
     position: absolute;
     inset: 0;
-    z-index: -1;
-    background:
-        linear-gradient(90deg, rgba(6, 24, 50, 0.9) 0%, rgba(6, 24, 50, 0.72) 34%, rgba(6, 24, 50, 0) 62%),
-        linear-gradient(180deg, rgba(6, 24, 50, 0.55) 0%, rgba(6, 24, 50, 0) 18%, rgba(6, 24, 50, 0) 82%, rgba(6, 24, 50, 0.6) 100%);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Each pin is a point on the Earth: the dot centred on the place, the label hung to one side. */
+.europe__pin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    pointer-events: none;
+}
+
+.europe__pin[data-show='true'] {
+    opacity: 1;
+}
+
+.europe__pin i {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow:
+        0 0 0 5px rgba(255, 255, 255, 0.22),
+        0 0 18px rgba(255, 255, 255, 0.6);
+}
+
+.europe__tag {
+    position: absolute;
+    top: -9px;
+    left: 16px;
+    display: grid;
+    gap: 2px;
+    white-space: nowrap;
+    font-size: 13px;
+    line-height: 1.2;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
+}
+
+/* Giessen reads to the left, Wrocław to the right: they are close on the map. */
+.europe__pin--0 .europe__tag {
+    right: 16px;
+    left: auto;
+    text-align: right;
+}
+
+.europe__tag b {
+    font-weight: 650;
+    color: #fff;
+}
+
+.europe__tag span {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.europe__credit {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    left: 12px;
+    z-index: 2;
+    font-size: 10px;
+    line-height: 1.35;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.europe__credit a {
+    color: inherit;
+}
+
+.europe__credit {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 .europe__inner {
+    position: relative;
+    z-index: 2;
     display: grid;
-    gap: 22px;
-    padding-block: 120px 56px;
+    gap: 20px;
+    padding-top: 12px;
 }
 
 .europe__inner > * {
-    max-width: 38rem;
+    max-width: 36rem;
+}
+
+.europe__more {
+    display: grid;
+    gap: 20px;
 }
 
 .europe__kicker {
@@ -960,32 +1051,84 @@ body {
     color: inherit;
 }
 
-/* Narrow screens: the mosaic as a picture above the text. */
-@media (max-width: 900px) {
+/* Wider screens: the Earth fills the stage to the right, the words sit on the left over a shade. */
+@media (min-aspect-ratio: 1 / 1) and (min-height: 501px) {
     .europe {
-        display: block;
-        min-height: 0;
+        padding-bottom: 0;
+        background: #050f22;
     }
 
-    .europe__photo {
+    .europe__stage {
         position: relative;
-        inset: auto;
-        z-index: 0;
-        aspect-ratio: 3 / 2;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        height: 100svh;
+        overflow: clip;
     }
 
-    .europe__photo img {
-        object-position: 62% 50%;
+    .europe__globe {
+        position: absolute;
+        inset: 0;
+        aspect-ratio: auto;
+        max-height: none;
+        background: radial-gradient(60% 70% at 66% 54%, #0d2a52 0%, #061832 60%, #040f22 100%);
     }
 
-    .europe__shade {
-        display: none;
+    .europe__globe::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(90deg, rgba(4, 14, 32, 0.94) 0%, rgba(4, 14, 32, 0.7) 30%, rgba(4, 14, 32, 0) 56%);
+        pointer-events: none;
+    }
+
+    .europe__credit {
+        right: var(--layout-gutter);
+        bottom: 14px;
+        left: auto;
+        max-width: 40em;
     }
 
     .europe__inner {
-        padding-block: 36px 56px;
+        padding-top: 0;
+    }
+}
+
+/* With motion: pinned while the Earth turns; the rest of the words arrive with Europe. */
+@media (min-aspect-ratio: 1 / 1) and (min-height: 501px) and (prefers-reduced-motion: no-preference) {
+    .europe {
+        height: 210vh;
     }
 
+    .europe__stage {
+        position: sticky;
+        top: 0;
+    }
+
+    .europe__more {
+        transition:
+            opacity 0.8s ease,
+            transform 0.8s var(--ease-rise, cubic-bezier(0.16, 1, 0.3, 1));
+    }
+
+    .europe:not(.is-arrived) .europe__more {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    /* Without the globe there is nothing to turn: no pinning. */
+    .europe.is-flat {
+        height: auto;
+    }
+
+    .europe.is-flat .europe__stage {
+        position: relative;
+    }
+}
+
+@media (max-width: 900px) {
     .europe__facts {
         grid-template-columns: 1fr;
     }
@@ -4550,40 +4693,45 @@ body {
         max-height: calc(100svh - var(--nav-h) - 40px);
     }
 
-    /* Europe: the whole mosaic on the screen, the argument under it. */
+    /* Europe: the Earth beside the words, as tall as the screen allows. */
     .europe {
-        display: block;
-        min-height: 0;
+        padding-bottom: 32px;
     }
 
-    .europe__photo {
-        position: relative;
-        inset: auto;
-        z-index: 0;
+    .europe__stage {
+        grid-template-columns: minmax(0, 11fr) minmax(0, 10fr);
+        align-items: center;
+    }
+
+    .europe__globe {
+        order: 2;
         aspect-ratio: auto;
-        background: #0b1a2e;
-    }
-
-    .europe__photo img {
-        display: block;
-        width: auto;
-        max-width: 100%;
-        height: auto;
-        max-height: calc(100svh - var(--nav-h));
-        margin-inline: auto;
-        object-fit: contain;
-    }
-
-    .europe__shade {
-        display: none;
+        height: calc(100svh - var(--nav-h) - 16px);
+        max-height: none;
     }
 
     .europe__inner {
-        padding-block: 32px 48px;
+        order: 1;
+        gap: 14px;
+        padding-block: 24px;
+    }
+
+    .europe__more {
+        gap: 14px;
     }
 
     .europe__facts {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        padding-top: 14px;
+    }
+
+    .europe__facts dt {
+        font-size: 30px;
+    }
+
+    .europe__facts dd {
+        font-size: 13px;
     }
 
     /* Platform: the text beside the stack drawing, the drawing no taller than the screen. */
@@ -4649,5 +4797,102 @@ body {
 
     .explore__go {
         margin: 0 0 12px;
+    }
+}
+
+/* ── Scroll animations ────────────────────────────────────────────────── */
+
+/*
+ * Tied to scrolling where the browser can (animation-timeline). Elsewhere, and whenever reduced
+ * motion is asked for, everything simply shows as it is.
+ */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        /* Headlines: the words light up one after another as the line scrolls into view. */
+        .words {
+            display: block;
+            view-timeline-name: --words;
+        }
+
+        .words .wd {
+            animation: word-light linear both;
+            animation-timeline: --words;
+            animation-range: cover calc(4% + var(--i) * 2%) cover calc(18% + var(--i) * 2%);
+        }
+
+        /* Photographs open out of a slightly smaller frame as they arrive. */
+        .made__grid img,
+        .company__photos img,
+        .news__img,
+        .chapter__photo img,
+        .method__photo img,
+        .ip__photo img {
+            animation: photo-open linear both;
+            animation-timeline: view();
+            animation-range: entry 0% cover 32%;
+        }
+
+        /* The first screen's words lift away as you leave it. */
+        .hero__content {
+            animation: hero-lift linear both;
+            animation-timeline: scroll(root);
+            animation-range: 0 70vh;
+        }
+    }
+}
+
+/* On wide screens the lab photograph pans slowly as it passes. */
+@supports (animation-timeline: view()) {
+    @media (min-aspect-ratio: 1 / 1) and (min-height: 501px) and (prefers-reduced-motion: no-preference) {
+        .made__lab img {
+            animation: lab-pan linear both;
+            animation-timeline: view();
+        }
+    }
+}
+
+/* In a strip that scrolls sideways the photos stay as they are. */
+@media (max-width: 900px) {
+    .made__grid img {
+        animation: none;
+    }
+}
+
+@keyframes word-light {
+    from {
+        opacity: 0.14;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes photo-open {
+    from {
+        clip-path: inset(9% 7% round var(--radius-panel));
+        transform: scale(1.06);
+    }
+
+    to {
+        clip-path: inset(0 round var(--radius-panel));
+        transform: none;
+    }
+}
+
+@keyframes hero-lift {
+    to {
+        opacity: 0;
+        transform: translateY(-72px);
+    }
+}
+
+@keyframes lab-pan {
+    from {
+        object-position: 50% 12%;
+    }
+
+    to {
+        object-position: 50% 78%;
     }
 }

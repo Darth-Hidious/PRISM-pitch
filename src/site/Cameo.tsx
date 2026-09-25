@@ -8,7 +8,7 @@
 import type { ComponentType, CSSProperties } from 'react';
 import { arc } from './arc';
 import { Arrow, Ball, Defs, T } from './engrave';
-import { Note } from './ui';
+import { Note, Words } from './ui';
 
 const ID = 'eg-cameo';
 
@@ -326,7 +326,7 @@ export default function CameoLineage() {
             <header className="cameo__head rv">
                 <p className="w-label trust__label">A real lineage</p>
                 <h3 id="cameo-title" className="w-h2 cameo__title">
-                    Every result should trace back like this.
+                    <Words>Every result should trace back like this.</Words>
                 </h3>
                 <p className="w-lead">
                     In 2020, NIST’s AI system CAMEO found a better memory material, with every step on record. PRISM

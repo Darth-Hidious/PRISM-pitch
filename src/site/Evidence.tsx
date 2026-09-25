@@ -4,7 +4,7 @@ import type { Visibility } from '../ds/RightsState';
 import CameoLineage from './Cameo';
 import { PartDiagram } from './diagrams';
 import { useMediaQuery } from './hooks';
-import { Grain, Idx, Note, Rails } from './ui';
+import { Grain, Idx, Note, Rails, Words } from './ui';
 
 /* ── Ontology explorer ────────────────────────────────────────────────── */
 
@@ -416,7 +416,7 @@ export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: bo
                     <div className="ip__head">
                         <p className="w-label trust__label">IP</p>
                         <h3 id="ip-title" className="w-h2 ip__title">
-                            Anyone can analyse a part. Nobody can copy the proof.
+                            <Words>Anyone can analyse a part. Nobody can copy the proof.</Words>
                         </h3>
                         <figure className="ip__photo">
                             <img

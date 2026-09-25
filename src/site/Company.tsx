@@ -1,6 +1,6 @@
 import { Button } from '../ds';
 import { LINKS } from './links';
-import { Arrow, Idx } from './ui';
+import { Arrow, Idx, Words } from './ui';
 
 /* ── Company: Mirdyne, Bimo Tech and PRISM ────────────────────────────── */
 
@@ -212,7 +212,7 @@ export function Contact() {
             <div className="wrap cta__inner rv">
                 <p className="w-label cta__kicker">Start</p>
                 <h2 id="contact-title" className="w-h2 cta__title">
-                    Tell us what your part must survive.
+                    <Words>Tell us what your part must survive.</Words>
                 </h2>
                 <div className="cta__side">
                     <p className="w-lead">We’ll tell you what PRISM can find, and how we’d prove it.</p>

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { seeded, useInView, useReducedMotion } from './hooks';
-import { Grain, Idx, Note, Rails } from './ui';
+import { Grain, Idx, Note, Rails, Words } from './ui';
 
 type TrackState = 'done' | 'current' | 'next';
 
@@ -158,7 +158,7 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>Progress</Idx>
                     <h2 id="roadmap-title" className="w-h2">
-                        Where PRISM stands, and where it goes.
+                        <Words>Where PRISM stands, and where it goes.</Words>
                     </h2>
                 </header>
 

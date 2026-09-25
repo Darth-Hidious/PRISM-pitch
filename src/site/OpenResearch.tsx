@@ -1,7 +1,7 @@
 import { Button } from '../ds';
 import { KnownAnswer } from './diagrams';
 import { LINKS } from './links';
-import { Idx, Note } from './ui';
+import { Idx, Note, Words } from './ui';
 
 /** Forager: the team's open research, built with PRISM. Every figure here is from Forager's public record. */
 export default function OpenResearch({ n = '02' }: { n?: string }) {
@@ -11,7 +11,7 @@ export default function OpenResearch({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>Open research</Idx>
                     <h2 id="open-title" className="w-h2">
-                        Forager: a fruit fly’s brain, searching for new alloys.
+                        <Words>Forager: a fruit fly’s brain, searching for new alloys.</Words>
                     </h2>
                     <p className="w-lead">
                         Our open research project. The wiring map of a fruit fly’s brain steers an AI that suggests
