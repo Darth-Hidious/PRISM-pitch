@@ -3,14 +3,14 @@ import { Arrow, Idx } from './ui';
 const PAGES = [
     {
         href: '/platform/',
-        img: '/img/machining-wide.webp',
+        img: '/img/spark-furnace-wide.webp',
         label: 'Platform',
         title: 'Five stacks. One system.',
         text: 'What PRISM is built from, and how ready each part is.',
     },
     {
         href: '/method/',
-        img: '/img/dlr-vinci-p41-1200.webp',
+        img: '/img/dlr-vinci-p41-wide.webp',
         label: 'Method',
         title: 'Every experiment has to earn its place.',
         text: 'Four live demos, and Forager, our open research.',
@@ -24,7 +24,7 @@ const PAGES = [
     },
     {
         href: '/company/',
-        img: '/img/spark-melt-wide.webp',
+        img: '/img/spark-hearth-column-wide.webp',
         label: 'Company',
         title: 'Mirdyne discovers. Bimo Tech delivers.',
         text: 'Who we are, the founders, and how to work with us.',
@@ -64,6 +64,13 @@ export default function Explore({ n = '03' }: { n?: string }) {
                         </li>
                     ))}
                 </ul>
+                <p className="explore__note rv">
+                    Photographs: our own, except Method (DLR,{' '}
+                    <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer license">
+                        CC BY 3.0
+                    </a>
+                    , cropped) and News (Hessen Ideen).
+                </p>
             </div>
         </section>
     );

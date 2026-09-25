@@ -66,6 +66,25 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                         </span>
                     </p>
                 </div>
+                <figure className="company__photos rv">
+                    <div>
+                        <img
+                            src="/img/spark-furnace-base.webp"
+                            alt="A vacuum-arc furnace, open: the steel chamber lifted above its round copper hearth."
+                            width={1200}
+                            height={675}
+                            loading="lazy"
+                        />
+                        <img
+                            src="/img/spark-hearth-column.webp"
+                            alt="Close-up of the copper hearth: small pieces of raw metal in its hollows, ready to be melted."
+                            width={900}
+                            height={1200}
+                            loading="lazy"
+                        />
+                    </div>
+                    <figcaption>The arc furnace, open, and its hearth loaded with raw metals. Our photographs.</figcaption>
+                </figure>
                 <div className="founders rv">
                     <p className="w-label">Founders</p>
                     <div className="founders__grid">
@@ -142,11 +161,11 @@ const NEWS: NewsItem[] = [
         title: 'Project SPARK: our first alloys are real',
         text: 'In SPARK, an ESA project led by Bimo Tech, the first alloys from our early screening were made as real metal: powder, melting and polishing. We are still testing them, and two or three look promising.',
         image: {
-            src: '/img/spark-lab.webp',
-            alt: 'Four photographs from Project SPARK: powder preparation, a powder container, melting equipment and sample polishing.',
-            width: 1080,
-            height: 270,
-            credit: 'Project SPARK: preparing powder, melting and polishing. Photographs: Bimo Tech.',
+            src: '/img/spark-hearth-charge.webp',
+            alt: 'Close-up of a copper hearth: small pieces of raw metal loaded into its hollows, ready to be melted.',
+            width: 1600,
+            height: 1067,
+            credit: 'Raw metals loaded into the copper hearth, before a melt. Our photograph.',
         },
     },
 ];

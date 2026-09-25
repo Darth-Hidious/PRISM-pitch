@@ -58,13 +58,12 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
 
 | File | What | Rights |
 | --- | --- | --- |
-| `spark-furnace.webp`, `spark-lab.webp`, `spark-coupon.webp` | Project SPARK photographs (furnace, lab, sample) | Bimo Tech, project photographs |
-| `spark-melt*.webp`, `spark-hearth.webp`, `spark-button*.webp`, `machining*.webp` | An alloy melting, the hearth, a cast button, machining; cropped only (an equipment label and a reflection cropped out) | Our own photographs, supplied by the team |
+| `spark-furnace.webp` | Project SPARK photograph: vacuum-arc melting, seen through the viewport | Bimo Tech, project photograph |
+| `spark-charge.webp`, `spark-hearth-charge*.webp`, `spark-hearth-column*.webp`, `spark-furnace-base.webp`, `spark-furnace-wide.webp`, `spark-melt.webp`, `spark-button*.webp`, `machining.webp` | Raw metals, the loaded hearth, the arc furnace, an alloy melting, a cast button, machining; cropped only (an equipment label and a reflection cropped out). No element or composition is named anywhere they are used | Our own photographs, supplied by the team |
 | `esa-europe-1280.webp`, `esa-europe-2400.webp` | Envisat MERIS true-colour mosaic of Europe, resized | ESA, CC BY-SA 3.0 IGO ([source](https://www.esa.int/ESA_Multimedia/Images/2010/09/MERIS_mosaic_of_Europe)) |
-| `search-manifold.webp`, `event-network.webp` | Illustrations from the Mirdyne briefing deck | Mirdyne |
 | `news-hessen-ideen-2026.webp` | Team PRISM receiving the KI-Sonderpreis at Hessen Ideen 2026 | Hessen Ideen (the organisers' photograph), supplied by the team |
 | `dlr-vulcain2-p5.webp` | Vulcain 2 engine on test stand P5, DLR Lampoldshausen | DLR, CC BY 3.0 ([source](https://www.dlr.de/en/images/2011/3/vulcain-2-engine-on-test-facility-p5-at-dlr-lampoldshausen_3149)) |
-| `dlr-vinci-p41-1200.webp`, `dlr-vinci-p41-2000.webp` | Vinci engine in altitude test stand P4.1, resized | DLR, CC BY 3.0 ([source](https://www.dlr.de/de/bilder/2016/2/vinci-triebwerk-im-pruefstand-p4-1_23249)) |
+| `dlr-vinci-p41-1200.webp`, `dlr-vinci-p41-2000.webp`, `dlr-vinci-p41-wide.webp` | Vinci engine in altitude test stand P4.1, resized (the `-wide` card version also cropped to 3:2) | DLR, CC BY 3.0 ([source](https://www.dlr.de/de/bilder/2016/2/vinci-triebwerk-im-pruefstand-p4-1_23249)) |
 
 ESA images: use only those whose page says **CC BY-SA 3.0 IGO**, credit them
 as the page says, link the licence and say if they were changed. Images under

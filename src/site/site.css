@@ -3311,6 +3311,38 @@ body {
     width: calc((100% - 150px) / 2 + 150px);
 }
 
+/* The furnace, wide, beside its hearth, tall. Each column is as wide as its photograph's shape
+   (16:9 and 3:4), so both come out the same height and neither is cropped. */
+.company__photos {
+    margin: clamp(56px, 7vw, 96px) 0 0;
+}
+
+.company__photos > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7778fr) minmax(0, 0.75fr);
+    gap: 12px;
+}
+
+.company__photos img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-panel);
+    background: var(--rule-soft);
+}
+
+.company__photos figcaption {
+    margin-top: 8px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+}
+
+@media (max-width: 600px) {
+    .company__photos > div {
+        grid-template-columns: 1fr;
+    }
+}
+
 .founders {
     display: grid;
     gap: 20px;
@@ -3561,7 +3593,7 @@ body {
 
 .made__grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 16px;
     margin: 0;
     padding: 0;
@@ -3583,21 +3615,51 @@ body {
 }
 
 .made__grid figcaption {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
     margin-top: 10px;
     font-size: 15px;
     font-weight: 650;
 }
 
-.made__note {
+.made__step {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+}
+
+.made__note,
+.explore__note {
     margin-top: 18px;
     font-size: 12.5px;
     color: var(--ink-2);
 }
 
+/* Tablets and phones: one row of whole photographs that scrolls sideways, out to the screen edges. */
 @media (max-width: 900px) {
     .made__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px 12px;
+        grid-template-columns: none;
+        grid-auto-flow: column;
+        grid-auto-columns: min(72%, 300px);
+        gap: 12px;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: var(--layout-gutter);
+        margin-inline: calc(-1 * var(--layout-gutter));
+        padding-inline: var(--layout-gutter);
+        scrollbar-width: none;
+    }
+
+    .made__grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .made__grid > li {
+        scroll-snap-align: start;
     }
 
     .made__grid figcaption {

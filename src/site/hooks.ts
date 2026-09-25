@@ -34,6 +34,22 @@ export function useInView<T extends Element>(rootMargin = '0px', once = false) {
     return [ref, inView] as const;
 }
 
+/** True while the element's content is wider than its box, so it scrolls sideways. */
+export function useScrollsSideways<T extends HTMLElement>() {
+    const ref = useRef<T>(null);
+    const [scrolls, setScrolls] = useState(false);
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const check = () => setScrolls(el.scrollWidth > el.clientWidth + 1);
+        check();
+        const ro = new ResizeObserver(check);
+        ro.observe(el);
+        return () => ro.disconnect();
+    }, []);
+    return [ref, scrolls] as const;
+}
+
 /** mulberry32: a small seeded generator, so generated figures are the same on every visit. */
 export function seeded(seed: number) {
     let a = seed >>> 0;

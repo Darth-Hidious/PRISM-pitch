@@ -143,9 +143,9 @@ const STACKS: StackDef[] = [
         lead: 'Only a real test can say.',
         answer: 'Most computer-designed materials stop at the recipe. We melt and 3D-print the best ideas, then test them.',
         photo: {
-            src: '/img/machining-wide.webp',
-            alt: 'A machined metal block covered in bright curled metal chips, with milled channels beside them.',
-            caption: 'Machined to shape. Our photograph.',
+            src: '/img/spark-furnace-wide.webp',
+            alt: 'A vacuum-arc furnace, open: the steel chamber with its viewports lifted above the round copper hearth.',
+            caption: 'The vacuum-arc furnace, open. Our photograph.',
         },
         limit: 'A test sample is not a finished part. Certification is the goal, not a claim.',
         layers: [
@@ -306,7 +306,7 @@ function Chapter({ stack, index }: { stack: StackDef; index: number }) {
                 </p>
                 {stack.photo && (
                     <figure className="chapter__photo">
-                        <img src={stack.photo.src} alt={stack.photo.alt} width={1000} height={667} loading="lazy" />
+                        <img src={stack.photo.src} alt={stack.photo.alt} width={1200} height={800} loading="lazy" />
                         <figcaption>{stack.photo.caption}</figcaption>
                     </figure>
                 )}
