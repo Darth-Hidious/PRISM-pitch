@@ -367,10 +367,8 @@ export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: bo
                         Every result keeps its proof, its owner and its rules.
                     </H>
                     <p className="w-lead">
-                        <b>Who can see what? Only what the owner allows.</b> Companies share data only if they stay in
-                        control of it. So in PRISM, every requirement, design, sample, test and decision records where
-                        it came from, who owns it and what it may be used for. Pick a viewer below and see what they
-                        can see.
+                        <b>Who can see what? Only what the owner allows.</b> Every record in PRISM keeps its source, its
+                        owner and its rules. Pick a viewer below.
                     </p>
                 </header>
 
@@ -424,11 +422,20 @@ export default function Evidence({ n = '01', h1 = false }: { n?: string; h1?: bo
                             Anyone can analyse a part. Nobody can copy the proof.
                         </h3>
                         <p className="w-lead">
-                            <b>What does a part give away? What it is made of, not the proof.</b> Anyone holding a part
-                            can test it, and may even copy something like it. What they cannot get from the part is the
-                            proof that it works, and the know-how to make it again and again. In PRISM that proof is the
-                            asset, and it stays with its owner.
+                            <b>What does a part give away? What it is made of, not the proof.</b> Anyone can test a
+                            part. Nobody gets the proof that it works, or the know-how to make it again. That stays with
+                            its owner.
                         </p>
+                        <figure className="ip__photo">
+                            <img
+                                src="/img/spark-button-side.webp"
+                                alt="A cast alloy button with a crystalline surface, resting in a red lid on a lab bench."
+                                width={1120}
+                                height={940}
+                                loading="lazy"
+                            />
+                            <figcaption>An alloy button, as cast. Our photograph.</figcaption>
+                        </figure>
                     </div>
                     <figure className="ip__plate" data-theme="paper">
                         <PartDiagram />

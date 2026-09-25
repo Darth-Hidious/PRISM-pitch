@@ -308,22 +308,22 @@ const STEPS: Step[] = [
     {
         title: 'The measurements',
         text: '19 rounds. In each, CAMEO picked one spot to X-ray and learned from the result.',
-        meta: 'A scientist worked out that spot’s ΔEg from the light scans. Each round took 20–25 minutes, at SLAC’s synchrotron.',
+        meta: 'A scientist worked out each ΔEg from the light scans. 20–25 minutes a round, at SLAC’s synchrotron.',
         where: 'Paper · Fig. 2c, Methods',
         Icon: Measure,
     },
     {
         title: 'The answer',
         text: 'Ge₄Sb₆Te₇ (GST467), found in round 19.',
-        meta: 'ΔEg of 0.76 eV, nearly three times the 0.23 eV of GST225, the best-known material of this kind. It lies where a second crystal structure starts to appear.',
+        meta: 'ΔEg of 0.76 eV: nearly three times the 0.23 eV of GST225, the best-known material of its kind.',
         where: 'Paper · Fig. 3',
         Icon: Answer,
     },
     {
         title: 'The proof',
         text: 'Checked two more ways: under an electron microscope, and in a working device.',
-        meta: 'The microscope showed why it works: tiny pockets of a second crystal inside the first. The device, built at the University of Washington, beat one made of GST225 and stayed stable over 30,000 switches.',
-        where: 'Paper · Fig. 4 · NIST release',
+        meta: 'The microscope showed why: tiny pockets of a second crystal. The device beat one made of GST225 and stayed stable over 30,000 switches.',
+        where: 'Paper · Fig. 4',
         Icon: Proof,
     },
 ];
@@ -342,11 +342,9 @@ export default function CameoLineage() {
                     Every result should trace back like this.
                 </h3>
                 <p className="w-lead">
-                    <b>What does a result you can trust look like?</b> Here is a public one. In 2020, researchers at NIST
-                    and their partners used an AI system called CAMEO to find a better material for memory that works
-                    with light. Every step is on record: the question, the options, what was known, each measurement, the
-                    answer and the checks. PRISM keeps the same record for every result, and adds who owns each step and
-                    who may see it.
+                    <b>What does a result you can trust look like?</b> Here is a public one: in 2020, NIST’s AI system
+                    CAMEO found a better material for memory that works with light. Every step is on record. PRISM keeps
+                    the same record for every result.
                 </p>
             </header>
 

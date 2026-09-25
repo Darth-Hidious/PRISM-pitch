@@ -18,6 +18,7 @@ interface StackDef {
     answer: string;
     limit: string;
     layers: Layer[];
+    photo?: { src: string; alt: string; caption: string };
 }
 
 const STACKS: StackDef[] = [
@@ -27,32 +28,32 @@ const STACKS: StackDef[] = [
         short: 'Research',
         question: 'Out of millions of possible mixes, which are worth making?',
         lead: 'A short list, ranked, with how sure we are.',
-        answer: 'AI suggests ideas from the whole range. Physics simulations throw out what cannot work, before any powder is weighed.',
-        limit: 'It cannot see what a real machine will do to the alloy. The manufacturing stack checks that.',
+        answer: 'AI suggests ideas. Physics simulations throw out what cannot work, before any powder is weighed.',
+        limit: 'It cannot see what a real machine does to the alloy. The manufacturing stack checks that.',
         layers: [
             {
                 name: 'Knowledge graph',
-                detail: 'Papers, patents and lab data in one connected map, each with its source. It suggests new leads when a search gets stuck.',
+                detail: 'Papers, patents and lab data, linked, each with its source.',
                 maturity: 'prototype',
             },
             {
                 name: 'Idea generator',
-                detail: 'AI that suggests new mixes, only ones that are physically possible.',
+                detail: 'AI that suggests new mixes that are physically possible.',
                 maturity: 'prototype',
             },
             {
                 name: 'Physics filter',
-                detail: 'Fast AI simulations first, then slower, exact ones. Most ideas fail here, where failing is cheap.',
+                detail: 'Fast simulations first, then exact ones. Most ideas stop here, cheaply.',
                 maturity: 'prototype',
             },
             {
                 name: 'Smart experiment choice',
-                detail: 'Each experiment is picked for what it will teach us, not to test everything.',
+                detail: 'Each experiment is picked for what it will teach us.',
                 maturity: 'prototype',
             },
             {
                 name: 'Safe settings',
-                detail: 'We look for a range of settings that works when powder and machine vary, not one perfect recipe.',
+                detail: 'Settings that still work when powder and machine vary.',
                 maturity: 'prototype',
             },
         ],
@@ -63,32 +64,32 @@ const STACKS: StackDef[] = [
         short: 'Harness',
         question: 'Who runs the work between the AI models?',
         lead: 'The harness.',
-        answer: 'AI models only suggest. The harness plans each round, runs the tools, scores the results and remembers what failed. So each round starts where the last one stopped.',
-        limit: 'It never makes the final call. A named engineer signs off everything that leaves the loop.',
+        answer: 'AI models only suggest. The harness plans each round, runs the tools, scores the results and remembers what failed.',
+        limit: 'It never makes the final call. A named engineer signs off what leaves the loop.',
         layers: [
             {
                 name: 'Planner',
-                detail: 'Plans each round: what to try next, based on the last results.',
+                detail: 'Decides what to try next, from the last results.',
                 maturity: 'prototype',
             },
             {
                 name: 'Playbooks',
-                detail: 'What every round learned, kept for the next one. Failures included.',
+                detail: 'What each round learned, failures included.',
                 maturity: 'prototype',
             },
             {
                 name: 'Tool connections',
-                detail: 'One way in to simulations, computers, lab instruments and factory data.',
+                detail: 'One way in to simulations, lab instruments and factory data.',
                 maturity: 'prototype',
             },
             {
                 name: 'Scorer',
-                detail: 'Scores every result against the requirement: quick estimates first, then physics, then real tests.',
+                detail: 'Scores every result against the requirement.',
                 maturity: 'prototype',
             },
             {
                 name: 'Human sign-off',
-                detail: 'AI suggests; engineers decide. Ideas without a source are rejected, and a named expert approves what leaves the loop.',
+                detail: 'AI suggests, engineers decide. Ideas without a source are rejected.',
                 maturity: 'prototype',
             },
         ],
@@ -99,37 +100,37 @@ const STACKS: StackDef[] = [
         short: 'Autonomy',
         question: 'How do experiments stop being the slow part?',
         lead: 'Robots do the repetitive steps. People stay in charge.',
-        answer: 'Making and measuring a sample by hand takes days, and data gets lost between machines. Here robots weigh and heat, instruments measure on the spot, and the data flows straight back.',
-        limit: 'Most of this is still being built. Turning ideas into lab recipes works as a prototype today.',
+        answer: 'Robots weigh and heat, instruments measure on the spot, and the data flows straight back.',
+        limit: 'Most of this is still being built. The recipe writer works as a prototype today.',
         layers: [
             {
                 name: 'Recipe writer',
-                detail: 'Turns each idea into steps a lab can run: ingredients, temperatures and timings.',
+                detail: 'Turns an idea into steps a lab can run.',
                 maturity: 'prototype',
             },
             {
                 name: 'Robot lab',
-                detail: 'Robot arms weigh out powder and move samples through the furnace.',
+                detail: 'Robot arms weigh powder and move samples through the furnace.',
                 maturity: 'development',
             },
             {
                 name: 'Automatic measurement',
-                detail: 'X-ray patterns taken on the spot, and AI that reads what has formed.',
+                detail: 'X-ray patterns on the spot, read by AI.',
                 maturity: 'development',
             },
             {
                 name: 'Probes',
-                detail: 'Our own sensors, which record calibrated data right at the machine.',
+                detail: 'Our own sensors, recording calibrated data at the machine.',
                 maturity: 'development',
             },
             {
                 name: 'Machine control',
-                detail: 'Software drives the instruments directly, so the loop does not wait for a person.',
+                detail: 'Software drives the instruments, so the loop never waits.',
                 maturity: 'development',
             },
             {
                 name: 'Field robots',
-                detail: 'The same autonomy outside the lab: rugged robots that find their way without GPS. Built for civil and defence use.',
+                detail: 'The same autonomy outside the lab, without GPS. For civil and defence use.',
                 maturity: 'development',
             },
         ],
@@ -140,32 +141,37 @@ const STACKS: StackDef[] = [
         short: 'Manufacturing and test',
         question: 'Can it really be made? Does it hold up?',
         lead: 'Only a real test can say.',
-        answer: 'A recipe is not a material until it has been made and tested. That is where most computer-designed materials stop. We melt and 3D-print the best ideas, then test them against the requirement.',
+        answer: 'Most computer-designed materials stop at the recipe. We melt and 3D-print the best ideas, then test them.',
+        photo: {
+            src: '/img/machining-wide.webp',
+            alt: 'A machined metal block covered in bright curled metal chips, with milled channels beside them.',
+            caption: 'Machined to shape. Our photograph.',
+        },
         limit: 'A test sample is not a finished part. Certification is the goal, not a claim.',
         layers: [
             {
                 name: 'Powder and melting',
-                detail: 'Preparing new alloys and melting them in a vacuum-arc furnace.',
+                detail: 'New alloys, prepared and melted in a vacuum-arc furnace.',
                 maturity: 'in-use',
             },
             {
                 name: 'Printability check',
-                detail: 'Checks whether an alloy can be 3D-printed before a build is started.',
+                detail: 'Can it be 3D-printed? Checked before any build starts.',
                 maturity: 'prototype',
             },
             {
                 name: 'Metal 3D printing',
-                detail: 'Industrial laser printing from metal powder, with the safe settings mapped for each lead idea.',
+                detail: 'Industrial laser printing from metal powder, safe settings mapped.',
                 maturity: 'in-use',
             },
             {
                 name: 'Testing',
-                detail: 'Density, inner structure and X-ray scans first, then strength and heat tests against the requirement.',
+                detail: 'Density and inner structure first, then strength and heat.',
                 maturity: 'in-use',
             },
             {
                 name: 'Certification file',
-                detail: 'The evidence your certification process needs, to go from test sample to real part.',
+                detail: 'The evidence certification needs, from test sample to real part.',
                 maturity: 'target',
             },
         ],
@@ -176,32 +182,32 @@ const STACKS: StackDef[] = [
         short: 'Evidence',
         question: 'Where did this result come from, and who may see it?',
         lead: 'Every result carries its source, its owner and its rules.',
-        answer: 'Partners only share data they control. Engineers only trust results they can trace. So every requirement, design, sample, test and decision is linked, like a family tree.',
-        limit: 'Tracing and export labels work today. Automatic enforcement of sharing rules is being built.',
+        answer: 'Every requirement, design, sample, test and decision is linked, like a family tree.',
+        limit: 'Tracing and export labels work today. Automatic enforcement is being built.',
         layers: [
             {
                 name: 'Traceability',
-                detail: 'Every result records what went in: data, code and model versions. Anyone can check and repeat it.',
+                detail: 'Every result records its inputs: data, code and model versions.',
                 maturity: 'in-use',
             },
             {
                 name: 'Linked records',
-                detail: 'Requirements, designs, builds, samples, tests and decisions, linked together instead of scattered in files.',
+                detail: 'Requirement to decision, linked instead of scattered in files.',
                 maturity: 'prototype',
             },
             {
                 name: 'Data rights',
-                detail: 'Each piece of data carries its owner and what it may be used for. Anything made from it keeps the same rules.',
+                detail: 'Each piece of data carries its owner and its allowed uses.',
                 maturity: 'development',
             },
             {
                 name: 'Controlled sharing',
-                detail: 'Nothing is shared by accident. Every release is signed and names who may see it.',
+                detail: 'Nothing is shared by accident. Every release is signed.',
                 maturity: 'development',
             },
             {
                 name: 'Export control',
-                detail: 'Export rules recorded on every deliverable today. Checked automatically, every time data leaves, next.',
+                detail: 'Export rules on every deliverable today; automatic checks next.',
                 maturity: 'in-use',
             },
         ],
@@ -298,6 +304,12 @@ function Chapter({ stack, index }: { stack: StackDef; index: number }) {
                 <p className="a chapter__a">
                     <b>{stack.lead}</b> {stack.answer}
                 </p>
+                {stack.photo && (
+                    <figure className="chapter__photo">
+                        <img src={stack.photo.src} alt={stack.photo.alt} width={1000} height={667} loading="lazy" />
+                        <figcaption>{stack.photo.caption}</figcaption>
+                    </figure>
+                )}
                 <p className="limit">
                     <span className="w-label">Limit</span>
                     {stack.limit}

@@ -625,11 +625,12 @@ body {
 
     .hero__photo {
         grid-column: 1;
-        height: min(58svh, 520px);
+        aspect-ratio: 989 / 1144;
+        max-height: 78svh;
     }
 
     .hero__photo::before {
-        background: linear-gradient(180deg, rgba(4, 15, 34, 0.6) 0%, rgba(4, 15, 34, 0) 20%, rgba(6, 24, 50, 0) 72%, #061832 100%);
+        background: linear-gradient(180deg, rgba(4, 15, 34, 0.6) 0%, rgba(4, 15, 34, 0) 18%, rgba(6, 24, 50, 0) 90%, #061832 100%);
     }
 
     .hero .grain {
@@ -671,7 +672,7 @@ body {
     display: block;
     width: 100%;
     max-width: 1348px;
-    aspect-ratio: 16 / 7;
+    aspect-ratio: 2 / 1;
     height: auto;
     object-fit: cover;
     object-position: 50% 62%;
@@ -705,7 +706,7 @@ body {
 .method__photo img {
     display: block;
     width: 100%;
-    aspect-ratio: 16 / 7;
+    aspect-ratio: 2 / 1;
     height: auto;
     object-fit: cover;
     object-position: 50% 45%;
@@ -715,7 +716,7 @@ body {
 @media (max-width: 760px) {
     .gap__photo img,
     .method__photo img {
-        aspect-ratio: 4 / 3;
+        aspect-ratio: auto;
     }
 }
 
@@ -928,7 +929,7 @@ body {
         position: relative;
         inset: auto;
         z-index: 0;
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 3 / 2;
     }
 
     .europe__photo img {
@@ -2373,7 +2374,27 @@ body {
 }
 
 .ip__title {
-    grid-column: 1 / span 9;
+    grid-column: 1 / span 8;
+}
+
+.ip__photo {
+    grid-column: 9 / -1;
+    grid-row: 2 / span 2;
+    align-self: end;
+    margin: 0;
+}
+
+.ip__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-panel);
+}
+
+.ip__photo figcaption {
+    margin-top: 8px;
+    font-size: 12.5px;
+    color: var(--ink-2);
 }
 
 .ip__head .w-lead {
@@ -2441,8 +2462,10 @@ body {
 
 @media (max-width: 860px) {
     .ip__title,
-    .ip__head .w-lead {
+    .ip__head .w-lead,
+    .ip__photo {
         grid-column: 1 / -1;
+        grid-row: auto;
     }
 
     .ip__plate {
@@ -3528,6 +3551,78 @@ body {
     }
 }
 
+/* ── Made for real: our own photographs ───────────────────────────────── */
+
+.made__head {
+    display: grid;
+    gap: 28px;
+    margin-bottom: 40px;
+}
+
+.made__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.made__grid figure {
+    margin: 0;
+}
+
+.made__grid img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-panel);
+    background: var(--rule-soft);
+}
+
+.made__grid figcaption {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 650;
+}
+
+.made__note {
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+}
+
+@media (max-width: 900px) {
+    .made__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 12px;
+    }
+
+    .made__grid figcaption {
+        font-size: 14px;
+    }
+}
+
+/* A photograph inside a stack's panel. */
+.chapter__photo {
+    margin: 0;
+}
+
+.chapter__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-panel);
+}
+
+.chapter__photo figcaption {
+    margin-top: 8px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+}
+
 /* ── More: the other pages ────────────────────────────────────────────── */
 
 .explore__head {
@@ -3551,10 +3646,10 @@ body {
 
 .explore__card {
     display: grid;
-    grid-template-rows: auto auto 1fr auto;
+    grid-template-rows: auto auto auto 1fr auto;
     gap: 10px;
     width: 100%;
-    padding: 20px 20px 18px;
+    padding: 0 0 18px;
     border-top: 2px solid var(--ink);
     background: var(--surface);
     color: var(--ink);
@@ -3564,6 +3659,24 @@ body {
 
 .explore__card:hover {
     background: var(--accent-tint);
+}
+
+.explore__card > :not(.explore__img) {
+    margin-inline: 18px;
+}
+
+.explore__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    margin-bottom: 6px;
+    background: var(--rule-soft);
+}
+
+.explore__card:hover .explore__img {
+    filter: brightness(1.04);
 }
 
 .explore__card .w-label {
@@ -3602,6 +3715,44 @@ body {
 @media (max-width: 600px) {
     .explore__grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Phones: a small photo beside the title, the one-line summary left out. */
+    .explore__card {
+        grid-template-columns: 38% minmax(0, 1fr);
+        grid-template-rows: auto auto 1fr;
+        align-items: start;
+        column-gap: 14px;
+        row-gap: 6px;
+        padding: 0;
+    }
+
+    .explore__img {
+        grid-column: 1;
+        grid-row: 1 / -1;
+        margin: 0;
+    }
+
+    .explore__card > :not(.explore__img) {
+        grid-column: 2;
+        margin-inline: 0 12px;
+    }
+
+    .explore__card .w-label {
+        margin-top: 12px;
+    }
+
+    .explore__card strong {
+        font-size: 16px;
+    }
+
+    .explore__text {
+        display: none;
+    }
+
+    .explore__go {
+        margin: 0 0 12px;
     }
 }
 
