@@ -18,48 +18,48 @@ const STEPS: Step[] = [
     {
         name: 'Requirement',
         question: 'What must the part survive?',
-        lead: 'The requirement comes first.',
-        text: 'You state the environment, the loads, the process route and the material to beat. PRISM turns that into a requirement every candidate is scored against.',
+        lead: 'You tell us.',
+        text: 'How hot, what loads, how it will be made, and the material it has to beat. Every idea is scored against this.',
         stack: 'Evidence stack',
         maturity: 'prototype',
     },
     {
         name: 'Design',
         question: 'What could work?',
-        lead: 'Candidates from the whole space.',
-        text: 'Generative models propose compositions across the design space, not only the corners that are already published.',
+        lead: 'AI suggests ideas.',
+        text: 'It searches the whole range of possible mixes, not only the well-known ones.',
         stack: 'Research stack',
         maturity: 'prototype',
     },
     {
         name: 'Screen',
         question: 'What survives the physics?',
-        lead: 'Most candidates stop here.',
-        text: 'Learned potentials first, then first principles and thermodynamics, then a manufacturability index, all before any powder is weighed.',
+        lead: 'Most ideas stop here.',
+        text: 'Fast simulations throw out what cannot work, long before anything is melted.',
         stack: 'Research stack',
         maturity: 'prototype',
     },
     {
         name: 'Make',
         question: 'Can it be made, and made again?',
-        lead: 'Inside a window, not on a point.',
-        text: 'The survivors are melted and printed in industrial processes, at settings that hold when the machine drifts.',
+        lead: 'Real machines make it.',
+        text: 'We melt and 3D-print the best ideas, with settings that still work when the machine drifts.',
         stack: 'Manufacturing and test stack',
         maturity: 'in-use',
     },
     {
         name: 'Test',
         question: 'Does it meet the requirement?',
-        lead: 'The coupon answers.',
-        text: 'Density, microstructure and property tests turn each candidate into evidence, measured against the requirement.',
+        lead: 'The test sample answers.',
+        text: 'We measure density, inner structure and strength, and compare them with your targets.',
         stack: 'Manufacturing and test stack',
         maturity: 'in-use',
     },
     {
         name: 'Learn',
         question: 'What should we try next?',
-        lead: 'Whatever teaches the most.',
-        text: 'Every result, failures included, goes back into the models, and active learning chooses the next experiment.',
+        lead: 'Whatever teaches us the most.',
+        text: 'Every result, good or bad, goes back into the models. They pick the next experiment.',
         stack: 'Harness stack',
         maturity: 'prototype',
     },
@@ -89,12 +89,11 @@ export default function Loop() {
                 <header className="sec-head rv">
                     <Idx n="02">How it works</Idx>
                     <h2 id="loop-title" className="w-h2">
-                        One loop, from requirement to physical evidence.
+                        One loop: design, make, test, learn.
                     </h2>
                     <p className="w-lead">
-                        <b>Can a model design a material? It can propose one.</b> A material still has to pass physics,
-                        manufacture and test. PRISM runs all of it as one loop, and every turn makes the next one
-                        cheaper.
+                        <b>Can AI design a material? It can suggest one.</b> The material still has to be made and
+                        tested. PRISM runs all of it as one loop, and every round teaches the next.
                     </p>
                 </header>
                 <div ref={ref} className="loop__body rv">
@@ -102,7 +101,7 @@ export default function Loop() {
                         <div className="scroll-x">
                             <ProcedureDiagram active={active} onPick={pick} />
                         </div>
-                        <figcaption className="fig-cap">The loop, drawn for this site. Select a step to read it.</figcaption>
+                        <figcaption className="fig-cap">The loop, drawn for this site. Tap a step to read it.</figcaption>
                     </figure>
                     <div className="loop__panel">
                         <div className="loop__tabs" role="tablist" aria-label="Steps of the loop">

@@ -4,7 +4,11 @@ A reader should finish any page knowing three things: what PRISM does, how far i
 
 ## The message
 
-**Specify the capability. We deliver the material.** PRISM designs candidate alloys and polymers, screens them against physics and manufacturability, has them made in real processes and tested against the requirement, and keeps the evidence attached. Say it in that order: requirement, design, screen, make, test, evidence.
+**Tell us what your part must survive. We deliver the material.** PRISM uses AI to design new alloys and polymers. Then we make them, test them and hand over the proof. Say it in that order: requirement, design, check, make, test, proof.
+
+## Plain words first
+
+Write so that anyone can follow, not only a materials scientist. Short sentences, one idea each. Everyday words: *test sample*, not coupon; *3D printing*, not LPBF; *traceability*, not provenance; *safe settings*, not process window. If a technical term has to appear, explain it in the same sentence. Put the precise terms in source lines and figure notes, where specialists look for them.
 
 The promise behind it, from the deck: *the material should follow the mission, not define its limits.*
 
@@ -24,12 +28,12 @@ Explain the platform as five stacks, each with the problem it solves and the mat
 
 | Instead of | Write |
 | --- | --- |
-| AI has identified over 2.2 million potential stable compositions, but only 736 have been verified. | AI models have predicted 2.2 million crystal structures. 736 have been made in a lab. |
-| ArianeGroup interest | ArianeGroup: requirements and validation in the PRISM Alpha consortium. |
+| The combinatorial design space is effectively infinite. | Five of nine metals, mixed in steps of 1 %, give 474 million possible alloys. |
+| Candidates are melted and printed in industrial processes. | We melt and 3D-print the best ideas. |
 | Our revolutionary AI platform | PRISM, a closed-loop materials platform. |
 | We qualify new materials. | Evidence assembled for your qualification process. *Target.* |
 | Robots run our lab. | Robotic synthesis. *In development.* |
-| ABB pilot (under NDA) | PFAS-free polymers, with an industrial partner under NDA. *Contracted.* |
+| A named partner under NDA | PFAS-free polymers, with an industrial partner under NDA. *Contracted.* |
 
 ## Rules
 

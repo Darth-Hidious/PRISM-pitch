@@ -1,9 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="200 200 930 930" width="64" height="64">
-  <rect x="200" y="200" width="930" height="930" rx="100" fill="#0a0f1c"/>
-  <g transform="matrix(1.3333333,0,0,-1.3333333,0,1333.3333)">
-    <g transform="scale(0.1)">
-      <path fill="#fff" d="m 2858.96,6488.46 c 0,0 198.4,516.75 1324.62,962.98 1126.23,446.23 2528.6,340.57 3253.95,-70.26 725.35,-410.84 807.81,-752.25 554.5,-1110.14 -253.32,-357.89 -1241.27,-136.28 -1614.04,18.26 -813.98,337.46 -2589.48,1317.23 -3519.03,199.16"/>
-      <path fill="#fff" d="m 7157.36,3495.22 c 0,0 -198.4,-516.75 -1324.62,-962.98 -1126.22,-446.24 -2528.6,-340.58 -3253.95,70.26 -725.35,410.84 -807.81,752.25 -554.49,1110.14 253.31,357.89 1241.26,136.28 1614.03,-18.26 813.98,-337.46 2589.49,-1317.24 3519.03,-199.16"/>
-    </g>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="66 60 380 380" width="64" height="64">
+  <style>
+    .edge { stroke: #13294b; }
+    @media (prefers-color-scheme: dark) { .edge { stroke: #ffffff; } }
+  </style>
+  <defs>
+    <linearGradient id="s" gradientUnits="userSpaceOnUse" x1="112" y1="0" x2="262" y2="0">
+      <stop offset="0" stop-color="#7b5ba6"/>
+      <stop offset="0.2" stop-color="#6b62b0"/>
+      <stop offset="0.38" stop-color="#3f82c9"/>
+      <stop offset="0.56" stop-color="#92a048"/>
+      <stop offset="0.76" stop-color="#f0a32c"/>
+      <stop offset="1" stop-color="#e34840"/>
+    </linearGradient>
+  </defs>
+  <path class="edge" d="M298 88 87 267 238 392 426 353Z M298 88 290 297 M87 267 290 297 426 353" fill="none" stroke-width="24" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M112 266 262 195 226 349 189 280Z" fill="url(#s)"/>
 </svg>

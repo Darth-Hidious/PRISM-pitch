@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Business from './Business';
 import { SiteFooter, SiteNav } from './Chrome';
 import { Company, Contact, News } from './Company';
+import Europe from './Europe';
 import Evidence from './Evidence';
 import { Gap, Precedent } from './Gap';
 import Hero from './Hero';
@@ -47,6 +48,7 @@ export default function SiteApp() {
                 <Hero />
                 <Gap />
                 <Precedent />
+                <Europe />
                 <Loop />
                 <Stacks />
                 <Method />

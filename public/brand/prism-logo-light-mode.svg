@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="72 56 368 368" width="368" height="368" role="img" aria-label="PRISM">
+  <title>PRISM</title>
+  <defs>
+    <linearGradient id="prism-spectrum" gradientUnits="userSpaceOnUse" x1="112" y1="0" x2="262" y2="0">
+      <stop offset="0" stop-color="#8468a9"/>
+      <stop offset="0.2" stop-color="#7a6aae"/>
+      <stop offset="0.38" stop-color="#4f86c2"/>
+      <stop offset="0.56" stop-color="#9d9b56"/>
+      <stop offset="0.76" stop-color="#e4a33b"/>
+      <stop offset="1" stop-color="#d9534a"/>
+    </linearGradient>
+  </defs>
+  <path d="M298 88 87 267 238 392 426 353Z M298 88 290 297 M87 267 290 297 426 353" fill="none" stroke="#13294b" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M112 266 262 195 226 349 189 280Z" fill="url(#prism-spectrum)"/>
+</svg>

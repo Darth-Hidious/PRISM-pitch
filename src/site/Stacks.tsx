@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { MaturityPill, Painting } from '../ds';
+import { LivePainting, MaturityPill } from '../ds';
+import type { LiveScene } from '../ds/livepaint';
 import type { Maturity } from '../ds/MaturityPill';
-import type { PaintOptions } from '../ds/paint';
 import { useMediaQuery } from './hooks';
-import { autonomyScene, evidenceLineage, harnessLoop } from './illustrations';
+import { couponScene, melterScene, millScene, polisherScene, researchScene } from './scenes';
 import { Grain, Idx } from './ui';
 
 interface Layer {
@@ -21,7 +21,7 @@ interface StackDef {
     answer: string;
     limit: string;
     layers: Layer[];
-    art: { src?: string; source?: (w: number, h: number) => HTMLCanvasElement; alt: string; caption: string } & PaintOptions;
+    art: { scene: LiveScene; photo: string; alt: string; caption: string };
 }
 
 const STACKS: StackDef[] = [
@@ -29,226 +29,215 @@ const STACKS: StackDef[] = [
         id: 'research',
         name: 'Research stack',
         short: 'Research',
-        question: 'Which of an effectively infinite set of compositions are worth making?',
-        lead: 'A short list, ranked, with its uncertainty.',
-        answer: 'Generative samplers propose candidates across the whole space. Learned potentials, first principles and thermodynamics remove what cannot work, before any powder is weighed.',
-        limit: 'It cannot see what a real machine will do to the alloy. The manufacturing and test stack answers that.',
+        question: 'Out of millions of possible mixes, which are worth making?',
+        lead: 'A short list, ranked, with how sure we are.',
+        answer: 'AI suggests ideas from the whole range. Physics simulations throw out what cannot work, before any powder is weighed.',
+        limit: 'It cannot see what a real machine will do to the alloy. The manufacturing stack checks that.',
         layers: [
             {
-                name: 'Materials knowledge graph',
-                detail: 'Literature, patents and instrument data in one graph, with provenance. It opens new lines of enquiry when a search stalls.',
+                name: 'Knowledge graph',
+                detail: 'Papers, patents and lab data in one connected map, each with its source. It suggests new leads when a search gets stuck.',
                 maturity: 'prototype',
             },
             {
-                name: 'Generative samplers',
-                detail: 'Propose candidate compositions across the whole design space, conditioned on physical feasibility.',
+                name: 'Idea generator',
+                detail: 'AI that suggests new mixes, only ones that are physically possible.',
                 maturity: 'prototype',
             },
             {
-                name: 'Physics funnel',
-                detail: 'Learned interatomic potentials first, then first-principles and thermodynamic checks. Most failures happen here, before any powder is weighed.',
+                name: 'Physics filter',
+                detail: 'Fast AI simulations first, then slower, exact ones. Most ideas fail here, where failing is cheap.',
                 maturity: 'prototype',
             },
             {
-                name: 'Active learning',
-                detail: 'Each experiment is chosen for what it will teach, not to map the whole space.',
+                name: 'Smart experiment choice',
+                detail: 'Each experiment is picked for what it will teach us, not to test everything.',
                 maturity: 'prototype',
             },
             {
-                name: 'Manufacturing window',
-                detail: 'The answer is a region that survives real variation in feedstock and machine energy, not a single recipe.',
+                name: 'Safe settings',
+                detail: 'We look for a range of settings that works when powder and machine vary, not one perfect recipe.',
                 maturity: 'prototype',
             },
         ],
         art: {
-            src: '/img/search-manifold.webp',
-            alt: 'Painted rendering of a materials search landscape: basins, sampled points and the path between experiments.',
-            caption: 'Illustrative search landscape, repainted in code.',
-            seed: 11,
-            direction: -8,
-            motion: 0.35,
-            focusX: 0.4,
+            scene: researchScene,
+            photo: '/img/search-manifold.webp',
+            alt: 'Painted rendering of a materials search landscape: basins, measured points lighting up, and a red path walking down to the best point.',
+            caption: 'Illustrative search landscape, repainted and animated in code.',
         },
     },
     {
         id: 'harness',
         name: 'Harness stack',
         short: 'Harness',
-        question: 'Who runs the science between the models?',
+        question: 'Who runs the work between the AI models?',
         lead: 'The harness.',
-        answer: 'Models on their own only propose. The harness plans each campaign, calls the tools, scores every batch against the requirement and keeps what failed, so the next campaign starts where the last one stopped.',
-        limit: 'It does not make the final call. Models propose; a named engineer signs off what leaves the loop.',
+        answer: 'AI models only suggest. The harness plans each round, runs the tools, scores the results and remembers what failed. So each round starts where the last one stopped.',
+        limit: 'It never makes the final call. A named engineer signs off everything that leaves the loop.',
         layers: [
             {
-                name: 'Campaign planner',
-                detail: 'Plans each campaign: proposes the next batch, scores the last one and updates the playbook.',
+                name: 'Planner',
+                detail: 'Plans each round: what to try next, based on the last results.',
                 maturity: 'prototype',
             },
             {
                 name: 'Playbooks',
-                detail: 'What every campaign learned, kept as reusable context. Failures included.',
+                detail: 'What every round learned, kept for the next one. Failures included.',
                 maturity: 'prototype',
             },
             {
-                name: 'Tool adapters',
-                detail: 'One interface to simulation codes, compute, laboratory instruments and manufacturing data.',
+                name: 'Tool connections',
+                detail: 'One way in to simulations, computers, lab instruments and factory data.',
                 maturity: 'prototype',
             },
             {
-                name: 'Evaluator',
-                detail: 'Scores every batch against the requirement: surrogate models, then physics, then physical test.',
+                name: 'Scorer',
+                detail: 'Scores every result against the requirement: quick estimates first, then physics, then real tests.',
                 maturity: 'prototype',
             },
             {
-                name: 'Sign-off gates',
-                detail: 'Models propose; engineers decide. Uncited candidates are rejected, and a named expert approves what leaves the loop.',
+                name: 'Human sign-off',
+                detail: 'AI suggests; engineers decide. Ideas without a source are rejected, and a named expert approves what leaves the loop.',
                 maturity: 'prototype',
             },
         ],
         art: {
-            source: harnessLoop,
-            alt: 'Painted illustration of the PRISM harness: five stations on a lit loop.',
-            caption: 'Illustration drawn and painted in code.',
-            seed: 5,
-            direction: -20,
-            motion: 0.55,
+            scene: millScene,
+            photo: '/img/spark-mill.webp',
+            alt: 'Painted from a photograph of a planetary ball mill preparing alloy powder in the Project SPARK laboratory.',
+            caption: 'Planetary ball mill, Project SPARK. Photograph repainted in code.',
         },
     },
     {
         id: 'autonomy',
         name: 'Autonomy stack',
         short: 'Autonomy',
-        question: 'How do experiments stop being the bottleneck?',
-        lead: 'By taking the person out of the sequence, not out of the loop.',
-        answer: 'Manual synthesis and characterisation take days per sample, and data is lost between instruments. Here candidates become recipes, robots dose and heat, instruments read the result on the line and the data goes straight back.',
-        limit: 'Most of it is still being built. Recipe translation runs as a prototype; the rest is in development.',
+        question: 'How do experiments stop being the slow part?',
+        lead: 'Robots do the repetitive steps. People stay in charge.',
+        answer: 'Making and measuring a sample by hand takes days, and data gets lost between machines. Here robots weigh and heat, instruments measure on the spot, and the data flows straight back.',
+        limit: 'Most of this is still being built. Turning ideas into lab recipes works as a prototype today.',
         layers: [
             {
-                name: 'Recipe translation',
-                detail: 'Candidates become executable recipes: precursors, temperatures and thermal profiles.',
+                name: 'Recipe writer',
+                detail: 'Turns each idea into steps a lab can run: ingredients, temperatures and timings.',
                 maturity: 'prototype',
             },
             {
-                name: 'Robotic synthesis',
-                detail: 'Robot arms dose powder and move samples through heating profiles.',
+                name: 'Robot lab',
+                detail: 'Robot arms weigh out powder and move samples through the furnace.',
                 maturity: 'development',
             },
             {
-                name: 'Automated characterisation',
-                detail: 'Diffraction patterns captured on the line; phases identified by neural networks against structure databases.',
+                name: 'Automatic measurement',
+                detail: 'X-ray patterns taken on the spot, and AI that reads what has formed.',
                 maturity: 'development',
             },
             {
                 name: 'Probes',
-                detail: 'Mirdyne-built instruments that record calibrated, traceable data at the machine itself.',
+                detail: 'Our own sensors, which record calibrated data right at the machine.',
                 maturity: 'development',
             },
             {
-                name: 'Instrument control',
-                detail: 'Direct control adapters close the loop with no human in the sequence.',
+                name: 'Machine control',
+                detail: 'Software drives the instruments directly, so the loop does not wait for a person.',
                 maturity: 'development',
             },
             {
-                name: 'Field autonomy',
-                detail: 'The same autonomy outside the lab: rugged robotic platforms with state estimation for GNSS-denied environments. Dual-use by design.',
+                name: 'Field robots',
+                detail: 'The same autonomy outside the lab: rugged robots that find their way without GPS. Built for civil and defence use.',
                 maturity: 'development',
             },
         ],
         art: {
-            source: autonomyScene,
-            alt: 'Painted illustration of a laboratory robot arm lifting a glowing crucible towards a furnace.',
-            caption: 'Illustration drawn and painted in code.',
-            seed: 23,
-            direction: -14,
-            motion: 0.5,
+            scene: melterScene,
+            photo: '/img/spark-melter.webp',
+            alt: 'Painted from a photograph of the melting equipment used in Project SPARK: a control cabinet beside a tall melting chamber.',
+            caption: 'Melting equipment, Project SPARK. Photograph repainted in code.',
         },
     },
     {
         id: 'manufacturing',
         name: 'Manufacturing and test stack',
         short: 'Manufacturing and test',
-        question: 'Does the material exist, and does it hold?',
-        lead: 'Only a physical test can say.',
-        answer: 'A composition is not a material until it survives manufacture and test, which is where most computer-designed materials stop. Candidates are melted and printed in industrial processes, then measured against the requirement.',
-        limit: 'A coupon is not a component. Qualification is the target, not a claim.',
+        question: 'Can it really be made? Does it hold up?',
+        lead: 'Only a real test can say.',
+        answer: 'A recipe is not a material until it has been made and tested. That is where most computer-designed materials stop. We melt and 3D-print the best ideas, then test them against the requirement.',
+        limit: 'A test sample is not a finished part. Certification is the goal, not a claim.',
         layers: [
             {
                 name: 'Powder and melting',
-                detail: 'Alloy preparation and vacuum-arc melting of refractory high-entropy alloys.',
+                detail: 'Preparing new alloys and melting them in a vacuum-arc furnace.',
                 maturity: 'in-use',
             },
             {
-                name: 'Manufacturability index',
-                detail: 'Screens candidates for laser powder-bed fusion (LPBF) before a build is committed.',
+                name: 'Printability check',
+                detail: 'Checks whether an alloy can be 3D-printed before a build is started.',
                 maturity: 'prototype',
             },
             {
-                name: 'Laser powder-bed fusion',
-                detail: 'Industrial LPBF, with the process window mapped for each lead candidate.',
+                name: 'Metal 3D printing',
+                detail: 'Industrial laser printing from metal powder, with the safe settings mapped for each lead idea.',
                 maturity: 'in-use',
             },
             {
-                name: 'Test and characterisation',
-                detail: 'Density, metallography and CT, then property and environment tests against the requirement.',
+                name: 'Testing',
+                detail: 'Density, inner structure and X-ray scans first, then strength and heat tests against the requirement.',
                 maturity: 'in-use',
             },
             {
-                name: 'Qualification package',
-                detail: 'Evidence assembled for your qualification process, so a material can move from coupon to component.',
+                name: 'Certification file',
+                detail: 'The evidence your certification process needs, to go from test sample to real part.',
                 maturity: 'target',
             },
         ],
         art: {
-            src: '/img/spark-coupon.webp',
-            alt: 'Painted rendering of a polished alloy coupon held in a hand in the laboratory.',
-            caption: 'Alloy coupon from Project SPARK, repainted in code.',
-            seed: 31,
-            direction: -24,
-            motion: 0.4,
+            scene: couponScene,
+            photo: '/img/spark-coupon.webp',
+            alt: 'Painted from a photograph of a polished alloy sample held in a hand in the laboratory, light moving across its face.',
+            caption: 'Alloy sample from Project SPARK, repainted and animated in code.',
         },
     },
     {
         id: 'evidence-stack',
         name: 'Evidence stack',
         short: 'Evidence',
-        question: 'Can every claim be traced to a specimen and a test, and who may see it?',
-        lead: 'Every result carries its inputs, its owner and its rights.',
-        answer: 'Partners will not share data they cannot control, and engineers cannot act on results they cannot trace. Requirements, designs, builds, specimens, tests and decisions are linked objects, not files.',
-        limit: 'Provenance and export classification run today. Machine-enforced rights and controlled release are in development.',
+        question: 'Where did this result come from, and who may see it?',
+        lead: 'Every result carries its source, its owner and its rules.',
+        answer: 'Partners only share data they control. Engineers only trust results they can trace. So every requirement, design, sample, test and decision is linked, like a family tree.',
+        limit: 'Tracing and export labels work today. Automatic enforcement of sharing rules is being built.',
         layers: [
             {
-                name: 'Provenance',
-                detail: 'Every result records its inputs, code and model versions. Versioned, reviewed and reproducible.',
+                name: 'Traceability',
+                detail: 'Every result records what went in: data, code and model versions. Anyone can check and repeat it.',
                 maturity: 'in-use',
             },
             {
-                name: 'Materials ontology',
-                detail: 'Requirements, compositions, builds, specimens, tests and decisions as linked objects, not files.',
+                name: 'Linked records',
+                detail: 'Requirements, designs, builds, samples, tests and decisions, linked together instead of scattered in files.',
                 maturity: 'prototype',
             },
             {
                 name: 'Data rights',
-                detail: 'Owner, permitted purposes and allowed derivatives travel with each asset and bind everything derived from it.',
+                detail: 'Each piece of data carries its owner and what it may be used for. Anything made from it keeps the same rules.',
                 maturity: 'development',
             },
             {
-                name: 'Controlled release',
-                detail: 'Nothing is declassified implicitly. Every release is signed, sourced and scoped to named parties.',
+                name: 'Controlled sharing',
+                detail: 'Nothing is shared by accident. Every release is signed and names who may see it.',
                 maturity: 'development',
             },
             {
                 name: 'Export control',
-                detail: 'Export classification recorded on every deliverable today; enforced at every exit of the data layer next.',
+                detail: 'Export rules recorded on every deliverable today. Checked automatically, every time data leaves, next.',
                 maturity: 'in-use',
             },
         ],
         art: {
-            source: evidenceLineage,
-            alt: 'Painted illustration of an evidence chain running from a requirement to an engineering decision.',
-            caption: 'Illustration drawn and painted in code.',
-            seed: 43,
-            direction: -6,
-            motion: 0.3,
+            scene: polisherScene,
+            photo: '/img/spark-polisher.webp',
+            alt: 'Painted from a photograph of a polishing machine that prepares samples for inspection in the Project SPARK laboratory.',
+            caption: 'Sample polishing for inspection, Project SPARK. Photograph repainted in code.',
         },
     },
 ];
@@ -333,19 +322,7 @@ function IsoStack({
 
 function StackPainting({ stack, className }: { stack: StackDef; className?: string }) {
     const { art } = stack;
-    return (
-        <Painting
-            className={className}
-            src={art.src}
-            source={art.source}
-            alt={art.alt}
-            seed={art.seed}
-            direction={art.direction}
-            motion={art.motion}
-            focusX={art.focusX}
-            focusY={art.focusY}
-        />
-    );
+    return <LivePainting className={className} scene={art.scene} alt={art.alt} fallback={{ src: art.photo, motion: 0.4 }} />;
 }
 
 function Chapter({ stack, index, inline }: { stack: StackDef; index: number; inline: boolean }) {
@@ -390,7 +367,6 @@ function Chapter({ stack, index, inline }: { stack: StackDef; index: number; inl
 export default function Stacks() {
     const wide = useMediaQuery('(min-width: 1024px)');
     const [active, setActive] = useState(0);
-    const [mounted, setMounted] = useState<ReadonlySet<number>>(() => new Set([0]));
     const chaptersRef = useRef<HTMLDivElement>(null);
 
     // The chapter crossing the middle of the viewport is the active one.
@@ -401,15 +377,7 @@ export default function Stacks() {
             (entries) => {
                 for (const e of entries) {
                     if (!e.isIntersecting) continue;
-                    const i = Number((e.target as HTMLElement).dataset.index);
-                    setActive(i);
-                    setMounted((prev) => {
-                        if (prev.has(i) && (i + 1 >= STACKS.length || prev.has(i + 1))) return prev;
-                        const next = new Set(prev);
-                        next.add(i);
-                        if (i + 1 < STACKS.length) next.add(i + 1);
-                        return next;
-                    });
+                    setActive(Number((e.target as HTMLElement).dataset.index));
                 }
             },
             { rootMargin: '-50% 0px -50% 0px' },
@@ -430,22 +398,22 @@ export default function Stacks() {
                         Five stacks. One system.
                     </h2>
                     <p className="w-lead">
-                        You bring the requirement. Five stacks carry it through design, orchestration, autonomous
-                        experiments, manufacture and test, with the evidence attached at every step. Each layer says
-                        how far it has come; we would rather you see the maturity than guess at it.
+                        PRISM is built in five layers, called stacks. Each does one job, from finding ideas to proving
+                        results. Every part is labelled with how ready it is, because we would rather show you than
+                        oversell.
                     </p>
                     <ul className="stacks__legend" aria-label="Maturity">
                         <li>
-                            <MaturityPill maturity="in-use" /> Runs in current programmes
+                            <MaturityPill maturity="in-use" /> Used in our projects today
                         </li>
                         <li>
-                            <MaturityPill maturity="prototype" /> Working software, being matured
+                            <MaturityPill maturity="prototype" /> Working, being improved
                         </li>
                         <li>
                             <MaturityPill maturity="development" /> Being built
                         </li>
                         <li>
-                            <MaturityPill maturity="target" /> Where the platform is going
+                            <MaturityPill maturity="target" /> The goal
                         </li>
                     </ul>
                 </header>
@@ -457,11 +425,8 @@ export default function Stacks() {
             <div className={`explorer${wide ? ' explorer--wide' : ''}`}>
                 {wide && (
                     <div className="explorer__media">
-                        {STACKS.map((s, i) =>
-                            mounted.has(i) ? (
-                                <StackPainting key={s.id} stack={s} className={`explorer__art${i === active ? ' is-on' : ''}`} />
-                            ) : null,
-                        )}
+                        {/* One painting: moving between stacks dissolves it to noise and resolves the next. */}
+                        <StackPainting stack={STACKS[active]} className="explorer__art is-on" />
                         <div className="explorer__shade" aria-hidden="true" />
                         <div className="explorer__hud">
                             <IsoStack active={active} compact />

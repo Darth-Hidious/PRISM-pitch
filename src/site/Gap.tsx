@@ -1,38 +1,57 @@
 import { useEffect, useRef, useState } from 'react';
-import { Painting, SourceLine } from '../ds';
+import { LivePainting, SourceLine } from '../ds';
 import { fitCanvas, seeded, useMediaQuery, useReducedMotion, useStickyValue } from './hooks';
-import { plumeScene } from './illustrations';
+import { raptorScene } from './scenes';
 import { Grain, Idx, Rails } from './ui';
 
-/* ── The gap: 2.2M predicted, 736 made, 0 qualified ───────────────────── */
+/* ── The problem: far too many alloys to make them all ────────────────── */
 
-/** One dot stands for 100 predicted structures, so the field holds the paper's numbers to scale. */
-const PER_DOT = 100;
-const N = 2_200_000 / PER_DOT; // 22,000
-const STABLE = 381_000 / PER_DOT; // 3,810
-// 736 made = 7 full dots and one at 36 %.
-const MADE_FULL = Math.floor(736 / PER_DOT);
-const MADE_PART = (736 % PER_DOT) / PER_DOT;
+/*
+ * Every number here is arithmetic, not anyone's result. Choose five of nine
+ * metals that all melt above 1,650 °C (126 ways) and mix them in whole
+ * percent, each at least 1 % (C(99, 4) = 3,764,376 ways).
+ */
+const ALLOYS = 126 * 3_764_376; // 474,311,376
+const PER_DAY = 10;
+const YEARS = ALLOYS / PER_DAY / 365.25; // 129,859
+const YEARS_SHOWN = Math.round(YEARS / 10_000) * 10_000; // 130,000
+const FINISH = Math.round((new Date().getFullYear() + YEARS) / 1000) * 1000;
+/** One dot stands for 20,000 possible alloys, so the field holds the count to scale. */
+const PER_DOT = 20_000;
+const N = Math.round(ALLOYS / PER_DOT); // 23,716
+const YEARS_PER_DOT = PER_DOT / PER_DAY / 365.25; // about 5.5
+
+const fmt = (v: number) => v.toLocaleString('en-GB');
 
 const STEPS = [
-    { value: 2_200_000, label: 'crystal structures predicted by one AI model', short: 'Predicted' },
-    { value: 381_000, label: 'of them predicted to be stable', short: 'Stable' },
-    { value: 736, label: 'made independently in a laboratory', short: 'Made' },
-    { value: 0, label: 'qualified as engineering materials', short: 'Qualified' },
+    {
+        value: ALLOYS,
+        approx: false,
+        label: 'possible alloys, from five of nine high-melting metals mixed in steps of 1%.',
+    },
+    {
+        value: PER_DAY,
+        approx: false,
+        label: 'alloys a fast lab can make in a day.',
+    },
+    {
+        value: YEARS_SHOWN,
+        approx: true,
+        label: `years to make every one of them once. Start today and you finish around the year ${fmt(FINISH)}.`,
+    },
 ];
-const LOG_MAX = Math.log10(STEPS[0].value);
 
 interface Field {
     x: Float32Array;
     y: Float32Array;
-    tier: Uint8Array; // 0 predicted, 1 stable, 2 made
     delay: Float32Array;
-    made: number[]; // indices, the last one partial
+    one: number; // the dot that stands for a few years of lab work
+    path: number[]; // an illustrative guided search, dot indices in order
 }
 
-/** Builds the dot field once: clustered like families of compounds. Layout is illustrative. */
+/** Builds the dot field once: clustered like families of alloys. Layout is illustrative. */
 function buildField(): Field {
-    const rand = seeded(2023);
+    const rand = seeded(2026);
     const gauss = () => {
         const u = Math.max(1e-9, rand());
         const v = rand();
@@ -73,46 +92,56 @@ function buildField(): Field {
         x[i] = px;
         y[i] = py;
     }
-    const order = Array.from({ length: N }, (_, i) => i);
-    for (let i = N - 1; i > 0; i--) {
-        const j = Math.floor(rand() * (i + 1));
-        [order[i], order[j]] = [order[j], order[i]];
-    }
-    const tier = new Uint8Array(N);
-    for (let k = 0; k < STABLE; k++) tier[order[k]] = 1;
-    // Made: stable dots away from the edges and from each other, so each one reads.
-    const made: number[] = [];
-    for (let k = 0; k < STABLE && made.length < MADE_FULL + 1; k++) {
-        const i = order[k];
-        if (x[i] < 0.14 || x[i] > 0.86 || y[i] < 0.16 || y[i] > 0.84) continue;
-        if (made.some((m) => Math.hypot(x[m] - x[i], y[m] - y[i]) < 0.16)) continue;
-        made.push(i);
-        tier[i] = 2;
+    const nearest = (nx: number, ny: number, skip: number[]) => {
+        let best = 0;
+        let bd = Infinity;
+        for (let i = 0; i < N; i++) {
+            const d = (x[i] - nx) ** 2 + (y[i] - ny) ** 2;
+            if (d < bd && !skip.includes(i)) {
+                bd = d;
+                best = i;
+            }
+        }
+        return best;
+    };
+    const one = nearest(0.3, 0.52, []);
+    // A guided search: long jumps while the model knows little, shorter ones as it closes in.
+    const path: number[] = [];
+    let px = 0.22;
+    let py = 0.74;
+    const goal = { x: 0.68, y: 0.36 };
+    for (let k = 0; k < 11; k++) {
+        const t = k / 10;
+        const pull = 0.3 + 0.45 * t;
+        const spread = 0.42 * (1 - t) + 0.02;
+        const i = nearest(
+            px + (goal.x - px) * pull + (rand() - 0.5) * spread,
+            py + (goal.y - py) * pull + (rand() - 0.5) * spread,
+            path,
+        );
+        path.push(i);
+        px = x[i];
+        py = y[i];
     }
     const delay = new Float32Array(N);
     for (let i = 0; i < N; i++) delay[i] = rand();
-    return { x, y, tier, delay, made };
+    return { x, y, delay, one, path };
 }
 
 let FIELD: Field | null = null;
 const field = () => (FIELD ??= buildField());
 
-/** Alpha of the ordinary dots per step (0 = intro) and tier. */
-const DOT_ALPHA: [number, number][] = [
-    [0.16, 0.16],
-    [0.6, 0.6],
-    [0.08, 0.95],
-    [0.05, 0.07],
-    [0.035, 0.05],
+/** Alpha of the ordinary dots per step (0 = intro). */
+const DOT_ALPHA = [0.16, 0.62, 0.28, 0.22, 0.07];
+/** The highlighted dot per step: core, halo, ring and its label. */
+const ONE_STATE: [number, number, number, number][] = [
+    [0.16, 0, 0, 0],
+    [0.62, 0, 0, 0],
+    [1, 1, 1, 1],
+    [1, 0.45, 1, 1],
+    [0.12, 0, 0, 0],
 ];
-/** Made dots per step: core, halo, ring. */
-const MADE_STATE: [number, number, number][] = [
-    [0.16, 0, 0],
-    [0.6, 0, 0],
-    [0.95, 0, 0],
-    [1, 1, 0],
-    [0.3, 0, 1],
-];
+const HOP_MS = 150;
 
 function DotField({ step }: { step: number }) {
     const ref = useRef<HTMLCanvasElement>(null);
@@ -126,12 +155,13 @@ function DotField({ step }: { step: number }) {
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
         const f = field();
+        const mono = getComputedStyle(document.documentElement).getPropertyValue('--font-mono').trim() || 'monospace';
         const cur = new Float32Array(N);
         const from = new Float32Array(N);
         const to = new Float32Array(N);
-        const mCur = f.made.map(() => [0, 0, 0]);
-        let mFrom = mCur.map((m) => [...m]);
-        let mTo = mCur.map((m) => [...m]);
+        const oneCur = [0, 0, 0, 0];
+        let oneFrom = [...oneCur];
+        let oneTo = [...oneCur];
         let s = 0;
         let start = 0;
         let raf = 0;
@@ -141,25 +171,29 @@ function DotField({ step }: { step: number }) {
         const offs = new Uint32Array(LEVELS + 2);
         const sorted = new Uint32Array(N);
         const DUR = reduce ? 0 : 1400;
+        const PATH_MS = reduce ? 0 : HOP_MS * f.path.length + 600;
 
         const box = (w: number, h: number) =>
             compact
-                ? { x0: w * 0.04, y0: h * 0.44, bw: w * 0.92, bh: h * 0.5 }
+                ? { x0: w * 0.04, y0: h * 0.46, bw: w * 0.92, bh: h * 0.48 }
                 : { x0: w * 0.5, y0: h * 0.1, bw: w * 0.47, bh: h * 0.8 };
 
         const draw = (now: number) => {
             raf = 0;
-            const t = DUR ? Math.min(1, (now - start) / DUR) : 1;
+            const el = now - start;
+            const t = DUR ? Math.min(1, el / DUR) : 1;
             const { dpr, w, h } = fitCanvas(canvas);
             ctx.clearRect(0, 0, w, h);
             const { x0, y0, bw, bh } = box(w, h);
+            const at = (i: number) => [x0 + f.x[i] * bw, y0 + f.y[i] * bh] as const;
+
             // Ordinary dots, bucketed by alpha so the canvas state changes only twenty times a frame.
             counts.fill(0);
             for (let i = 0; i < N; i++) {
                 const local = Math.min(1, Math.max(0, (t - f.delay[i] * 0.45) / 0.55));
                 const e = 1 - Math.pow(1 - local, 3);
                 cur[i] = from[i] + (to[i] - from[i]) * e;
-                const l = f.tier[i] === 2 ? 0 : Math.round(cur[i] * LEVELS);
+                const l = i === f.one ? 0 : Math.round(cur[i] * LEVELS);
                 lv[i] = l;
                 counts[l]++;
             }
@@ -169,52 +203,102 @@ function DotField({ step }: { step: number }) {
             for (let i = 0; i < N; i++) sorted[fill[lv[i]]++] = i;
             const size = Math.max(1, Math.round(1.45 * dpr));
             const half = size / 2;
-            const stableWhite = s >= 2;
-            for (const group of [0, 1]) {
-                const rgb = group === 1 && stableWhite ? '255,255,255' : '185,198,214';
-                for (let l = 1; l <= LEVELS; l++) {
-                    let any = false;
-                    for (let k = offs[l]; k < offs[l + 1]; k++) {
-                        const i = sorted[k];
-                        if ((f.tier[i] >= 1 ? 1 : 0) !== group) continue;
-                        if (!any) {
-                            ctx.fillStyle = `rgba(${rgb},${l / LEVELS})`;
-                            any = true;
-                        }
-                        ctx.fillRect(x0 + f.x[i] * bw - half, y0 + f.y[i] * bh - half, size, size);
-                    }
+            for (let l = 1; l <= LEVELS; l++) {
+                if (offs[l] === offs[l + 1]) continue;
+                ctx.fillStyle = `rgba(185,198,214,${l / LEVELS})`;
+                for (let k = offs[l]; k < offs[l + 1]; k++) {
+                    const i = sorted[k];
+                    ctx.fillRect(x0 + f.x[i] * bw - half, y0 + f.y[i] * bh - half, size, size);
                 }
             }
-            // Made dots: a warm halo when made, a crimson ring when the count reaches qualification.
+
+            // The one dot: 20,000 alloys, about five and a half years of lab work.
             const e = 1 - Math.pow(1 - t, 3);
-            f.made.forEach((i, k) => {
-                const part = k === f.made.length - 1 ? MADE_PART : 1;
-                for (let c = 0; c < 3; c++) mCur[k][c] = mFrom[k][c] + (mTo[k][c] - mFrom[k][c]) * e;
-                const [core, halo, ring] = mCur[k];
-                const px = x0 + f.x[i] * bw;
-                const py = y0 + f.y[i] * bh;
-                if (halo > 0.01) {
-                    const r = 22 * dpr;
-                    const g = ctx.createRadialGradient(px, py, 0, px, py, r);
-                    g.addColorStop(0, `rgba(255,220,170,${0.85 * halo * part})`);
-                    g.addColorStop(0.35, `rgba(255,160,90,${0.35 * halo * part})`);
-                    g.addColorStop(1, 'rgba(255,160,90,0)');
-                    ctx.fillStyle = g;
-                    ctx.fillRect(px - r, py - r, r * 2, r * 2);
-                }
-                if (ring > 0.01) {
-                    ctx.strokeStyle = `rgba(226,122,139,${ring * (0.35 + 0.65 * part)})`;
-                    ctx.lineWidth = 1.5 * dpr;
-                    ctx.beginPath();
-                    ctx.arc(px, py, 7 * dpr, 0, Math.PI * 2);
-                    ctx.stroke();
-                }
-                ctx.fillStyle = `rgba(255,255,255,${core * part})`;
+            for (let c = 0; c < 4; c++) oneCur[c] = oneFrom[c] + (oneTo[c] - oneFrom[c]) * e;
+            const [core, halo, ring, label] = oneCur;
+            const [ox, oy] = at(f.one);
+            if (halo > 0.01) {
+                const r = 26 * dpr;
+                const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, r);
+                g.addColorStop(0, `rgba(255,220,170,${0.85 * halo})`);
+                g.addColorStop(0.35, `rgba(255,160,90,${0.35 * halo})`);
+                g.addColorStop(1, 'rgba(255,160,90,0)');
+                ctx.fillStyle = g;
+                ctx.fillRect(ox - r, oy - r, r * 2, r * 2);
+            }
+            if (ring > 0.01) {
+                ctx.strokeStyle = `rgba(255,214,170,${ring})`;
+                ctx.lineWidth = 1.5 * dpr;
                 ctx.beginPath();
-                ctx.arc(px, py, (halo > 0.01 ? 2.6 : 1) * dpr, 0, Math.PI * 2);
-                ctx.fill();
-            });
-            if (t < 1) raf = requestAnimationFrame(draw);
+                ctx.arc(ox, oy, 8 * dpr, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            ctx.fillStyle = `rgba(255,255,255,${core})`;
+            ctx.beginPath();
+            ctx.arc(ox, oy, (halo > 0.01 ? 2.6 : 0.8) * dpr, 0, Math.PI * 2);
+            ctx.fill();
+            if (label > 0.01) {
+                const right = ox + 230 * dpr < w;
+                const dir = right ? 1 : -1;
+                const lx = ox + dir * 34 * dpr;
+                const ly = oy - 30 * dpr;
+                ctx.strokeStyle = `rgba(255,255,255,${0.5 * label})`;
+                ctx.lineWidth = dpr;
+                ctx.beginPath();
+                ctx.moveTo(ox + dir * 10 * dpr, oy - 6 * dpr);
+                ctx.lineTo(lx - dir * 4 * dpr, ly + 8 * dpr);
+                ctx.stroke();
+                ctx.textAlign = right ? 'left' : 'right';
+                ctx.textBaseline = 'alphabetic';
+                ctx.font = `600 ${12 * dpr}px ${mono}`;
+                ctx.fillStyle = `rgba(255,255,255,${label})`;
+                ctx.fillText(`1 dot = ${fmt(PER_DOT)} alloys`, lx, ly);
+                ctx.font = `${11.5 * dpr}px ${mono}`;
+                ctx.fillStyle = `rgba(214,224,236,${0.85 * label})`;
+                ctx.fillText(`≈ ${YEARS_PER_DOT.toFixed(1)} years of lab work`, lx, ly + 17 * dpr);
+            }
+
+            // The guided search, in the last step: hop by hop towards the answer.
+            let pathDone = true;
+            if (s === 4) {
+                const shown = PATH_MS ? (el / HOP_MS) : f.path.length;
+                pathDone = el >= PATH_MS;
+                ctx.lineWidth = dpr;
+                for (let k = 0; k < f.path.length; k++) {
+                    const a = Math.min(1, Math.max(0, shown - k));
+                    if (a <= 0) break;
+                    const [hx, hy] = at(f.path[k]);
+                    if (k > 0) {
+                        const [px, py] = at(f.path[k - 1]);
+                        ctx.strokeStyle = `rgba(255,255,255,${0.42 * a})`;
+                        ctx.beginPath();
+                        ctx.moveTo(px, py);
+                        ctx.lineTo(px + (hx - px) * a, py + (hy - py) * a);
+                        ctx.stroke();
+                    }
+                    const last = k === f.path.length - 1;
+                    if (last) {
+                        const r = 30 * dpr;
+                        const g = ctx.createRadialGradient(hx, hy, 0, hx, hy, r);
+                        g.addColorStop(0, `rgba(255,220,170,${0.9 * a})`);
+                        g.addColorStop(0.35, `rgba(255,160,90,${0.35 * a})`);
+                        g.addColorStop(1, 'rgba(255,160,90,0)');
+                        ctx.fillStyle = g;
+                        ctx.fillRect(hx - r, hy - r, r * 2, r * 2);
+                        ctx.strokeStyle = `rgba(255,214,170,${a})`;
+                        ctx.lineWidth = 1.5 * dpr;
+                        ctx.beginPath();
+                        ctx.arc(hx, hy, 9 * dpr, 0, Math.PI * 2);
+                        ctx.stroke();
+                        ctx.lineWidth = dpr;
+                    }
+                    ctx.fillStyle = `rgba(255,255,255,${(last ? 1 : 0.85) * a})`;
+                    ctx.beginPath();
+                    ctx.arc(hx, hy, (last ? 3 : 2.1) * dpr, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            if (t < 1 || !pathDone) raf = requestAnimationFrame(draw);
         };
         const schedule = () => {
             if (!raf) raf = requestAnimationFrame(draw);
@@ -222,10 +306,9 @@ function DotField({ step }: { step: number }) {
         const go = (next: number) => {
             s = next;
             from.set(cur);
-            const [a0, a1] = DOT_ALPHA[next];
-            for (let i = 0; i < N; i++) to[i] = f.tier[i] === 0 ? a0 : a1;
-            mFrom = mCur.map((m) => [...m]);
-            mTo = f.made.map(() => [...MADE_STATE[next]]);
+            to.fill(DOT_ALPHA[next]);
+            oneFrom = [...oneCur];
+            oneTo = [...ONE_STATE[next]];
             start = performance.now();
             schedule();
         };
@@ -248,42 +331,36 @@ function DotField({ step }: { step: number }) {
     return <canvas ref={ref} className="gap__canvas" aria-hidden="true" />;
 }
 
-/** Counts from the previous value to the new one. */
+/** Counts up from 1 to the value, in log space so big numbers read as orders of magnitude. */
 function Counter({ value }: { value: number }) {
     const reduce = useReducedMotion();
-    const [shown, setShown] = useState(value);
-    const shownRef = useRef(value);
+    const [shown, setShown] = useState(reduce ? value : 1);
     useEffect(() => {
-        const from = shownRef.current;
-        if (reduce || from === value) {
-            shownRef.current = value;
+        if (reduce) {
             const id = requestAnimationFrame(() => setShown(value));
             return () => cancelAnimationFrame(id);
         }
         const start = performance.now();
+        const lb = Math.log10(value + 1);
         let raf = 0;
         const tick = (now: number) => {
             const t = Math.min(1, (now - start) / 1100);
             const e = 1 - Math.pow(1 - t, 4);
-            // Interpolate in log space so the large drops read as drops of orders of magnitude.
-            const la = Math.log10(from + 1);
-            const lb = Math.log10(value + 1);
-            const v = Math.round(Math.pow(10, la + (lb - la) * e) - 1);
-            shownRef.current = v;
-            setShown(v);
+            setShown(Math.round(Math.pow(10, Math.log10(2) + (lb - Math.log10(2)) * e) - 1));
             if (t < 1) raf = requestAnimationFrame(tick);
         };
         raf = requestAnimationFrame(tick);
         return () => cancelAnimationFrame(raf);
     }, [value, reduce]);
-    return <>{shown.toLocaleString('en-GB')}</>;
+    return <>{fmt(shown)}</>;
 }
 
 const stepFor = (p: number) => (p < 0.13 ? 0 : p < 0.33 ? 1 : p < 0.53 ? 2 : p < 0.73 ? 3 : 4);
 
 export function Gap() {
     const [ref, step] = useStickyValue<HTMLElement, number>(stepFor, 0);
-    const active = step > 0 ? STEPS[step - 1] : null;
+    const shownStep = Math.min(Math.max(step, 1), STEPS.length);
+    const active = STEPS[shownStep - 1];
     return (
         <section id="gap" ref={ref} className="gap" data-theme="navy" data-nav="navy" aria-labelledby="gap-title">
             <div className="gap__stage">
@@ -291,59 +368,51 @@ export function Gap() {
                 <DotField step={step} />
                 <Grain />
                 <div className="wrap gap__inner">
-                    <Idx n="01" tail={<span className="gap__legend"><i /> = {PER_DOT} predicted structures</span>}>
-                        The gap
+                    <Idx n="01" tail={<span className="gap__legend"><i /> = {fmt(PER_DOT)} possible alloys</span>}>
+                        The problem
                     </Idx>
                     <div className="gap__copy">
                         <div className={`gap__intro${step === 0 ? ' is-on' : ''}`}>
                             <h2 id="gap-title" className="w-h2">
-                                Materials decide what engineers are free to build.
+                                Materials decide what engineers can build.
                             </h2>
                             <p className="w-lead">
-                                An engine or a reactor can work on paper and still be impossible to build, because no
-                                available material survives its environment. Bringing a new material into service
-                                still takes ten to twenty years.
+                                A rocket engine can work on paper and still be impossible to build, because no material
+                                survives inside it. A new material usually takes ten to twenty years to reach service.
                             </p>
                         </div>
                         <div className={`gap__figure${step > 0 ? ' is-on' : ''}`} aria-hidden="true">
-                            <p className={`w-num gap__num${active?.value === 0 ? ' is-zero' : ''}`}>
-                                <Counter value={active?.value ?? STEPS[0].value} />
+                            <p className="w-num gap__num">
+                                {active.approx && <span className="gap__approx">about</span>}
+                                <Counter key={shownStep} value={active.value} />
                             </p>
-                            <p className="gap__label">{active?.label ?? STEPS[0].label}</p>
-                            <ol className="gap__bars">
-                                {STEPS.map((s, i) => {
-                                    const width = s.value > 0 ? (Math.log10(s.value) / LOG_MAX) * 100 : 0;
-                                    const state = i + 1 === step ? 'is-on' : i + 1 < step ? 'is-past' : '';
-                                    return (
-                                        <li key={s.short} className={state}>
-                                            <span className="gap__bar-name">{s.short}</span>
-                                            <span className="gap__bar">
-                                                <i style={{ width: `${width}%` }} />
-                                            </span>
-                                            <span className="gap__bar-value">{s.value.toLocaleString('en-GB')}</span>
-                                        </li>
-                                    );
-                                })}
-                            </ol>
+                            <p className="gap__label">{active.label}</p>
+                            <p className="gap__sum">
+                                <span className={step >= 1 ? 'is-on' : ''}>{fmt(ALLOYS)} alloys</span>
+                                <span className={step >= 2 ? 'is-on' : ''}>÷ {PER_DAY} a day</span>
+                                <span className={step >= 3 ? 'is-on' : ''}>≈ {fmt(YEARS_SHOWN)} years</span>
+                            </p>
                             <p className={`gap__close${step === 4 ? ' is-on' : ''}`}>
-                                Prediction has outrun validation. PRISM is built for the half that is still slow:
-                                making, testing and proving.
+                                <b>Nobody can make them all.</b> The skill is choosing the few worth making, then
+                                proving they work. That is what PRISM is for.
                             </p>
                         </div>
                     </div>
                     <div className="gap__foot">
-                        <SourceLine label="Sources">
-                            Merchant et al., “Scaling deep learning for materials discovery”, Nature 624, 80–85 (2023).
-                            Qualification count: Mirdyne. Bars on a log scale; dot positions are illustrative.
+                        <SourceLine label="Arithmetic">
+                            126 ways to pick five of nine metals that all melt above 1,650&nbsp;°C (Ti, V, Cr, Zr, Nb,
+                            Mo, Hf, Ta, W) × 3,764,376 ways to mix five in whole percent. Ten a day, every day. Dot
+                            positions and the search path are illustrative.
                         </SourceLine>
                     </div>
                 </div>
                 <ul className="pm-visually-hidden">
-                    {STEPS.map((s) => (
-                        <li key={s.short}>
-                            {s.value.toLocaleString('en-GB')} {s.label}
-                        </li>
-                    ))}
+                    <li>{fmt(ALLOYS)} possible alloys, from five of nine high-melting metals mixed in steps of 1%.</li>
+                    <li>A fast lab makes about {PER_DAY} alloys a day.</li>
+                    <li>
+                        Making every one of them once would take about {fmt(YEARS_SHOWN)} years. Nobody can make them
+                        all; the skill is choosing the few worth making, then proving they work.
+                    </li>
                 </ul>
             </div>
         </section>
@@ -356,12 +425,10 @@ export function Precedent() {
     return (
         <section className="precedent" data-theme="navy" data-nav="navy" aria-labelledby="precedent-title">
             <div className="precedent__art">
-                <Painting
-                    source={plumeScene}
-                    alt="Painted illustration of a rocket engine firing: a bell nozzle, a white-hot core with shock diamonds and a plume rolling into exhaust cloud."
-                    seed={19}
-                    direction={84}
-                    motion={0.62}
+                <LivePainting
+                    scene={raptorScene}
+                    alt="Painted from a photograph of SpaceX's first Raptor test firing at night: a long pink-white plume runs from the engine across a gravel field into clouds of orange smoke."
+                    fallback={{ src: '/img/raptor-test.webp', seed: 19, direction: 2, motion: 0.5, focusX: 0.5, focusY: 0 }}
                 />
             </div>
             <div className="precedent__shade" aria-hidden="true" />
@@ -370,25 +437,27 @@ export function Precedent() {
                 <div className="precedent__copy rv">
                     <p className="w-label precedent__kicker">A precedent</p>
                     <h2 id="precedent-title" className="w-h2">
-                        SpaceX built a foundry. Europe needs the same capability.
+                        SpaceX built its own foundry. Europe needs the same.
                     </h2>
                     <p className="w-lead">
-                        When no available alloy survived the hot, oxygen-rich gas inside Raptor, SpaceX developed its
-                        own superalloy, SX500, and built a foundry so materials could iterate at the speed of the engine
-                        programme. European propulsion faces the same bottleneck. PRISM builds that capability in
-                        Europe, for any programme that needs it.
+                        No existing alloy could survive the hot, oxygen-rich gas inside SpaceX’s Raptor engine. So SpaceX
+                        invented its own, SX500, and built a foundry to make it. Europe needs the same ability. PRISM
+                        builds it, for any programme that needs it.
                     </p>
                     <dl className="precedent__figs">
                         <div>
                             <dt>SX500</dt>
-                            <dd>An in-house superalloy that became engine infrastructure</dd>
+                            <dd>SpaceX’s own alloy, made in its own foundry</dd>
                         </div>
                         <div>
                             <dt>~12,000&nbsp;psi</dt>
-                            <dd>Hot oxygen-rich gas, the stated operating condition</dd>
+                            <dd>About 830 bar of hot, oxygen-rich gas that the alloy has to survive</dd>
                         </div>
                     </dl>
-                    <SourceLine>Elon Musk, 23 December 2018 and 25 May 2019. Illustration drawn and painted in code.</SourceLine>
+                    <SourceLine>
+                        Elon Musk, 23 December 2018 and 25 May 2019. Photograph: Raptor’s first test firing, SpaceX,
+                        25 September 2016 (CC0), repainted and animated in code.
+                    </SourceLine>
                 </div>
             </div>
         </section>

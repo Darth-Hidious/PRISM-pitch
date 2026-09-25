@@ -8,7 +8,7 @@ type TrackState = 'done' | 'current' | 'next';
 const BRANCHES: { name: string; text: string; items: { title: string; status: string; state: TrackState }[] }[] = [
     {
         name: 'Materials programmes',
-        text: 'The loop, extended across material classes.',
+        text: 'The loop, taken to new kinds of material.',
         items: [
             { title: 'Refractory alloys', status: 'Active', state: 'current' },
             { title: 'PFAS‑free polymers', status: 'Contracted', state: 'next' },
@@ -16,13 +16,13 @@ const BRANCHES: { name: string; text: string; items: { title: string; status: st
         ],
     },
     {
-        name: 'Systems intelligence',
-        text: 'The same evidence discipline, applied to how change moves through a supply chain.',
+        name: 'Supply-chain intelligence',
+        text: 'The same tools, used to see how a change at one supplier spreads.',
         items: [
             { title: 'Supply risk', status: 'Internal', state: 'done' },
             { title: 'Market signals', status: 'Prototype', state: 'current' },
             { title: 'Programme risk', status: 'Exploratory', state: 'next' },
-            { title: 'Weak signals', status: 'Next', state: 'next' },
+            { title: 'Early warnings', status: 'Next', state: 'next' },
         ],
     },
 ];
@@ -157,14 +157,13 @@ export default function Roadmap() {
             <Grain />
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n="07">Where it goes</Idx>
+                    <Idx n="07">Progress</Idx>
                     <h2 id="roadmap-title" className="w-h2">
-                        Two branches. One discipline.
+                        Where PRISM stands, and where it goes.
                     </h2>
                     <p className="w-lead">
-                        One branch extends the loop across material classes. The other applies the same provenance,
-                        uncertainty and network models to how a change moves through suppliers, materials, components
-                        and programmes.
+                        We would rather show you what is done and what is not. Then two directions: new kinds of
+                        material, and the same tools applied to supply chains.
                     </p>
                 </header>
 
@@ -174,19 +173,23 @@ export default function Roadmap() {
                     </h3>
                     <div className="stands__cols">
                         <div>
-                            <p className="w-label">What PRISM has shown</p>
+                            <p className="w-label">Done so far</p>
                             <ul>
-                                <li>Computer-designed refractory high-entropy alloys, made and tested as real alloys (Project SPARK).</li>
-                                <li>An ESA activity awarded to run the complete loop for European space transportation (PRISM Alpha).</li>
-                                <li>A privately funded programme, contracted, for PFAS-free polymers.</li>
+                                <li>
+                                    Our first alloys from early screening have been made as real metal (Project SPARK).
+                                    We are still testing them. Two or three look promising.
+                                </li>
+                                <li>ESA has awarded PRISM Alpha, a project to run the full loop for European space transport.</li>
+                                <li>Our first privately funded project, for PFAS‑free polymers, is signed.</li>
+                                <li>PRISM won the AI special prize (KI‑Sonderpreis) at Hessen Ideen 2026.</li>
                             </ul>
                         </div>
                         <div>
-                            <p className="w-label">What it has to show next</p>
+                            <p className="w-label">Still to prove</p>
                             <ul>
-                                <li>One complete closed loop, from requirement to coupon evidence. That is PRISM Alpha’s job.</li>
-                                <li>Robotic synthesis and instrument control working on the line.</li>
-                                <li>A material taken from coupon to component, with the evidence a qualification process needs.</li>
+                                <li>One full loop, from requirement to test results. That is PRISM Alpha’s job.</li>
+                                <li>Robots making samples and software driving the instruments, on a real line.</li>
+                                <li>A material taken from test sample to real part, with the evidence certification needs.</li>
                             </ul>
                         </div>
                     </div>
@@ -213,16 +216,14 @@ export default function Roadmap() {
                     <EventNetwork />
                     <figcaption>
                         <SourceLine label="Illustrative">
-                            A change at one supplier propagating to the programmes that depend on it. Method: PRISM’s
-                            proposed adaptation of Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving
-                            Communities”, KDD 2021.
+                            How a change at one supplier spreads to the programmes that depend on it. Method adapted from
+                            Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities”, KDD 2021.
                         </SourceLine>
                     </figcaption>
                 </figure>
 
                 <p className="roadmap__close rv">
-                    The branches differ in application. The discipline is the same: every claim keeps its source, its
-                    uncertainty and its consequences attached.
+                    Different uses, one rule: every claim keeps its source and says how sure it is.
                 </p>
             </div>
         </section>

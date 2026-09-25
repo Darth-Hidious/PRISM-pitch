@@ -1,19 +1,18 @@
-import { Button, Painting } from '../ds';
+import { Button, LivePainting } from '../ds';
 import { LINKS } from './links';
+import { furnaceScene } from './scenes';
 import { Grain } from './ui';
 
 export default function Hero() {
     return (
         <section id="top" className="hero" data-theme="navy" data-nav="hero" aria-labelledby="hero-title">
             <div className="hero__art">
-                <Painting
-                    src="/img/spark-furnace.webp"
-                    alt="Painted view into a vacuum-arc melting furnace: a glowing alloy button on the hearth, beside cooled buttons from earlier melts."
-                    seed={7}
-                    direction={-16}
-                    motion={0.5}
-                    focusX={0.5}
-                    focusY={0.84}
+                <LivePainting
+                    scene={furnaceScene}
+                    reveal="load"
+                    alt="Painted view into a vacuum-arc melting furnace: an arc strikes a glowing alloy button on the hearth, beside cooled buttons from earlier melts."
+                    fallback={{ src: '/img/spark-furnace.webp', seed: 7, direction: -16, motion: 0.5, focusX: 0.5, focusY: 0.84 }}
+                    poster={5}
                 />
             </div>
             <div className="hero__shade" aria-hidden="true" />
@@ -21,13 +20,12 @@ export default function Hero() {
             <div className="wrap hero__content">
                 <p className="hero__kicker rise">PRISM by Mirdyne</p>
                 <h1 id="hero-title" className="w-mega rise" style={{ animationDelay: '90ms' }}>
-                    Specify the capability. We&nbsp;deliver the material.
+                    Tell us what your part must survive. We&nbsp;deliver the material.
                 </h1>
                 <div className="hero__row">
                     <p className="w-lead rise" style={{ animationDelay: '180ms' }}>
-                        PRISM is a closed-loop materials platform. It designs new alloys and polymers, has them made in
-                        real processes, tests them against your requirement and keeps the evidence attached to every
-                        result.
+                        PRISM uses AI to design new alloys and polymers. Then we make them, test them and hand you the
+                        proof.
                     </p>
                     <div className="hero__actions rise" style={{ animationDelay: '260ms' }}>
                         <Button href={LINKS.interest} external>
@@ -46,17 +44,17 @@ export default function Hero() {
                     </li>
                     <li>
                         <span className="w-label">First application</span>
-                        <strong>Refractory alloys</strong>
+                        <strong>Alloys for extreme heat</strong>
                         <span>For rocket engines</span>
                     </li>
                     <li>
-                        <span className="w-label">Next material class</span>
+                        <span className="w-label">Next</span>
                         <strong>PFAS‑free polymers</strong>
-                        <span>With an industrial partner</span>
+                        <span>Replacing “forever chemicals”, with an industrial partner</span>
                     </li>
                 </ul>
             </div>
-            <p className="hero__caption">Vacuum-arc melting, Project SPARK. Photograph repainted in code.</p>
+            <p className="hero__caption">Vacuum-arc melting, Project SPARK. Photograph repainted and animated in code.</p>
         </section>
     );
 }

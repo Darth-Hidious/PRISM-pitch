@@ -10,7 +10,7 @@ import { Grain, Idx, Rails } from './ui';
 type Party = 'Customer A' | 'Partner B' | 'Mirdyne' | 'Public';
 const VIEWERS: { id: Party; role: string }[] = [
     { id: 'Customer A', role: 'Owns the requirement' },
-    { id: 'Partner B', role: 'Makes and tests the coupons' },
+    { id: 'Partner B', role: 'Makes and tests the samples' },
     { id: 'Mirdyne', role: 'Runs the platform' },
     { id: 'Public', role: 'Anyone else' },
 ];
@@ -63,7 +63,7 @@ const OBJECTS: Obj[] = [
     {
         id: 'BLD-12',
         type: 'Build',
-        title: 'Coupon build 12',
+        title: 'Sample build 12',
         owner: 'Partner B',
         state: 'computable',
         props: [
@@ -104,7 +104,7 @@ const OBJECTS: Obj[] = [
     {
         id: 'MDL-4',
         type: 'Model',
-        title: 'PRISM surrogate model, version 4',
+        title: 'PRISM prediction model, version 4',
         owner: 'Mirdyne',
         state: 'private',
         props: [
@@ -147,8 +147,8 @@ const OBJECTS: Obj[] = [
 ];
 
 const EDGES: [string, string, string][] = [
-    ['REQ-A-014', 'CND-07', 'motivates'],
-    ['CND-07', 'BLD-12', 'instantiated as'],
+    ['REQ-A-014', 'CND-07', 'leads to'],
+    ['CND-07', 'BLD-12', 'built as'],
     ['BLD-12', 'SPC-12-3', 'produced'],
     ['SPC-12-3', 'TST-88', 'measured by'],
     ['TST-88', 'EST-88', 'supports'],
@@ -168,13 +168,13 @@ function access(o: Obj, viewer: Party): Access {
 }
 
 function why(o: Obj, viewer: Party, a: Access) {
-    if (a === 'full' && viewer === o.owner) return 'You own this object.';
-    if (a === 'full') return `Released to you under ${o.release}.`;
+    if (a === 'full' && viewer === o.owner) return 'You own this record.';
+    if (a === 'full') return `Shared with you under release ${o.release}.`;
     if (a === 'compute')
-        return 'Computable: approved workloads may run on it, but no person can read the values. That includes Mirdyne.';
-    if (viewer === 'Public') return 'Not public. Nothing is published unless its owner decides to publish it.';
-    if (o.state === 'private') return `Private to ${o.owner}. Nothing is released implicitly.`;
-    return `Not released to you. ${o.owner} has released it to ${o.releasedTo?.join(' and ')} only.`;
+        return 'Software may calculate with it, but no person can read the values. Not even Mirdyne.';
+    if (viewer === 'Public') return 'Not public. Nothing is published unless its owner decides to.';
+    if (o.state === 'private') return `Private to ${o.owner}. Nothing is shared by accident.`;
+    return `Not shared with you. ${o.owner} has shared it with ${o.releasedTo?.join(' and ')} only.`;
 }
 
 /** Tracks an element's content box; `dep` re-attaches when the element is swapped. */
@@ -204,7 +204,7 @@ function NodeCard({ o, a, selected, onSelect }: { o: Obj; a: Access; selected: b
                 <RightsState state={o.state} label={o.type} />
             </span>
             <span className="onode__title">
-                {a === 'full' ? o.title : a === 'compute' ? 'Values hidden · compute only' : 'Not visible to you'}
+                {a === 'full' ? o.title : a === 'compute' ? 'Values hidden · software only' : 'Not visible to you'}
             </span>
             <span className="onode__id">{a === 'hidden' ? '●●●-●●' : o.id}</span>
         </button>
@@ -233,7 +233,7 @@ function OntologyExplorer() {
                     ))}
                 </div>
                 <p className="ont__count" aria-live="polite">
-                    {VIEWERS.find((v) => v.id === viewer)?.role}. Sees {visibleCount} of {OBJECTS.length} objects in
+                    {VIEWERS.find((v) => v.id === viewer)?.role}. Sees {visibleCount} of {OBJECTS.length} records in
                     full.
                 </p>
             </div>
@@ -291,7 +291,7 @@ function OntologyExplorer() {
             )}
 
             <aside className="ont__inspector" aria-live="polite">
-                <p className="w-label">Object</p>
+                <p className="w-label">Record</p>
                 <div className="ont__head">
                     <RightsState state={obj.state} />
                     <span className="ont__id">{a === 'hidden' ? '●●●-●●' : obj.id}</span>
@@ -313,8 +313,8 @@ function OntologyExplorer() {
                         </div>
                     ))}
                     <div>
-                        <dt>Training</dt>
-                        <dd>Separate right · not granted</dd>
+                        <dt>AI training</dt>
+                        <dd>Separate permission · not given</dd>
                     </div>
                 </dl>
                 <p className={`ont__why ont__why--${a}`}>{why(obj, viewer, a)}</p>
@@ -326,31 +326,31 @@ function OntologyExplorer() {
 /* ── Section ──────────────────────────────────────────────────────────── */
 
 const STATES: { state: Visibility; text: string }[] = [
-    { state: 'private', text: 'Stays inside the organisation that produced it.' },
-    { state: 'computable', text: 'Approved workloads may compute on it. No person or party inspects it.' },
-    { state: 'released', text: 'An approved derivative, shared with named parties under a signed release.' },
-    { state: 'public', text: 'Deliberately published. Nothing becomes public by default.' },
+    { state: 'private', text: 'Stays inside the company that made it.' },
+    { state: 'computable', text: 'Approved software may calculate with it. No person sees the values.' },
+    { state: 'released', text: 'A result shared with named partners, under a signed release.' },
+    { state: 'public', text: 'Published on purpose. Nothing becomes public by default.' },
 ];
 
 const RULES = [
-    'Derived results inherit the strictest rights of their inputs.',
-    'Training is a separate right. Analysing a partner’s data never implies permission to train on it.',
-    'Export classification is a property of the data, checked at every exit.',
-    'Partners can take their data and its provenance with them. Nobody is locked in.',
+    'Anything made from data keeps the strictest rules of what went into it.',
+    'Training AI is a separate permission. Using a partner’s data never means training on it.',
+    'Export rules belong to the data, and are checked whenever data leaves.',
+    'Partners can take their data and its history with them. No lock-in.',
 ];
 
 const GIVES = [
-    ['Bulk chemistry', 'X-ray fluorescence, spark emission and plasma spectrometry'],
-    ['Oxygen, nitrogen and carbon', 'Combustion and inert-gas fusion analysis'],
-    ['Phases and microstructure', 'X-ray diffraction, electron microscopy and EBSD'],
-    ['Some process fingerprints', 'Melt-pool tracks, texture and porosity, which narrow the process without fixing it'],
+    ['What it is made of', 'Standard lab analysis'],
+    ['Trace gases', 'Oxygen, nitrogen and carbon'],
+    ['Its inner structure', 'X-ray and electron microscopes'],
+    ['Clues about how it was made', 'Melt tracks and pores hint at the process, but do not give it away'],
 ];
 
 const KEEPS = [
-    ['The window', 'The settings that hold when powder, machine and atmosphere vary'],
-    ['The failures', 'Every candidate that did not work, and why'],
-    ['The lineage', 'The chain from requirement to decision, with owners and rights'],
-    ['The proof', 'The test evidence, and the demonstrated ability to make it again'],
+    ['The safe settings', 'What still works when powder, machine and gas vary'],
+    ['The failures', 'Every idea that did not work, and why'],
+    ['The history', 'The chain from requirement to decision, with owners and rights'],
+    ['The proof', 'The test results, and the proven ability to make it again'],
 ];
 
 export default function Evidence() {
@@ -362,13 +362,13 @@ export default function Evidence() {
                 <header className="sec-head rv">
                     <Idx n="05">Evidence and IP</Idx>
                     <h2 id="evidence-title" className="w-h2">
-                        Every claim keeps its evidence, its owner and its rights attached.
+                        Every result keeps its proof, its owner and its rules.
                     </h2>
                     <p className="w-lead">
-                        <b>Who can see what? Only what its owner has released.</b> Industrial partners share data only
-                        when they stay in control of it. In PRISM, provenance and rights are part of the material: every
-                        requirement, design, build, specimen, test and decision records where it came from, who owns it
-                        and what it may be used for.
+                        <b>Who can see what? Only what the owner allows.</b> Companies share data only if they stay in
+                        control of it. So in PRISM, every requirement, design, sample, test and decision records where
+                        it came from, who owns it and what it may be used for. Pick a viewer below and see what they
+                        can see.
                     </p>
                 </header>
 
@@ -376,15 +376,15 @@ export default function Evidence() {
                     <OntologyExplorer />
                     <div className="evidence__src">
                         <SourceLine label="Illustrative">
-                            Placeholder parties and objects, not customer data. Provenance and export classification
-                            are maintained today; machine-enforced rights and controlled release are in development.
+                            Made-up parties and records, not customer data. Tracing and export labels work today;
+                            automatic enforcement of sharing rules is being built.
                         </SourceLine>
                     </div>
                 </div>
 
                 <div className="trust rv">
                     <div>
-                        <p className="w-label trust__label">Four states, never changed implicitly</p>
+                        <p className="w-label trust__label">Four levels of sharing. None changes by accident.</p>
                         <ul className="trust__states">
                             {STATES.map((s) => (
                                 <li key={s.state}>
@@ -395,7 +395,7 @@ export default function Evidence() {
                         </ul>
                     </div>
                     <div>
-                        <p className="w-label trust__label">Rules the platform enforces</p>
+                        <p className="w-label trust__label">Rules PRISM follows</p>
                         <ol className="trust__rules">
                             {RULES.map((r, i) => (
                                 <li key={r}>
@@ -411,13 +411,13 @@ export default function Evidence() {
                     <div className="ip__head">
                         <p className="w-label trust__label">IP</p>
                         <h3 id="ip-title" className="w-h2 ip__title">
-                            A part reveals its chemistry. It does not reveal the evidence.
+                            Anyone can analyse a part. Nobody can copy the proof.
                         </h3>
                         <p className="w-lead">
-                            <b>What does a part give away? Its chemistry, not its evidence.</b> Anyone holding a part can
-                            analyse it, and may even work out a way to make something like it. What the part cannot
-                            give them is the proof that it works and the demonstrated ability to make it again. In PRISM
-                            that evidence is the asset, and it stays with its owner.
+                            <b>What does a part give away? What it is made of, not the proof.</b> Anyone holding a part
+                            can test it, and may even copy something like it. What they cannot get from the part is the
+                            proof that it works, and the know-how to make it again and again. In PRISM that proof is the
+                            asset, and it stays with its owner.
                         </p>
                     </div>
                     <figure className="ip__plate" data-theme="paper">

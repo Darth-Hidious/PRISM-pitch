@@ -1,20 +1,20 @@
 import { Idx } from './ui';
 
 const LADDER = [
-    { name: 'Open source', text: 'Prediction, ranking and materials informatics that anyone can use and inspect.', tag: 'Free' },
-    { name: 'Programme', text: 'An experimental campaign against your requirements, accepted on evidence.' },
-    { name: 'Pilot', text: 'Probe deployment, calibration and a reference run on your problem.' },
-    { name: 'Deployment', text: 'PRISM installed on your hardware, under your sign-off process.' },
-    { name: 'Support', text: 'Recalibration, data traceability and versioned releases.' },
-    { name: 'Transfer', text: 'Validated process documentation handed to your own team.' },
+    { name: 'Open source', text: 'Prediction and data tools that anyone can use and check.', tag: 'Free' },
+    { name: 'Project', text: 'We run a project against your requirement. You judge it on the test results.' },
+    { name: 'Pilot', text: 'We install our sensors, calibrate them and run a first trial on your problem.' },
+    { name: 'Deployment', text: 'PRISM on your own machines, under your own approval process.' },
+    { name: 'Support', text: 'Recalibration, traceable data and regular updates.' },
+    { name: 'Transfer', text: 'The proven process, written down and handed to your team.' },
 ];
 
 const MARKETS = [
-    { name: 'Space propulsion', text: 'Refractory alloys for rocket engines. Our first application.' },
-    { name: 'Defence and dual-use', text: 'Materials, robotics and test systems for defence programmes, with export control designed into the data layer.' },
-    { name: 'Fusion and energy', text: 'Plasma-facing materials, efficient turbines and batteries.' },
-    { name: 'Strategic autonomy', text: 'Substitutes for critical inputs such as tungsten and permanent magnets.' },
-    { name: 'Regulatory replacement', text: 'Alternatives for more than 250 materials under EU REACH, starting with PFAS.' },
+    { name: 'Space propulsion', text: 'Alloys for rocket engines. Our first application.' },
+    { name: 'Defence', text: 'Materials, robots and test systems for defence, with export rules built into the data.' },
+    { name: 'Fusion and energy', text: 'Materials for fusion reactors, efficient turbines and batteries.' },
+    { name: 'Supply independence', text: 'Replacements for hard-to-get materials such as tungsten and magnet metals.' },
+    { name: 'Replacing harmful substances', text: 'Alternatives for more than 250 substances the EU lists as of very high concern (REACH), starting with PFAS.' },
     { name: 'Key technologies', text: 'Semiconductors and lightweight polymers.' },
 ];
 
@@ -25,11 +25,11 @@ export default function Business() {
                 <header className="sec-head rv">
                     <Idx n="06">Working with us</Idx>
                     <h2 id="business-title" className="w-h2">
-                        Open where it learns. Paid where it becomes physical.
+                        The software is open. We earn when the material is real.
                     </h2>
                     <p className="w-lead">
-                        Prediction, ranking and materials informatics are released open source. Mirdyne is paid when a
-                        material has to exist: in a programme, a pilot or a deployment on your own hardware.
+                        Our prediction and data tools are free and open source. We are paid when a material has to
+                        exist: in a project, a pilot or on your own machines.
                     </p>
                 </header>
 

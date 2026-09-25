@@ -5,10 +5,10 @@ PRISM is Mirdyne's closed-loop materials platform, and this system is how it loo
 The message in one line: **Specify the capability. We deliver the material.** Everything else is evidence for it.
 
 - Write headlines as full sentences with a full stop: "Materials decide what engineers are free to build." Never a label ("Our Solution").
-- State maturity exactly, never ahead of it. Every capability carries one of four words: *In use* (runs in current programmes), *Prototype* (PRISM software being matured from TRL 3 to 4), *In development* (being built), *Target* (where the platform is going, not claimed today). Write "Twelve months to take PRISM from TRL 3 to 4", not "PRISM is TRL 4".
-- Every figure and every photograph gets a source line: "Source: Merchant et al., Nature 624 (2023)." Illustrative graphics say "Illustrative" in the line.
+- State maturity exactly, never ahead of it. Every capability carries one of four words: *In use* (runs in current programmes), *Prototype* (working software, being matured), *In development* (being built), *Target* (where the platform is going, not claimed today). Write "Prototype, being matured", not "production-ready".
+- Every figure and every photograph gets a source line: "Source: Kusne et al., Nature Communications 11, 5966 (2020)." Arithmetic says "Arithmetic" and shows the sum. Illustrative graphics say "Illustrative" in the line.
 - "We" is Mirdyne. "PRISM" is the platform. Say "PRISM designs candidate alloys", never "our AI".
-- British spelling: programme, characterisation, organisation. Non-breaking space before units: 1,200 °C, 12 months, TRL 3 → 4. Figures as €48M, 2.2M, 381,000.
+- British spelling: programme, characterisation, organisation. Non-breaking space before units: 1,200 °C, 12 months. Figures as €48M, 474M, 23,716.
 - No exclamation marks, no emoji, no hype words (revolutionary, cutting-edge, game-changing, unlock).
 - Partners under NDA are "an industrial partner". Competitors are not named on the website.
 - Confident comes from specifics: "Eight refractory high-entropy alloy candidates taken to two physical down-selections" beats "proven results".

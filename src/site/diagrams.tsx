@@ -11,12 +11,12 @@ import type { Tone } from './engrave';
 const PX = [110, 355, 600, 845, 1090];
 const PANELS = [
     { n: '01', name: 'requirement', sub: 'what the part must survive' },
-    { n: '02', name: 'design', sub: 'candidates across the whole space' },
-    { n: '03', name: 'screen', sub: 'physics first; most stop here' },
-    { n: '04', name: 'make', sub: 'melted and printed for real' },
-    { n: '05', name: 'test', sub: 'measured against the requirement' },
+    { n: '02', name: 'design', sub: 'AI suggests ideas' },
+    { n: '03', name: 'screen', sub: 'physics checks; most stop here' },
+    { n: '04', name: 'make', sub: 'melted and 3D-printed for real' },
+    { n: '05', name: 'test', sub: 'measured against the targets' },
 ];
-const HANDOFFS = ['targets', 'candidates', 'survivors', 'coupons'];
+const HANDOFFS = ['targets', 'ideas', 'survivors', 'samples'];
 
 function Requirement({ px }: { px: number }) {
     return (
@@ -149,7 +149,7 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
 
             <line className="eg-line eg-line--dashed" x1={40} y1={30} x2={1160} y2={30} />
             <T x={40} y={18} kind="small" anchor="start">
-                evidence · every step is recorded with its inputs, its owner and its rights
+                evidence · every step is recorded: what went in, who owns it, who may see it
             </T>
             {PX.map((x) => (
                 <line key={x} className="eg-line eg-line--thin" x1={x} y1={30} x2={x} y2={46} />
@@ -191,7 +191,7 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
                     06 · learn
                 </T>
                 <T x={(PX[1] + PX[4]) / 2} y={382} kind="small">
-                    every result, failures included, updates the models and picks the next experiment
+                    every result, good or bad, updates the models and picks the next experiment
                 </T>
             </g>
         </svg>
@@ -201,10 +201,10 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
 /* ── The ladder: rungs of rising cost ─────────────────────────────────── */
 
 const RUNGS = [
-    { q: 'is it stable at all?', how: 'learned interatomic potentials', time: 'seconds', n: 48, pass: 24, cols: 12, r: 5.2, gap: 15 },
-    { q: 'is the energy right?', how: 'first principles', time: 'hours', n: 24, pass: 10, cols: 8, r: 7, gap: 19 },
-    { q: 'which phases compete?', how: 'thermodynamics', time: 'minutes', n: 10, pass: 5, cols: 5, r: 8.5, gap: 23 },
-    { q: 'can it be printed?', how: 'manufacturability index', time: 'seconds', n: 5, pass: 2, cols: 5, r: 9.5, gap: 26 },
+    { q: 'is it stable at all?', how: 'fast AI simulation', time: 'seconds', n: 48, pass: 24, cols: 12, r: 5.2, gap: 15 },
+    { q: 'is the energy right?', how: 'exact quantum calculation', time: 'hours', n: 24, pass: 10, cols: 8, r: 7, gap: 19 },
+    { q: 'what forms at each temperature?', how: 'phase diagrams', time: 'minutes', n: 10, pass: 5, cols: 5, r: 8.5, gap: 23 },
+    { q: 'can it be 3D-printed?', how: 'printability check', time: 'seconds', n: 5, pass: 2, cols: 5, r: 9.5, gap: 26 },
     { q: 'does it meet the requirement?', how: 'make and test', time: 'weeks', n: 2, pass: 1, cols: 2, r: 12, gap: 34 },
 ];
 
@@ -238,14 +238,14 @@ export function LadderDiagram() {
     return (
         <svg className="eg eg--ladder" viewBox="0 0 1200 474" role="img" aria-labelledby={`${id}-title`}>
             <title id={`${id}-title`}>
-                The PRISM ladder: learned potentials, first principles, thermodynamics, a manufacturability index, then
-                make and test. Each rung costs more than the one before it and most candidates stop low. Counts are
-                illustrative.
+                The PRISM ladder: a fast AI simulation, an exact quantum calculation, phase diagrams, a printability
+                check, then make and test. Each step costs more than the one before, and most ideas stop early. Counts
+                are illustrative.
             </title>
             <Defs id={id} />
             <Ball cx={50} cy={34} r={7} tone="white" />
             <T x={66} y={39} kind="plain" anchor="start">
-                passes this rung
+                passes this step
             </T>
             <Ball cx={50} cy={58} r={7} tone="dark" />
             <T x={66} y={63} kind="plain" anchor="start">
@@ -283,10 +283,10 @@ export function LadderDiagram() {
 
             <Arrow id={id} d="M40,418 H1160" />
             <T x={600} y={444} kind="plain">
-                each rung adds physics the one below cannot see
+                each step checks something the step before cannot see
             </T>
             <T x={600} y={463} kind="small">
-                heights show the order, not the cost · times are typical per candidate · counts are illustrative
+                heights show the order, not the cost · times are typical per idea · counts are illustrative
             </T>
         </svg>
     );
@@ -312,12 +312,12 @@ export function PartDiagram() {
     return (
         <svg className="eg eg--part" viewBox="0 0 1000 330" role="img" aria-labelledby={`${id}-title`}>
             <title id={`${id}-title`}>
-                What analysis of a part recovers: its chemistry, its oxygen, nitrogen and carbon, and its phases and
-                grains. What stays with the owner: the manufacturing window, the failures, the lineage and the proof.
+                What testing a part reveals: what it is made of, its trace gases and its inner structure. What stays with
+                the owner: the safe settings, the failures, the history and the proof.
             </title>
             <Defs id={id} />
             <T x={40} y={26} kind="head" anchor="start">
-                what analysis recovers
+                what testing a part reveals
             </T>
             <T x={640} y={26} kind="head" anchor="start">
                 what stays with its owner
@@ -328,10 +328,10 @@ export function PartDiagram() {
             <rect className="eg-solid" x={118} y={73} width={14} height={14} />
             <path className="eg-line eg-line--thin" d={wave(132, 80, 426, 110)} />
             <T x={48} y={116} kind="strong" anchor="start">
-                chemistry
+                what it is made of
             </T>
             <T x={48} y={133} kind="small" anchor="start">
-                X-ray fluorescence, spark and plasma spectrometry
+                standard lab analysis
             </T>
 
             {/* Gas fusion */}
@@ -339,10 +339,10 @@ export function PartDiagram() {
             <path className="eg-line eg-line--thin" d="M60,192 q6,-5 12,0 t12,0 t12,0 t12,0" />
             <Arrow id={id} dashed d="M120,168 L424,172" />
             <T x={48} y={214} kind="strong" anchor="start">
-                oxygen, nitrogen, carbon
+                trace gases
             </T>
             <T x={48} y={231} kind="small" anchor="start">
-                combustion and inert-gas fusion
+                oxygen, nitrogen and carbon
             </T>
 
             {/* Electron column */}
@@ -350,10 +350,10 @@ export function PartDiagram() {
             <path className="eg-solid" d="M110,250 L128,262 L110,274 Z" />
             <path className="eg-line eg-line--thin" d="M128,262 L426,232" />
             <T x={48} y={296} kind="strong" anchor="start">
-                phases and grains
+                inner structure
             </T>
             <T x={48} y={313} kind="small" anchor="start">
-                X-ray diffraction, electron microscopy, EBSD
+                X-ray and electron microscopes
             </T>
 
             {/* The part */}
@@ -376,10 +376,10 @@ export function PartDiagram() {
             <path className="eg-fill" fill={`url(#${id}-hatch)`} d="M646,90 L666,64 L697,64 L677,90 Z" />
             <path className="eg-line eg-line--thin" d="M646,90 L666,64 L697,64 L677,90 Z" />
             <T x={722} y={74} kind="strong" anchor="start">
-                the window
+                the safe settings
             </T>
             <T x={722} y={91} kind="small" anchor="start">
-                settings that hold as powder and machine vary
+                what still works when powder and machine vary
             </T>
 
             {/* The failures */}
@@ -390,7 +390,7 @@ export function PartDiagram() {
                 the failures
             </T>
             <T x={722} y={157} kind="small" anchor="start">
-                every candidate that did not work, and why
+                every idea that did not work, and why
             </T>
 
             {/* The lineage */}
@@ -399,10 +399,10 @@ export function PartDiagram() {
                 <Ball key={x} cx={x} cy={208} r={6} tone={k === 3 ? 'mid' : 'white'} />
             ))}
             <T x={722} y={204} kind="strong" anchor="start">
-                the lineage
+                the history
             </T>
             <T x={722} y={221} kind="small" anchor="start">
-                requirement to decision, with owners and rights
+                from requirement to decision, with owners
             </T>
 
             {/* The proof */}
@@ -413,7 +413,7 @@ export function PartDiagram() {
                 the proof
             </T>
             <T x={722} y={283} kind="small" anchor="start">
-                the test evidence, and the ability to make it again
+                the test results, and the know-how to make it again
             </T>
         </svg>
     );
@@ -433,13 +433,14 @@ export function KnownAnswer() {
     return (
         <svg className="eg eg--known" viewBox="0 0 1000 222" role="img" aria-labelledby={`${id}-title`}>
             <title id={`${id}-title`}>
-                Known answer for equiatomic Mo–Ta: Forager's ordering rung gives 1149 plus or minus 114 kelvin, inside a
-                band of 500 to 2600 kelvin set before the run; the published value is 2020 kelvin.
+                A known answer, checked: for a 50/50 mix of molybdenum and tantalum, Forager gives 1149 plus or minus 114
+                kelvin, inside the pass band of 500 to 2600 kelvin agreed before the run. The published value is 2020
+                kelvin.
             </title>
             <Defs id={id} />
             <path className="eg-line eg-line--bold" d="M40,22 L48,30 L62,14" />
             <T x={74} y={28} kind="strong" anchor="start">
-                known answer, reproduced: equiatomic Mo–Ta through the same path
+                a known answer, checked first: a 50/50 mix of molybdenum and tantalum (Mo–Ta)
             </T>
             <T x={X(1149)} y={82} kind="strong">
                 this model: 1149 ± 114 K
@@ -461,7 +462,7 @@ export function KnownAnswer() {
                 </g>
             ))}
             <T x={(X(500) + X(2600)) / 2} y={202} kind="plain">
-                set before the run: a transition between 500 and 2600 K
+                agreed before the run: a pass if it lands between 500 and 2600 K
             </T>
         </svg>
     );

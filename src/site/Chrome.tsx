@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, MirdyneMark } from '../ds';
+import { Button, PrismMark } from '../ds';
 import { LINKS } from './links';
 
 const NAV = [
@@ -65,7 +65,7 @@ export function SiteNav() {
         <header className="nav" data-over={open ? 'navy' : over} data-theme={theme}>
             <div className="wrap nav__inner">
                 <a className="nav__brand" href="#top" aria-label="PRISM by Mirdyne, back to top">
-                    <MirdyneMark title="" />
+                    <PrismMark title="" weight={20} />
                     <span className="nav__name">PRISM</span>
                     <span className="nav__by">by Mirdyne</span>
                 </a>

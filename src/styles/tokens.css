@@ -34,6 +34,13 @@
     --emphasis: #061832;
     --on-emphasis: #ffffff;
     --focus: #1d4c86;
+    /* PRISM mark spectrum, light-mode artwork */
+    --prism-s0: #8468a9;
+    --prism-s1: #7a6aae;
+    --prism-s2: #4f86c2;
+    --prism-s3: #9d9b56;
+    --prism-s4: #e4a33b;
+    --prism-s5: #d9534a;
     color-scheme: light;
 }
 
@@ -57,6 +64,13 @@
     --emphasis: #ffffff;
     --on-emphasis: #061832;
     --focus: #a8b7c9;
+    /* PRISM mark spectrum, dark-mode artwork */
+    --prism-s0: #6b4c9e;
+    --prism-s1: #5f55ad;
+    --prism-s2: #2f7ecf;
+    --prism-s3: #86a23a;
+    --prism-s4: #f6a21f;
+    --prism-s5: #ec3f37;
     color-scheme: dark;
 }
 

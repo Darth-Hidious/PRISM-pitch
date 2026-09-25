@@ -53,19 +53,20 @@ export function Problem() {
         <>
             <Head
                 kicker="The problem"
-                title="Prediction has outrun validation by three orders of magnitude."
-                lead="AI models have predicted millions of new crystal structures. Only hundreds have been made in a lab, and bringing a new material into service still takes ten to twenty years."
+                title="There are far too many possible alloys to make them all."
+                lead="Pick five of nine high-melting metals and mix them in steps of 1%: 474 million possible alloys. Even at ten a day, making each one once would take about 130,000 years. And a new material still takes ten to twenty years to reach service."
             />
             <div className="d-body" style={{ display: 'grid', alignContent: 'center' }}>
                 <div className="d-stats-row">
                     <Stat size="lg" value="10–20" label="Years to bring a material into service" />
-                    <Stat size="lg" value="2.2M" label="Structures predicted" note="736 independently made in a lab" />
+                    <Stat size="lg" value="474M" label="Possible alloys from five of nine metals" note="About 130,000 years to make, at ten a day" />
                     <Stat size="lg" value="€170.7B" label="EU aerospace manufacturing turnover" note="The industry that waits on its materials" />
                 </div>
             </div>
             <div className="d-foot">
                 <SourceLine label="Sources">
-                    Merchant et al., Nature 624 (2023); Eurostat, EU aerospace manufacturing turnover 2023 (MKT3).
+                    Arithmetic: 126 ways to pick five of nine metals × 3,764,376 mixes in whole percent. Eurostat, EU
+                    aerospace manufacturing turnover 2023 (MKT3).
                 </SourceLine>
             </div>
         </>

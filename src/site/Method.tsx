@@ -44,10 +44,10 @@ function escapes(v: number, p: number): Regime | null {
 }
 
 const REGIME_TEXT: Record<Regime, { name: string; text: string }> = {
-    window: { name: 'Inside the window', text: 'The melt pool overlaps the layer below: dense metal.' },
-    lof: { name: 'Lack of fusion', text: 'Too little energy per millimetre: unmelted powder and irregular pores.' },
-    keyhole: { name: 'Keyholing', text: 'The pool turns into a vapour cavity that collapses and traps round pores.' },
-    balling: { name: 'Balling', text: 'Too fast: the long, thin pool breaks up into beads.' },
+    window: { name: 'Inside the safe range', text: 'The metal melts into the layer below and comes out solid.' },
+    lof: { name: 'Lack of fusion', text: 'Too little energy: the powder does not fully melt and leaves holes.' },
+    keyhole: { name: 'Keyholing', text: 'Too much energy: the metal boils, and the collapsing hole traps bubbles.' },
+    balling: { name: 'Balling', text: 'Too fast: the melted line breaks up into beads.' },
 };
 
 function MeltPool({ r }: { r: Regime }) {
@@ -362,15 +362,15 @@ function ProcessWindow() {
                     </div>
                     <p className={`pw__robust${r === 'window' && !esc ? ' is-ok' : ''}`}>
                         {r !== 'window'
-                            ? 'Outside the window.'
+                            ? 'Outside the safe range.'
                             : esc
-                              ? `Not robust: ±10 % power and ±8 % speed reach ${REGIME_TEXT[esc].name.toLowerCase()}.`
-                              : 'Robust: holds under ±10 % power and ±8 % speed.'}
+                              ? `Too close to the edge: a drift of 10 % in power or 8 % in speed causes ${REGIME_TEXT[esc].name.toLowerCase()}.`
+                              : 'Safe: still works if power drifts 10 % and speed 8 %.'}
                     </p>
                 </div>
                 <label className="pw__toggle">
                     <input type="checkbox" checked={showRobust} onChange={(e) => setShowRobust(e.target.checked)} />
-                    <span>Show the robust region</span>
+                    <span>Show the safe region</span>
                 </label>
             </div>
         </div>
@@ -539,14 +539,14 @@ function ActiveLearning() {
                     ))}
                 </g>
                 <text className="al__axis" x="8" y={H - 6}>
-                    177 candidate points
+                    177 possible experiments
                 </text>
             </svg>
             <div className="al__bar">
                 <p className="al__count" aria-live="polite">
                     {run.found ? (
                         <>
-                            Optimum found after <b>{n}</b> of {POINTS} measurements
+                            Best point found after <b>{n}</b> of {POINTS} measurements
                         </>
                     ) : (
                         <>
@@ -564,9 +564,9 @@ function ActiveLearning() {
                 </div>
             </div>
             <ul className="al__legend" aria-hidden="true">
-                <li className="al__legend-mean">Model mean</li>
-                <li className="al__legend-band">Uncertainty, ±2σ</li>
-                <li className="al__legend-truth">Hidden function</li>
+                <li className="al__legend-mean">Model’s best guess</li>
+                <li className="al__legend-band">How unsure it is</li>
+                <li className="al__legend-truth">The hidden answer</li>
                 <li className="al__legend-pt">Measured</li>
             </ul>
         </div>
@@ -576,12 +576,12 @@ function ActiveLearning() {
 /* ── Exhibit C: a reusable core ───────────────────────────────────────── */
 
 const CORE = [
-    'Orchestrator and playbooks',
-    'Generative samplers',
-    'Evaluator',
-    'Knowledge graph and provenance',
-    'Manufacturability screening',
-    'Evidence packaging',
+    'Planner and playbooks',
+    'Idea generator',
+    'Scorer',
+    'Knowledge graph and traceability',
+    'Printability check',
+    'Evidence file',
 ];
 
 const MODULES = {
@@ -589,20 +589,20 @@ const MODULES = {
         label: 'Refractory alloys',
         status: 'Now',
         slots: [
-            ['Requirement', 'Service environment, temperature and the benchmark alloy'],
-            ['Physics', 'Learned potentials, first principles and CALPHAD thermodynamics'],
-            ['Reward', 'Phase stability, oxidation resistance and manufacturability'],
-            ['Tests', 'Density, metallography and environment tests'],
+            ['Requirement', 'Where it works, how hot, and the alloy to beat'],
+            ['Physics', 'Fast AI simulations, exact quantum calculations and phase diagrams'],
+            ['Scored on', 'Stability, resistance to oxidation, and printability'],
+            ['Tests', 'Density, inner structure and heat tests'],
         ],
     },
     polymers: {
         label: 'Polymers',
         status: 'Next',
         slots: [
-            ['Requirement', 'The property profile of the material being replaced'],
+            ['Requirement', 'What the replaced material could do'],
             ['Physics', 'Polymer property models and chemistry rules'],
-            ['Reward', 'Property match, processability and PFAS-free chemistry'],
-            ['Tests', 'Application tests for the replaced material'],
+            ['Scored on', 'Matching those properties, easy processing, and no PFAS'],
+            ['Tests', 'The tests the old material had to pass'],
         ],
     },
 } as const;
@@ -622,13 +622,13 @@ function CoreModules() {
             </div>
             <div className="core__grid">
                 <div className="core__block" data-theme="navy">
-                    <p className="w-label">Reusable core · stays the same</p>
+                    <p className="w-label">The core · stays the same</p>
                     <ul>
                         {CORE.map((c) => (
                             <li key={c}>{c}</li>
                         ))}
                     </ul>
-                    <p className="core__foot">The same core, versioned, from one programme to the next.</p>
+                    <p className="core__foot">The same core, from one project to the next.</p>
                 </div>
                 <div className="core__plugs" aria-hidden="true">
                     {mod.slots.map((_, i) => (
@@ -636,7 +636,7 @@ function CoreModules() {
                     ))}
                 </div>
                 <div className="core__slots" key={cls}>
-                    <p className="w-label">Changes with each application</p>
+                    <p className="w-label">Changes with each material</p>
                     {mod.slots.map(([k, v], i) => (
                         <div key={k} className="core__slot" style={{ animationDelay: `${i * 70}ms` }}>
                             <span className="w-label">{k}</span>
@@ -661,9 +661,8 @@ export default function Method() {
                         Every experiment has to earn its place.
                     </h2>
                     <p className="w-lead">
-                        <b>Why not simply make everything?</b> Because physical experiments are the expensive part.
-                        PRISM spends them where they teach the most and aims for a region that can be made repeatably,
-                        not a single perfect point. The exhibits below run live in your browser.
+                        <b>Why not just make everything?</b> Because real experiments are slow and expensive. PRISM
+                        spends them where they teach the most. The four demos below run live in your browser.
                     </p>
                 </header>
 
@@ -671,13 +670,13 @@ export default function Method() {
                     <div className="exhibit__text">
                         <p className="w-label exhibit__tag">Exhibit A · The ladder</p>
                         <h3 id="ex-ladder" className="w-h3">
-                            Every candidate climbs a ladder of rising cost.
+                            Cheap checks first. Expensive ones last.
                         </h3>
-                        <p className="q">How do you afford to check so many candidates?</p>
+                        <p className="q">How can you check so many ideas?</p>
                         <p className="a">
-                            <b>By stopping most of them where stopping is cheap.</b> A learned potential answers in
-                            seconds; a physical test takes weeks. Each rung adds physics the one below cannot see, so
-                            only the few that survive every cheaper question reach the furnace.
+                            <b>By stopping most of them early, where stopping is cheap.</b> A quick simulation takes
+                            seconds. A real test takes weeks. Only the ideas that pass every cheap check reach the
+                            furnace.
                         </p>
                     </div>
                     <figure className="exhibit__stage">
@@ -686,8 +685,8 @@ export default function Method() {
                         </div>
                         <figcaption>
                             <SourceLine label="Illustrative">
-                                The ladder, drawn for this site. Counts show the shape of a campaign, not a result;
-                                times are typical orders of magnitude per candidate.
+                                Drawn for this site. The counts show the shape, not real results. Times are typical per
+                                idea.
                             </SourceLine>
                         </figcaption>
                     </figure>
@@ -695,24 +694,23 @@ export default function Method() {
 
                 <article className="exhibit rv" aria-labelledby="ex-window">
                     <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit B · Manufacturing window</p>
+                        <p className="w-label exhibit__tag">Exhibit B · Safe settings</p>
                         <h3 id="ex-window" className="w-h3">
-                            A manufacturing window, not a single recipe.
+                            A safe range of settings, not one perfect recipe.
                         </h3>
-                        <p className="q">Will the recipe survive a real machine?</p>
+                        <p className="q">Will the recipe work on a real machine?</p>
                         <p className="a">
-                            <b>Only if it sits inside a window.</b> Powder, laser power and atmosphere all drift. Drag the
-                            probe across the laser powder-bed fusion map: the hatched region is what PRISM looks for,
-                            settings that stay dense when the machine moves.
+                            <b>Only if it has room to spare.</b> When you 3D-print metal, the powder, the laser power
+                            and the gas all vary a little. Drag the dot across the map. The hatched area is what we look
+                            for: settings that still give solid metal when things drift.
                         </p>
                         <p className="exhibit__note">
-                            Energy density alone does not decide the outcome: the keyholing boundary cuts across the
-                            lines of equal energy. That is why PRISM maps the window instead of a single number.
+                            Why not use one number, such as energy? Because the lines where printing fails do not follow
+                            it. So we map the whole range.
                         </p>
                         <SourceLine label="Illustrative">
-                            Boundaries follow the usual scaling laws: lack of fusion with line energy P/v, keyholing
-                            with P/√v and balling at high speed. Hatch 0.1 mm, layer 30 µm. Constants are illustrative,
-                            not measured data.
+                            Boundaries follow standard scaling rules: lack of fusion with P/v, keyholing with P/√v,
+                            balling at high speed. Hatch 0.1 mm, layer 30 µm. Not measured data.
                         </SourceLine>
                     </div>
                     <div className="exhibit__stage">
@@ -722,29 +720,29 @@ export default function Method() {
 
                 <article className="exhibit rv" aria-labelledby="ex-al">
                     <div className="exhibit__text">
-                        <p className="w-label exhibit__tag">Exhibit C · Active learning</p>
+                        <p className="w-label exhibit__tag">Exhibit C · Smart experiments</p>
                         <h3 id="ex-al" className="w-h3">
-                            Each experiment is chosen for what it will teach.
+                            Each experiment is picked for what it will teach.
                         </h3>
-                        <p className="q">Which experiment teaches the most?</p>
+                        <p className="q">Which experiment should we run next?</p>
                         <p className="a">
-                            <b>The one the model is least sure of, where it matters.</b> A model of what is known, and of
-                            how uncertain it is, picks the next measurement. Watch the uncertainty collapse around the
-                            optimum long before every point is measured.
+                            <b>The one the model is least sure about, near the best answer.</b> Press Run. Watch the
+                            shaded band, how unsure the model is, shrink around the best point long before every point
+                            is measured.
                         </p>
                         <dl className="exhibit__stats">
                             <div>
                                 <dt>19</dt>
-                                <dd>measurements for NIST’s CAMEO to find a reported optimum</dd>
+                                <dd>measurements for NIST’s CAMEO system to find the best material</dd>
                             </div>
                             <div>
                                 <dt>177</dt>
-                                <dd>points in the full map it did not need</dd>
+                                <dd>points on the full map, most of which it never had to measure</dd>
                             </div>
                         </dl>
                         <SourceLine label="Sources">
                             Kusne et al., Nature Communications 11, 5966 (2020): about 10 hours instead of more than 90.
-                            The exhibit is a live Gaussian-process loop on a synthetic function, not material data.
+                            The demo is a real learning loop (a Gaussian process) on a test function, not material data.
                         </SourceLine>
                     </div>
                     <div className="exhibit__stage">
@@ -756,13 +754,13 @@ export default function Method() {
                     <div className="exhibit__text">
                         <p className="w-label exhibit__tag">Exhibit D · Reuse</p>
                         <h3 id="ex-core" className="w-h3">
-                            A reusable core. Material-specific modules.
+                            One core. Swappable modules.
                         </h3>
-                        <p className="q">What changes when the material does?</p>
+                        <p className="q">What changes when the material changes?</p>
                         <p className="a">
-                            <b>Only the modules.</b> Orchestration, sampling, evaluation and provenance stay the same from
-                            one programme to the next. Requirements, material physics and test criteria change with each
-                            application. That is how one platform moves from alloys to polymers.
+                            <b>Only the modules.</b> The planner, the idea generator, the scorer and the records stay the
+                            same. The requirement, the physics and the tests change. That is how one platform moves from
+                            alloys to polymers.
                         </p>
                     </div>
                     <div className="exhibit__stage">

@@ -1,5 +1,6 @@
-import { Button, MirdyneMark, Painting, SourceLine } from '../ds';
+import { Button, LivePainting, SourceLine } from '../ds';
 import { LINKS } from './links';
+import { contactScene } from './scenes';
 import { Arrow, Idx } from './ui';
 
 /* ── Company: Mirdyne, Bimo Tech and PRISM ────────────────────────────── */
@@ -11,59 +12,58 @@ export function Company() {
                 <header className="sec-head rv">
                     <Idx n="09">Company</Idx>
                     <h2 id="company-title" className="w-h2">
-                        A platform company, born inside a manufacturer.
+                        Mirdyne discovers. Bimo Tech delivers.
                     </h2>
                     <p className="w-lead">
-                        Mirdyne is a spin-off of Bimo Tech, which develops and manufactures high-performance metal
-                        components and high-entropy alloys. PRISM is developed in the European Space Agency activities
-                        that Bimo Tech leads, and built by Mirdyne in Giessen, Germany, for any programme that needs a
-                        new material.
+                        Finding a new material is half the job. Someone also has to make it in quantity and supply it
+                        for years. So the work is split between two companies: one finds and proves the material, the
+                        other scales it up and supplies it.
                     </p>
                 </header>
 
-                <div className="rel rv" aria-label="How Bimo Tech, Mirdyne and PRISM relate">
-                    <article className="rel__card rel__card--bimo" data-theme="navy">
-                        <p className="w-label">The industrial parent</p>
-                        <img className="rel__logo" src="/bimo-logo.png" alt="Bimo Tech" width={182} height={66} />
+                <div className="rel rel--two rv" aria-label="How Mirdyne and Bimo Tech share the work">
+                    <article className="rel__card">
+                        <p className="w-label">Discovers</p>
+                        <img className="rel__logo" src="/brand/mirdyne-lockup-ink.png" alt="Mirdyne" width={183} height={50} />
+                        <p className="rel__head">Finds the material and proves it works.</p>
                         <p>
-                            Develops and manufactures high-performance metal components, with a focus on high-entropy
-                            alloys. A supplier to ITER, the international fusion project, and prime contractor of the
-                            ESA activities in which PRISM is developed.
+                            Designs new materials with PRISM, makes the first samples and tests them against the
+                            requirement. Based in Giessen, Germany.
                         </p>
+                        <ul className="rel__tags" aria-label="What Mirdyne does">
+                            <li>Design with PRISM</li>
+                            <li>First samples</li>
+                            <li>Test evidence</li>
+                        </ul>
+                    </article>
+                    <p className="rel__arrow">
+                        <span>proven material</span>
+                        <i aria-hidden="true" />
+                    </p>
+                    <article className="rel__card rel__card--bimo" data-theme="navy">
+                        <p className="w-label">Delivers</p>
+                        <img className="rel__logo" src="/bimo-logo.png" alt="Bimo Tech" width={182} height={66} />
+                        <p className="rel__head">Makes it at scale and supplies it.</p>
+                        <p>
+                            An industrial manufacturer of high-performance metal parts and high-entropy alloys, and a
+                            supplier to ITER, the international fusion project. It takes a proven material into
+                            production.
+                        </p>
+                        <ul className="rel__tags" aria-label="What Bimo Tech does">
+                            <li>Scale-up</li>
+                            <li>Powder and parts</li>
+                            <li>Supply</li>
+                        </ul>
                         <a className="rel__link" href={LINKS.bimotech} target="_blank" rel="noopener noreferrer">
                             bimotech.pl <Arrow external />
                         </a>
                     </article>
-                    <p className="rel__arrow">
-                        <span>spin-off</span>
-                        <i aria-hidden="true" />
-                    </p>
-                    <article className="rel__card">
-                        <p className="w-label">The platform company</p>
-                        <img className="rel__logo" src="/brand/mirdyne-lockup-ink.png" alt="Mirdyne" width={183} height={50} />
-                        <p>
-                            Based in Giessen, Germany. Builds PRISM and takes it to programmes beyond space, starting
-                            with PFAS-free polymers for an industrial partner.
-                        </p>
-                    </article>
-                    <p className="rel__arrow">
-                        <span>builds</span>
-                        <i aria-hidden="true" />
-                    </p>
-                    <article className="rel__card rel__card--prism">
-                        <p className="w-label">The platform</p>
-                        <p className="rel__prism">
-                            <MirdyneMark title="" />
-                            PRISM
-                        </p>
-                        <p>
-                            Design, orchestration, autonomous experiments, manufacture, test and evidence, run as one
-                            closed loop.
-                        </p>
-                    </article>
                     <p className="rel__under">
                         <i aria-hidden="true" />
-                        <span>Bimo Tech’s ESA activities are where PRISM’s designs meet real manufacture and test.</span>
+                        <span>
+                            Mirdyne is a spin-off of Bimo Tech. PRISM is being developed in ESA projects that Bimo Tech
+                            leads.
+                        </span>
                     </p>
                 </div>
 
@@ -76,7 +76,7 @@ export function Company() {
                         loading="lazy"
                     />
                     <figcaption>
-                        <SourceLine label="Project SPARK">Powder preparation, melting and polishing. Real project photographs.</SourceLine>
+                        <SourceLine label="Project SPARK">Preparing powder, melting and polishing. Real photographs from the project.</SourceLine>
                     </figcaption>
                 </figure>
 
@@ -110,22 +110,28 @@ export function Company() {
 
 const NEWS = [
     {
+        when: '2026',
+        tag: 'Award',
+        title: 'PRISM wins the AI special prize at Hessen Ideen',
+        text: 'Team PRISM, from Justus Liebig University Giessen, won the KI‑Sonderpreis, the special prize for artificial intelligence, in the Hessen Ideen competition 2026.',
+    },
+    {
         when: 'August 2026',
         tag: 'Industry',
-        title: 'First privately funded programme: PFAS‑free polymers',
-        text: 'Mirdyne has signed its first privately funded programme, with an industrial partner under NDA: PFAS-free polymer materials designed with PRISM. It is the platform’s first polymer class, and work starts next.',
+        title: 'First privately funded project: PFAS‑free polymers',
+        text: 'Mirdyne has signed its first privately funded project, with an industrial partner under NDA. We will design PFAS‑free polymers with PRISM, to replace “forever chemicals”. Work starts next.',
     },
     {
         when: 'July 2026',
         tag: 'Programme',
         title: 'ESA awards PRISM Alpha',
-        text: 'The European Space Agency has awarded PRISM Alpha to a consortium led by Bimo Tech, under the Future Launchers Preparatory Programme (FIRST! Simulation & Intelligence). It is the first activity built around the complete PRISM loop, for European space transportation.',
+        text: 'The European Space Agency has awarded PRISM Alpha to a team led by Bimo Tech. It is the first project built around the full PRISM loop, for European space transport.',
     },
     {
-        when: 'Active',
+        when: 'Ongoing',
         tag: 'Project',
-        title: 'Project SPARK: refractory high-entropy alloys, made for real',
-        text: 'In SPARK, an ESA activity led by Bimo Tech, candidate refractory high-entropy alloys left the computer and became physical alloys: powder, melting, polishing and test. The photographs on this site come from the project.',
+        title: 'Project SPARK: our first alloys are real',
+        text: 'In SPARK, an ESA project led by Bimo Tech, the first alloys from our early screening were made as real metal: powder, melting and polishing. We are still testing them, and two or three look promising. The photographs on this site come from the project.',
     },
 ];
 
@@ -162,25 +168,20 @@ export function Contact() {
     return (
         <section id="contact" className="cta" data-theme="paper" data-nav="paper" aria-labelledby="contact-title">
             <div className="cta__art">
-                <Painting
-                    src="/img/search-manifold.webp"
-                    alt="Painted materials search landscape: basins, sampled points and a path descending to the optimum."
-                    seed={29}
-                    direction={-10}
-                    motion={0.4}
-                    focusX={0.7}
-                    focusY={0.5}
+                <LivePainting
+                    scene={contactScene}
+                    alt="Painted materials search landscape: basins, measured points and a path descending to the best point."
+                    fallback={{ src: '/img/search-manifold.webp', seed: 29, direction: -10, motion: 0.4, focusX: 0.7, focusY: 0.5 }}
                 />
             </div>
             <div className="cta__shade" aria-hidden="true" />
             <div className="wrap cta__inner rv">
                 <p className="w-label cta__kicker">Start</p>
                 <h2 id="contact-title" className="w-mega cta__title">
-                    Start with the capability you need.
+                    Tell us what your part must survive.
                 </h2>
                 <p className="w-lead">
-                    Tell us the environment your part has to survive. We will tell you what PRISM can search, how we
-                    would prove it and what it would take.
+                    We will tell you what PRISM can search for, how we would prove it and what it would take.
                 </p>
                 <div className="cta__actions">
                     <Button href={LINKS.interest} external>
