@@ -1,12 +1,30 @@
 import { put } from '@vercel/blob';
+import { waitUntil } from '@vercel/functions';
+import { createTransport } from 'nodemailer';
 
 /**
- * Register interest. Checks a submission from the form at /interest/ and keeps it as one private JSON
- * file in the project's Blob store, in Frankfurt. Nothing else is kept: no IP address, no cookies.
+ * Register interest. Checks a submission from the form at /interest/, keeps it as one private JSON file
+ * in the project's Blob store in Frankfurt, and emails it to info@mirdyne.com through our own Zoho
+ * mailbox, with the visitor as the reply-to address. Nothing else is kept: no IP address, no cookies.
  * The areas below must match the form (src/site/Interest.tsx).
+ *
+ * The email needs SMTP_PASS (an app password for the sending mailbox) in the project's environment.
+ * Optional: SMTP_USER (default info@mirdyne.com), SMTP_HOST (default smtppro.zoho.eu, Zoho's server for
+ * paid company plans; smtp.zoho.eu on the free plan), SMTP_PORT (default 465), INTEREST_MAIL_TO
+ * (default info@mirdyne.com) and INTEREST_MAIL_FROM (default: SMTP_USER).
  */
 
-const AREAS = ['material', 'deployment', 'supply', 'research', 'partnership', 'investment', 'other'];
+/** Each area, as the form words it. */
+const AREA_NAMES: Record<string, string> = {
+    material: 'A new material for a part',
+    deployment: 'PRISM on our programme',
+    supply: 'Supply of a qualified material',
+    research: 'Research collaboration',
+    partnership: 'Partnership',
+    investment: 'Investment',
+    other: 'Something else',
+};
+const AREAS = Object.keys(AREA_NAMES);
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MAX = { name: 120, email: 254, organisation: 160, role: 120, message: 3000, from: 200 };
 
@@ -105,15 +123,98 @@ export async function POST(request: Request) {
 
     const at = new Date();
     const stamp = at.toISOString().replace(/[:.]/g, '-');
+    let saved: string | null = null;
     try {
-        await put(
+        const blob = await put(
             `interest/${stamp.slice(0, 7)}/${stamp}-${slug(entry.organisation) || 'submission'}.json`,
             JSON.stringify({ receivedAt: at.toISOString(), ...entry, consent: true }, null, 2),
             { access: 'private', contentType: 'application/json', addRandomSuffix: true },
         );
+        saved = blob.pathname;
     } catch (err) {
-        console.error('interest: could not store a submission:', err instanceof Error ? err.message : err);
-        return reply(500, { ok: false, error: 'We could not save your message. Please try again in a moment.' });
+        console.error('interest: could not store a submission:', why(err));
     }
-    return reply(201, { ok: true });
+
+    if (saved) {
+        // Saved: the visitor gets their answer now, and the email goes out after it.
+        waitUntil(mail(entry, at, saved).catch((err) => console.error('interest: could not email a submission:', why(err))));
+        return reply(201, { ok: true });
+    }
+    // Not saved: the email is the only copy, so it has to go before we say thank you.
+    try {
+        if ((await mail(entry, at, null)) === 'sent') return reply(201, { ok: true });
+    } catch (err) {
+        console.error('interest: could not email a submission either:', why(err));
+    }
+    return reply(500, { ok: false, error: 'We could not save your message. Please try again in a moment.' });
+}
+
+const why = (err: unknown) => (err instanceof Error ? err.message : String(err));
+
+type Entry = ReturnType<typeof check>['entry'];
+
+const esc = (v: string) =>
+    v.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
+
+/**
+ * Emails one submission to our inbox. Replying to the email answers the visitor. Returns 'off' when no
+ * mail password is set, so the site works (storing only) before the mailbox is connected.
+ */
+async function mail(entry: Entry, at: Date, saved: string | null): Promise<'sent' | 'off'> {
+    const pass = process.env.SMTP_PASS;
+    if (!pass) {
+        console.warn('interest: SMTP_PASS is not set, so no email was sent.');
+        return 'off';
+    }
+    const user = process.env.SMTP_USER || 'info@mirdyne.com';
+    const port = Number(process.env.SMTP_PORT) || 465;
+    const transport = createTransport({
+        host: process.env.SMTP_HOST || 'smtppro.zoho.eu',
+        port,
+        secure: port === 465,
+        auth: { user, pass },
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 12000,
+    });
+    const when = at.toLocaleString('en-GB', { timeZone: 'Europe/Berlin', dateStyle: 'long', timeStyle: 'short' });
+    const rows: [string, string][] = [
+        ['Name', entry.name],
+        ['Email', entry.email],
+        ['Organisation', entry.organisation],
+        ['Role', entry.role || '(not given)'],
+        ['Interested in', entry.areas.map((a) => AREA_NAMES[a] ?? a).join(', ')],
+        ['Sent from', entry.from ? `the page ${entry.from}` : 'the form directly'],
+        ['Received', `${when} (Berlin)`],
+    ];
+    const kept = saved
+        ? `A copy is kept in the prism-interest store on Vercel: ${saved}`
+        : 'The store on Vercel could not save it, so this email is the only copy.';
+    const text = [
+        ...rows.map(([k, v]) => `${k}: ${v}`),
+        '',
+        'Message:',
+        entry.message || '(none)',
+        '',
+        `Reply to this email to answer ${entry.name}.`,
+        kept,
+    ].join('\n');
+    const html = `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;color:#161714">
+<p style="margin:0 0 16px;font-size:18px"><b>New interest from ${esc(entry.name)}</b>, ${esc(entry.organisation)}</p>
+<table cellpadding="0" cellspacing="0" style="border-collapse:collapse">
+${rows.map(([k, v]) => `<tr><td style="padding:4px 20px 4px 0;color:#5f625e;vertical-align:top">${esc(k)}</td><td style="padding:4px 0">${esc(v)}</td></tr>`).join('\n')}
+</table>
+<p style="margin:20px 0 6px;color:#5f625e">Message</p>
+<p style="margin:0;white-space:pre-wrap">${esc(entry.message || '(none)')}</p>
+<p style="margin:24px 0 0;font-size:13px;color:#5f625e">Reply to this email to answer ${esc(entry.name)}. ${esc(kept)}</p>
+</div>`;
+    await transport.sendMail({
+        from: { name: 'PRISM website', address: process.env.INTEREST_MAIL_FROM || user },
+        to: process.env.INTEREST_MAIL_TO || 'info@mirdyne.com',
+        replyTo: { name: entry.name, address: entry.email },
+        subject: `Register interest: ${entry.name}, ${entry.organisation}`,
+        text,
+        html,
+    });
+    return 'sent';
 }

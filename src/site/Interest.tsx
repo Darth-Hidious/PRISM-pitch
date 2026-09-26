@@ -366,8 +366,8 @@ function InterestForm() {
                     <span>Mirdyne may keep these details to reply to me.</span>
                 </label>
                 <p className="consent__note">
-                    We use them only to reply. They are stored in Frankfurt with our hosting provider and deleted after
-                    twelve months, or sooner if you ask.
+                    We use them only to reply. They are stored in Frankfurt with our hosting provider and emailed to our
+                    team. We delete them after twelve months, or sooner if you ask.
                 </p>
                 {shown('consent') && (
                     <p className="field__error" id="f-consent-error">

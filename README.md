@@ -30,12 +30,22 @@ the menu.
   in the project's Blob store `prism-interest` (Frankfurt), under
   `interest/<year-month>/`. It keeps what the form asks for and the page the
   visitor came from; no IP address and no cookies.
+- **Email:** each submission is also emailed to info@mirdyne.com, sent through
+  our own Zoho mailbox (`smtppro.zoho.eu`, port 465). Reply to the email to
+  answer the visitor. It needs one setting in Vercel: `SMTP_PASS`, an app
+  password for info@mirdyne.com (Zoho → My Account → Security → App
+  Passwords). Until it is set, submissions are stored but not emailed. On
+  Zoho's free plan use `SMTP_HOST=smtp.zoho.eu`. `SMTP_USER`,
+  `INTEREST_MAIL_TO` and `INTEREST_MAIL_FROM` change the sender and recipient.
+  If the store fails, the email is sent before the visitor is thanked, so a
+  submission is never lost silently.
 - **Reading them:** Vercel dashboard → Storage → `prism-interest` → Browser.
 - **Spam:** a hidden field that only bots fill in, a two-second minimum, our
   own pages only (`Origin`), 20 kB at most.
 - **Retention:** the form says details are deleted after twelve months.
-  `api/interest-cleanup.ts` does that once a day (`crons` in `vercel.json`,
-  production only), authorised by the `CRON_SECRET` environment variable.
+  `api/interest-cleanup.ts` does that for the store once a day (`crons` in
+  `vercel.json`, production only), authorised by the `CRON_SECRET`
+  environment variable. The emails in the inbox have to be deleted there.
 - Locally, `npm run dev` does not run `api/`; the form then shows its error
   message. `vercel dev` runs both.
 
