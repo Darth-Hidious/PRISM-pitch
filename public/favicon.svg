@@ -1,18 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="66 60 380 380" width="64" height="64">
-  <style>
-    .edge { stroke: #13294b; }
-    @media (prefers-color-scheme: dark) { .edge { stroke: #ffffff; } }
-  </style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="s" gradientUnits="userSpaceOnUse" x1="112" y1="0" x2="262" y2="0">
-      <stop offset="0" stop-color="#7b5ba6"/>
-      <stop offset="0.2" stop-color="#6b62b0"/>
-      <stop offset="0.38" stop-color="#3f82c9"/>
-      <stop offset="0.56" stop-color="#92a048"/>
-      <stop offset="0.76" stop-color="#f0a32c"/>
-      <stop offset="1" stop-color="#e34840"/>
-    </linearGradient>
+  <linearGradient id="s" gradientUnits="userSpaceOnUse" x1="112" y1="0" x2="262" y2="0">
+    <stop offset="0" stop-color="#6b4c9e"/>
+    <stop offset="0.2" stop-color="#5f55ad"/>
+    <stop offset="0.38" stop-color="#2f7ecf"/>
+    <stop offset="0.56" stop-color="#86a23a"/>
+    <stop offset="0.76" stop-color="#f6a21f"/>
+    <stop offset="1" stop-color="#ec3f37"/>
+  </linearGradient>
   </defs>
-  <path class="edge" d="M298 88 87 267 238 392 426 353Z M298 88 290 297 M87 267 290 297 426 353" fill="none" stroke-width="24" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M112 266 262 195 226 349 189 280Z" fill="url(#s)"/>
+  <rect width="512" height="512" rx="96" fill="#061832"/>
+  <g transform="translate(256 262) scale(1.16) translate(-256.5 -240)">
+    <path d="M298 88 87 267 238 392 426 353Z M298 88 290 297 M87 267 290 297 426 353" fill="none" stroke="#ffffff" stroke-width="32" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M112 266 262 195 226 349 189 280Z" fill="url(#s)"/>
+  </g>
 </svg>

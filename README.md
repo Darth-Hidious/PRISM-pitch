@@ -74,6 +74,21 @@ that changes.
 - Locally, `npm run dev` does not run `api/`; the form then shows its error
   message. `vercel dev` runs both.
 
+## Icons and link previews
+
+- **Icons:** the PRISM mark on a navy tile, so it reads on light and dark tab
+  bars: `favicon.svg` and `favicon.ico` for browser tabs, `apple-touch-icon.png`
+  for iPhone home screens, and the Android icons in `icons/`, listed in
+  `site.webmanifest`. `node scripts/make-icons.mjs` draws them all again.
+- **Link previews:** what WhatsApp, LinkedIn, Slack and iMessage show when a
+  link is shared. Every page names its image and its address on
+  `www.mirdyne.com` (`og:` tags and `rel="canonical"`, so search engines count
+  every copy of a page as one). The deck has its own picture and stays out of
+  search (`noindex`, no canonical). `node scripts/make-previews.mjs` draws the
+  pictures again; change the words there.
+- `robots.txt` keeps crawlers out of `/api/` and points them at `sitemap.xml`,
+  which lists every page except the deck.
+
 ## Develop
 
 ```bash
@@ -135,6 +150,7 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
 | `news-hessen-ideen-2026.webp` | Team PRISM receiving the KI-Sonderpreis at Hessen Ideen 2026 | Hessen Ideen (the organisers' photograph), supplied by the team |
 | `dlr-vulcain2-p5.webp` | Vulcain 2 engine on test stand P5, DLR Lampoldshausen (the home page's first screen) | DLR, CC BY 3.0 ([source](https://www.dlr.de/en/images/2011/3/vulcain-2-engine-on-test-facility-p5-at-dlr-lampoldshausen_3149)) |
 | `dlr-vinci-p41-1200.webp`, `dlr-vinci-p41-2000.webp`, `dlr-vinci-p41-wide.webp` | Vinci engine in altitude test stand P4.1, resized (the `-wide` card version also cropped to 3:2) | DLR, CC BY 3.0 ([source](https://www.dlr.de/de/bilder/2016/2/vinci-triebwerk-im-pruefstand-p4-1_23249)) |
+| `public/og/prism.jpg`, `public/og/investor-room.jpg` | The link previews: `spark-melt.webp` and `spark-hearth-charge.webp` beside the site's own words. Previews travel without a credit line, so they use only our own photographs | Our own photographs |
 
 ESA images: use only those whose page says **CC BY-SA 3.0 IGO**, credit them
 as the page says, link the licence and say if they were changed. Images under
