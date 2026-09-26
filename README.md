@@ -9,6 +9,7 @@
 | `/method/` | Four live demos of the method (`/method/#al` opens one), open research, and Proof, built in (`#proof`): a live map of who sees what, a real lineage (NIST's CAMEO), what a part gives away | `src/site/pages/method.tsx` |
 | `/company/` | Mirdyne and Bimo Tech, the founders, working with us | `src/site/pages/company.tsx` |
 | `/news/` | News, with the photographs | `src/site/pages/news.tsx` |
+| `/interest/` | Register interest: our own form (`/interest/?topic=investment` starts with a topic chosen) | `src/site/pages/interest.tsx`, `api/interest.ts` |
 | `/deck/` | The investor briefing: 12 slides on a 1440 × 810 stage, `/deck/#5` opens slide 5 | `src/deck/` |
 
 Each page is its own HTML file (`index.html`, `platform/index.html`, …), listed
@@ -17,6 +18,26 @@ and sends the old `/evidence/` address to `/method/#proof`.
 
 Both are built from the same component library in `src/ds/` and the tokens in
 `src/styles/`, which are also published as the PRISM design system.
+
+The **Register interest** button in the bar opens two ways in: the form at
+`/interest/` and the investor room (`/deck/`). On phones both are at the foot of
+the menu.
+
+## Register interest: where submissions go
+
+- `api/interest.ts` (a Vercel Function, run in Frankfurt: `regions` in
+  `vercel.json`) checks each submission and saves it as one private JSON file
+  in the project's Blob store `prism-interest` (Frankfurt), under
+  `interest/<year-month>/`. It keeps what the form asks for and the page the
+  visitor came from; no IP address and no cookies.
+- **Reading them:** Vercel dashboard → Storage → `prism-interest` → Browser.
+- **Spam:** a hidden field that only bots fill in, a two-second minimum, our
+  own pages only (`Origin`), 20 kB at most.
+- **Retention:** the form says details are deleted after twelve months.
+  `api/interest-cleanup.ts` does that once a day (`crons` in `vercel.json`,
+  production only), authorised by the `CRON_SECRET` environment variable.
+- Locally, `npm run dev` does not run `api/`; the form then shows its error
+  message. `vercel dev` runs both.
 
 ## Develop
 
@@ -64,7 +85,7 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
 
 | File | What | Rights |
 | --- | --- | --- |
-| `spark-furnace.webp` | Project SPARK photograph: vacuum-arc melting, seen through the viewport (deck cover only) | Our own photograph |
+| `spark-furnace.webp` | Project SPARK photograph: vacuum-arc melting, seen through the viewport (the deck and the Register interest page) | Our own photograph |
 | `spark-charge.webp`, `spark-hearth-charge*.webp`, `spark-hearth-column*.webp`, `spark-furnace-wide.webp`, `spark-melt.webp`, `spark-button*.webp`, `machining.webp` | Raw metals, the loaded hearth, the arc furnace, an alloy melting, a cast button, machining; cropped only (an equipment label and a reflection cropped out). No element or composition is named anywhere they are used | Our own photographs |
 | `lab-arc-melter.webp`, `lab-melt-spinner*.webp` | The arc melter and the melt spinner in the materials science lab at WUST, Wrocław (run by the university; we rent the equipment); cropped only, the arc melter's ignition-current label cropped out | Our own photographs |
 | `markets/space.webp` | Aestus engine in ESA's altitude test stand P4.2, DLR Lampoldshausen; cropped square (the DLR signs left out) | DLR, CC BY 3.0 ([source](https://www.dlr.de/de/bilder/2016/4/triebwerkstests-beim-dlr_25044)) |

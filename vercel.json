@@ -1,4 +1,7 @@
 {
+  "regions": [
+    "fra1"
+  ],
   "redirects": [
     {
       "source": "/evidence",
@@ -34,6 +37,10 @@
       "destination": "/news/index.html"
     },
     {
+      "source": "/interest",
+      "destination": "/interest/index.html"
+    },
+    {
       "source": "/deck",
       "destination": "/deck/index.html"
     },
@@ -44,6 +51,12 @@
     {
       "source": "/install.ps1",
       "destination": "https://raw.githubusercontent.com/Darth-Hidious/PRISM/main/install.ps1"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/interest-cleanup",
+      "schedule": "17 3 * * *"
     }
   ]
 }

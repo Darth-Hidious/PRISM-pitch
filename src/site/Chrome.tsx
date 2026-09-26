@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Button, PrismMark } from '../ds';
 import { CREDITS } from './credits';
+import InterestMenu from './InterestMenu';
 import { LINKS } from './links';
 
 /** The site's pages. Home is `/`; each other page is its own HTML entry (see vite.config.ts). */
-export type PageId = 'home' | 'platform' | 'method' | 'company' | 'news';
+export type PageId = 'home' | 'platform' | 'method' | 'company' | 'news' | 'interest';
 
 const NAV: { id: PageId; href: string; label: string }[] = [
     { id: 'platform', href: '/platform/', label: 'Platform' },
@@ -81,9 +82,7 @@ export function SiteNav({ page }: { page: PageId }) {
                     ))}
                 </ul>
                 <div className="nav__cta">
-                    <Button href={LINKS.interest} external>
-                        Register interest
-                    </Button>
+                    <InterestMenu />
                 </div>
                 <button
                     type="button"
@@ -113,9 +112,12 @@ export function SiteNav({ page }: { page: PageId }) {
                             {n.label}
                         </a>
                     ))}
-                    <Button href={LINKS.interest} external>
-                        Register interest
-                    </Button>
+                    <div className="nav__panel-ctas">
+                        <Button href={LINKS.interest}>Register interest</Button>
+                        <Button variant="secondary" href={LINKS.deck}>
+                            Investor room
+                        </Button>
+                    </div>
                 </div>
             </nav>
         </header>
@@ -164,9 +166,10 @@ export function SiteFooter({ page }: { page: PageId }) {
                                 <a href="/news/">News</a>
                             </li>
                             <li>
-                                <a href={LINKS.interest} target="_blank" rel="noopener noreferrer">
-                                    Register interest
-                                </a>
+                                <a href={LINKS.interest}>Register interest</a>
+                            </li>
+                            <li>
+                                <a href={LINKS.deck}>Investor room</a>
                             </li>
                         </ul>
                     </nav>

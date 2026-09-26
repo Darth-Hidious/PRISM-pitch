@@ -30,9 +30,7 @@ export default function Hero() {
                         Designed with AI. Made and tested in Europe.
                     </p>
                     <div className="hero__actions rise" style={{ animationDelay: '260ms' }}>
-                        <Button href={LINKS.interest} external>
-                            Register interest
-                        </Button>
+                        <Button href={LINKS.interest}>Register interest</Button>
                         <Button variant="secondary" href="#gap">
                             See why it matters
                         </Button>

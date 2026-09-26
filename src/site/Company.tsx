@@ -217,9 +217,7 @@ export function Contact() {
                 <div className="cta__side">
                     <p className="w-lead">We’ll tell you what PRISM can find, and how we’d prove it.</p>
                     <div className="cta__actions">
-                        <Button href={LINKS.interest} external>
-                            Register interest
-                        </Button>
+                        <Button href={LINKS.interest}>Register interest</Button>
                         <Button variant="secondary" href={LINKS.github} external>
                             Open-source layer on GitHub
                         </Button>

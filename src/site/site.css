@@ -412,6 +412,149 @@ body {
     padding: 0 18px;
 }
 
+/* Register interest: pointing at the button opens two ways in, our form and the investor room. */
+.imenu {
+    position: relative;
+}
+
+.imenu__trigger svg {
+    transition: transform 220ms var(--ease-rise);
+}
+
+.imenu__trigger:hover svg {
+    transform: none;
+}
+
+.imenu.is-open .imenu__trigger svg {
+    transform: rotate(180deg);
+}
+
+/* The top padding bridges the gap under the button, so the pointer can cross it. */
+.imenu__panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 348px;
+    padding-top: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition:
+        opacity 160ms ease,
+        transform 240ms var(--ease-rise),
+        visibility 0s linear 240ms;
+}
+
+.imenu.is-open .imenu__panel {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+        opacity 160ms ease,
+        transform 240ms var(--ease-rise),
+        visibility 0s;
+}
+
+.imenu__panel ul {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-panel);
+    box-shadow:
+        0 22px 48px -18px rgba(3, 12, 28, 0.45),
+        0 2px 8px rgba(3, 12, 28, 0.1);
+}
+
+.imenu__item {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) 16px;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-card);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+.imenu__item:hover,
+.imenu__item:focus-visible {
+    border-color: var(--ink);
+}
+
+.imenu__item--main {
+    background: var(--emphasis);
+    border-color: var(--emphasis);
+    color: var(--on-emphasis);
+}
+
+.imenu__item--main:hover,
+.imenu__item--main:focus-visible {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ground);
+}
+
+.imenu__icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-card);
+    background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.imenu__icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.imenu__words {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.imenu__words b {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.imenu__words span {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    opacity: 0.78;
+}
+
+.imenu__go {
+    width: 16px;
+    height: 16px;
+    transition: transform 200ms var(--ease-rise);
+}
+
+.imenu__item:hover .imenu__go,
+.imenu__item:focus-visible .imenu__go {
+    transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .imenu__panel,
+    .imenu.is-open .imenu__panel {
+        transform: none;
+        transition: none;
+    }
+}
+
 .nav__menu {
     display: none;
     position: relative;
@@ -480,9 +623,18 @@ body {
     color: var(--accent);
 }
 
-.nav__panel .pm-btn {
-    justify-self: start;
+/* The menu on small screens ends with both ways in, side by side where they fit, else one above the other. */
+.nav__panel-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
     margin-top: 20px;
+}
+
+.nav__panel-ctas .pm-btn {
+    flex: 1 1 200px;
+    justify-content: space-between;
+    max-width: 320px;
 }
 
 @media (max-width: 1100px) {
@@ -5496,6 +5648,10 @@ body {
         column-gap: 28px;
     }
 
+    .nav__panel-ctas {
+        grid-column: 1 / -1;
+    }
+
     .nav__panel a:not(.pm-btn) {
         padding: 10px 0;
         font-size: 17px;
@@ -6254,3 +6410,569 @@ body {
     border-radius: 0;
 }
 
+
+/* ── Register interest (/interest/) ───────────────────────────────────── */
+
+/*
+ * Wide screens: a furnace photograph fills the left column, with the heading at the top and what happens
+ * next at the foot; the form fills the right. Phones: heading over the photograph, then the form, then
+ * the rest.
+ */
+.ask {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    min-height: 100svh;
+    background: var(--navy);
+}
+
+.ask__photo {
+    position: relative;
+    grid-column: 1;
+    grid-row: 1 / 3;
+    overflow: hidden;
+}
+
+.ask__photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 38% 55%;
+}
+
+.ask__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(6, 24, 50, 0.92) 0%,
+        rgba(6, 24, 50, 0.55) 34%,
+        rgba(6, 24, 50, 0.25) 52%,
+        rgba(6, 24, 50, 0.8) 76%,
+        rgba(6, 24, 50, 0.97) 100%
+    );
+}
+
+.ask__side,
+.ask__more {
+    position: relative;
+    z-index: 1;
+    grid-column: 1;
+    background: none;
+    padding-inline: var(--layout-gutter) clamp(28px, 4vw, 64px);
+}
+
+.ask__side {
+    grid-row: 1;
+    padding-top: calc(var(--nav-h) + clamp(40px, 7vh, 88px));
+}
+
+.ask__head {
+    display: grid;
+    gap: 18px;
+    max-width: 30rem;
+}
+
+.ask__head .w-h2 {
+    margin: 0;
+}
+
+.ask__head .w-lead {
+    margin: 0;
+    color: var(--ink-2);
+}
+
+.ask__more {
+    grid-row: 2;
+    display: grid;
+    gap: 28px;
+    padding-bottom: clamp(36px, 6vh, 64px);
+}
+
+.ask__next {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule-soft);
+}
+
+.ask__next li {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.ask__next li span {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-3);
+}
+
+.ask__investors {
+    margin: 0;
+    font-size: 15.5px;
+    color: var(--ink-2);
+}
+
+.ask__investors a {
+    color: var(--ink);
+    font-weight: 700;
+    text-underline-offset: 4px;
+}
+
+.ask__partners {
+    --logo-h: 20px;
+    display: grid;
+    gap: 14px;
+}
+
+.ask__partners .w-label {
+    margin: 0;
+    color: var(--ink-3);
+}
+
+.ask__partners ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 26px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: rgba(255, 255, 255, 0.84);
+}
+
+.ask__main {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    padding: calc(var(--nav-h) + clamp(40px, 7vh, 88px)) clamp(24px, 6vw, 104px) clamp(56px, 8vh, 96px);
+}
+
+/* The form */
+
+.ask__form,
+.ask__done {
+    display: grid;
+    gap: 26px;
+    max-width: 660px;
+}
+
+.ask__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 20px;
+}
+
+.field {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.field__label {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.field__label small {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+
+.field__input {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 14px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    /* 16 px or more, so phones do not zoom in on focus. */
+    font-size: 16px;
+    line-height: 1.4;
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+textarea.field__input {
+    min-height: 148px;
+    resize: vertical;
+    line-height: 1.55;
+}
+
+.field__input::placeholder {
+    color: var(--ink-3);
+}
+
+.field__input:hover {
+    border-color: var(--ink-3);
+}
+
+.field__input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.field--bad .field__input,
+.field__input[aria-invalid='true'] {
+    border-color: var(--crimson);
+}
+
+.field--bad .field__input:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--crimson) 20%, transparent);
+}
+
+.field__error {
+    margin: 0;
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--crimson-text);
+}
+
+.field__count {
+    justify-self: end;
+    margin-top: -2px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+}
+
+/* A tick box, drawn: for the topic chips and the consent box. */
+.tick {
+    flex: none;
+    width: 16px;
+    height: 16px;
+}
+
+.tick__box {
+    stroke: currentColor;
+    stroke-width: 1.4;
+    fill: none;
+    opacity: 0.55;
+    transition:
+        fill 160ms ease,
+        opacity 160ms ease;
+}
+
+.tick__mark {
+    stroke: var(--emphasis);
+    stroke-width: 1.8;
+    fill: none;
+    stroke-dasharray: 12;
+    stroke-dashoffset: 12;
+    transition: stroke-dashoffset 220ms var(--ease-rise);
+}
+
+input:checked + .tick .tick__box,
+input:checked + span .tick__box {
+    fill: currentColor;
+    opacity: 1;
+}
+
+input:checked + .tick .tick__mark,
+input:checked + span .tick__mark {
+    stroke-dashoffset: 0;
+}
+
+.chips__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip {
+    position: relative;
+    display: inline-flex;
+}
+
+/* The real checkbox covers the chip, invisible, so it keeps its keyboard and screen-reader behaviour. */
+.chip input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.chip span {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 42px;
+    padding: 0 16px 0 13px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    pointer-events: none;
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+.chip:hover span {
+    border-color: var(--ink-3);
+}
+
+.chip input:checked + span {
+    background: var(--emphasis);
+    border-color: var(--emphasis);
+    color: var(--on-emphasis);
+}
+
+.chip input:checked + span .tick__mark {
+    stroke: var(--emphasis);
+}
+
+.chip input:focus-visible + span {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+.field--bad .chip span {
+    border-color: color-mix(in srgb, var(--crimson) 55%, var(--rule));
+}
+
+.consent {
+    gap: 10px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule-soft);
+}
+
+.consent__box {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15.5px;
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.consent__box input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.consent__box .tick {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+    color: var(--ink);
+}
+
+.consent__box input:checked + .tick .tick__mark {
+    stroke: var(--ground);
+}
+
+.consent__box input:focus-visible + .tick {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+.field--bad .consent__box .tick {
+    color: var(--crimson);
+}
+
+.consent__note {
+    margin: 0 0 0 32px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.consent .field__error {
+    margin-left: 32px;
+}
+
+.ask__trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.ask__failure {
+    margin: 0;
+    padding: 14px 16px;
+    border-left: 3px solid var(--crimson);
+    background: var(--crimson-tint);
+    color: var(--crimson-text);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.ask__send .pm-btn {
+    min-height: 52px;
+    padding-inline: 28px;
+}
+
+.ask__send .pm-btn[disabled] {
+    cursor: progress;
+    opacity: 0.7;
+}
+
+/* Sent */
+
+.ask__done {
+    align-content: start;
+    gap: 18px;
+    padding-top: clamp(0px, 4vh, 40px);
+}
+
+.ask__done-mark {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--teal-tint);
+    color: var(--teal-text);
+}
+
+.ask__done-mark svg {
+    width: 28px;
+    height: 28px;
+}
+
+.ask__done h2 {
+    margin: 8px 0 0;
+    font-size: clamp(32px, 3.4vw, 48px);
+    line-height: 1.05;
+    font-weight: 650;
+    letter-spacing: -0.035em;
+    outline: none;
+}
+
+.ask__done p {
+    margin: 0;
+    font-size: 18px;
+    color: var(--ink-2);
+}
+
+.ask__done p b {
+    color: var(--ink);
+    overflow-wrap: anywhere;
+}
+
+.ask__done-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+/* The fieldset's legend sits outside its grid, so it needs its own space. */
+.chips .field__label {
+    margin-bottom: 12px;
+}
+
+/* Wide screens: the bar runs across both columns, solid, so it does not turn grey over the paper. */
+@media (min-width: 961px) {
+    body:has(.ask) .nav[data-over='navy']::before {
+        background: var(--navy);
+    }
+}
+
+/* Tablets and phones: the heading over the photograph, then the form, then the rest. */
+@media (max-width: 960px) {
+    .ask {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto;
+        min-height: 0;
+    }
+
+    .ask__photo {
+        grid-row: 1;
+    }
+
+    .ask__photo::after {
+        background: linear-gradient(180deg, rgba(6, 24, 50, 0.9) 0%, rgba(6, 24, 50, 0.35) 45%, rgba(6, 24, 50, 0.92) 100%);
+    }
+
+    .ask__side {
+        display: flex;
+        align-items: flex-end;
+        min-height: min(62svh, 520px);
+        padding: calc(var(--nav-h) + 40px) var(--layout-gutter) 36px;
+    }
+
+    .ask__main {
+        grid-column: 1;
+        grid-row: 2;
+        padding: 40px var(--layout-gutter) 56px;
+    }
+
+    .ask__more {
+        grid-row: 3;
+        padding: 40px var(--layout-gutter) 48px;
+    }
+}
+
+@media (max-width: 560px) {
+    .ask__row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ask__side {
+        min-height: min(52svh, 440px);
+    }
+
+    .chip span {
+        font-size: 14px;
+    }
+}
+
+/* Phones held sideways: no tall photo band; the heading sits on navy above the form. */
+@media (max-height: 500px) and (min-aspect-ratio: 1 / 1) {
+    .ask__side {
+        min-height: 0;
+        padding-top: calc(var(--nav-h) + 28px);
+    }
+
+    .ask__row {
+        grid-template-columns: 1fr 1fr;
+    }
+}

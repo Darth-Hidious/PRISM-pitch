@@ -630,9 +630,7 @@ export function Close() {
                 under ESA FLPP, FIRST! Simulation &amp; Intelligence.
             </p>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                <Button href={LINKS.interest} external>
-                    Register interest
-                </Button>
+                <Button href={LINKS.interest}>Register interest</Button>
                 <Button variant="secondary" href="/">
                     prism.mirdyne.com
                 </Button>
