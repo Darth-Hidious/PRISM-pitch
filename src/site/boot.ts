@@ -14,14 +14,17 @@ import { LangProvider, setDictionary, type Lang } from './i18n';
  * scripts/prerender.mjs). The browser never shows that copy while this script runs: it is hidden from the
  * first paint and removed here, and React draws the page as before.
  *
- * The page's language is the one its HTML declares (`<html lang="de">` under /de/). German pages load
- * their dictionary first; if that fails, the German plain copy stays on screen instead.
+ * The page's language is the one its HTML declares (`<html lang="de">` under /de/). The 404 page, one
+ * file for every missing address, says `data-lang-from-path` instead: German under /de/. German pages load
+ * their dictionary first; if that fails, the plain copy stays on screen instead.
  */
 export function mount(page: ReactNode) {
     // The build imports the pages to render them to HTML; there is nothing to mount then.
     if (import.meta.env.SSR) return;
     const root = document.documentElement;
     root.classList.add('js');
+    const fromPath = root.hasAttribute('data-lang-from-path') && /^\/de(\/|$)/.test(location.pathname);
+    if (fromPath) root.lang = 'de';
     const lang: Lang = root.lang === 'de' ? 'de' : 'en';
     const draw = () => {
         document.querySelector('[data-prerender]')?.remove();

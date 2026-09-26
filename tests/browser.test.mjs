@@ -28,7 +28,8 @@ before(async () => {
         let file = resolve(DIST, decodeURIComponent(new URL(req.url, 'http://x').pathname).slice(1));
         if (existsSync(file) && statSync(file).isDirectory()) file = resolve(file, 'index.html');
         if (!file.startsWith(DIST) || !existsSync(file)) {
-            res.writeHead(404).end();
+            // As on Vercel: any missing address gets 404.html, with status 404.
+            res.writeHead(404, { 'Content-Type': TYPES['.html'] }).end(readFileSync(resolve(DIST, '404.html')));
             return;
         }
         res.writeHead(200, { 'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream' }).end(readFileSync(file));
@@ -340,4 +341,40 @@ test('the German form: its own checks, every answer from the server, and the tha
         [],
         '/de/interest/: the same as on /interest/',
     );
+});
+
+test('the 404 page is German under /de/ and English anywhere else', { skip }, async () => {
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    await context.addInitScript(recordCanvasText);
+    for (const [path, lang, h1, home] of [
+        ['/de/no-such-page/', 'de', 'Seite nicht gefunden.', '/de/'],
+        ['/de/company/no-such-page', 'de', 'Seite nicht gefunden.', '/de/'],
+        ['/no-such-page/', 'en', 'Page not found.', '/'],
+        ['/design/', 'en', 'Page not found.', '/'],
+    ]) {
+        const page = await context.newPage();
+        const errors = [];
+        page.on('pageerror', (e) => errors.push(e.message));
+        const res = await page.goto(base + path, { waitUntil: 'networkidle' });
+        assert.equal(res.status(), 404, path);
+        await page.waitForFunction(() => !document.querySelector('[data-prerender]'));
+        const state = await page.evaluate(() => ({
+            lang: document.documentElement.lang,
+            h1: document.querySelector('#root main h1')?.textContent.trim(),
+            title: document.title,
+            links: [...document.querySelectorAll('#root main .legal__list a')].map((a) => a.getAttribute('href')),
+        }));
+        assert.equal(state.lang, lang, path);
+        assert.equal(state.h1, h1, path);
+        assert.equal(state.links[0], home, `${path}: the first link goes home in the same language`);
+        assert.ok(state.links.every((href) => href.startsWith(lang === 'de' ? '/de/' : '/') && (lang === 'de' || !href.startsWith('/de/'))), `${path}: ${state.links}`);
+        if (lang === 'de') assert.equal(state.title, 'Seite nicht gefunden | PRISM by Mirdyne');
+        assert.deepEqual(errors, [], `${path}: page errors`);
+        await page.close();
+    }
+    // Nothing on the German 404 is left in English.
+    const en = await visit(context, '/no-such-page/');
+    const de = await visit(context, '/de/no-such-page/');
+    assert.deepEqual(leftInEnglish(en.texts, de.texts), [], '/de/no-such-page/: the same as on /no-such-page/');
+    await context.close();
 });

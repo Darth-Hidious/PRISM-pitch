@@ -871,6 +871,7 @@ export const DE: Readonly<Record<string, string>> = {
     'PRISM by Mirdyne': 'PRISM by Mirdyne',
     Forager: 'Forager',
     GitHub: 'GitHub',
+    'llms.txt': 'llms.txt',
     'Bimo Materials': 'Bimo Materials',
     EOxCloudless: 'EOxCloudless',
     '© 2026 Mirdyne': '© 2026 Mirdyne',
@@ -970,6 +971,17 @@ export const DE: Readonly<Record<string, string>> = {
     'ISCIX-Ex ·': 'ISCIX-Ex ·',
     'ESA ·': 'ESA ·',
     'FlyEM, HHMI Janelia ·': 'FlyEM, HHMI Janelia ·',
+
+    // Page not found (src/site/NotFound.tsx): 404.html, drawn in German under /de/
+    'Error 404': 'Fehler 404',
+    'Page not found.': 'Seite nicht gefunden.',
+    'Page not found | PRISM by Mirdyne': 'Seite nicht gefunden | PRISM by Mirdyne',
+    'There is no page at this address. The link may be wrong, or the page may have moved.':
+        'Unter dieser Adresse gibt es keine Seite. Vielleicht ist der Link falsch, oder die Seite ist umgezogen.',
+    'Pages on this site': 'Seiten dieser Website',
+    Indexes: 'Verzeichnisse',
+    'The <0>site map</0> lists every page. For language models and other software, <1>llms.txt</1> describes the site and links a Markdown version of each page.':
+        'Die <0>Sitemap</0> listet jede Seite auf. Für Sprachmodelle und andere Software beschreibt <1>llms.txt</1> die Website und verlinkt eine Markdown-Fassung jeder Seite.',
 
     // The two ways in (src/site/InterestMenu.tsx)
     'Our deck, for investors.': 'Unsere Präsentation für Investoren.',

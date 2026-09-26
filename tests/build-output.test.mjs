@@ -168,6 +168,8 @@ test('trust pages: About (/company/), Contact and Privacy each hold at least 500
 
 test('404.html: not for indexing, and it points to the site map and llms.txt', () => {
     const { document, copy } = page('404.html');
+    // One file for every missing address: the browser draws it in German under /de/ (boot.ts).
+    assert.ok(document.documentElement.hasAttribute('data-lang-from-path'), '404.html takes its language from the address');
     assert.equal(document.querySelector('meta[name="robots"]')?.getAttribute('content'), 'noindex');
     assert.equal(document.querySelector('link[rel="canonical"]'), null);
     assert.equal(text(copy.querySelector('h1')), 'Page not found.');

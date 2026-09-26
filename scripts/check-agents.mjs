@@ -99,6 +99,11 @@ const nfhead = await get(missing, { accept: 'text/markdown', method: 'HEAD' });
 ok(nfhead.status === 404, `missing page, HEAD: ${nfhead.status}`);
 const nfdeep = await get('/company/no-such-page', { accept: 'text/markdown' });
 ok(nfdeep.status === 404 && nfdeep.type.startsWith('text/markdown'), `missing page under /company/ as Markdown: ${nfdeep.status}`);
+const nfde = await get(`/de${missing}`, { accept: 'text/markdown' });
+ok(
+    nfde.status === 404 && nfde.type.startsWith('text/markdown') && nfde.body.startsWith('# Seite nicht gefunden'),
+    `missing page under /de/ as Markdown: ${nfde.status}, "${nfde.body.split('\n')[0]}"`,
+);
 const nfasset = await get('/assets/no-such-file.js');
 ok(nfasset.status === 404, `missing asset: ${nfasset.status}`);
 

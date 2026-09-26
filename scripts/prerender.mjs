@@ -83,6 +83,13 @@ for (const page of PAGES) {
     console.log(`prerendered ${page.file}: ${html.length} bytes${note}`);
 }
 
+// The 404 page is one file for both languages; under /de/ the browser draws it in German. Render that
+// too, only to check its German.
+const notFound = PAGES.find((p) => p.file === '404.html');
+for (const text of untranslated(englishRender.get(null), render({ ...notFound, lang: 'de' }), keptTheSame())) {
+    leftInEnglish.set(text, '404.html under /de/');
+}
+
 // Every German page has been rendered: any English text it showed without a German translation stops the
 // build, so the German site never goes out half in English.
 const missing = missingGerman();
