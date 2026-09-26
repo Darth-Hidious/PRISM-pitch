@@ -1,4 +1,5 @@
 import { Button } from '../ds';
+import { useT } from './i18n';
 import { LINKS } from './links';
 import { Arrow, Idx, Words } from './ui';
 
@@ -8,39 +9,40 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
     const H = h1 ? 'h1' : 'h2';
     const Sub = h1 ? 'h2' : 'h3';
     const Name = h1 ? 'h3' : 'h4';
+    const t = useT();
     return (
         <section id="company" className="sec company" data-theme="paper" data-nav="paper" aria-labelledby="company-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>Company</Idx>
+                    <Idx n={n}>{t('Company')}</Idx>
                     <H id="company-title" className="w-h2">
-                        We design new materials, and Bimo Tech makes them.
+                        {t('We design new materials, and Bimo Tech makes them.')}
                     </H>
                 </header>
 
-                <div className="rel rel--two rv" aria-label="How Mirdyne and Bimo Tech share the work">
+                <div className="rel rel--two rv" aria-label={t('How Mirdyne and Bimo Tech share the work')}>
                     <article className="rel__card">
-                        <p className="w-label">Giessen</p>
+                        <p className="w-label">{t('Giessen')}</p>
                         <img className="rel__logo" src="/brand/mirdyne-lockup-ink.png" alt="Mirdyne" width={183} height={50} />
-                        <p className="rel__head">Designs new materials with PRISM and proves that they work.</p>
-                        <ul className="rel__tags" aria-label="What Mirdyne does">
-                            <li>Design with PRISM</li>
-                            <li>First samples</li>
-                            <li>Test evidence</li>
+                        <p className="rel__head">{t('Designs new materials with PRISM and proves that they work.')}</p>
+                        <ul className="rel__tags" aria-label={t('What Mirdyne does')}>
+                            <li>{t('Design with PRISM')}</li>
+                            <li>{t('First samples')}</li>
+                            <li>{t('Test evidence')}</li>
                         </ul>
                     </article>
                     <p className="rel__arrow">
-                        <span>proven material</span>
+                        <span>{t('proven material')}</span>
                         <i aria-hidden="true" />
                     </p>
                     <article className="rel__card rel__card--bimo" data-theme="navy">
-                        <p className="w-label">Wrocław</p>
+                        <p className="w-label">{t('Wrocław')}</p>
                         <img className="rel__logo" src="/bimo-logo.png" alt="Bimo Tech" width={182} height={66} />
-                        <p className="rel__head">Makes them at scale and supplies them. Bimo Tech already supplies ITER, the fusion project.</p>
-                        <ul className="rel__tags" aria-label="What Bimo Tech does">
-                            <li>Scale-up</li>
-                            <li>Powder and parts</li>
-                            <li>Supply</li>
+                        <p className="rel__head">{t('Makes them at scale and supplies them. Bimo Tech already supplies ITER, the fusion project.')}</p>
+                        <ul className="rel__tags" aria-label={t('What Bimo Tech does')}>
+                            <li>{t('Scale-up')}</li>
+                            <li>{t('Powder and parts')}</li>
+                            <li>{t('Supply')}</li>
                         </ul>
                         <a className="rel__link" href={LINKS.bimotech} target="_blank" rel="noopener noreferrer">
                             bimotech.pl <Arrow external />
@@ -49,8 +51,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                     <p className="rel__under">
                         <i aria-hidden="true" />
                         <span>
-                            Mirdyne is a spin-off of Bimo Tech. PRISM is being developed in ESA projects that Bimo Tech
-                            leads.
+                            {t('Mirdyne is a spin-off of Bimo Tech. PRISM is being developed in ESA projects that Bimo Tech leads.')}
                         </span>
                     </p>
                 </div>
@@ -58,46 +59,43 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                     <div>
                         <img
                             src="/img/lab-arc-melter.webp"
-                            alt="An arc melter in a university materials lab: the steel melting chamber with two round windows on its control cabinet, a chiller and gas bottles beside it."
+                            alt={t('An arc melter in a university materials lab: the steel melting chamber with two round windows on its control cabinet, a chiller and gas bottles beside it.')}
                             width={1400}
                             height={786}
                             loading="lazy"
                         />
                         <img
                             src="/img/spark-hearth-column.webp"
-                            alt="Close-up of the copper hearth: small pieces of raw metal in its hollows, ready to be melted."
+                            alt={t('Close-up of the copper hearth: small pieces of raw metal in its hollows, ready to be melted.')}
                             width={900}
                             height={1200}
                             loading="lazy"
                         />
                     </div>
-                    <figcaption>Where our alloys are melted: the materials lab at WUST, Wrocław.</figcaption>
+                    <figcaption>{t('Where our alloys are melted: the materials lab at WUST, Wrocław.')}</figcaption>
                 </figure>
                 <div className="founders rv">
-                    <Sub className="w-label">Founders</Sub>
+                    <Sub className="w-label">{t('Founders')}</Sub>
                     <div className="founders__grid">
                         <article className="founder">
                             <Name>Kevin Grüning</Name>
-                            <p className="founder__role">Managing Director, Mirdyne</p>
+                            <p className="founder__role">{t('Managing Director, Mirdyne')}</p>
                             <p>
-                                Space Systems Lead at Bimo Tech. Physics and technology for space applications, JLU
-                                Giessen and THM.
+                                {t('Space Systems Lead at Bimo Tech. Physics and technology for space applications, JLU Giessen and THM.')}
                             </p>
                         </article>
                         <article className="founder">
                             <Name>Siddhartha Yash Kovid</Name>
-                            <p className="founder__role">Technical Lead, Mirdyne</p>
+                            <p className="founder__role">{t('Technical Lead, Mirdyne')}</p>
                             <p>
-                                Technical lead of the ESA projects SPARK and PRISM Alpha at Bimo Tech. Applied AI and
-                                data science, MIT Professional Education; biomedical engineering, THM.
+                                {t('Technical lead of the ESA projects SPARK and PRISM Alpha at Bimo Tech. Applied AI and data science, MIT Professional Education; biomedical engineering, THM.')}
                             </p>
                         </article>
                         <article className="founder">
                             <Name>Marcin Orzechowski</Name>
-                            <p className="founder__role">Co-founder, Mirdyne</p>
+                            <p className="founder__role">{t('Co-founder, Mirdyne')}</p>
                             <p>
-                                CEO and Head of R&amp;D at Bimo Tech, which supplies special metals and precision parts for
-                                space, energy and science. Wrocław University of Technology.
+                                {t('CEO and Head of R&D at Bimo Tech, which supplies special metals and precision parts for space, energy and science. Wrocław University of Technology.')}
                             </p>
                         </article>
                     </div>
@@ -159,13 +157,14 @@ const NEWS: NewsItem[] = [
 export function News({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
     const H = h1 ? 'h1' : 'h2';
     const Item = h1 ? 'h2' : 'h3';
+    const t = useT();
     return (
         <section id="news" className="sec news" data-theme="paper" data-nav="paper" aria-labelledby="news-title">
             <div className="wrap">
                 <header className="news__head rv">
-                    <Idx n={n}>News</Idx>
+                    <Idx n={n}>{t('News')}</Idx>
                     <H id="news-title" className="w-h2">
-                        Latest from Mirdyne.
+                        {t('Latest from Mirdyne.')}
                     </H>
                 </header>
                 <ol className="news__list">
@@ -180,7 +179,7 @@ export function News({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
                                     <img
                                         className="news__img"
                                         src={n.image.src}
-                                        alt={n.image.alt}
+                                        alt={t(n.image.alt)}
                                         width={n.image.width}
                                         height={n.image.height}
                                         loading="lazy"
@@ -190,11 +189,11 @@ export function News({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
                             )}
                             <div className="news__body">
                                 <p className="news__meta">
-                                    <span>{n.when}</span>
-                                    <span className="news__tag">{n.tag}</span>
+                                    <span>{t(n.when)}</span>
+                                    <span className="news__tag">{t(n.tag)}</span>
                                 </p>
-                                <Item>{n.title}</Item>
-                                <p>{n.text}</p>
+                                <Item>{t(n.title)}</Item>
+                                <p>{t(n.text)}</p>
                             </div>
                         </li>
                     ))}
@@ -207,17 +206,18 @@ export function News({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
 /* ── Call to action ───────────────────────────────────────────────────── */
 
 export function Contact() {
+    const t = useT();
     return (
         <section id="contact" className="cta" data-theme="paper" data-nav="paper" aria-labelledby="contact-title">
             <div className="wrap cta__inner rv">
-                <p className="w-label cta__kicker">Start</p>
+                <p className="w-label cta__kicker">{t('Start')}</p>
                 <h2 id="contact-title" className="w-h2 cta__title">
-                    <Words>Tell us what your part must survive.</Words>
+                    <Words>{t('Tell us what your part must survive.')}</Words>
                 </h2>
                 <div className="cta__side">
-                    <p className="w-lead">We’ll tell you what PRISM can find, and how we’d prove it.</p>
+                    <p className="w-lead">{t('We’ll tell you what PRISM can find, and how we’d prove it.')}</p>
                     <div className="cta__actions">
-                        <Button href={LINKS.interest}>Register interest</Button>
+                        <Button href={t.link(LINKS.interest)}>{t('Register interest')}</Button>
                         <Button variant="secondary" href={LINKS.github} external>
                             GitHub
                         </Button>

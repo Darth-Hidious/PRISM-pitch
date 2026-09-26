@@ -8,6 +8,7 @@
 import type { ComponentType, CSSProperties } from 'react';
 import { arc } from './arc';
 import { Arrow, Ball, Defs, T } from './engrave';
+import { useT } from './i18n';
 import { Note, Words } from './ui';
 
 const ID = 'eg-cameo';
@@ -39,6 +40,7 @@ function ray(x: number) {
 
 export function QuestionIcon() {
     const id = `${ID}-1`;
+    const t = useT();
     return (
         <svg className="eg eg--icon" viewBox="0 0 180 120" aria-hidden="true">
             <Defs id={id} />
@@ -66,10 +68,10 @@ export function QuestionIcon() {
                 ΔE<tspan fontSize="12" dy="4">g</tspan>
             </T>
             <T x={39} y={113} kind="small">
-                glass
+                {t('glass')}
             </T>
             <T x={141} y={113} kind="small">
-                crystal
+                {t('crystal')}
             </T>
         </svg>
     );
@@ -328,16 +330,16 @@ const HOURS = [
 ];
 
 export default function CameoLineage() {
+    const t = useT();
     return (
         <div id="lineage" className="cameo" aria-labelledby="cameo-title">
             <header className="cameo__head rv">
-                <p className="w-label trust__label">A published example</p>
+                <p className="w-label trust__label">{t('A published example')}</p>
                 <h3 id="cameo-title" className="w-h2 cameo__title">
-                    <Words>What a complete record looks like.</Words>
+                    <Words>{t('What a complete record looks like.')}</Words>
                 </h3>
                 <p className="w-lead">
-                    In 2020, NIST’s AI system CAMEO found a better memory material and recorded every step. We keep
-                    the same kind of record for every result.
+                    {t('In 2020, NIST’s AI system CAMEO found a better memory material and recorded every step. We keep the same kind of record for every result.')}
                 </p>
             </header>
 
@@ -355,18 +357,22 @@ export default function CameoLineage() {
                                 )}
                             </div>
                             <p className="cameo__n">
-                                {String(i + 1).padStart(2, '0')} · {title}
+                                {String(i + 1).padStart(2, '0')} · {t(title)}
                             </p>
-                            <p className="cameo__text">{text}</p>
+                            <p className="cameo__text">{t(text)}</p>
                         </li>
                     ))}
                 </ol>
 
-                <div className="cameo__time rv" role="img" aria-label="CAMEO took 19 rounds and about 10 hours. Measuring all 177 mixes took more than 90 hours.">
+                <div
+                    className="cameo__time rv"
+                    role="img"
+                    aria-label={t('CAMEO took 19 rounds and about 10 hours. Measuring all 177 mixes took more than 90 hours.')}
+                >
                     {HOURS.map((r) => (
                         <div key={r.label} className={`cameo__row${r.h === 90 ? ' cameo__row--all' : ''}`} aria-hidden="true">
-                            <span className="cameo__label">{r.label}</span>
-                            <span className="cameo__val">{r.value}</span>
+                            <span className="cameo__label">{t(r.label)}</span>
+                            <span className="cameo__val">{t(r.value)}</span>
                             <span className="cameo__track">
                                 <i
                                     className="cameo__fill"
@@ -380,9 +386,7 @@ export default function CameoLineage() {
 
             <div className="evidence__src">
                 <Note>
-                    Kusne et al., Nature Communications 11, 5966 (2020); NIST news release, 24 November 2020. CAMEO is the
-                    work of NIST and its partners, not ours. We show it because it is the clearest published example of a
-                    complete record.
+                    {t('Kusne et al., Nature Communications 11, 5966 (2020); NIST news release, 24 November 2020. CAMEO is the work of NIST and its partners, not ours. We show it because it is the clearest published example of a complete record.')}
                 </Note>
             </div>
         </div>

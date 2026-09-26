@@ -3,6 +3,7 @@ import { RightsState } from '../ds';
 import type { Visibility } from '../ds/RightsState';
 import { Glyph, type GlyphName } from './glyphs';
 import { seeded, useMediaQuery, useReducedMotion } from './hooks';
+import { useT, type Translator } from './i18n';
 
 /*
  * Who sees what, drawn as a live map. Each company is a territory; its records sit inside it. Wires
@@ -23,6 +24,9 @@ const VIEWERS: { id: Party; role: string }[] = [
 ];
 
 const LAND_KEY: Record<Owner, string> = { 'Customer A': 'a', 'Partner B': 'b', Mirdyne: 'm' };
+
+/** The same English RightsState shows by default (src/ds/RightsState.tsx); translated here for the site. */
+const VISIBILITY_LABEL: Record<Visibility, string> = { private: 'Private', computable: 'Computable', released: 'Released', public: 'Public' };
 
 /** Each company's territory on the wide map, in % of the map. The top middle is neutral ground. */
 const LANDS: { owner: Owner; x: number; y: number; w: number; h: number }[] = [
@@ -223,13 +227,13 @@ function access(r: Rec, viewer: Party): Access {
     return 'hidden';
 }
 
-function why(r: Rec, viewer: Party, a: Access) {
-    if (a === 'full' && viewer === r.owner) return 'You own this record.';
-    if (a === 'full') return `Shared with you under release ${r.release}.`;
-    if (a === 'compute') return 'Software may calculate with it, but no person can read the values. Not even Mirdyne.';
-    if (viewer === 'Public') return 'Not public. Nothing is published unless its owner decides to.';
-    if (r.state === 'private') return `Private to ${r.owner}. Nothing is shared by accident.`;
-    return `Not shared with you. ${r.owner} has shared it with ${r.releasedTo?.join(' and ')} only.`;
+function why(r: Rec, viewer: Party, a: Access, t: Translator) {
+    if (a === 'full' && viewer === r.owner) return t('You own this record.');
+    if (a === 'full') return `${t('Shared with you under release')} ${t(r.release!)}.`;
+    if (a === 'compute') return t('Software may calculate with it, but no person can read the values. Not even Mirdyne.');
+    if (viewer === 'Public') return t('Not public. Nothing is published unless its owner decides to.');
+    if (r.state === 'private') return `${t('Private to')} ${t(r.owner)}. ${t('Nothing is shared by accident.')}`;
+    return `${t('Not shared with you.')} ${t(r.owner)} ${t('has shared it with')} ${r.releasedTo?.map((p) => t(p)).join(` ${t('and')} `)} ${t('only.')}`;
 }
 
 /** How a wire looks to this viewer: open if both ends can be read, sealed if either end is hidden. */
@@ -257,6 +261,7 @@ function RecCard({
     style?: CSSProperties;
 }) {
     const a = access(r, viewer);
+    const t = useT();
     return (
         <button
             type="button"
@@ -270,10 +275,10 @@ function RecCard({
                 <Glyph name={a === 'hidden' ? 'lock' : r.glyph} />
             </span>
             <span className="rcard__type">
-                <RightsState state={r.state} label={r.type} />
+                <RightsState state={r.state} label={t(r.type)} />
             </span>
             <span className="rcard__title">
-                {a === 'full' ? r.title : a === 'compute' ? 'Values hidden · software only' : 'Sealed · not visible to you'}
+                {a === 'full' ? t(r.title) : a === 'compute' ? t('Values hidden · software only') : t('Sealed · not visible to you')}
             </span>
             <span className="rcard__id">{a === 'hidden' ? '●●●-●●' : r.id}</span>
         </button>
@@ -282,45 +287,47 @@ function RecCard({
 
 function Details({ r, viewer }: { r: Rec; viewer: Party }) {
     const a = access(r, viewer);
+    const t = useT();
     return (
         <>
             <div className="rdetail__head">
-                <RightsState state={r.state} />
+                <RightsState state={r.state} label={t(VISIBILITY_LABEL[r.state])} />
                 <span className="rdetail__id">{a === 'hidden' ? '●●●-●●' : r.id}</span>
             </div>
-            <h4 className="rdetail__title">{a === 'full' ? r.title : r.type}</h4>
+            <h4 className="rdetail__title">{a === 'full' ? t(r.title) : t(r.type)}</h4>
             <dl className="rdetail__props">
                 <div>
-                    <dt>Type</dt>
-                    <dd>{r.type}</dd>
+                    <dt>{t('Type')}</dt>
+                    <dd>{t(r.type)}</dd>
                 </div>
                 <div>
-                    <dt>Owner</dt>
-                    <dd>{r.owner}</dd>
+                    <dt>{t('Owner')}</dt>
+                    <dd>{t(r.owner)}</dd>
                 </div>
                 {r.props.map(([k, v]) => (
                     <div key={k}>
-                        <dt>{k}</dt>
-                        <dd className={a === 'full' ? undefined : 'is-masked'}>{a === 'full' ? v : '████████'}</dd>
+                        <dt>{t(k)}</dt>
+                        <dd className={a === 'full' ? undefined : 'is-masked'}>{a === 'full' ? t(v) : '████████'}</dd>
                     </div>
                 ))}
                 <div>
-                    <dt>AI training</dt>
-                    <dd>Separate permission · not given</dd>
+                    <dt>{t('AI training')}</dt>
+                    <dd>{t('Separate permission · not given')}</dd>
                 </div>
             </dl>
-            <p className={`rdetail__why rdetail__why--${a}`}>{why(r, viewer, a)}</p>
+            <p className={`rdetail__why rdetail__why--${a}`}>{why(r, viewer, a, t)}</p>
         </>
     );
 }
 
 function GateMark({ gate, style }: { gate: Gate; style?: CSSProperties }) {
+    const t = useT();
     return (
-        <span className={`rgate rgate--${gate.kind}`} style={style} title={gate.note}>
+        <span className={`rgate rgate--${gate.kind}`} style={style} title={t(gate.note)}>
             <i aria-hidden="true">
                 <span>{gate.kind === 'compute' ? 'ƒ' : '✓'}</span>
             </i>
-            <b>{gate.name}</b>
+            <b>{t(gate.name)}</b>
         </span>
     );
 }
@@ -504,6 +511,7 @@ function Mesh({ w, h }: { w: number; h: number }) {
 /* ── Wide map ─────────────────────────────────────────────────────────── */
 
 function WideMap({ viewer, sel, onSelect, moving }: { viewer: Party; sel: string; onSelect: (id: string) => void; moving: boolean }) {
+    const t = useT();
     const [ref, geo] = useBoxes('wide');
     const W = geo?.w ?? 0;
     const H = geo?.h ?? 0;
@@ -580,13 +588,13 @@ function WideMap({ viewer, sel, onSelect, moving }: { viewer: Party; sel: string
                     className={`rland__tag land-${LAND_KEY[l.owner]}${youOwn === l.owner ? ' is-you' : ''}`}
                     style={{ left: `${l.x + 1.2}%`, top: `${l.y + 2}%` }}
                 >
-                    <b>{l.owner}</b>
-                    {youOwn === l.owner && <em>You</em>}
+                    <b>{t(l.owner)}</b>
+                    {youOwn === l.owner && <em>{t('You')}</em>}
                 </p>
             ))}
             <p className="rland__tag rland__tag--x" style={{ left: `${EXCHANGE.x + 1.2}%`, top: `${EXCHANGE.y + 2}%` }}>
-                <b>Between companies</b>
-                <span>Signed releases only</span>
+                <b>{t('Between companies')}</b>
+                <span>{t('Signed releases only')}</span>
             </p>
             {wires.map(
                 (x) =>
@@ -596,7 +604,7 @@ function WideMap({ viewer, sel, onSelect, moving }: { viewer: Party; sel: string
                             className={`rwire__label${x.label.vertical ? ' is-v' : ''}${x.label.p[0] < W / 2 ? ' is-left' : ''}${x.on ? ' is-on' : ''}`}
                             style={{ left: x.label.p[0], top: x.label.p[1] }}
                         >
-                            {x.w.label}
+                            {t(x.w.label)}
                         </span>
                     ),
             )}
@@ -631,6 +639,7 @@ const SPINE = ['REQ-A-014', 'CND-07', 'BLD-12', 'SPC-12-3', 'TST-88', 'EST-88', 
 const SPINE_X = 16;
 
 function FlowMap({ viewer, sel, onSelect, moving }: { viewer: Party; sel: string; onSelect: (id: string) => void; moving: boolean }) {
+    const t = useT();
     const [ref, geo] = useBoxes('flow');
     let lines: { key: string; d: string; length: number; look: string; up?: boolean }[] = [];
     let ports: { id: string; y: number; x: number }[] = [];
@@ -694,15 +703,15 @@ function FlowMap({ viewer, sel, onSelect, moving }: { viewer: Party; sel: string
                     <div key={i} className={`rflow__gate rflow__gate--${step.gate.kind}`}>
                         <GateMark gate={step.gate} />
                         <span>
-                            <strong>{step.gate.name}</strong>
-                            {step.gate.note}
+                            <strong>{t(step.gate.name)}</strong>
+                            {t(step.gate.note)}
                         </span>
                     </div>
                 ) : (
                     <section key={i} className={`rflow__land land-${LAND_KEY[step.owner]}${viewer === step.owner ? ' is-you' : ''}`}>
                         <p className="rland__tag">
-                            <b>{step.owner}</b>
-                            {viewer === step.owner && <em>You</em>}
+                            <b>{t(step.owner)}</b>
+                            {viewer === step.owner && <em>{t('You')}</em>}
                         </p>
                         {step.ids.map((id) => (
                             <div key={id} className={`rflow__item${id === 'MDL-4' ? ' is-side' : ''}`}>
@@ -724,6 +733,7 @@ function FlowMap({ viewer, sel, onSelect, moving }: { viewer: Party; sel: string
 /* ── The map ──────────────────────────────────────────────────────────── */
 
 export default function RecordMap() {
+    const t = useT();
     const [viewer, setViewer] = useState<Party>('Customer A');
     // Wide screens open on one record; phones open a record's details only when it is tapped.
     const [sel, setSel] = useState(() =>
@@ -755,17 +765,17 @@ export default function RecordMap() {
     return (
         <div ref={box} className={`rmap${wide ? ' rmap--wide' : ' rmap--flow'}`}>
             <div className="rmap__bar">
-                <p className="w-label">Viewing as</p>
-                <div className="seg seg--dark rmap__seg" role="group" aria-label="Viewing as">
+                <p className="w-label">{t('Viewing as')}</p>
+                <div className="seg seg--dark rmap__seg" role="group" aria-label={t('Viewing as')}>
                     {VIEWERS.map((v) => (
                         <button key={v.id} type="button" aria-pressed={v.id === viewer} onClick={() => pick(v.id)}>
-                            {v.id}
+                            {t(v.id)}
                         </button>
                     ))}
                 </div>
                 <p className="rmap__count" aria-live="polite">
                     <span className="rmap__live" aria-hidden="true" />
-                    {VIEWERS.find((v) => v.id === viewer)?.role}. Opens {shown} of {RECORDS.length} records.
+                    {t(VIEWERS.find((v) => v.id === viewer)!.role)}. {t('Opens')} {shown} {t('of')} {RECORDS.length} {t('records.')}
                 </p>
             </div>
             <div className="rmap__body">
@@ -779,7 +789,7 @@ export default function RecordMap() {
                 </div>
                 {wide && selected && (
                     <aside className="rdetail" aria-live="polite">
-                        <p className="w-label">Record</p>
+                        <p className="w-label">{t('Record')}</p>
                         <Details r={selected} viewer={viewer} />
                     </aside>
                 )}

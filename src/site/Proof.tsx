@@ -2,8 +2,12 @@ import { RightsState } from '../ds';
 import type { Visibility } from '../ds/RightsState';
 import CameoLineage from './Cameo';
 import { PartDiagram } from './diagrams';
+import { useT } from './i18n';
 import RecordMap from './RecordMap';
 import { Grain, Idx, Note, Rails, Words } from './ui';
+
+/** The same English RightsState shows by default (src/ds/RightsState.tsx); translated here for the site. */
+const VISIBILITY_LABEL: Record<Visibility, string> = { private: 'Private', computable: 'Computable', released: 'Released', public: 'Public' };
 
 const STATES: { state: Visibility; text: string }[] = [
     { state: 'private', text: 'Stays with the company that made it.' },
@@ -39,47 +43,46 @@ const KEEPS = [
  * give away.
  */
 export default function Proof({ n = '03' }: { n?: string }) {
+    const t = useT();
     return (
         <section id="proof" className="sec evidence" data-theme="navy" data-nav="navy" aria-labelledby="proof-title">
             <Rails />
             <Grain />
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>Proof</Idx>
+                    <Idx n={n}>{t('Proof')}</Idx>
                     <h2 id="proof-title" className="w-h2">
-                        <Words>We keep the evidence for every result.</Words>
+                        <Words>{t('We keep the evidence for every result.')}</Words>
                     </h2>
                     <p className="w-lead">
-                        Each record shows where it came from and who may see it. Switch the viewer to see what each
-                        partner sees.
+                        {t('Each record shows where it came from and who may see it. Switch the viewer to see what each partner sees.')}
                     </p>
                 </header>
 
                 <div id="sharing" className="rv">
                     <RecordMap />
-                    <ul className="proof__key" aria-label="Four levels of sharing">
+                    <ul className="proof__key" aria-label={t('Four levels of sharing')}>
                         {STATES.map((st) => (
                             <li key={st.state}>
-                                <RightsState state={st.state} />
-                                <span>{st.text}</span>
+                                <RightsState state={st.state} label={t(VISIBILITY_LABEL[st.state])} />
+                                <span>{t(st.text)}</span>
                             </li>
                         ))}
                     </ul>
                     <div className="evidence__src">
-                        <Note label="Illustrative">
-                            Made-up parties and records, not customer data. Tracing and export labels work today;
-                            automatic enforcement of sharing rules is being built.
+                        <Note label={t('Illustrative')}>
+                            {t('Made-up parties and records, not customer data. Tracing and export labels work today; automatic enforcement of sharing rules is being built.')}
                         </Note>
                     </div>
                 </div>
 
                 <div className="trust rv">
-                    <p className="w-label trust__label">Rules PRISM follows</p>
+                    <p className="w-label trust__label">{t('Rules PRISM follows')}</p>
                     <ol className="trust__rules">
                         {RULES.map((r, i) => (
                             <li key={r}>
                                 <span>{String(i + 1).padStart(2, '0')}</span>
-                                {r}
+                                {t(r)}
                             </li>
                         ))}
                     </ol>
@@ -89,19 +92,19 @@ export default function Proof({ n = '03' }: { n?: string }) {
 
                 <div id="ip" className="ip rv" aria-labelledby="ip-title">
                     <div className="ip__head">
-                        <p className="w-label trust__label">What stays yours</p>
+                        <p className="w-label trust__label">{t('What stays yours')}</p>
                         <h3 id="ip-title" className="w-h2 ip__title">
-                            <Words>A finished part does not give away how it was made.</Words>
+                            <Words>{t('A finished part does not give away how it was made.')}</Words>
                         </h3>
                         <figure className="ip__photo">
                             <img
                                 src="/img/spark-button-side.webp"
-                                alt="A cast alloy button with a crystalline surface, resting in a red lid on a lab bench."
+                                alt={t('A cast alloy button with a crystalline surface, resting in a red lid on a lab bench.')}
                                 width={1120}
                                 height={940}
                                 loading="lazy"
                             />
-                            <figcaption>An alloy button, as cast.</figcaption>
+                            <figcaption>{t('An alloy button, as cast.')}</figcaption>
                         </figure>
                     </div>
                     <figure className="ip__plate" data-theme="paper">
@@ -109,29 +112,29 @@ export default function Proof({ n = '03' }: { n?: string }) {
                     </figure>
                     <div className="ip__grid">
                         <div className="ip__col">
-                            <p className="w-label">What a part gives away</p>
+                            <p className="w-label">{t('What a part gives away')}</p>
                             <ul>
                                 {GIVES.map(([k, v]) => (
                                     <li key={k}>
-                                        <strong>{k}</strong>
-                                        <span>{v}</span>
+                                        <strong>{t(k)}</strong>
+                                        <span>{t(v)}</span>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                         <div className="ip__col ip__col--keep">
-                            <p className="w-label">What stays with its owner</p>
+                            <p className="w-label">{t('What stays with its owner')}</p>
                             <ul>
                                 {KEEPS.map(([k, v]) => (
                                     <li key={k}>
-                                        <strong>{k}</strong>
-                                        <span>{v}</span>
+                                        <strong>{t(k)}</strong>
+                                        <span>{t(v)}</span>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                     </div>
-                    <p className="ip__foot">Patent filings on PRISM’s methods are in progress.</p>
+                    <p className="ip__foot">{t('Patent filings on PRISM’s methods are in progress.')}</p>
                 </div>
             </div>
         </section>

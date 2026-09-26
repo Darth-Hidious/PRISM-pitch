@@ -1,4 +1,5 @@
 import { Button } from '../ds';
+import { useT } from './i18n';
 import { LINKS } from './links';
 import { CONSORTIUM, PartnerLogo } from './partners';
 import { Grain } from './ui';
@@ -9,13 +10,14 @@ import { Grain } from './ui';
  * the footer.
  */
 export default function Hero() {
+    const t = useT();
     return (
         <>
             <section id="top" className="hero" data-theme="navy" data-nav="hero" aria-labelledby="hero-title">
                 <figure className="hero__media">
                     <img
                         src="/img/dlr-vulcain2-p5.webp"
-                        alt="A Vulcain 2 rocket engine firing on a test stand: flame pours out beneath the ribbed metal nozzle."
+                        alt={t('A Vulcain 2 rocket engine firing on a test stand: flame pours out beneath the ribbed metal nozzle.')}
                         width={1348}
                         height={758}
                         fetchPriority="high"
@@ -24,40 +26,40 @@ export default function Hero() {
                 <Grain />
                 <div className="wrap hero__content">
                     <h1 id="hero-title" className="w-mega rise" style={{ animationDelay: '90ms' }}>
-                        Materials built for the&nbsp;extreme.
+                        {t('Materials built for the extreme.')}
                     </h1>
                     <p className="w-lead hero__lead rise" style={{ animationDelay: '180ms' }}>
-                        We design them with AI, and make and test them in Europe.
+                        {t('We design them with AI, and make and test them in Europe.')}
                     </p>
                     <div className="hero__actions rise" style={{ animationDelay: '260ms' }}>
-                        <Button href={LINKS.interest}>Register interest</Button>
+                        <Button href={t.link(LINKS.interest)}>{t('Register interest')}</Button>
                         <Button variant="secondary" href="#gap">
-                            The problem
+                            {t('The problem')}
                         </Button>
                     </div>
                 </div>
             </section>
-            <aside className="proof" data-theme="navy" data-nav="navy" aria-label="PRISM in brief">
+            <aside className="proof" data-theme="navy" data-nav="navy" aria-label={t('PRISM in brief')}>
                 <ul className="wrap proof__list">
                     <li>
-                        <span className="w-label">Funded by</span>
-                        <strong>The European Space Agency</strong>
-                        <span>PRISM’s first deployment</span>
+                        <span className="w-label">{t('Funded by')}</span>
+                        <strong>{t('The European Space Agency')}</strong>
+                        <span>{t('PRISM’s first deployment')}</span>
                     </li>
                     <li>
-                        <span className="w-label">First application</span>
-                        <strong>Alloys for extreme heat</strong>
-                        <span>For rocket engines</span>
+                        <span className="w-label">{t('First application')}</span>
+                        <strong>{t('Alloys for extreme heat')}</strong>
+                        <span>{t('For rocket engines')}</span>
                     </li>
                     <li>
-                        <span className="w-label">Next</span>
-                        <strong>PFAS‑free polymers</strong>
-                        <span>Replacing “forever chemicals”, with an industrial partner</span>
+                        <span className="w-label">{t('Next')}</span>
+                        <strong>{t('PFAS‑free polymers')}</strong>
+                        <span>{t('Replacing “forever chemicals”, with an industrial partner')}</span>
                     </li>
                 </ul>
                 <div className="wrap proof__partners">
-                    <p className="w-label">PRISM Alpha, with</p>
-                    <ul aria-label="PRISM Alpha consortium">
+                    <p className="w-label">{t('PRISM Alpha, with')}</p>
+                    <ul aria-label={t('PRISM Alpha consortium')}>
                         {CONSORTIUM.map((p) => (
                             <li key={p.id}>
                                 <PartnerLogo p={p} />

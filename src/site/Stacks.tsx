@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from
 import { MaturityPill } from '../ds';
 import type { Maturity } from '../ds/MaturityPill';
 import { useMediaQuery } from './hooks';
+import { useT } from './i18n';
 import { STACKS, type Layer, type StackDef } from './stacks-data';
 import { Grain, Idx } from './ui';
 
@@ -98,6 +99,9 @@ function box(cx: number, a: number, b: number, da: number, db: number, h: number
 /** How tall a part stands: built parts tallest, goals only drawn on the plate. */
 const TALL: Record<Maturity, number> = { 'in-use': 30, prototype: 21, development: 13, target: 0 };
 
+/** The same English MaturityPill shows by default (src/ds/MaturityPill.tsx); translated here for the site. */
+const MATURITY_LABEL: Record<Maturity, string> = { 'in-use': 'In use', prototype: 'Prototype', development: 'In development', target: 'Target' };
+
 /** Where a stack's parts stand on its plate: rows of three, drawn back to front. */
 function slots(layers: Layer[]) {
     return layers
@@ -106,6 +110,7 @@ function slots(layers: Layer[]) {
 }
 
 function IsoStack({ variant, onPick }: { variant: Variant; onPick?: (i: number) => (e: MouseEvent) => void }) {
+    const t = useT();
     const g = GEOMS[variant];
     const { cx, width, height, y0 } = frame(g);
     const start = layout(g, 0, 0, false);
@@ -124,7 +129,7 @@ function IsoStack({ variant, onPick }: { variant: Variant; onPick?: (i: number) 
             viewBox={`0 0 ${width.toFixed(0)} ${height.toFixed(0)}`}
             data-variant={variant}
             role={named ? 'group' : parts ? 'img' : undefined}
-            aria-label={parts ? 'The five PRISM stacks, Research on top and Evidence as the foundation' : undefined}
+            aria-label={parts ? t('The five PRISM stacks, Research on top and Evidence as the foundation') : undefined}
             aria-hidden={parts ? undefined : true}
         >
             {order.map((i) => {
@@ -180,7 +185,7 @@ function IsoStack({ variant, onPick }: { variant: Variant; onPick?: (i: number) 
                                     {String(i + 1).padStart(2, '0')}
                                 </text>
                                 <text className="iso__name" x={x} y={13}>
-                                    {st.short}
+                                    {t(st.short)}
                                 </text>
                             </g>
                         </a>
@@ -190,7 +195,7 @@ function IsoStack({ variant, onPick }: { variant: Variant; onPick?: (i: number) 
                 <g className="iso__whole" aria-hidden="true">
                     <line className="iso__lead" x1={cx + W2 + 6} y1={y0 + (LAST / 2) * g.open} x2={cx + W2 + 16} y2={y0 + (LAST / 2) * g.open} />
                     <text className="iso__name" x={cx + W2 + 22} y={y0 + (LAST / 2) * g.open + 6}>
-                        One system
+                        {t('One system')}
                     </text>
                 </g>
             )}
@@ -240,39 +245,40 @@ function draw(svg: SVGSVGElement, apart: number, at: number, still: boolean) {
 
 function Chapter({ stack, index, level }: { stack: StackDef; index: number; level: 'h2' | 'h3' }) {
     const H = level;
+    const t = useT();
     return (
         <article id={stack.id} className="chapter" aria-labelledby={`${stack.id}-name`}>
             <p className="w-label chapter__index">
-                Stack {String(index + 1).padStart(2, '0')} / {String(STACKS.length).padStart(2, '0')}
+                {t('Stack')} {String(index + 1).padStart(2, '0')} / {String(STACKS.length).padStart(2, '0')}
             </p>
             <H id={`${stack.id}-name`} className="chapter__name">
-                {stack.name}
+                {t(stack.name)}
             </H>
-            <p className="q chapter__q">{stack.question}</p>
+            <p className="q chapter__q">{t(stack.question)}</p>
             <p className="a chapter__a">
-                <b>{stack.lead}</b> {stack.answer}
+                <b>{t(stack.lead)}</b> {t(stack.answer)}
             </p>
             {stack.photo && (
                 <figure className="chapter__photo">
-                    <img src={stack.photo.src} alt={stack.photo.alt} width={1200} height={800} loading="lazy" />
-                    <figcaption>{stack.photo.caption}</figcaption>
+                    <img src={stack.photo.src} alt={t(stack.photo.alt)} width={1200} height={800} loading="lazy" />
+                    <figcaption>{t(stack.photo.caption)}</figcaption>
                 </figure>
             )}
-            <ol className="layers" aria-label={`${stack.name} layers`}>
+            <ol className="layers" aria-label={`${t(stack.name)} ${t('layers')}`}>
                 {stack.layers.map((l, k) => (
                     <li key={l.name}>
                         <span className="layers__num">{String(k + 1).padStart(2, '0')}</span>
                         <div>
-                            <strong>{l.name}</strong>
-                            <span>{l.detail}</span>
+                            <strong>{t(l.name)}</strong>
+                            <span>{t(l.detail)}</span>
                         </div>
-                        <MaturityPill maturity={l.maturity} />
+                        <MaturityPill maturity={l.maturity} label={t(MATURITY_LABEL[l.maturity])} />
                     </li>
                 ))}
             </ol>
             <p className="limit">
-                <span className="w-label">Limit</span>
-                {stack.limit}
+                <span className="w-label">{t('Limit')}</span>
+                {t(stack.limit)}
             </p>
         </article>
     );
@@ -289,6 +295,7 @@ const two = (i: number) => String(i + 1).padStart(2, '0');
  */
 export default function Stacks({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
     const H = h1 ? 'h1' : 'h2';
+    const t = useT();
     const section = useRef<HTMLElement>(null);
     const [active, setActive] = useState(0);
     const short = useMediaQuery('(max-height: 500px)');
@@ -369,43 +376,43 @@ export default function Stacks({ n = '01', h1 = false }: { n?: string; h1?: bool
                 </div>
                 <div className="stacks__main">
                     <header className="stacks__head rv">
-                        <Idx n={n}>The platform</Idx>
+                        <Idx n={n}>{t('The platform')}</Idx>
                         <H id="platform-title" className="w-h2">
-                            What PRISM is built from.
+                            {t('What PRISM is built from.')}
                         </H>
-                        <p className="w-lead">PRISM has five stacks, each with one job. Every part is marked with how ready it is.</p>
-                        <ul className="stacks__legend" aria-label="Maturity">
+                        <p className="w-lead">{t('PRISM has five stacks, each with one job. Every part is marked with how ready it is.')}</p>
+                        <ul className="stacks__legend" aria-label={t('Maturity')}>
                             <li>
-                                <MaturityPill maturity="in-use" /> Used in our projects today
+                                <MaturityPill maturity="in-use" label={t(MATURITY_LABEL['in-use'])} /> {t('Used in our projects today')}
                             </li>
                             <li>
-                                <MaturityPill maturity="prototype" /> Working, being improved
+                                <MaturityPill maturity="prototype" label={t(MATURITY_LABEL.prototype)} /> {t('Working, being improved')}
                             </li>
                             <li>
-                                <MaturityPill maturity="development" /> Being built
+                                <MaturityPill maturity="development" label={t(MATURITY_LABEL.development)} /> {t('Being built')}
                             </li>
                             <li>
-                                <MaturityPill maturity="target" /> The goal
+                                <MaturityPill maturity="target" label={t(MATURITY_LABEL.target)} /> {t('The goal')}
                             </li>
                         </ul>
                         <p className="stacks__cue" aria-hidden="true">
-                            Scroll to take it apart
+                            {t('Scroll to take it apart')}
                         </p>
                     </header>
                     <div className="stacks__strip">
                         <IsoStack variant="mini" />
                         <p className="stacks__now">
                             <span className="w-label">
-                                Stack {two(active)} / {two(LAST)}
+                                {t('Stack')} {two(active)} / {two(LAST)}
                             </span>
-                            <b>{STACKS[active].short}</b>
+                            <b>{t(STACKS[active].short)}</b>
                         </p>
-                        <nav className="stacks__jump" aria-label="The five stacks">
+                        <nav className="stacks__jump" aria-label={t('The five stacks')}>
                             {STACKS.map((st, i) => (
                                 <a
                                     key={st.id}
                                     href={`#${st.id}`}
-                                    aria-label={st.name}
+                                    aria-label={t(st.name)}
                                     aria-current={i === active ? 'step' : undefined}
                                     onClick={go(i)}
                                 >

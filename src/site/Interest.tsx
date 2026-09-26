@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { Button } from '../ds';
 import { useMediaQuery } from './hooks';
+import { useT } from './i18n';
 import { AREAS, type AreaId } from './interest-areas';
 import { LINKS } from './links';
 import { CONSORTIUM, PartnerLogo } from './partners';
@@ -74,16 +75,17 @@ function Text({
     error?: string;
     children: ReactNode;
 }) {
+    const t = useT();
     return (
         <div className={`field${error ? ' field--bad' : ''}`}>
             <label className="field__label" htmlFor={`f-${id}`}>
-                {label}
-                {optional && <small>Optional</small>}
+                {t(label)}
+                {optional && <small>{t('Optional')}</small>}
             </label>
             {children}
             {error && (
                 <p className="field__error" id={`f-${id}-error`}>
-                    {error}
+                    {t(error)}
                 </p>
             )}
         </div>
@@ -91,6 +93,7 @@ function Text({
 }
 
 function InterestForm() {
+    const t = useT();
     const [v, setV] = useState<Values>(() => ({
         name: '',
         email: '',
@@ -189,15 +192,15 @@ function InterestForm() {
                     </svg>
                 </span>
                 <h2 ref={thanks} tabIndex={-1}>
-                    Thank you, {first}.
+                    {t('Thank you,')} {first}.
                 </h2>
                 <p>
-                    We have your message and will reply to <b>{v.email.trim()}</b>.
+                    {t('We have your message and will reply to')} <b>{v.email.trim()}</b>.
                 </p>
                 <div className="ask__done-actions">
-                    <Button href={LINKS.deck}>Investor room</Button>
-                    <Button variant="secondary" href="/">
-                        Home
+                    <Button href={t.link(LINKS.deck)}>{t('Investor room')}</Button>
+                    <Button variant="secondary" href={t.link('/')}>
+                        {t('Home')}
                     </Button>
                 </div>
             </div>
@@ -207,7 +210,7 @@ function InterestForm() {
     return (
         <form ref={form} className="ask__form" noValidate onSubmit={submit} aria-labelledby="ask-form-title">
             <h2 id="ask-form-title" className="pm-visually-hidden">
-                Your details
+                {t('Your details')}
             </h2>
             <div className="ask__row">
                 <Text id="name" label="Full name" error={shown('name')}>
@@ -280,7 +283,7 @@ function InterestForm() {
 
             <fieldset className={`field chips${shown('areas') ? ' field--bad' : ''}`} aria-describedby={shown('areas') ? 'f-areas-error' : undefined}>
                 <legend className="field__label">
-                    What are you interested in? <small>Choose any</small>
+                    {t('What are you interested in?')} <small>{t('Choose any')}</small>
                 </legend>
                 <div className="chips__list">
                     {AREAS.map((a, i) => {
@@ -300,7 +303,7 @@ function InterestForm() {
                                 />
                                 <span>
                                     <Tick />
-                                    {a.label}
+                                    {t(a.label)}
                                 </span>
                             </label>
                         );
@@ -308,7 +311,7 @@ function InterestForm() {
                 </div>
                 {shown('areas') && (
                     <p className="field__error" id="f-areas-error">
-                        {shown('areas')}
+                        {t(shown('areas')!)}
                     </p>
                 )}
             </fieldset>
@@ -321,7 +324,7 @@ function InterestForm() {
                     name="message"
                     rows={5}
                     maxLength={MESSAGE_MAX}
-                    placeholder="What must the part survive? Timeline, quantities, anything that helps."
+                    placeholder={t('What must the part survive? Timeline, quantities, anything that helps.')}
                     value={v.message}
                     onChange={(e) => set('message', e.target.value)}
                     onBlur={blur('message')}
@@ -335,7 +338,7 @@ function InterestForm() {
             {/* People never see this field. Bots fill it in. */}
             <div className="ask__trap" aria-hidden="true">
                 <label>
-                    Website
+                    {t('Website')}
                     <input type="text" name="website" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
                 </label>
             </div>
@@ -354,28 +357,30 @@ function InterestForm() {
                         {...aria('consent')}
                     />
                     <Tick />
-                    <span>Mirdyne may keep these details to reply to me.</span>
+                    <span>{t('Mirdyne may keep these details to reply to me.')}</span>
                 </label>
                 <p className="consent__note">
-                    We use them only to reply. They are stored in Frankfurt with our hosting provider and emailed to our
-                    team. We delete them after twelve months, or sooner if you ask. <a href="/privacy/">Privacy policy</a>
+                    {t.rich(
+                        'We use them only to reply. They are stored in Frankfurt with our hosting provider and emailed to our team. We delete them after twelve months, or sooner if you ask. <0>Privacy policy</0>',
+                        (s) => <a href={t.link('/privacy/')}>{s}</a>,
+                    )}
                 </p>
                 {shown('consent') && (
                     <p className="field__error" id="f-consent-error">
-                        {shown('consent')}
+                        {t(shown('consent')!)}
                     </p>
                 )}
             </div>
 
             {state === 'failed' && failure && (
                 <p className="ask__failure" role="alert">
-                    {failure}
+                    {t(failure)}
                 </p>
             )}
 
             <div className="ask__send">
                 <button type="submit" className="pm-btn pm-btn--primary" disabled={state === 'sending'} aria-busy={state === 'sending'}>
-                    <span>{state === 'sending' ? 'Sending…' : 'Send'}</span>
+                    <span>{state === 'sending' ? t('Sending…') : t('Send')}</span>
                     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
                         <path d="M2.5 8h10M9 4.5 12.5 8 9 11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
                     </svg>
@@ -395,6 +400,7 @@ const NEXT = ['You tell us what you need.', 'We reply by email.', 'If PRISM fits
 export default function Interest() {
     // On wide screens the bar spans both columns: it follows the dark one, so the form column does not claim it.
     const wide = useMediaQuery('(min-width: 961px)');
+    const t = useT();
     return (
         <section className="ask" aria-labelledby="ask-title">
             <div className="ask__photo" aria-hidden="true">
@@ -402,12 +408,12 @@ export default function Interest() {
             </div>
             <div className="ask__side" data-theme="navy" data-nav="navy">
                 <div className="ask__head">
-                    <p className="w-label rise">Register interest</p>
+                    <p className="w-label rise">{t('Register interest')}</p>
                     <h1 id="ask-title" className="w-h2 rise" style={{ animationDelay: '80ms' }}>
-                        Tell us what you need.
+                        {t('Tell us what you need.')}
                     </h1>
                     <p className="w-lead rise" style={{ animationDelay: '160ms' }}>
-                        A new material, a research project or an investment.
+                        {t('A new material, a research project or an investment.')}
                     </p>
                 </div>
             </div>
@@ -415,20 +421,20 @@ export default function Interest() {
                 <InterestForm />
             </div>
             <div className="ask__more" data-theme="navy" data-nav="navy">
-                <ol className="ask__next" aria-label="What happens next">
-                    {NEXT.map((t, i) => (
-                        <li key={t}>
+                <ol className="ask__next" aria-label={t('What happens next')}>
+                    {NEXT.map((n, i) => (
+                        <li key={n}>
                             <span>{String(i + 1).padStart(2, '0')}</span>
-                            {t}
+                            {t(n)}
                         </li>
                     ))}
                 </ol>
                 <p className="ask__investors">
-                    For investors: <a href={LINKS.deck}>Investor room</a>
+                    {t.rich('For investors: <0>Investor room</0>', (s) => <a href={t.link(LINKS.deck)}>{s}</a>)}
                 </p>
                 <div className="ask__partners">
-                    <p className="w-label">PRISM Alpha, with</p>
-                    <ul aria-label="PRISM Alpha consortium">
+                    <p className="w-label">{t('PRISM Alpha, with')}</p>
+                    <ul aria-label={t('PRISM Alpha consortium')}>
                         {CONSORTIUM.map((p) => (
                             <li key={p.id}>
                                 <PartnerLogo p={p} />

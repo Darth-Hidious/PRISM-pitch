@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useT } from './i18n';
 
 /**
  * PRISM Alpha, the ESA-funded project built around the full PRISM loop: who is in it and what each
@@ -16,11 +17,12 @@ export type Partner = (typeof CONSORTIUM)[number];
 
 /** A partner's logo in the surrounding text colour. `size` evens out how large each one looks. */
 export function PartnerLogo({ p }: { p: Partner }) {
+    const t = useT();
     return (
         <span
             className="plogo"
             role="img"
-            aria-label={p.name}
+            aria-label={t(p.name)}
             style={{ '--src': `url(${p.logo})`, '--ratio': p.ratio, '--size': p.size } as CSSProperties}
         />
     );

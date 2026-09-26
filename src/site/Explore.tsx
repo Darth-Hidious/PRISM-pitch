@@ -1,3 +1,4 @@
+import { useT } from './i18n';
 import { Arrow, Idx } from './ui';
 
 const PAGES = [
@@ -40,25 +41,26 @@ const PAGES = [
 
 /** The rest of the site, one card per page. */
 export default function Explore({ n = '03' }: { n?: string }) {
+    const t = useT();
     return (
         <section id="more" className="sec explore" data-theme="paper" data-nav="paper" aria-labelledby="explore-title">
             <div className="wrap">
                 <header className="explore__head rv">
-                    <Idx n={n}>Explore</Idx>
+                    <Idx n={n}>{t('Explore')}</Idx>
                     <h2 id="explore-title" className="w-h2">
-                        More about PRISM and Mirdyne.
+                        {t('More about PRISM and Mirdyne.')}
                     </h2>
                 </header>
                 <ul className="explore__grid">
                     {PAGES.map((p, i) => (
                         <li key={p.href} className="rv" style={{ ['--d' as string]: `${i * 70}ms` }}>
-                            <a className="explore__card" href={p.href}>
+                            <a className="explore__card" href={t.link(p.href)}>
                                 <img className="explore__img" src={p.img} alt="" width={600} height={400} loading="lazy" />
-                                <span className="w-label">{p.label}</span>
-                                <strong>{p.title}</strong>
-                                <span className="explore__text">{p.text}</span>
+                                <span className="w-label">{t(p.label)}</span>
+                                <strong>{t(p.title)}</strong>
+                                <span className="explore__text">{t(p.text)}</span>
                                 <span className="explore__go">
-                                    Open <Arrow />
+                                    {t('Open')} <Arrow />
                                 </span>
                             </a>
                         </li>

@@ -5,6 +5,7 @@
 import { seeded } from './hooks';
 import { Arrow, Ball, Defs, T } from './engrave';
 import type { Tone } from './engrave';
+import { useT } from './i18n';
 
 /* ── The procedure: requirement, design, screen, make, test, learn ─────── */
 
@@ -134,11 +135,13 @@ function Test({ px, id }: { px: number; id: string }) {
 /** `active` 0–4 marks a panel, 5 marks the return arrow (learn). */
 export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (i: number) => void }) {
     const id = 'eg-proc';
+    const t = useT();
     return (
         <svg className="eg eg--procedure" viewBox="0 0 1200 400" role="img" aria-labelledby={`${id}-title`}>
             <title id={`${id}-title`}>
-                The PRISM loop: a requirement, then design, screen, make and test; every result goes back to design.
-                Evidence is recorded at every step.
+                {t(
+                    'The PRISM loop: a requirement, then design, screen, make and test; every result goes back to design. Evidence is recorded at every step.',
+                )}
             </title>
             <Defs id={id} />
             <defs>
@@ -149,7 +152,7 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
 
             <line className="eg-line eg-line--dashed" x1={40} y1={30} x2={1160} y2={30} />
             <T x={40} y={18} kind="small" anchor="start">
-                evidence · every step is recorded: what went in, who owns it, who may see it
+                {t('evidence · every step is recorded: what went in, who owns it, who may see it')}
             </T>
             {PX.map((x) => (
                 <line key={x} className="eg-line eg-line--thin" x1={x} y1={30} x2={x} y2={46} />
@@ -159,10 +162,10 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
                 <g key={p.name} className={`eg-panel${active === i ? ' is-on' : ''}`} onClick={() => onPick(i)}>
                     <rect className="eg-panel__bg" x={PX[i] - 110} y={50} width={220} height={236} rx={6} />
                     <T x={PX[i]} y={70} kind="strong">
-                        {p.n} · {p.name}
+                        {p.n} · {t(p.name)}
                     </T>
                     <T x={PX[i]} y={88} kind="small">
-                        {p.sub}
+                        {t(p.sub)}
                     </T>
                     {i === 0 && <Requirement px={PX[i]} />}
                     {i === 1 && <Design px={PX[i]} />}
@@ -176,7 +179,7 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
                 <g key={h}>
                     <Arrow id={id} d={`M${PX[i] + 86},192 H${PX[i + 1] - 86}`} />
                     <T x={(PX[i] + PX[i + 1]) / 2} y={182} kind="small">
-                        {h}
+                        {t(h)}
                     </T>
                 </g>
             ))}
@@ -188,10 +191,10 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
                     d={`M${PX[4]},292 C${PX[4]},332 ${PX[4] - 20},338 ${PX[4] - 50},338 H${PX[1] + 50} C${PX[1] + 20},338 ${PX[1]},332 ${PX[1]},296`}
                 />
                 <T x={(PX[1] + PX[4]) / 2} y={364} kind="strong">
-                    06 · learn
+                    06 · {t('learn')}
                 </T>
                 <T x={(PX[1] + PX[4]) / 2} y={382} kind="small">
-                    every result, good or bad, updates the models and picks the next experiment
+                    {t('every result, good or bad, updates the models and picks the next experiment')}
                 </T>
             </g>
         </svg>
@@ -210,6 +213,7 @@ const RUNGS = [
 
 export function LadderDiagram() {
     const id = 'eg-ladder';
+    const t = useT();
     const rand = seeded(41);
     const base = 330;
     const layout = RUNGS.map((g, i) => {
@@ -238,18 +242,18 @@ export function LadderDiagram() {
     return (
         <svg className="eg eg--ladder" viewBox="0 0 1200 474" role="img" aria-labelledby={`${id}-title`}>
             <title id={`${id}-title`}>
-                The PRISM ladder: a fast AI simulation, an exact quantum calculation, phase diagrams, a printability
-                check, then make and test. Each step costs more than the one before, and most ideas stop early. Counts
-                are illustrative.
+                {t(
+                    'The PRISM ladder: a fast AI simulation, an exact quantum calculation, phase diagrams, a printability check, then make and test. Each step costs more than the one before, and most ideas stop early. Counts are illustrative.',
+                )}
             </title>
             <Defs id={id} />
             <Ball cx={50} cy={34} r={7} tone="white" />
             <T x={66} y={39} kind="plain" anchor="start">
-                passes this step
+                {t('passes this step')}
             </T>
             <Ball cx={50} cy={58} r={7} tone="dark" />
             <T x={66} y={63} kind="plain" anchor="start">
-                stops here
+                {t('stops here')}
             </T>
 
             {layout.map((g, i) => (
@@ -260,13 +264,13 @@ export function LadderDiagram() {
                         <Ball key={k} cx={b.cx} cy={b.cy} r={g.r} tone={b.pass ? 'white' : 'dark'} />
                     ))}
                     <T x={g.x + g.w / 2} y={356} kind="strong">
-                        {i} · {g.q}
+                        {i} · {t(g.q)}
                     </T>
                     <T x={g.x + g.w / 2} y={375} kind="plain">
-                        {g.how}
+                        {t(g.how)}
                     </T>
                     <T x={g.x + g.w / 2} y={394} kind="small">
-                        {g.time}
+                        {t(g.time)}
                     </T>
                     {i < layout.length - 1 && (
                         <Arrow
@@ -278,15 +282,15 @@ export function LadderDiagram() {
             ))}
             <circle className="eg-halo" cx={chosen.cx} cy={chosen.cy} r={last.r + 6} />
             <T x={last.x + last.w / 2} y={last.topY - 18} kind="strong">
-                a material, with its evidence
+                {t('a material, with its evidence')}
             </T>
 
             <Arrow id={id} d="M40,418 H1160" />
             <T x={600} y={444} kind="plain">
-                each step checks something the step before cannot see
+                {t('each step checks something the step before cannot see')}
             </T>
             <T x={600} y={463} kind="small">
-                heights show the order, not the cost · times are typical per idea · counts are illustrative
+                {t('heights show the order, not the cost · times are typical per idea · counts are illustrative')}
             </T>
         </svg>
     );
@@ -296,25 +300,29 @@ export function LadderDiagram() {
 
 /** The ladder for phones: the same rungs, top to bottom, each bar as long as the ideas that reach it. */
 export function LadderList() {
+    const t = useT();
     const most = RUNGS[0].n;
     return (
-        <ol className="ladder-m" aria-label="The ladder, step by step. Counts are illustrative.">
-            {RUNGS.map((g, i) => (
-                <li key={g.q}>
-                    <p className="ladder-m__q">
-                        <span>{i}</span> {g.q.charAt(0).toUpperCase() + g.q.slice(1)}
-                    </p>
-                    <p className="ladder-m__how">
-                        {g.how} · {g.time}
-                    </p>
-                    <span className="ladder-m__bar" style={{ ['--w' as string]: `${(g.n / most) * 100}%` }}>
-                        <i style={{ ['--p' as string]: `${(g.pass / g.n) * 100}%` }} />
-                    </span>
-                    <p className="ladder-m__n">
-                        {g.n} in, {g.pass} {i === RUNGS.length - 1 ? 'chosen' : 'pass'}
-                    </p>
-                </li>
-            ))}
+        <ol className="ladder-m" aria-label={t('The ladder, step by step. Counts are illustrative.')}>
+            {RUNGS.map((g, i) => {
+                const q = t(g.q);
+                return (
+                    <li key={g.q}>
+                        <p className="ladder-m__q">
+                            <span>{i}</span> {q.charAt(0).toUpperCase() + q.slice(1)}
+                        </p>
+                        <p className="ladder-m__how">
+                            {t(g.how)} · {t(g.time)}
+                        </p>
+                        <span className="ladder-m__bar" style={{ ['--w' as string]: `${(g.n / most) * 100}%` }}>
+                            <i style={{ ['--p' as string]: `${(g.pass / g.n) * 100}%` }} />
+                        </span>
+                        <p className="ladder-m__n">
+                            {g.n} {t('in,')} {g.pass} {i === RUNGS.length - 1 ? t('chosen') : t('pass')}
+                        </p>
+                    </li>
+                );
+            })}
         </ol>
     );
 }
@@ -334,18 +342,20 @@ function wave(x0: number, y0: number, x1: number, y1: number) {
 
 export function PartDiagram() {
     const id = 'eg-part';
+    const t = useT();
     return (
         <svg className="eg eg--part" viewBox="0 0 1000 330" role="img" aria-labelledby={`${id}-title`}>
             <title id={`${id}-title`}>
-                What testing a part reveals: what it is made of, its trace gases and its inner structure. What stays with
-                the owner: the safe settings, the failures, the history and the proof.
+                {t(
+                    'What testing a part reveals: what it is made of, its trace gases and its inner structure. What stays with the owner: the safe settings, the failures, the history and the proof.',
+                )}
             </title>
             <Defs id={id} />
             <T x={40} y={26} kind="head" anchor="start">
-                what testing a part reveals
+                {t('what testing a part reveals')}
             </T>
             <T x={640} y={26} kind="head" anchor="start">
-                what stays with its owner
+                {t('what stays with its owner')}
             </T>
 
             {/* X-ray fluorescence */}
@@ -353,10 +363,10 @@ export function PartDiagram() {
             <rect className="eg-solid" x={118} y={73} width={14} height={14} />
             <path className="eg-line eg-line--thin" d={wave(132, 80, 426, 110)} />
             <T x={48} y={116} kind="strong" anchor="start">
-                what it is made of
+                {t('what it is made of')}
             </T>
             <T x={48} y={133} kind="small" anchor="start">
-                standard lab analysis
+                {t('standard lab analysis')}
             </T>
 
             {/* Gas fusion */}
@@ -364,10 +374,10 @@ export function PartDiagram() {
             <path className="eg-line eg-line--thin" d="M60,192 q6,-5 12,0 t12,0 t12,0 t12,0" />
             <Arrow id={id} dashed d="M120,168 L424,172" />
             <T x={48} y={214} kind="strong" anchor="start">
-                trace gases
+                {t('trace gases')}
             </T>
             <T x={48} y={231} kind="small" anchor="start">
-                oxygen, nitrogen and carbon
+                {t('oxygen, nitrogen and carbon')}
             </T>
 
             {/* Electron column */}
@@ -375,10 +385,10 @@ export function PartDiagram() {
             <path className="eg-solid" d="M110,250 L128,262 L110,274 Z" />
             <path className="eg-line eg-line--thin" d="M128,262 L426,232" />
             <T x={48} y={296} kind="strong" anchor="start">
-                inner structure
+                {t('inner structure')}
             </T>
             <T x={48} y={313} kind="small" anchor="start">
-                X-ray and electron microscopes
+                {t('X-ray and electron microscopes')}
             </T>
 
             {/* The part */}
@@ -388,10 +398,10 @@ export function PartDiagram() {
             ))}
             <ellipse className="eg-solid eg-solid--top" cx={480} cy={72} rx={50} ry={12} />
             <T x={480} y={300} kind="strong">
-                a part
+                {t('a part')}
             </T>
             <T x={480} y={317} kind="small">
-                what anyone can hold
+                {t('what anyone can hold')}
             </T>
 
             <line className="eg-line eg-line--dashed" x1={596} y1={44} x2={596} y2={316} />
@@ -401,10 +411,10 @@ export function PartDiagram() {
             <path className="eg-fill" fill={`url(#${id}-hatch)`} d="M646,90 L666,64 L697,64 L677,90 Z" />
             <path className="eg-line eg-line--thin" d="M646,90 L666,64 L697,64 L677,90 Z" />
             <T x={722} y={74} kind="strong" anchor="start">
-                the safe settings
+                {t('the safe settings')}
             </T>
             <T x={722} y={91} kind="small" anchor="start">
-                what still works when powder and machine vary
+                {t('what still works when powder and machine vary')}
             </T>
 
             {/* The failures */}
@@ -412,10 +422,10 @@ export function PartDiagram() {
             <Ball cx={672} cy={144} r={9} tone="dark" />
             <Ball cx={693} cy={144} r={9} tone="white" />
             <T x={722} y={140} kind="strong" anchor="start">
-                the failures
+                {t('the failures')}
             </T>
             <T x={722} y={157} kind="small" anchor="start">
-                every idea that did not work, and why
+                {t('every idea that did not work, and why')}
             </T>
 
             {/* The lineage */}
@@ -424,10 +434,10 @@ export function PartDiagram() {
                 <Ball key={x} cx={x} cy={208} r={6} tone={k === 3 ? 'mid' : 'white'} />
             ))}
             <T x={722} y={204} kind="strong" anchor="start">
-                the history
+                {t('the history')}
             </T>
             <T x={722} y={221} kind="small" anchor="start">
-                from requirement to decision, with owners
+                {t('from requirement to decision, with owners')}
             </T>
 
             {/* The proof */}
@@ -435,10 +445,10 @@ export function PartDiagram() {
             <circle className="eg-solid" cx={692} cy={268} r={2.5} />
             <path className="eg-line eg-line--bold" d="M652,268 L660,275 L675,259" />
             <T x={722} y={266} kind="strong" anchor="start">
-                the proof
+                {t('the proof')}
             </T>
             <T x={722} y={283} kind="small" anchor="start">
-                the test results, and the know-how to make it again
+                {t('the test results, and the know-how to make it again')}
             </T>
         </svg>
     );
@@ -448,46 +458,47 @@ export function PartDiagram() {
 
 export function KnownAnswer() {
     const id = 'eg-known';
-    const X = (t: number) => 70 + (t / 3000) * 860;
-    const bar = (t: number, e: number, y: number, open: boolean) => (
+    const t = useT();
+    const X = (k: number) => 70 + (k / 3000) * 860;
+    const bar = (k: number, e: number, y: number, open: boolean) => (
         <g>
-            <path className="eg-line" d={`M${X(t - e)},${y} H${X(t + e)} M${X(t - e)},${y - 6} V${y + 6} M${X(t + e)},${y - 6} V${y + 6}`} />
-            <circle className={open ? 'eg-point eg-point--open' : 'eg-point'} cx={X(t)} cy={y} r={6} />
+            <path className="eg-line" d={`M${X(k - e)},${y} H${X(k + e)} M${X(k - e)},${y - 6} V${y + 6} M${X(k + e)},${y - 6} V${y + 6}`} />
+            <circle className={open ? 'eg-point eg-point--open' : 'eg-point'} cx={X(k)} cy={y} r={6} />
         </g>
     );
     return (
         <svg className="eg eg--known" viewBox="0 0 1000 222" role="img" aria-labelledby={`${id}-title`}>
             <title id={`${id}-title`}>
-                A known answer, checked: for a 50/50 mix of molybdenum and tantalum, Forager gives 1149 plus or minus 114
-                kelvin, inside the pass band of 500 to 2600 kelvin agreed before the run. The published value is 2020
-                kelvin.
+                {t(
+                    'A known answer, checked: for a 50/50 mix of molybdenum and tantalum, Forager gives 1149 plus or minus 114 kelvin, inside the pass band of 500 to 2600 kelvin agreed before the run. The published value is 2020 kelvin.',
+                )}
             </title>
             <Defs id={id} />
             <path className="eg-line eg-line--bold" d="M40,22 L48,30 L62,14" />
             <T x={74} y={28} kind="strong" anchor="start">
-                a known answer, checked first: a 50/50 mix of molybdenum and tantalum (Mo–Ta)
+                {t('a known answer, checked first: a 50/50 mix of molybdenum and tantalum (Mo–Ta)')}
             </T>
             <T x={X(1149)} y={82} kind="strong">
-                this model: 1149 ± 114 K
+                {t('this model: 1149 ± 114 K')}
             </T>
             {bar(1149, 114, 104, false)}
             <T x={X(2020)} y={82} kind="plain">
-                published: 2020 K (± 545 K)
+                {t('published: 2020 K (± 545 K)')}
             </T>
             {bar(2020, 545, 104, true)}
             <rect className="eg-fill" fill={`url(#${id}-hatch)`} x={X(500)} y={136} width={X(2600) - X(500)} height={12} />
             <rect className="eg-frame" x={X(500)} y={136} width={X(2600) - X(500)} height={12} />
             <Arrow id={id} d={`M${X(0)},148 H${X(3000) + 20}`} />
-            {[0, 1000, 2000, 3000].map((t) => (
-                <g key={t}>
-                    <line className="eg-line" x1={X(t)} y1={148} x2={X(t)} y2={155} />
-                    <T x={X(t)} y={174} kind="small">
-                        {t === 3000 ? '3000 K' : String(t)}
+            {[0, 1000, 2000, 3000].map((k) => (
+                <g key={k}>
+                    <line className="eg-line" x1={X(k)} y1={148} x2={X(k)} y2={155} />
+                    <T x={X(k)} y={174} kind="small">
+                        {k === 3000 ? t('3000 K') : String(k)}
                     </T>
                 </g>
             ))}
             <T x={(X(500) + X(2600)) / 2} y={202} kind="plain">
-                agreed before the run: a pass if it lands between 500 and 2600 K
+                {t('agreed before the run: a pass if it lands between 500 and 2600 K')}
             </T>
         </svg>
     );
@@ -495,11 +506,18 @@ export function KnownAnswer() {
 
 /** The known answer for phones: one scale, the pass band agreed first, both results placed on it. */
 export function KnownAnswerList() {
-    const at = (t: number) => `${(t / 3000) * 100}%`;
+    const t = useT();
+    const at = (k: number) => `${(k / 3000) * 100}%`;
     return (
-        <div className="known-m" role="img" aria-label="A known answer, checked: for a 50/50 mix of molybdenum and tantalum, Forager gives 1149 plus or minus 114 kelvin, inside the pass band of 500 to 2600 kelvin agreed before the run. The published value is 2020 kelvin.">
+        <div
+            className="known-m"
+            role="img"
+            aria-label={t(
+                'A known answer, checked: for a 50/50 mix of molybdenum and tantalum, Forager gives 1149 plus or minus 114 kelvin, inside the pass band of 500 to 2600 kelvin agreed before the run. The published value is 2020 kelvin.',
+            )}
+        >
             <p className="known-m__head">
-                <span aria-hidden="true">✓</span> A known answer, checked first: a 50/50 mix of molybdenum and tantalum
+                <span aria-hidden="true">✓</span> {t('A known answer, checked first: a 50/50 mix of molybdenum and tantalum')}
             </p>
             <div className="known-m__scale" aria-hidden="true">
                 <span className="known-m__band" style={{ left: at(500), width: at(2100) }} />
@@ -512,16 +530,16 @@ export function KnownAnswerList() {
             </div>
             <dl className="known-m__list" aria-hidden="true">
                 <div>
-                    <dt><i className="known-m__key known-m__key--ours" /> This model</dt>
+                    <dt><i className="known-m__key known-m__key--ours" /> {t('This model')}</dt>
                     <dd>1149 ± 114 K</dd>
                 </div>
                 <div>
-                    <dt><i className="known-m__key" /> Published</dt>
+                    <dt><i className="known-m__key" /> {t('Published')}</dt>
                     <dd>2020 ± 545 K</dd>
                 </div>
                 <div>
-                    <dt><i className="known-m__key known-m__key--band" /> Pass, agreed before the run</dt>
-                    <dd>500 to 2600 K</dd>
+                    <dt><i className="known-m__key known-m__key--band" /> {t('Pass, agreed before the run')}</dt>
+                    <dd>{t('500 to 2600 K')}</dd>
                 </div>
             </dl>
         </div>

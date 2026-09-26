@@ -1,4 +1,5 @@
 import { MarketCards } from './Markets';
+import { useT } from './i18n';
 import { Idx, Words } from './ui';
 
 const LADDER = [
@@ -11,34 +12,35 @@ const LADDER = [
 ];
 
 export default function Business({ n = '02' }: { n?: string }) {
+    const t = useT();
     return (
         <section id="business" className="sec business" data-theme="paper" data-nav="paper" aria-labelledby="business-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>Working with us</Idx>
+                    <Idx n={n}>{t('Working with us')}</Idx>
                     <h2 id="business-title" className="w-h2">
-                        <Words>Our tools are free. We are paid for projects and materials.</Words>
+                        <Words>{t('Our tools are free. We are paid for projects and materials.')}</Words>
                     </h2>
                 </header>
 
-                <ol className="ladder rv" aria-label="How Mirdyne works with you, from open source to supply">
+                <ol className="ladder rv" aria-label={t('How Mirdyne works with you, from open source to supply')}>
                     {LADDER.map((s, i) => (
                         <li key={s.name} className={`ladder__step${i === 0 ? ' ladder__step--open' : ''}`} style={{ ['--i' as string]: i }}>
                             <span className="ladder__num">{String(i + 1).padStart(2, '0')}</span>
-                            <h3>{s.name}</h3>
-                            <p>{s.text}</p>
-                            {s.tag && <span className="ladder__tag">{s.tag}</span>}
+                            <h3>{t(s.name)}</h3>
+                            <p>{t(s.text)}</p>
+                            {s.tag && <span className="ladder__tag">{t(s.tag)}</span>}
                         </li>
                     ))}
                 </ol>
                 <p className="ladder__axis rv" aria-hidden="true">
-                    <span>Open software</span>
+                    <span>{t('Open software')}</span>
                     <i />
-                    <span>Materials on your line</span>
+                    <span>{t('Materials on your line')}</span>
                 </p>
 
                 <div className="markets">
-                    <p className="w-label markets__label rv">Where PRISM is used first</p>
+                    <p className="w-label markets__label rv">{t('Where PRISM is used first')}</p>
                     <MarketCards />
                 </div>
             </div>
