@@ -50,7 +50,7 @@ export function Cover() {
             <div className="d-hero__foot d-in" style={{ '--i': 2 } as CSSProperties}>
                 <div className="d-hero__esa">
                     <span className="d-label">Funded by the European Space Agency</span>
-                    <p>Initial deployment of PRISM, for its first use cases: ESA FLPP, FIRST! Simulation &amp; Intelligence.</p>
+                    <p>PRISM’s first deployment, through ESA’s programme for future launchers (FLPP).</p>
                 </div>
                 <div className="d-hero__partners">
                     <span className="d-label">PRISM Alpha, with</span>
@@ -338,7 +338,7 @@ const PROGRAMMES: {
     },
     {
         name: 'PRISM Alpha',
-        note: 'ESA FLPP · FIRST! Simulation & Intelligence',
+        note: 'ESA · future launchers programme (FLPP)',
         status: 'Running',
         tone: 'accent',
         art: <TrlSteps />,
@@ -772,8 +772,8 @@ export function Close() {
                         </Button>
                     </div>
                     <p className="d-close__esa">
-                        Initial deployment of PRISM, for its first use cases, funded under ESA FLPP, FIRST! Simulation &amp;
-                        Intelligence.
+                        The European Space Agency funds PRISM’s first deployment, through its programme for future
+                        launchers (FLPP).
                     </p>
                 </div>
                 <div className="d-close__logos">
