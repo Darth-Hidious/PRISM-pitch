@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createGlobe, type Globe, type GlobeView } from './globe';
+import { useT } from './i18n';
 import { Note, Words } from './ui';
 
 const EOX = 'https://cloudless.eox.at';
@@ -39,6 +40,7 @@ export default function Europe() {
     const [noGL, setNoGL] = useState(false);
     const [arrived, setArrived] = useState(false);
     const arrivedRef = useRef(false);
+    const t = useT();
 
     useEffect(() => {
         const sec = section.current;
@@ -155,7 +157,7 @@ export default function Europe() {
                     ref={box}
                     className="europe__globe"
                     role="img"
-                    aria-label="A satellite view of the Earth turning to Europe, with Giessen and Wrocław marked."
+                    aria-label={t('A satellite view of the Earth turning to Europe, with Giessen and Wrocław marked.')}
                 >
                     <canvas ref={canvas} className="europe__canvas" aria-hidden="true" />
                     {noGL && (
@@ -180,18 +182,18 @@ export default function Europe() {
                         >
                             <i />
                             <span className="europe__tag">
-                                <b>{pl.name}</b>
-                                <span>{pl.role}</span>
+                                <b>{t(pl.name)}</b>
+                                <span>{t(pl.role)}</span>
                             </span>
                         </span>
                     ))}
                     {!noGL && (
                         <p className="europe__credit">
-                            Earth:{' '}
+                            {t('Earth:')}{' '}
                             <a href={EOX} target="_blank" rel="noopener noreferrer">
                                 EOxCloudless
                             </a>{' '}
-                            by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016),{' '}
+                            {t('by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2016),')}{' '}
                             <a href={CC_BY_4} target="_blank" rel="noopener noreferrer license">
                                 CC BY 4.0
                             </a>
@@ -199,31 +201,32 @@ export default function Europe() {
                     )}
                 </div>
                 <div className="wrap europe__inner">
-                    <p className="w-label europe__kicker">Why Europe</p>
+                    <p className="w-label europe__kicker">{t('Why Europe')}</p>
                     <h2 id="europe-title" className="w-h2">
-                        <Words>Europe depends on others for key materials.</Words>
+                        <Words>{t('Europe depends on others for key materials.')}</Words>
                     </h2>
                     <div className="europe__more">
                         <p className="w-lead europe__lead">
-                            For some critical raw materials, the EU relies almost entirely on one country.
+                            {t('For some critical raw materials, the EU relies almost entirely on one country.')}
                         </p>
                         <dl className="europe__facts">
                             <div>
                                 <dt>65%</dt>
-                                <dd>By 2030, the EU wants no more than this share of any strategic raw material to come from one outside country.</dd>
+                                <dd>{t('By 2030, the EU wants no more than this share of any strategic raw material to come from one outside country.')}</dd>
                             </div>
                             <div>
                                 <dt>SX500</dt>
-                                <dd>No existing alloy could survive inside SpaceX’s Raptor engine, so SpaceX made its own.</dd>
+                                <dd>{t('No existing alloy could survive inside SpaceX’s Raptor engine, so SpaceX made its own.')}</dd>
                             </div>
                         </dl>
                         <p className="europe__close">
-                            We design new alloys in Giessen, and Bimo Tech makes them in Wrocław.
+                            {t('We design new alloys in Giessen, and Bimo Tech makes them in Wrocław.')}
                         </p>
                         <div className="europe__foot">
                             <Note>
-                                EU Critical Raw Materials Act, Regulation (EU) 2024/1252, recital 12 and Article 5. SX500:
-                                Elon Musk, 23 December 2018 and 25 May 2019.
+                                {t(
+                                    'EU Critical Raw Materials Act, Regulation (EU) 2024/1252, recital 12 and Article 5. SX500: Elon Musk, 23 December 2018 and 25 May 2019.',
+                                )}
                             </Note>
                         </div>
                     </div>

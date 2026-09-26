@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import { useT } from './i18n';
 import { LINKS } from './links';
 
 /** The two ways in: our form, and the deck for investors. */
@@ -26,6 +27,7 @@ function Icon({ name }: { name: 'form' | 'deck' }) {
  * them too and keeps them open until you choose, click elsewhere or press Escape.
  */
 export default function InterestMenu() {
+    const t = useT();
     const [open, setOpen] = useState(false);
     const pinned = useRef(false);
     const timer = useRef(0);
@@ -109,7 +111,7 @@ export default function InterestMenu() {
                 aria-controls={id}
                 onClick={toggle}
             >
-                <span>Register interest</span>
+                <span>{t('Register interest')}</span>
                 <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="m4 6 4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
                 </svg>
@@ -118,13 +120,13 @@ export default function InterestMenu() {
                 <ul>
                     {WAYS_IN.map((w, i) => (
                         <li key={w.href}>
-                            <a className={`imenu__item${i === 0 ? ' imenu__item--main' : ''}`} href={w.href} onClick={close}>
+                            <a className={`imenu__item${i === 0 ? ' imenu__item--main' : ''}`} href={t.link(w.href)} onClick={close}>
                                 <span className="imenu__icon">
                                     <Icon name={w.icon} />
                                 </span>
                                 <span className="imenu__words">
-                                    <b>{w.title}</b>
-                                    <span>{w.text}</span>
+                                    <b>{t(w.title)}</b>
+                                    <span>{t(w.text)}</span>
                                 </span>
                                 <svg className="imenu__go" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                                     <path d="M2.5 8h10M9 4.5 12.5 8 9 11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />

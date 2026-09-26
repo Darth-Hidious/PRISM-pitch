@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useT } from './i18n';
 import { Idx, Words } from './ui';
 
 /** Our own photographs, as taken: cropped, never retouched. In order, from raw metal to a part. */
@@ -43,6 +44,7 @@ export default function Made({ n = '02' }: { n?: string }) {
     const stage = useRef<HTMLDivElement>(null);
     const track = useRef<HTMLUListElement>(null);
     const bar = useRef<HTMLElement>(null);
+    const t = useT();
 
     useEffect(() => {
         const p = pin.current;
@@ -106,7 +108,7 @@ export default function Made({ n = '02' }: { n?: string }) {
                     src="/img/lab-melt-spinner.webp"
                     srcSet="/img/lab-melt-spinner-1200.webp 1200w, /img/lab-melt-spinner.webp 1932w"
                     sizes="100vw"
-                    alt="A melt spinner in a university materials lab: a steel vacuum sphere with a round window, its power supply and gas bottles beside it."
+                    alt={t('A melt spinner in a university materials lab: a steel vacuum sphere with a round window, its power supply and gas bottles beside it.')}
                     width={1932}
                     height={1287}
                     loading="lazy"
@@ -116,20 +118,20 @@ export default function Made({ n = '02' }: { n?: string }) {
                 <div ref={stage} className="made__stage">
                     <div className="wrap made__inner">
                         <header className="made__head rv">
-                            <Idx n={n}>From raw metal to a part</Idx>
+                            <Idx n={n}>{t('From raw metal to a part')}</Idx>
                             <h2 id="made-title" className="w-h2">
-                                <Words>We make what we design.</Words>
+                                <Words>{t('We make what we design.')}</Words>
                             </h2>
                         </header>
                         <div className="made__view rv">
-                            <ul ref={track} className="made__grid" aria-label="From raw metal to a machined part, in five photographs">
+                            <ul ref={track} className="made__grid" aria-label={t('From raw metal to a machined part, in five photographs')}>
                                 {PHOTOS.map((ph, i) => (
                                     <li key={ph.src}>
                                         <figure>
-                                            <img src={ph.src} alt={ph.alt} width={1000} height={1000} loading="lazy" />
+                                            <img src={ph.src} alt={t(ph.alt)} width={1000} height={1000} loading="lazy" />
                                             <figcaption>
                                                 <span className="made__step">{String(i + 1).padStart(2, '0')}</span>
-                                                {ph.caption}
+                                                {t(ph.caption)}
                                             </figcaption>
                                         </figure>
                                     </li>

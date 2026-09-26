@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useT } from './i18n';
 import { COMPANY, MISSING, PRIVACY_UPDATED, TO_CONFIRM } from './legal';
 import { PICTURE_CREDITS } from './credits-data';
 
@@ -11,8 +12,9 @@ function Blank({ children }: { children: ReactNode }) {
 
 /** A fact filled in but not yet confirmed. */
 function Unsure({ children }: { children: ReactNode }) {
+    const t = useT();
     return (
-        <mark className="legal__unsure" title="To be confirmed">
+        <mark className="legal__unsure" title={t('To be confirmed')}>
             {children}
         </mark>
     );
@@ -25,12 +27,23 @@ const or = (value: string | null, label: string, key?: keyof typeof COMPANY) =>
 const UNSURE = Object.values(TO_CONFIRM);
 
 function Draft() {
+    const t = useT();
     if (!MISSING.length && !UNSURE.length) return null;
     return (
         <p className="legal__draft" role="note">
-            <b>Draft.</b> Fill in the marked details before this page goes live.
-            {MISSING.length > 0 && <> Missing: {MISSING.join(', ')}.</>}
-            {UNSURE.length > 0 && <> To confirm: {UNSURE.join(', ')}.</>}
+            <b>{t('Draft.')}</b> {t('Fill in the marked details before this page goes live.')}
+            {MISSING.length > 0 && (
+                <>
+                    {' '}
+                    {t('Missing:')} {MISSING.map((m) => t(m)).join(', ')}.
+                </>
+            )}
+            {UNSURE.length > 0 && (
+                <>
+                    {' '}
+                    {t('To confirm:')} {UNSURE.map((m) => t(m)).join(', ')}.
+                </>
+            )}
         </p>
     );
 }
@@ -56,6 +69,7 @@ const phone = (label: string) =>
     COMPANY.phone ? <a href={`tel:${COMPANY.phone.replace(/[^\d+]/g, '')}`}>{COMPANY.phone}</a> : <Blank>{label}</Blank>;
 
 function Page({ label, title, children }: { label: string; title: string; children: ReactNode }) {
+    const t = useT();
     return (
         <section className="sec legal" data-theme="paper" data-nav="paper" aria-labelledby="legal-title">
             <div className="wrap legal__wrap">
@@ -65,7 +79,7 @@ function Page({ label, title, children }: { label: string; title: string; childr
                     <h1 id="legal-title" className="w-h2">
                         {title}
                     </h1>
-                    <nav className="legal__lang" aria-label="Language">
+                    <nav className="legal__lang" aria-label={t('Language')}>
                         <a href="#en" hrefLang="en">
                             English
                         </a>
@@ -84,42 +98,66 @@ function Page({ label, title, children }: { label: string; title: string; childr
 
 const ext = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
-/** Every picture that is not our own, once, for every page: the footers link here. */
+/** Every picture that is not our own, once, for every page: the footers link here. On German pages the
+ * German-only gloss becomes the page's own text, instead of repeating it after the English. */
 function PictureCredits() {
+    const t = useT();
+    const german = t.lang === 'de';
     return (
         <section id="credits" className="legal__body legal__credits" aria-labelledby="credits-title">
             <h2 id="credits-title">
-                Picture credits <span lang="de">· Bildnachweis</span>
+                {german ? (
+                    t('Picture credits')
+                ) : (
+                    <>
+                        Picture credits <span lang="de">· Bildnachweis</span>
+                    </>
+                )}
             </h2>
             <p>
-                All other photographs are our own. <span lang="de">Alle übrigen Fotos sind unsere eigenen.</span>
+                {german ? (
+                    t('All other photographs are our own.')
+                ) : (
+                    <>
+                        All other photographs are our own. <span lang="de">Alle übrigen Fotos sind unsere eigenen.</span>
+                    </>
+                )}
             </p>
             <ul className="legal__pics">
                 {PICTURE_CREDITS.map((c) => (
                     <li key={c.picture}>
-                        <b>{c.source ? <a href={c.source} {...ext}>{c.picture}</a> : c.picture}</b>
+                        <b>{c.source ? <a href={c.source} {...ext}>{t(c.picture)}</a> : t(c.picture)}</b>
                         <span>
-                            {c.by}
+                            {t(c.by)}
                             {c.licence && (
                                 <>
                                     {' · '}
                                     {c.licenceUrl ? (
                                         <a href={c.licenceUrl} {...ext} rel="noopener noreferrer license">
-                                            {c.licence}
+                                            {t(c.licence)}
                                         </a>
                                     ) : (
-                                        c.licence
+                                        t(c.licence)
                                     )}
                                 </>
                             )}
-                            {c.change && ` · ${c.change}`}
-                            {` · ${c.pages}`}
+                            {c.change && ` · ${t(c.change)}`}
+                            {` · ${c.pages
+                                .split(', ')
+                                .map((p) => t(p))
+                                .join(', ')}`}
                         </span>
                     </li>
                 ))}
             </ul>
             <p>
-                Partner logos belong to their owners. <span lang="de">Partnerlogos gehören ihren Inhabern.</span>
+                {german ? (
+                    t('Partner logos belong to their owners.')
+                ) : (
+                    <>
+                        Partner logos belong to their owners. <span lang="de">Partnerlogos gehören ihren Inhabern.</span>
+                    </>
+                )}
             </p>
         </section>
     );
@@ -128,10 +166,11 @@ function PictureCredits() {
 /* ── Impressum ────────────────────────────────────────────────────────── */
 
 export function Impressum() {
+    const t = useT();
     const md = COMPANY.managingDirectors;
     const many = (md?.length ?? 0) > 1;
     return (
-        <Page label="Impressum" title="Legal notice">
+        <Page label={t('Impressum')} title={t('Legal notice')}>
             <article id="en" lang="en" className="legal__body">
                 <h2>Information according to § 5 DDG</h2>
                 <Address />
@@ -242,8 +281,9 @@ function Controller({ de = false }: { de?: boolean }) {
 }
 
 export function Privacy() {
+    const t = useT();
     return (
-        <Page label="Datenschutz" title="Privacy policy">
+        <Page label={t('Datenschutz')} title={t('Privacy policy')}>
             <article id="en" lang="en" className="legal__body">
                 <p className="legal__meta">Last updated: {PRIVACY_UPDATED.en}</p>
 

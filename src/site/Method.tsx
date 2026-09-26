@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
 import { LadderDiagram, LadderList } from './diagrams';
 import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
+import { useT } from './i18n';
 import { Idx, Note } from './ui';
 
 /* ── Exhibit A: a laser powder-bed fusion process map ────────────────────
@@ -48,6 +49,8 @@ const REGIME_TEXT: Record<Regime, { name: string; text: string }> = {
     keyhole: { name: 'Keyholing', text: 'Too much energy: the metal boils, and the collapsing hole traps bubbles.' },
     balling: { name: 'Balling', text: 'Too fast: the melted line breaks up into beads.' },
 };
+/** The regime names as they read mid-sentence ("...causes lack of fusion."); German nouns keep their capital. */
+const REGIME_MID: Record<Regime, string> = { window: 'inside the safe range', lof: 'lack of fusion', keyhole: 'keyholing', balling: 'balling' };
 
 function MeltPool({ r }: { r: Regime }) {
     return (
@@ -107,6 +110,7 @@ function ProcessWindow() {
     const [probe, setProbe] = useState({ v: 950, p: 250 });
     const [showRobust, setShowRobust] = useState(true);
     const dragging = useRef(false);
+    const t = useT();
 
     const r = regime(probe.v, probe.p);
     const esc = r === 'window' ? escapes(probe.v, probe.p) : null;
@@ -221,11 +225,11 @@ function ProcessWindow() {
         ctx.font = `600 ${12.5 * dpr}px ${col('--font-sans')}`;
         ctx.fillStyle = col('--ink-2');
         ctx.textAlign = 'center';
-        ctx.fillText('Lack of fusion', X(1560), Y(118));
-        ctx.fillText('Keyholing', X(470), Y(410));
-        ctx.fillText('Balling', X(1850), Y(380));
+        ctx.fillText(t('Lack of fusion'), X(1560), Y(118));
+        ctx.fillText(t('Keyholing'), X(470), Y(410));
+        ctx.fillText(t('Balling'), X(1850), Y(380));
         ctx.fillStyle = col('--teal-text');
-        ctx.fillText('Window', X(760), Y(228));
+        ctx.fillText(t('Window'), X(760), Y(228));
         ctx.restore();
 
         // Axes.
@@ -238,7 +242,7 @@ function ProcessWindow() {
         for (const v of [500, 1000, 1500, 2000]) {
             ctx.fillText(String(v), X(v), pad.t + ph + 18 * dpr);
         }
-        ctx.fillText('Scan speed v, mm/s', pad.l + pw / 2, pad.t + ph + 38 * dpr);
+        ctx.fillText(t('Scan speed v, mm/s'), pad.l + pw / 2, pad.t + ph + 38 * dpr);
         ctx.textAlign = 'right';
         for (const p of [100, 200, 300, 400]) {
             ctx.fillText(String(p), pad.l - 8 * dpr, Y(p) + 4 * dpr);
@@ -247,7 +251,7 @@ function ProcessWindow() {
         ctx.translate(16 * dpr, pad.t + ph / 2);
         ctx.rotate(-Math.PI / 2);
         ctx.textAlign = 'center';
-        ctx.fillText('Laser power P, W', 0, 0);
+        ctx.fillText(t('Laser power P, W'), 0, 0);
         ctx.restore();
 
         // Probe with its variation envelope.
@@ -273,7 +277,7 @@ function ProcessWindow() {
         ctx.strokeStyle = col('--ground');
         ctx.lineWidth = 2 * dpr;
         ctx.stroke();
-    }, [probe, showRobust]);
+    }, [probe, showRobust, t]);
 
     useEffect(() => {
         draw();
@@ -320,7 +324,7 @@ function ProcessWindow() {
                 <div className="pw__controls">
                     <label>
                         <span>
-                            Laser power <b>{probe.p} W</b>
+                            {t('Laser power')} <b>{probe.p} W</b>
                         </span>
                         <input
                             type="range"
@@ -333,7 +337,7 @@ function ProcessWindow() {
                     </label>
                     <label>
                         <span>
-                            Scan speed <b>{probe.v} mm/s</b>
+                            {t('Scan speed')} <b>{probe.v} mm/s</b>
                         </span>
                         <input
                             type="range"
@@ -347,7 +351,7 @@ function ProcessWindow() {
                 </div>
                 <div className="pw__readout" aria-live="polite">
                     <p className="pw__energy">
-                        <span className="w-label">Energy density</span>
+                        <span className="w-label">{t('Energy density')}</span>
                         <b>
                             {Math.round(ev)} J/mm³
                         </b>
@@ -355,21 +359,21 @@ function ProcessWindow() {
                     <div className={`pw__regime pw__regime--${r}`}>
                         <MeltPool r={r} />
                         <div>
-                            <p className="pw__regime-name">{REGIME_TEXT[r].name}</p>
-                            <p>{REGIME_TEXT[r].text}</p>
+                            <p className="pw__regime-name">{t(REGIME_TEXT[r].name)}</p>
+                            <p>{t(REGIME_TEXT[r].text)}</p>
                         </div>
                     </div>
                     <p className={`pw__robust${r === 'window' && !esc ? ' is-ok' : ''}`}>
                         {r !== 'window'
-                            ? 'Outside the safe range.'
+                            ? t('Outside the safe range.')
                             : esc
-                              ? `Too close to the edge: a drift of 10 % in power or 8 % in speed causes ${REGIME_TEXT[esc].name.toLowerCase()}.`
-                              : 'Safe: still works if power drifts 10 % and speed 8 %.'}
+                              ? `${t('Too close to the edge: a drift of 10 % in power or 8 % in speed causes')} ${t(REGIME_MID[esc])}.`
+                              : t('Safe: still works if power drifts 10 % and speed 8 %.')}
                     </p>
                 </div>
                 <label className="pw__toggle">
                     <input type="checkbox" checked={showRobust} onChange={(e) => setShowRobust(e.target.checked)} />
-                    <span>Show the safe region</span>
+                    <span>{t('Show the safe region')}</span>
                 </label>
             </div>
         </div>
@@ -465,6 +469,7 @@ interface RunState {
 
 function ActiveLearning() {
     const reduce = useReducedMotion();
+    const t = useT();
     const [ref, inView] = useInView<HTMLDivElement>('-10% 0px');
     const [playing, setPlaying] = useState(!reduce);
     const [run, setRun] = useState<RunState>(() => ({ seed: 3, sampled: makeTruth(3).first, found: false }));
@@ -517,7 +522,12 @@ function ActiveLearning() {
 
     return (
         <div ref={ref} className="al">
-            <svg className="al__svg" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Active learning on a synthetic function: ${n} of ${POINTS} points measured${run.found ? ', optimum found' : ''}.`}>
+            <svg
+                className="al__svg"
+                viewBox={`0 0 ${W} ${H}`}
+                role="img"
+                aria-label={`${t('Active learning on a synthetic function:')} ${n} ${t('of')} ${POINTS} ${t('points measured')}${run.found ? `, ${t('optimum found')}` : ''}.`}
+            >
                 <defs>
                     <clipPath id="al-clip">
                         <rect x="0" y={top} width={W} height={plotH} />
@@ -538,35 +548,35 @@ function ActiveLearning() {
                     ))}
                 </g>
                 <text className="al__axis" x="8" y={H - 6}>
-                    177 possible experiments
+                    {t('177 possible experiments')}
                 </text>
             </svg>
             <div className="al__bar">
                 <p className="al__count" aria-live="polite">
                     {run.found ? (
                         <>
-                            Best point found after <b>{n}</b> of {POINTS} measurements
+                            {t('Best point found after')} <b>{n}</b> {t('of')} {POINTS} {t('measurements')}
                         </>
                     ) : (
                         <>
-                            Measured <b>{n}</b> of {POINTS}
+                            {t('Measured')} <b>{n}</b> {t('of')} {POINTS}
                         </>
                     )}
                 </p>
                 <div className="al__buttons">
                     <button type="button" className="pm-btn pm-btn--secondary al__btn" onClick={() => setPlaying((p) => !p)}>
-                        {playing ? 'Pause' : 'Run'}
+                        {playing ? t('Pause') : t('Run')}
                     </button>
                     <button type="button" className="pm-btn pm-btn--link al__btn" onClick={next}>
-                        Step
+                        {t('Step')}
                     </button>
                 </div>
             </div>
             <ul className="al__legend" aria-hidden="true">
-                <li className="al__legend-mean">Model’s best guess</li>
-                <li className="al__legend-band">How unsure it is</li>
-                <li className="al__legend-truth">The hidden answer</li>
-                <li className="al__legend-pt">Measured</li>
+                <li className="al__legend-mean">{t('Model’s best guess')}</li>
+                <li className="al__legend-band">{t('How unsure it is')}</li>
+                <li className="al__legend-truth">{t('The hidden answer')}</li>
+                <li className="al__legend-pt">{t('Measured')}</li>
             </ul>
         </div>
     );
@@ -607,27 +617,28 @@ const MODULES = {
 } as const;
 
 function CoreModules() {
+    const t = useT();
     const [cls, setCls] = useState<keyof typeof MODULES>('alloys');
     const mod = MODULES[cls];
     return (
         <div className="core">
-            <div className="seg" role="group" aria-label="Material class">
+            <div className="seg" role="group" aria-label={t('Material class')}>
                 {(Object.keys(MODULES) as (keyof typeof MODULES)[]).map((k) => (
                     <button key={k} type="button" aria-pressed={k === cls} onClick={() => setCls(k)}>
-                        {MODULES[k].label}
-                        <span className="seg__tag">{MODULES[k].status}</span>
+                        {t(MODULES[k].label)}
+                        <span className="seg__tag">{t(MODULES[k].status)}</span>
                     </button>
                 ))}
             </div>
             <div className="core__grid">
                 <div className="core__block" data-theme="navy">
-                    <p className="w-label">The core · stays the same</p>
+                    <p className="w-label">{t('The core · stays the same')}</p>
                     <ul>
                         {CORE.map((c) => (
-                            <li key={c}>{c}</li>
+                            <li key={c}>{t(c)}</li>
                         ))}
                     </ul>
-                    <p className="core__foot">The same core, from one project to the next.</p>
+                    <p className="core__foot">{t('The same core, from one project to the next.')}</p>
                 </div>
                 <div className="core__plugs" aria-hidden="true">
                     {mod.slots.map((_, i) => (
@@ -635,11 +646,11 @@ function CoreModules() {
                     ))}
                 </div>
                 <div className="core__slots" key={cls}>
-                    <p className="w-label">Changes with each material</p>
+                    <p className="w-label">{t('Changes with each material')}</p>
                     {mod.slots.map(([k, v], i) => (
                         <div key={k} className="core__slot" style={{ animationDelay: `${i * 70}ms` }}>
-                            <span className="w-label">{k}</span>
-                            <p>{v}</p>
+                            <span className="w-label">{t(k)}</span>
+                            <p>{t(v)}</p>
                         </div>
                     ))}
                 </div>
@@ -666,6 +677,7 @@ const demoFromHash = () => {
 export default function Method({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
     const H = h1 ? 'h1' : 'h2';
     const Sub = h1 ? 'h2' : 'h3';
+    const t = useT();
     // The build renders the page to plain HTML (scripts/prerender.mjs). Without JavaScript the tabs cannot
     // switch, so that copy shows every exhibit, one after another.
     const all = typeof window === 'undefined';
@@ -687,12 +699,12 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
         <section id="method" className="sec method" data-theme="paper" data-nav="paper" aria-labelledby="method-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>The method</Idx>
+                    <Idx n={n}>{t('The method')}</Idx>
                     <H id="method-title" className="w-h2">
-                        PRISM chooses which experiments to run.
+                        {t('PRISM chooses which experiments to run.')}
                     </H>
                     <p className="w-lead">
-                        Real experiments are slow and expensive, so PRISM runs the ones that will teach us the most.
+                        {t('Real experiments are slow and expensive, so PRISM runs the ones that will teach us the most.')}
                     </p>
                 </header>
 
@@ -701,17 +713,17 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                         src="/img/dlr-vinci-p41-2000.webp"
                         srcSet="/img/dlr-vinci-p41-1200.webp 1200w, /img/dlr-vinci-p41-2000.webp 2000w"
                         sizes="(max-width: 1400px) 100vw, 1320px"
-                        alt="The Vinci upper-stage engine mounted in an altitude test stand: its dark nozzle hangs below a tangle of pipes and cables."
+                        alt={t('The Vinci upper-stage engine mounted in an altitude test stand: its dark nozzle hangs below a tangle of pipes and cables.')}
                         width={2000}
                         height={1125}
                         loading="lazy"
                     />
                     <figcaption>
-                        <b>A real engine test takes months.</b> Vinci, in an altitude test stand at DLR.
+                        {t.rich('<0>A real engine test takes months.</0> Vinci, in an altitude test stand at DLR.', (s) => <b>{s}</b>)}
                     </figcaption>
                 </figure>
 
-                <div className="method__tabs rv" role="tablist" aria-label="Demos" onKeyDown={onKey}>
+                <div className="method__tabs rv" role="tablist" aria-label={t('Demos')} onKeyDown={onKey}>
                     {EXHIBITS.map((x, i) => (
                         <button
                             key={x.id}
@@ -727,8 +739,10 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                             className="method__tab"
                             onClick={() => pick(i)}
                         >
-                            <span className="method__tab-tag">Exhibit {x.tag}</span>
-                            <span>{x.name}</span>
+                            <span className="method__tab-tag">
+                                {t('Exhibit')} {x.tag}
+                            </span>
+                            <span>{t(x.name)}</span>
                         </button>
                     ))}
                 </div>
@@ -736,13 +750,16 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                     {(all || active === 0) && (
                         <article className="exhibit exhibit--wide" aria-labelledby="ex-ladder">
                             <div className="exhibit__text">
-                                <p className="w-label exhibit__tag">Exhibit A · The ladder</p>
+                                <p className="w-label exhibit__tag">
+                                    {t('Exhibit')} A · {t('The ladder')}
+                                </p>
                                 <Sub id="ex-ladder" className="w-h3">
-                                    Cheap checks come first, expensive ones last.
+                                    {t('Cheap checks come first, expensive ones last.')}
                                 </Sub>
                                 <p className="a">
-                                    <b>Most ideas stop early,</b> in a simulation that takes seconds, long before a test that
-                                    takes weeks.
+                                    {t.rich('<0>Most ideas stop early,</0> in a simulation that takes seconds, long before a test that takes weeks.', (s) => (
+                                        <b>{s}</b>
+                                    ))}
                                 </p>
                             </div>
                             <figure className="exhibit__stage">
@@ -751,9 +768,8 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                                 </div>
                                 <LadderList />
                                 <figcaption>
-                                    <Note label="Illustrative">
-                                        Drawn for this site. The counts show the shape, not real results. Times are typical per
-                                        idea.
+                                    <Note label={t('Illustrative')}>
+                                        {t('Drawn for this site. The counts show the shape, not real results. Times are typical per idea.')}
                                     </Note>
                                 </figcaption>
                             </figure>
@@ -762,17 +778,19 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                     {(all || active === 1) && (
                         <article className="exhibit" aria-labelledby="ex-window">
                             <div className="exhibit__text">
-                                <p className="w-label exhibit__tag">Exhibit B · Safe settings</p>
+                                <p className="w-label exhibit__tag">
+                                    {t('Exhibit')} B · {t('Safe settings')}
+                                </p>
                                 <Sub id="ex-window" className="w-h3">
-                                    We look for a safe range of settings.
+                                    {t('We look for a safe range of settings.')}
                                 </Sub>
                                 <p className="a">
-                                    <b>Machines drift, so the recipe needs room to spare.</b> Drag the dot: anywhere in the
-                                    hatched area, the metal still comes out solid.
+                                    {t.rich('<0>Machines drift, so the recipe needs room to spare.</0> Drag the dot: anywhere in the hatched area, the metal still comes out solid.', (s) => (
+                                        <b>{s}</b>
+                                    ))}
                                 </p>
-                                <Note label="Illustrative">
-                                    Boundaries follow standard scaling rules: lack of fusion with P/v, keyholing with P/√v,
-                                    balling at high speed. Not measured data.
+                                <Note label={t('Illustrative')}>
+                                    {t('Boundaries follow standard scaling rules: lack of fusion with P/v, keyholing with P/√v, balling at high speed. Not measured data.')}
                                 </Note>
                             </div>
                             <div className="exhibit__stage">
@@ -783,27 +801,29 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                     {(all || active === 2) && (
                         <article className="exhibit" aria-labelledby="ex-al">
                             <div className="exhibit__text">
-                                <p className="w-label exhibit__tag">Exhibit C · Smart experiments</p>
+                                <p className="w-label exhibit__tag">
+                                    {t('Exhibit')} C · {t('Smart experiments')}
+                                </p>
                                 <Sub id="ex-al" className="w-h3">
-                                    Each experiment is chosen for what it will teach us.
+                                    {t('Each experiment is chosen for what it will teach us.')}
                                 </Sub>
                                 <p className="a">
-                                    <b>PRISM tests where the model is least sure,</b> close to the best answer. Press Run to
-                                    watch the uncertainty shrink.
+                                    {t.rich('<0>PRISM tests where the model is least sure,</0> close to the best answer. Press Run to watch the uncertainty shrink.', (s) => (
+                                        <b>{s}</b>
+                                    ))}
                                 </p>
                                 <dl className="exhibit__stats">
                                     <div>
                                         <dt>19</dt>
-                                        <dd>measurements for NIST’s CAMEO system to find the best material</dd>
+                                        <dd>{t('measurements for NIST’s CAMEO system to find the best material')}</dd>
                                     </div>
                                     <div>
                                         <dt>177</dt>
-                                        <dd>points on the full map, most of which it never had to measure</dd>
+                                        <dd>{t('points on the full map, most of which it never had to measure')}</dd>
                                     </div>
                                 </dl>
                                 <Note>
-                                    Kusne et al., Nature Communications 11, 5966 (2020): about 10 hours instead of more than 90.
-                                    The demo is a real learning loop (a Gaussian process) on a test function, not material data.
+                                    {t('Kusne et al., Nature Communications 11, 5966 (2020): about 10 hours instead of more than 90. The demo is a real learning loop (a Gaussian process) on a test function, not material data.')}
                                 </Note>
                             </div>
                             <div className="exhibit__stage">
@@ -814,12 +834,14 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                     {(all || active === 3) && (
                         <article className="exhibit" aria-labelledby="ex-core">
                             <div className="exhibit__text">
-                                <p className="w-label exhibit__tag">Exhibit D · Reuse</p>
+                                <p className="w-label exhibit__tag">
+                                    {t('Exhibit')} D · {t('Reuse')}
+                                </p>
                                 <Sub id="ex-core" className="w-h3">
-                                    Only the modules change from one material to the next.
+                                    {t('Only the modules change from one material to the next.')}
                                 </Sub>
                                 <p className="a">
-                                    The core stays the same. That is how one platform moves from alloys to polymers.
+                                    {t('The core stays the same. That is how one platform moves from alloys to polymers.')}
                                 </p>
                             </div>
                             <div className="exhibit__stage">

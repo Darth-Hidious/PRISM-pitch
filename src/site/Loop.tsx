@@ -4,6 +4,7 @@ import type { Maturity } from '../ds/MaturityPill';
 import { ProcedureDiagram } from './diagrams';
 import { Glyph, type GlyphName } from './glyphs';
 import { useInView, useReducedMotion } from './hooks';
+import { useT } from './i18n';
 import { Idx, Words } from './ui';
 
 interface Step {
@@ -74,6 +75,9 @@ const STEPS: Step[] = [
 ];
 
 
+/** The same English MaturityPill shows by default (src/ds/MaturityPill.tsx); translated here for the site. */
+const MATURITY_LABEL: Record<Maturity, string> = { 'in-use': 'In use', prototype: 'Prototype', development: 'In development', target: 'Target' };
+
 /* ── Phones: the loop as a ring that turns as you scroll ──────────────── */
 
 /** Where the ring shows: the screens that have no room for the drawing, when motion is welcome. */
@@ -102,6 +106,7 @@ function LoopRing() {
     const nodes = useRef<(SVGGElement | null)[]>([]);
     const middle = useRef<SVGGElement>(null);
     const [step, setStep] = useState(0);
+    const t = useT();
 
     useEffect(() => {
         const p = pin.current;
@@ -168,10 +173,10 @@ function LoopRing() {
                     <span className="loopring__num">
                         {String(step + 1).padStart(2, '0')} / {String(STEPS.length).padStart(2, '0')}
                     </span>
-                    <b>{s.name}</b>
-                    <MaturityPill maturity={s.maturity} />
+                    <b>{t(s.name)}</b>
+                    <MaturityPill maturity={s.maturity} label={t(MATURITY_LABEL[s.maturity])} />
                 </p>
-                <svg className="loopring__svg" viewBox="0 0 400 360" role="img" aria-label="The PRISM loop: your requirement in the middle; design, screen, make, test and learn around it, and round again.">
+                <svg className="loopring__svg" viewBox="0 0 400 360" role="img" aria-label={t('The PRISM loop: your requirement in the middle; design, screen, make, test and learn around it, and round again.')}>
                     <circle className="loopring__track" cx={CX} cy={CY} r={R} />
                     <circle
                         ref={arc}
@@ -195,10 +200,10 @@ function LoopRing() {
                             <Glyph name="target" className="loopring__glyph" size={28} />
                         </g>
                         <text x={CX} y={CY + 12} textAnchor="middle">
-                            Your
+                            {t('Your')}
                         </text>
                         <text x={CX} y={CY + 25} textAnchor="middle">
-                            requirement
+                            {t('requirement')}
                         </text>
                     </g>
                     {ROUND.map((st, k) => {
@@ -219,7 +224,7 @@ function LoopRing() {
                                     <Glyph name={st.glyph} className="loopring__glyph" size={22} />
                                 </g>
                                 <text x={l.x} y={l.y + dy} textAnchor={anchor}>
-                                    {st.name}
+                                    {t(st.name)}
                                 </text>
                             </g>
                         );
@@ -230,7 +235,7 @@ function LoopRing() {
                     </g>
                 </svg>
                 <p className="loopring__text">
-                    <b>{s.lead}</b> {s.text}
+                    <b>{t(s.lead)}</b> {t(s.text)}
                 </p>
             </div>
         </div>
@@ -242,6 +247,7 @@ export default function Loop({ n = '02' }: { n?: string }) {
     const [paused, setPaused] = useState(false);
     const [ref, inView] = useInView<HTMLDivElement>('-20% 0px');
     const reduce = useReducedMotion();
+    const t = useT();
 
     useEffect(() => {
         if (!inView || paused || reduce) return;
@@ -259,9 +265,9 @@ export default function Loop({ n = '02' }: { n?: string }) {
         <section id="loop" className="sec loop" data-theme="paper" data-nav="paper" aria-labelledby="loop-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>How it works</Idx>
+                    <Idx n={n}>{t('How it works')}</Idx>
                     <h2 id="loop-title" className="w-h2">
-                        <Words>Every result feeds the next design.</Words>
+                        <Words>{t('Every result feeds the next design.')}</Words>
                     </h2>
                 </header>
                 <div ref={ref} className="loop__body rv">
@@ -273,10 +279,10 @@ export default function Loop({ n = '02' }: { n?: string }) {
                                 <span className="loop__list-num">{String(i + 1).padStart(2, '0')}</span>
                                 <div>
                                     <p className="loop__list-name">
-                                        {s.name} <MaturityPill maturity={s.maturity} />
+                                        {t(s.name)} <MaturityPill maturity={s.maturity} label={t(MATURITY_LABEL[s.maturity])} />
                                     </p>
                                     <p className="loop__list-text">
-                                        <b>{s.lead}</b> {s.text}
+                                        <b>{t(s.lead)}</b> {t(s.text)}
                                     </p>
                                 </div>
                             </li>
@@ -288,7 +294,7 @@ export default function Loop({ n = '02' }: { n?: string }) {
                         </div>
                     </figure>
                     <div className="loop__panel">
-                        <div className="loop__tabs" role="tablist" aria-label="Steps of the loop">
+                        <div className="loop__tabs" role="tablist" aria-label={t('Steps of the loop')}>
                             {STEPS.map((s, i) => (
                                 <button
                                     key={s.name}
@@ -301,7 +307,7 @@ export default function Loop({ n = '02' }: { n?: string }) {
                                     onClick={() => pick(i)}
                                 >
                                     <span className="loop__tab-num">{String(i + 1).padStart(2, '0')}</span>
-                                    <span className="loop__tab-name">{s.name}</span>
+                                    <span className="loop__tab-name">{t(s.name)}</span>
                                     <span className="loop__tab-bar" aria-hidden="true">
                                         {i === active && !paused && !reduce && inView && <i key={active} />}
                                     </span>
@@ -310,13 +316,13 @@ export default function Loop({ n = '02' }: { n?: string }) {
                         </div>
                         <div id="loop-detail" className="loop__detail" role="tabpanel" aria-labelledby={`loop-tab-${active}`}>
                             <div className="loop__detail-q" key={active}>
-                                <p className="q">{step.question}</p>
+                                <p className="q">{t(step.question)}</p>
                                 <p className="a">
-                                    <b>{step.lead}</b> {step.text}
+                                    <b>{t(step.lead)}</b> {t(step.text)}
                                 </p>
                             </div>
                             <div className="loop__detail-meta">
-                                <MaturityPill maturity={step.maturity} />
+                                <MaturityPill maturity={step.maturity} label={t(MATURITY_LABEL[step.maturity])} />
                             </div>
                         </div>
                     </div>

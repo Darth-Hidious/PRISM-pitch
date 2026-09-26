@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { fitCanvas, seeded, useInView, useReducedMotion } from './hooks';
+import { useT } from './i18n';
 import { Grain, Idx, Note, Rails, Words } from './ui';
 
 /* ── The problem: far too many alloys to make them all ────────────────── */
@@ -18,7 +19,8 @@ const PER_DOT = 20_000;
 const N = Math.round(ALLOYS / PER_DOT); // 23,716
 const YEARS_PER_DOT = PER_DOT / PER_DAY / 365.25; // about 5.5
 
-const fmt = (v: number) => v.toLocaleString('en-GB');
+/** One decimal place, with the language's own decimal mark: "5.5" or "5,5". */
+const yearsText = (lang: string) => (lang === 'de' ? YEARS_PER_DOT.toFixed(1).replace('.', ',') : YEARS_PER_DOT.toFixed(1));
 
 interface Field {
     x: Float32Array;
@@ -127,6 +129,7 @@ function DotField({ step }: { step: number }) {
     const reduce = useReducedMotion();
     const api = useRef<{ go: (s: number) => void } | null>(null);
     const stepRef = useRef(step);
+    const t = useT();
 
     useEffect(() => {
         const canvas = ref.current;
@@ -156,7 +159,7 @@ function DotField({ step }: { step: number }) {
         const draw = (now: number) => {
             raf = 0;
             const el = now - start;
-            const t = DUR ? Math.min(1, el / DUR) : 1;
+            const pt = DUR ? Math.min(1, el / DUR) : 1;
             const { dpr, w, h } = fitCanvas(canvas);
             ctx.clearRect(0, 0, w, h);
             const { x0, y0, bw, bh } = box(w, h);
@@ -165,7 +168,7 @@ function DotField({ step }: { step: number }) {
             // Ordinary dots, bucketed by alpha so the canvas state changes only twenty times a frame.
             counts.fill(0);
             for (let i = 0; i < N; i++) {
-                const local = Math.min(1, Math.max(0, (t - f.delay[i] * 0.45) / 0.55));
+                const local = Math.min(1, Math.max(0, (pt - f.delay[i] * 0.45) / 0.55));
                 const e = 1 - Math.pow(1 - local, 3);
                 cur[i] = from[i] + (to[i] - from[i]) * e;
                 const l = i === f.one ? 0 : Math.round(cur[i] * LEVELS);
@@ -188,7 +191,7 @@ function DotField({ step }: { step: number }) {
             }
 
             // The one dot: 20,000 alloys, about five and a half years of lab work.
-            const e = 1 - Math.pow(1 - t, 3);
+            const e = 1 - Math.pow(1 - pt, 3);
             for (let c = 0; c < 4; c++) oneCur[c] = oneFrom[c] + (oneTo[c] - oneFrom[c]) * e;
             const [core, halo, ring, label] = oneCur;
             const [ox, oy] = at(f.one);
@@ -227,10 +230,10 @@ function DotField({ step }: { step: number }) {
                 ctx.textBaseline = 'alphabetic';
                 ctx.font = `600 ${12 * dpr}px ${mono}`;
                 ctx.fillStyle = `rgba(255,255,255,${label})`;
-                ctx.fillText(`1 dot = ${fmt(PER_DOT)} alloys`, lx, ly);
+                ctx.fillText(`${t('1 dot =')} ${t.num(PER_DOT)} ${t('alloys')}`, lx, ly);
                 ctx.font = `${11.5 * dpr}px ${mono}`;
                 ctx.fillStyle = `rgba(214,224,236,${0.85 * label})`;
-                ctx.fillText(`≈ ${YEARS_PER_DOT.toFixed(1)} years of lab work`, lx, ly + 17 * dpr);
+                ctx.fillText(`≈ ${yearsText(t.lang)} ${t('years of lab work')}`, lx, ly + 17 * dpr);
             }
 
             // The guided search, in the last step: hop by hop towards the answer.
@@ -273,7 +276,7 @@ function DotField({ step }: { step: number }) {
                     ctx.fill();
                 }
             }
-            if (t < 1 || !pathDone) raf = requestAnimationFrame(draw);
+            if (pt < 1 || !pathDone) raf = requestAnimationFrame(draw);
         };
         const schedule = () => {
             if (!raf) raf = requestAnimationFrame(draw);
@@ -296,7 +299,7 @@ function DotField({ step }: { step: number }) {
             ro.disconnect();
             cancelAnimationFrame(raf);
         };
-    }, [reduce]);
+    }, [reduce, t]);
 
     useEffect(() => {
         stepRef.current = step;
@@ -312,6 +315,7 @@ function DotField({ step }: { step: number }) {
  */
 function Counter({ value }: { value: number }) {
     const reduce = useReducedMotion();
+    const t = useT();
     const [shown, setShown] = useState(reduce || typeof window === 'undefined' ? value : 1);
     useEffect(() => {
         if (reduce) {
@@ -330,7 +334,7 @@ function Counter({ value }: { value: number }) {
         raf = requestAnimationFrame(tick);
         return () => cancelAnimationFrame(raf);
     }, [value, reduce]);
-    return <>{fmt(shown)}</>;
+    return <>{t.num(shown)}</>;
 }
 
 /** Seconds after the section comes into view at which the field moves to each step. */
@@ -344,6 +348,7 @@ export function Gap({ n = '01' }: { n?: string }) {
     const [ref, inView] = useInView<HTMLElement>('0px 0px -25% 0px', true);
     const reduce = useReducedMotion();
     const [played, setPlayed] = useState(0);
+    const t = useT();
 
     // Once on screen, play the field through once: dots in, one dot singled out, then a guided search.
     useEffect(() => {
@@ -358,42 +363,41 @@ export function Gap({ n = '01' }: { n?: string }) {
             <Rails />
             <Grain />
             <div className="wrap gap__inner">
-                <Idx n={n} tail={<span className="gap__legend"><i /> = {fmt(PER_DOT)} possible alloys</span>}>
-                    The problem
+                <Idx n={n} tail={<span className="gap__legend"><i /> = {t.num(PER_DOT)} {t('possible alloys')}</span>}>
+                    {t('The problem')}
                 </Idx>
                 <div className="gap__grid">
                     <div className="gap__copy rv">
                         <h2 id="gap-title" className="w-h2">
-                            <Words>Materials decide what we can build.</Words>
+                            <Words>{t('Materials decide what we can build.')}</Words>
                         </h2>
                         <p className="w-lead">
-                            Finding new materials has become faster. Putting one into service still takes ten to twenty
-                            years.
+                            {t('Finding new materials has become faster. Putting one into service still takes ten to twenty years.')}
                         </p>
                         <dl className="gap__stats">
                             <div className="gap__big">
                                 <dt>
                                     <Counter key={String(inView)} value={ALLOYS} />
                                 </dt>
-                                <dd>possible alloys from just five of nine high-melting metals</dd>
+                                <dd>{t('possible alloys from just five of nine high-melting metals')}</dd>
                             </div>
                             <div>
                                 <dt>
                                     <span className="gap__op">÷</span>
                                     {PER_DAY}
                                 </dt>
-                                <dd>alloys a fast lab can make in a day</dd>
+                                <dd>{t('alloys a fast lab can make in a day')}</dd>
                             </div>
                             <div>
                                 <dt>
                                     <span className="gap__op">≈</span>
-                                    {fmt(YEARS_SHOWN)}
+                                    {t.num(YEARS_SHOWN)}
                                 </dt>
-                                <dd>years to make them all</dd>
+                                <dd>{t('years to make them all')}</dd>
                             </div>
                         </dl>
                         <p className="gap__close">
-                            <b>Nobody can make them all,</b> so PRISM picks the few worth making.
+                            {t.rich('<0>Nobody can make them all,</0> so PRISM picks the few worth making.', (s) => <b>{s}</b>)}
                         </p>
                     </div>
                     <div className="gap__field" aria-hidden="true">
@@ -401,10 +405,10 @@ export function Gap({ n = '01' }: { n?: string }) {
                     </div>
                 </div>
                 <div className="gap__foot">
-                    <Note label="How we counted">
-                        126 ways to pick five of nine metals that all melt above 1,650&nbsp;°C, × 3,764,376 ways to mix
-                        five in whole percent. Ten a day, every day. Each dot is 20,000 alloys; their positions are
-                        illustrative.
+                    <Note label={t('How we counted')}>
+                        {t(
+                            '126 ways to pick five of nine metals that all melt above 1,650 °C, × 3,764,376 ways to mix five in whole percent. Ten a day, every day. Each dot is 20,000 alloys; their positions are illustrative.',
+                        )}
                     </Note>
                 </div>
             </div>

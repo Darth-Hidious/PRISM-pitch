@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useT } from './i18n';
 import { Idx, Words } from './ui';
 
 /** Where PRISM goes first: one photograph for each market, what PRISM does there, and how far along it is. */
@@ -61,6 +62,7 @@ const MARKETS = [
 
 /** The six markets as photo cards. Used on the home page and in Working with us. */
 export function MarketCards() {
+    const t = useT();
     return (
         <ul className="mcards">
             {MARKETS.map((m, i) => (
@@ -68,7 +70,7 @@ export function MarketCards() {
                     <img
                         className="mcard__img"
                         src={m.img}
-                        alt={m.alt}
+                        alt={t(m.alt)}
                         width={1100}
                         height={1100}
                         loading="lazy"
@@ -79,11 +81,11 @@ export function MarketCards() {
                         }}
                     />
                     <span className={`mcard__chip mcard__chip--${m.chip.toLowerCase()}`}>
-                        {String(i + 1).padStart(2, '0')} · {m.chip}
+                        {String(i + 1).padStart(2, '0')} · {t(m.chip)}
                     </span>
                     <div className="mcard__body">
-                        <h3 className="mcard__title">{m.title}</h3>
-                        <p className="mcard__text">{m.text}</p>
+                        <h3 className="mcard__title">{t(m.title)}</h3>
+                        <p className="mcard__text">{t(m.text)}</p>
                     </div>
                 </li>
             ))}
@@ -93,13 +95,14 @@ export function MarketCards() {
 
 /** Home: where PRISM goes first, near the end of the page. */
 export default function Markets({ n = '04' }: { n?: string }) {
+    const t = useT();
     return (
         <section id="markets" className="sec markets-home" data-theme="navy" data-nav="navy" aria-labelledby="markets-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>Markets</Idx>
+                    <Idx n={n}>{t('Markets')}</Idx>
                     <h2 id="markets-title" className="w-h2">
-                        <Words>Where PRISM is used first.</Words>
+                        <Words>{t('Where PRISM is used first.')}</Words>
                     </h2>
                 </header>
                 <MarketCards />

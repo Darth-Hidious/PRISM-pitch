@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useT } from './i18n';
 
 /** Section index line: "02 — How it works", with a hairline running to the edge. */
 export function Idx({ n, children, tail }: { n: string; children: ReactNode; tail?: ReactNode }) {
@@ -13,10 +14,11 @@ export function Idx({ n, children, tail }: { n: string; children: ReactNode; tai
 }
 
 /** Sources and fine print, folded away: one small word on the page, the detail one tap away. */
-export function Note({ label = 'Sources', children }: { label?: string; children: ReactNode }) {
+export function Note({ label, children }: { label?: string; children: ReactNode }) {
+    const t = useT();
     return (
         <details className="note">
-            <summary>{label}</summary>
+            <summary>{label ?? t('Sources')}</summary>
             <p>{children}</p>
         </details>
     );

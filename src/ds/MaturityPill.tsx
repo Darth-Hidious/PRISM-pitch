@@ -14,8 +14,11 @@ const MATURITY: Record<Maturity, { label: string; tone: 'accent' | 'teal' | 'cri
  * programmes; Prototype = PRISM software being matured from TRL 3 to 4;
  * In development = being built; Target = where the platform is going, not
  * claimed today. Every capability claim on the site carries one.
+ *
+ * `label` overrides the pill's own English word, for a caller that translates it (the site passes its own
+ * `t('In use')`, etc.); the default output is unchanged for every other caller (the investor deck).
  */
-export default function MaturityPill({ maturity }: { maturity: Maturity }) {
+export default function MaturityPill({ maturity, label }: { maturity: Maturity; label?: string }) {
     const m = MATURITY[maturity];
-    return <StatusPill tone={m.tone}>{m.label}</StatusPill>;
+    return <StatusPill tone={m.tone}>{label ?? m.label}</StatusPill>;
 }

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { seeded, useInView, useMediaQuery, useReducedMotion } from './hooks';
+import { useT } from './i18n';
 import { CONSORTIUM, PartnerLogo } from './partners';
 import { Grain, Idx, Note, Rails, Words } from './ui';
 
@@ -89,6 +90,7 @@ const upright = (n: Net['nodes'][number]) => ({
 
 function EventNetwork() {
     const net = NET;
+    const t = useT();
     const [ref, inView] = useInView<HTMLDivElement>('-10% 0px');
     const reduce = useReducedMotion();
     const svgRef = useRef<SVGSVGElement>(null);
@@ -140,16 +142,16 @@ function EventNetwork() {
                 className={`net__svg${vertical ? ' net__svg--upright' : ''}`}
                 viewBox={vertical ? `0 0 ${VW} ${VH}` : `0 0 ${W} ${H}`}
                 role="img"
-                aria-label="Illustrative network: an event at a supplier propagating through materials and processes to components and programmes."
+                aria-label={t('Illustrative network: an event at a supplier propagating through materials and processes to components and programmes.')}
             >
                 {COLUMNS.map((c, i) =>
                     vertical ? (
                         <text key={c} className="net__col" x={0} y={64 + i * ROW - 30} textAnchor="start">
-                            {c}
+                            {t(c)}
                         </text>
                     ) : (
                         <text key={c} className="net__col" x={90 + i * 255} y="22" textAnchor="middle">
-                            {c}
+                            {t(c)}
                         </text>
                     ),
                 )}
@@ -177,49 +179,50 @@ function EventNetwork() {
 }
 
 export default function Roadmap({ n = '02' }: { n?: string }) {
+    const t = useT();
     return (
         <section id="roadmap" className="sec roadmap" data-theme="navy" data-nav="navy" aria-labelledby="roadmap-title">
             <Rails />
             <Grain />
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>Progress</Idx>
+                    <Idx n={n}>{t('Progress')}</Idx>
                     <h2 id="roadmap-title" className="w-h2">
-                        <Words>What PRISM has done, and what comes next.</Words>
+                        <Words>{t('What PRISM has done, and what comes next.')}</Words>
                     </h2>
                 </header>
 
                 <article className="alpha rv" aria-labelledby="alpha-title">
                     <div className="alpha__head">
-                        <p className="w-label alpha__kicker">Running now · funded by ESA</p>
+                        <p className="w-label alpha__kicker">{t('Running now · funded by ESA')}</p>
                         <h3 id="alpha-title" className="w-h3 alpha__title">
                             PRISM Alpha
                         </h3>
                         <p className="alpha__lead">
-                            The first project built around the full PRISM loop, for European space transport.
+                            {t('The first project built around the full PRISM loop, for European space transport.')}
                         </p>
                         <dl className="alpha__facts">
                             <div>
-                                <dt>12 months</dt>
-                                <dd>TRL 3 to 4</dd>
+                                <dt>{t('12 months')}</dt>
+                                <dd>{t('TRL 3 to 4')}</dd>
                             </div>
                             <div>
                                 <dt>3+</dt>
-                                <dd>candidate alloys</dd>
+                                <dd>{t('candidate alloys')}</dd>
                             </div>
                             <div>
                                 <dt>1</dt>
-                                <dd>complete closed loop</dd>
+                                <dd>{t('complete closed loop')}</dd>
                             </div>
                         </dl>
-                        <p className="alpha__when">Kicked off in July 2026. Award ceremony in October.</p>
+                        <p className="alpha__when">{t('Kicked off in July 2026. Award ceremony in October.')}</p>
                     </div>
-                    <ul className="alpha__team" aria-label="PRISM Alpha consortium">
+                    <ul className="alpha__team" aria-label={t('PRISM Alpha consortium')}>
                         {CONSORTIUM.map((p) => (
                             <li key={p.id}>
                                 <PartnerLogo p={p} />
-                                <span className="alpha__name">{p.name}</span>
-                                <span className="alpha__role">{p.role}</span>
+                                <span className="alpha__name">{t(p.name)}</span>
+                                <span className="alpha__role">{t(p.role)}</span>
                             </li>
                         ))}
                     </ul>
@@ -227,24 +230,24 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
 
                 <div className="stands rv" aria-labelledby="stands-title">
                     <h3 id="stands-title" className="w-h3">
-                        Where it stands
+                        {t('Where it stands')}
                     </h3>
                     <div className="stands__cols">
                         <div>
-                            <p className="w-label">Done so far</p>
+                            <p className="w-label">{t('Done so far')}</p>
                             <ul>
-                                <li>Project SPARK: eight candidate alloys narrowed to two, made as real metal.</li>
-                                <li>PRISM Alpha, funded by ESA, kicked off in July 2026.</li>
-                                <li>Our first privately funded project, for PFAS‑free polymers, is signed.</li>
-                                <li>PRISM won the AI special prize (KI‑Sonderpreis) at Hessen Ideen 2026.</li>
+                                <li>{t('Project SPARK: eight candidate alloys narrowed to two, made as real metal.')}</li>
+                                <li>{t('PRISM Alpha, funded by ESA, kicked off in July 2026.')}</li>
+                                <li>{t('Our first privately funded project, for PFAS‑free polymers, is signed.')}</li>
+                                <li>{t('PRISM won the AI special prize (KI‑Sonderpreis) at Hessen Ideen 2026.')}</li>
                             </ul>
                         </div>
                         <div>
-                            <p className="w-label">Still to prove</p>
+                            <p className="w-label">{t('Still to prove')}</p>
                             <ul>
-                                <li>One full loop, from requirement to test results. That is PRISM Alpha’s job.</li>
-                                <li>Robots making samples and software driving the instruments, on a real line.</li>
-                                <li>A material taken from test sample to real part, with the evidence certification needs.</li>
+                                <li>{t('One full loop, from requirement to test results. That is PRISM Alpha’s job.')}</li>
+                                <li>{t('Robots making samples and software driving the instruments, on a real line.')}</li>
+                                <li>{t('A material taken from test sample to real part, with the evidence certification needs.')}</li>
                             </ul>
                         </div>
                     </div>
@@ -253,13 +256,13 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                 <div className="branches rv">
                     {BRANCHES.map((b) => (
                         <div key={b.name} className="branch">
-                            <h3 className="branch__name">{b.name}</h3>
-                            <p className="branch__text">{b.text}</p>
+                            <h3 className="branch__name">{t(b.name)}</h3>
+                            <p className="branch__text">{t(b.text)}</p>
                             <ol className="track">
                                 {b.items.map((it) => (
                                     <li key={it.title} className="track__item" data-state={it.state}>
-                                        <span className="w-label">{it.status}</span>
-                                        <strong>{it.title}</strong>
+                                        <span className="w-label">{t(it.status)}</span>
+                                        <strong>{t(it.title)}</strong>
                                     </li>
                                 ))}
                             </ol>
@@ -270,15 +273,14 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                 <figure className="roadmap__net rv">
                     <EventNetwork />
                     <figcaption>
-                        <Note label="Illustrative">
-                            How a change at one supplier spreads to the programmes that depend on it. Method adapted from
-                            Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities”, KDD 2021.
+                        <Note label={t('Illustrative')}>
+                            {t('How a change at one supplier spreads to the programmes that depend on it. Method adapted from Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities”, KDD 2021.')}
                         </Note>
                     </figcaption>
                 </figure>
 
                 <p className="roadmap__close rv">
-                    Whatever PRISM is used for, every claim keeps its source and says how sure it is.
+                    {t('Whatever PRISM is used for, every claim keeps its source and says how sure it is.')}
                 </p>
             </div>
         </section>
