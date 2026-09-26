@@ -129,6 +129,7 @@ npm run dev        # http://localhost:5173/, /platform/, … and /deck/
 npm run build      # type-check, build every page into dist/, then the plain HTML and Markdown copies
 npm run lint
 npm test           # build, then every test in tests/ (npm run test:only skips the build)
+node scripts/check-agents.mjs [url]   # check a deployed site as an agent meets it (default www.mirdyne.com)
 node scripts/capture-pdf.mjs   # rebuild PRISM-Pitch-Deck.pdf from /deck/ (links point at www.mirdyne.com)
 node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design system
 ```
