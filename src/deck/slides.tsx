@@ -1,11 +1,13 @@
-import type { CSSProperties } from 'react';
-import { Button, EvidenceLineage, Kicker, MaturityPill, PrismMark, RightsState, SourceLine, StatusTable } from '../ds';
+import type { CSSProperties, ReactElement } from 'react';
+import { Button, EvidenceLineage, Kicker, MaturityPill, PrismMark, RightsState, SourceLine, StatusPill } from '../ds';
+import type { StatusTone } from '../ds/StatusPill';
 import type { Maturity } from '../ds/MaturityPill';
 import { Glyph } from '../site/glyphs';
 import { LINKS } from '../site/links';
 import { MarketCards } from '../site/Markets';
 import { CONSORTIUM, PartnerLogo } from '../site/partners';
 import { ALLOYS, YEARS_ALL, fmt } from './numbers';
+import { HeaLattice, PolymerChain, TokamakSection, TrlSteps } from './traction-art';
 import { DotField, LoopWheel, ModuleMap, StackTower, type LoopStep, type Module, type TowerRow } from './visuals';
 
 function Head({ kicker, title, lead }: { kicker: string; title: string; lead?: string }) {
@@ -313,59 +315,84 @@ export function Proof() {
 
 /* ── 08 Traction ──────────────────────────────────────────────────────── */
 
-/** Each partner's part in PRISM Alpha, in the deck's own terms. */
-const DECK_ROLES: Record<string, string> = {
-    esa: 'Customer · FLPP',
-    bimo: 'Prime contractor',
-    ariane: 'Requirements and validation',
-    iapt: 'LPBF process',
-    amsight: 'Manufacturing data',
-};
+const PARTNERS_ALPHA = ['ariane', 'iapt', 'amsight'].map((id) => CONSORTIUM.find((p) => p.id === id)!);
+
+const PROGRAMMES: {
+    name: string;
+    note: string;
+    status: string;
+    tone: StatusTone;
+    art: ReactElement;
+    figure: string;
+    text: string;
+    partners?: typeof PARTNERS_ALPHA;
+}[] = [
+    {
+        name: 'Project SPARK',
+        note: 'ESA activity · Bimo Tech',
+        status: 'Active',
+        tone: 'accent',
+        art: <HeaLattice />,
+        figure: '8',
+        text: 'Refractory high-entropy alloy candidates, taken to two physical down-selections.',
+    },
+    {
+        name: 'PRISM Alpha',
+        note: 'ESA FLPP · FIRST! Simulation & Intelligence',
+        status: 'Running',
+        tone: 'accent',
+        art: <TrlSteps />,
+        figure: 'TRL 3 → 4',
+        text: 'In 12 months: at least three candidates and one complete closed loop.',
+        partners: PARTNERS_ALPHA,
+    },
+    {
+        name: 'PFAS-free polymers',
+        note: 'Industrial partner · under NDA',
+        status: 'Contracted',
+        tone: 'teal',
+        art: <PolymerChain />,
+        figure: '1st',
+        text: 'Privately funded programme, and our first polymer class. Contract and NDA signed; start pending.',
+    },
+    {
+        name: 'Fusion heritage',
+        note: 'Bimo Tech · ITER',
+        status: 'Delivered',
+        tone: 'accent',
+        art: <TokamakSection />,
+        figure: 'ITER',
+        text: 'Titanium first-wall materials and rhodium targets, supplied by Bimo Tech.',
+    },
+];
 
 export function Traction() {
     return (
         <>
             <Head kicker="Traction" title="Funded, contracted and in the lab." />
-            <div className="d-body">
-                <StatusTable
-                    rows={[
-                        {
-                            entity: 'Project SPARK',
-                            entityNote: 'ESA activity · Bimo Tech',
-                            status: { label: 'Active', tone: 'accent' },
-                            statement: ['Eight refractory high-entropy alloy candidates taken to two physical down-selections.'],
-                        },
-                        {
-                            entity: 'PRISM Alpha',
-                            entityNote: 'ESA FLPP · FIRST! Simulation & Intelligence',
-                            status: { label: 'Running', tone: 'accent' },
-                            statement: ['12 months, TRL 3 to 4: at least three candidates and one complete closed loop, with ArianeGroup, Fraunhofer IAPT and amsight.'],
-                        },
-                        {
-                            entity: 'PFAS-free polymers',
-                            entityNote: 'Industrial partner · under NDA',
-                            status: { label: 'Contracted', tone: 'teal' },
-                            statement: ['First privately funded programme and first polymer class. Contract and NDA signed; start pending.'],
-                        },
-                        {
-                            entity: 'Fusion heritage',
-                            entityNote: 'Bimo Tech · ITER',
-                            status: { label: 'Delivered', tone: 'accent' },
-                            statement: ['Titanium first-wall materials and rhodium targets supplied to ITER.'],
-                        },
-                    ]}
-                />
-            </div>
-            <div className="d-consortium" aria-label="PRISM Alpha consortium">
-                <p className="pm-column">PRISM Alpha consortium</p>
-                <ul>
-                    {CONSORTIUM.map((p) => (
-                        <li key={p.id}>
-                            <PartnerLogo p={p} />
-                            <span>{DECK_ROLES[p.id]}</span>
-                        </li>
-                    ))}
-                </ul>
+            <div className="d-body d-prog">
+                {PROGRAMMES.map((p) => (
+                    <article key={p.name} className="d-prog__card">
+                        <div className="d-prog__art">
+                            {p.art}
+                            <StatusPill tone={p.tone}>{p.status}</StatusPill>
+                        </div>
+                        <div className="d-prog__body">
+                            <h3 className="d-prog__name">{p.name}</h3>
+                            <p className="d-prog__note">{p.note}</p>
+                            <p className="d-prog__figure">{p.figure}</p>
+                            <p className="d-prog__text">{p.text}</p>
+                            {p.partners && (
+                                <p className="d-prog__with">
+                                    <span>With</span>
+                                    {p.partners.map((q) => (
+                                        <PartnerLogo key={q.id} p={q} />
+                                    ))}
+                                </p>
+                            )}
+                        </div>
+                    </article>
+                ))}
             </div>
             <div className="d-foot">
                 <SourceLine label="Sources">ESA contract records; Mirdyne and Bimo Tech programme records.</SourceLine>
@@ -509,7 +536,8 @@ const eurM = (n: number) => `${n < 0 ? '−' : ''}€${Math.abs(n / 1_000_000).t
 
 export function Financials() {
     const cL = 48;
-    const cR = 700;
+    // The end values sit to the right of the lines, never across them.
+    const cR = 590;
     const cT = 20;
     const cB = 360;
     const hi = Math.max(...UPSIDE.revenue);
@@ -536,12 +564,18 @@ export function Financials() {
                         <path d={area(BASE.revenue)} fill="var(--accent-tint)" />
                         <path d={line(BASE.revenue)} fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinejoin="round" />
                         <circle cx={x(9)} cy={y(UPSIDE.revenue[9])} r="4.5" fill="var(--teal)" />
-                        <text x={x(9) - 12} y={y(UPSIDE.revenue[9]) + 20} textAnchor="end" fill="var(--teal-text)" style={{ font: '700 15px var(--font-sans)' }}>
-                            Upside {eurM(UPSIDE.revenue[9])}
+                        <text x={x(9) + 16} y={y(UPSIDE.revenue[9]) - 2} fill="var(--teal-text)" style={{ font: '600 13px var(--font-sans)' }}>
+                            Upside
+                        </text>
+                        <text x={x(9) + 16} y={y(UPSIDE.revenue[9]) + 19} fill="var(--teal-text)" style={{ font: '700 19px var(--font-sans)' }}>
+                            {eurM(UPSIDE.revenue[9])}
                         </text>
                         <circle cx={x(9)} cy={y(BASE.revenue[9])} r="4.5" fill="var(--accent)" />
-                        <text x={x(9) - 12} y={y(BASE.revenue[9]) - 14} textAnchor="end" fill="var(--accent)" style={{ font: '700 15px var(--font-sans)' }}>
-                            Base {eurM(BASE.revenue[9])}
+                        <text x={x(9) + 16} y={y(BASE.revenue[9]) - 2} fill="var(--accent)" style={{ font: '600 13px var(--font-sans)' }}>
+                            Base
+                        </text>
+                        <text x={x(9) + 16} y={y(BASE.revenue[9]) + 19} fill="var(--accent)" style={{ font: '700 19px var(--font-sans)' }}>
+                            {eurM(BASE.revenue[9])}
                         </text>
                         {YEARS.map((yr, i) =>
                             i % 3 === 0 || i === YEARS.length - 1 ? (

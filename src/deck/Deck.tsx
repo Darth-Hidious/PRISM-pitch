@@ -63,6 +63,7 @@ export default function Deck({ slides }: { slides: SlideDef[] }) {
     const [current, setCurrent] = useState(() => indexFromHash(total));
     const [scale, setScale] = useState(1);
     const reader = useMedia('(max-width: 760px), (max-aspect-ratio: 4/5)');
+    const deckRef = useRef<HTMLDivElement>(null);
     const stageRef = useRef<HTMLDivElement>(null);
 
     const go = useCallback(
@@ -74,15 +75,20 @@ export default function Deck({ slides }: { slides: SlideDef[] }) {
         [total],
     );
 
+    // The deck box is the screen's safe area (deck.css), so the slide stays clear of a phone's notch and home bar.
     useLayoutEffect(() => {
-        if (reader) return;
-        const fit = () => setScale(Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H));
+        const el = deckRef.current;
+        if (reader || !el) return;
+        const fit = () => setScale(Math.min(el.clientWidth / STAGE_W, el.clientHeight / STAGE_H));
         fit();
-        window.addEventListener('resize', fit);
-        return () => window.removeEventListener('resize', fit);
+        const ro = new ResizeObserver(fit);
+        ro.observe(el);
+        return () => ro.disconnect();
     }, [reader]);
 
+    // Only the stage locks the page: the reader must always scroll, whatever happens to this script.
     useEffect(() => {
+        document.body.classList.toggle('deck-body--stage', !reader);
         document.body.classList.toggle('deck-body--reader', reader);
     }, [reader]);
 
@@ -153,7 +159,7 @@ export default function Deck({ slides }: { slides: SlideDef[] }) {
     const position = `${String(current + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
 
     return (
-        <div className={`deck${reader ? ' deck--reader' : ''}`}>
+        <div ref={deckRef} className={`deck${reader ? ' deck--reader' : ''}`}>
             <div
                 ref={stageRef}
                 className="deck-stage"

@@ -2,17 +2,10 @@ import { useEffect, useRef, type CSSProperties } from 'react';
 import { MaturityPill } from '../ds';
 import type { Maturity } from '../ds/MaturityPill';
 import { Glyph, type GlyphName } from '../site/glyphs';
-import { seeded, useReducedMotion } from '../site/hooks';
+import { seeded } from '../site/hooks';
 import { STACKS } from '../site/stacks-data';
 import { N_DOTS, YEARS_PER_DOT, fmt, PER_DOT } from './numbers';
-import { useSlide } from './slideContext';
-
-/** Motion only on the slide on screen (or in the reader), and never when the viewer asks for less. */
-function useLive() {
-    const { active, reader } = useSlide();
-    const reduced = useReducedMotion();
-    return { live: (active || reader) && !reduced, active, reader, reduced };
-}
+import { useLive } from './slideContext';
 
 /* ── The problem: every possible alloy, to scale ──────────────────────── */
 

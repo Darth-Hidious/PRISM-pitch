@@ -8,12 +8,23 @@
 .deck-body {
     margin: 0;
     background: var(--navy);
-    overflow: hidden;
 }
 
+/* Only the stage locks the page (Deck.tsx adds the class). The reader never gets it, so it scrolls
+   even if the script is slow or a browser keeps a lock it was once given. */
+.deck-body--stage {
+    overflow: hidden;
+    /* The body holds only the fixed deck, so it would have no height: make it cover the screen, so the
+       navy also fills the strips beside the safe area. */
+    min-height: 100vh;
+}
+
+/* The screen's safe area: on phones the slide keeps clear of the notch and the home bar (the page
+   runs under them: viewport-fit=cover in deck/index.html). The navy body fills what is left. */
 .deck {
     position: fixed;
-    inset: 0;
+    inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
+        env(safe-area-inset-left, 0px);
     background: var(--navy);
 }
 
@@ -212,7 +223,8 @@
     inset: auto;
     opacity: 1;
     visibility: visible;
-    padding: 56px 20px 40px;
+    /* The page runs under a phone's notch (viewport-fit=cover); text stays inside the safe area. */
+    padding: 56px max(20px, env(safe-area-inset-right, 0px)) 40px max(20px, env(safe-area-inset-left, 0px));
     overflow: visible;
     border-bottom: var(--hairline) solid var(--rule);
 }
@@ -221,9 +233,35 @@
     padding: 0;
 }
 
+/* On a phone the band is the page's footer, after the last slide: a bar pinned over the slides would
+   crowd a small screen and the browser's own toolbar. Its parts wrap instead of overlapping. */
 .deck--reader .deck-chrome {
-    position: sticky;
-    bottom: 0;
+    position: static;
+}
+
+.deck--reader .pm-band {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 20px;
+    padding: 18px 20px calc(18px + env(safe-area-inset-bottom, 0px));
+}
+
+.deck--reader .pm-band__left {
+    flex-wrap: wrap;
+    row-gap: 8px;
+}
+
+.deck--reader .pm-band__middle {
+    display: none;
+}
+
+@media (min-width: 620px) {
+    .deck--reader .pm-band__middle {
+        display: block;
+    }
 }
 
 /* ── Slide-specific ───────────────────────────────────────────────────── */
@@ -338,42 +376,146 @@
     border-top: var(--hairline) solid var(--rule);
 }
 
-.d-consortium {
+/* Traction: one card per programme, a drawing on top (traction-art.tsx). */
+.d-prog {
     display: grid;
-    gap: 12px;
-    margin-top: 24px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
 }
 
-.d-consortium ul {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+.d-prog__card {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    background: var(--surface);
+    border: var(--hairline) solid var(--rule);
+    border-radius: var(--radius-panel);
+}
+
+.d-prog__art {
+    position: relative;
+    flex: 0 0 auto;
+    height: 270px;
+    background: var(--ground);
+    border-bottom: var(--hairline) solid var(--rule-soft);
+}
+
+.d-prog__art svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.d-prog__art .pm-pill {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.d-prog__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 18px 18px;
+}
+
+.d-prog__name {
     margin: 0;
-    padding: 0;
-    list-style: none;
-    border-top: var(--hairline) solid var(--rule);
-    border-bottom: var(--hairline) solid var(--rule);
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
-.d-consortium li {
-    --logo-h: 24px;
-    display: grid;
-    align-content: start;
-    gap: 8px;
-    padding: 14px 16px 14px 0;
-}
-
-.d-consortium li + li {
-    padding-left: 16px;
-    border-left: var(--hairline) solid var(--rule-soft);
-}
-
-.d-consortium b {
-    font-size: 18px;
-}
-
-.d-consortium span {
-    font-size: 14px;
+.d-prog__note {
+    margin: 0;
+    font-size: 13px;
     color: var(--ink-2);
+}
+
+.d-prog__figure {
+    margin: 12px 0 0;
+    padding-top: 14px;
+    border-top: var(--hairline) solid var(--rule-soft);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--emphasis);
+}
+
+.d-prog__text {
+    margin: 8px 0 0;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.d-prog__with {
+    --logo-h: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin: 12px 0 0;
+    font-size: 12px;
+    color: var(--ink-2);
+}
+
+/* The level under way fills, slowly, again and again; still when motion is off. */
+.trl-fill {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    transform: scaleY(0.5);
+    opacity: 0.85;
+}
+
+.tok-flux {
+    stroke-dasharray: 5 4;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .trl-fill.is-live {
+        animation: trl-rise 3.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .tok-core.is-live {
+        animation: tok-glow 2.8s ease-in-out infinite alternate;
+    }
+
+    .tok-flux.is-live {
+        animation: tok-flow 9s linear infinite;
+    }
+}
+
+@keyframes trl-rise {
+    0% {
+        transform: scaleY(0.08);
+        opacity: 0.85;
+    }
+    75%,
+    92% {
+        transform: scaleY(0.62);
+        opacity: 0.85;
+    }
+    100% {
+        transform: scaleY(0.62);
+        opacity: 0;
+    }
+}
+
+@keyframes tok-glow {
+    from {
+        opacity: 0.7;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes tok-flow {
+    to {
+        stroke-dashoffset: -90;
+    }
 }
 
 /* Market */
@@ -1638,7 +1780,8 @@
 
     .d-hero {
         min-height: 92svh;
-        padding: 28px 20px 28px;
+        padding: max(28px, calc(env(safe-area-inset-top, 0px) + 16px)) max(20px, env(safe-area-inset-right, 0px)) 28px
+            max(20px, env(safe-area-inset-left, 0px));
     }
 
     .d-hero::after {
@@ -1783,7 +1926,7 @@
         height: 72vw;
     }
 
-    .d-consortium ul,
+    .d-prog,
     .d-context,
     .d-bridge,
     .d-boundary,
@@ -1796,11 +1939,8 @@
         display: none;
     }
 
-    /* One partner per row: the row rules replace the dividers between columns. */
-    .d-consortium li + li {
-        padding-left: 0;
-        border-left: 0;
-        border-top: var(--hairline) solid var(--rule-soft);
+    .d-prog__art {
+        height: 230px;
     }
 
     .d-ask__figure .pm-numeral {
@@ -1833,7 +1973,7 @@
     }
 
     .d-close__copy {
-        padding: 56px 20px 40px;
+        padding: 56px max(20px, env(safe-area-inset-right, 0px)) 40px max(20px, env(safe-area-inset-left, 0px));
     }
 
     .d-close__title {
@@ -1851,5 +1991,12 @@
 
     .d-close__media::after {
         background: linear-gradient(0deg, var(--ground) 0%, rgba(6, 24, 50, 0) 40%);
+    }
+}
+
+/* Upright tablets read the deck as a page too; two programme cards fit side by side. */
+@media (min-width: 600px) and (max-aspect-ratio: 4/5) {
+    .d-prog {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
