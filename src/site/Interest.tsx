@@ -367,7 +367,7 @@ function InterestForm() {
                 </label>
                 <p className="consent__note">
                     We use them only to reply. They are stored in Frankfurt with our hosting provider and emailed to our
-                    team. We delete them after twelve months, or sooner if you ask.
+                    team. We delete them after twelve months, or sooner if you ask. <a href="/privacy/">Privacy policy</a>
                 </p>
                 {shown('consent') && (
                     <p className="field__error" id="f-consent-error">

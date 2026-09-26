@@ -10,6 +10,7 @@
 | `/company/` | Mirdyne and Bimo Tech, the founders, working with us | `src/site/pages/company.tsx` |
 | `/news/` | News, with the photographs | `src/site/pages/news.tsx` |
 | `/interest/` | Register interest: our own form (`/interest/?topic=investment` starts with a topic chosen) | `src/site/pages/interest.tsx`, `api/interest.ts` |
+| `/impressum/`, `/privacy/` | Legal notice and privacy policy, in English and German | `src/site/Legal.tsx`, facts in `src/site/legal.ts` |
 | `/deck/` | The investor room: 14 slides on a 1440 × 810 stage, scaled to any screen; `/deck/#5` opens slide 5; phones get the slides as one scrolling page | `src/deck/` |
 
 Each page is its own HTML file (`index.html`, `platform/index.html`, …), listed
@@ -22,6 +23,18 @@ Both are built from the same component library in `src/ds/` and the tokens in
 The **Register interest** button in the bar opens two ways in: the form at
 `/interest/` and the investor room (`/deck/`). On phones both are at the foot of
 the menu.
+
+## Legal pages
+
+`/impressum/` and `/privacy/` are built from the company facts in
+`src/site/legal.ts`: legal name, address, managing directors, phone,
+register court and number, VAT ID and the person responsible for content.
+Any fact still `null` is marked on both pages, and both carry a Draft
+notice until every required fact is in. Do not publish them in that state.
+The footer on every page, the form and the deck's bottom bar link to both.
+The privacy policy describes exactly what the site does (Vercel hosting,
+the form, email through Zoho, no cookies or tracking); change it whenever
+that changes.
 
 ## Register interest: where submissions go
 

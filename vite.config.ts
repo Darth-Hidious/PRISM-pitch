@@ -4,8 +4,9 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // The website is one HTML page per section of the site (home at /, then
-// /platform, /method, /company and /news, and our form at /interest); the investor deck is at /deck/.
-const pages = ['platform', 'method', 'company', 'news', 'interest', 'deck']
+// /platform, /method, /company and /news, our form at /interest, the legal pages at /impressum and
+// /privacy); the investor deck is at /deck/.
+const pages = ['platform', 'method', 'company', 'news', 'interest', 'impressum', 'privacy', 'deck']
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],

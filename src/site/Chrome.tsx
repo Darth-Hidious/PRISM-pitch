@@ -5,7 +5,7 @@ import InterestMenu from './InterestMenu';
 import { LINKS } from './links';
 
 /** The site's pages. Home is `/`; each other page is its own HTML entry (see vite.config.ts). */
-export type PageId = 'home' | 'platform' | 'method' | 'company' | 'news' | 'interest';
+export type PageId = 'home' | 'platform' | 'method' | 'company' | 'news' | 'interest' | 'impressum' | 'privacy';
 
 const NAV: { id: PageId; href: string; label: string }[] = [
     { id: 'platform', href: '/platform/', label: 'Platform' },
@@ -206,6 +206,14 @@ export function SiteFooter({ page }: { page: PageId }) {
                 )}
                 <div className="footer__legal">
                     <span>© 2026 Mirdyne · Giessen, Germany · A spin-off of Bimo Tech</span>
+                    <nav className="footer__law" aria-label="Legal">
+                        <a href="/impressum/" aria-current={page === 'impressum' ? 'page' : undefined}>
+                            Impressum
+                        </a>
+                        <a href="/privacy/" aria-current={page === 'privacy' ? 'page' : undefined}>
+                            Privacy
+                        </a>
+                    </nav>
                     <a className="footer__credit" href={LINKS.marc27} target="_blank" rel="noopener noreferrer">
                         Technology concept by marc27
                     </a>

@@ -173,6 +173,18 @@
     outline-color: var(--on-chrome);
 }
 
+/* The legal pages, reachable from every slide. */
+.deck-law {
+    margin-left: 10px;
+    color: var(--on-chrome-2);
+    text-decoration: none;
+}
+
+.deck-law:hover {
+    color: var(--on-chrome);
+    text-decoration: underline;
+}
+
 /* ── Reader mode (phones, portrait) ───────────────────────────────────── */
 
 .deck--reader {

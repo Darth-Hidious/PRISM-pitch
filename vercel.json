@@ -41,6 +41,14 @@
       "destination": "/interest/index.html"
     },
     {
+      "source": "/impressum",
+      "destination": "/impressum/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy/index.html"
+    },
+    {
       "source": "/deck",
       "destination": "/deck/index.html"
     },

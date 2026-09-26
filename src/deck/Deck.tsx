@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ReactElement } from 'react';
-import { FooterBand } from '../ds';
+import { FooterBand, MirdyneMark } from '../ds';
 import { SlideContext } from './slideContext';
 
 export interface SlideDef {
@@ -176,6 +176,18 @@ export default function Deck({ slides }: { slides: SlideDef[] }) {
                 <div className="deck-chrome">
                     {!reader && <div className="deck-progress" style={{ width: `${((current + 1) / total) * 100}%` }} />}
                     <FooterBand
+                        left={
+                            <>
+                                <MirdyneMark title="" style={{ width: 14, height: 14 }} />
+                                <span>Mirdyne</span>
+                                <a className="deck-law" href="/impressum/">
+                                    Impressum
+                                </a>
+                                <a className="deck-law" href="/privacy/">
+                                    Privacy
+                                </a>
+                            </>
+                        }
                         right={
                             reader ? (
                                 'Investor room'
