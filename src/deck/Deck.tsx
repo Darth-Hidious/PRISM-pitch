@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ReactElement } from 'react';
-import { FooterBand, MirdyneMark } from '../ds';
+import { FooterBand } from '../ds';
 import { SlideContext } from './slideContext';
 
 export interface SlideDef {
@@ -184,8 +184,7 @@ export default function Deck({ slides }: { slides: SlideDef[] }) {
                     <FooterBand
                         left={
                             <>
-                                <MirdyneMark title="" style={{ width: 14, height: 14 }} />
-                                <span>Mirdyne</span>
+                                <img className="deck-logo" src="/brand/mirdyne-lockup-white.png" alt="Mirdyne" width={355} height={97} />
                                 <a className="deck-law" href="/impressum/">
                                     Impressum
                                 </a>

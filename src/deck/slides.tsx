@@ -755,23 +755,32 @@ export function Close() {
     return (
         <div className="d-close">
             <div className="d-close__copy">
-                <Kicker>Mirdyne · Giessen, Germany</Kicker>
-                <h2 className="d-close__title d-in">Start with the capability you need.</h2>
-                <p className="d-close__lead d-in" style={{ '--i': 1 } as CSSProperties}>
-                    Alloys and polymers, designed, made and tested in one loop, with the proof attached.
-                </p>
-                <div className="d-close__actions d-in" style={{ '--i': 2 } as CSSProperties}>
-                    <Button href={`${LINKS.interest}?topic=investment`}>Register interest</Button>
-                    <Button variant="secondary" href="/">
-                        mirdyne.com
-                    </Button>
+                <span className="d-hero__brand d-close__brand">
+                    <PrismMark title="" weight={20} />
+                    <b>PRISM</b>
+                    <span>by Mirdyne</span>
+                </span>
+                <div className="d-close__main">
+                    <h2 className="d-close__title d-in">Start with the capability you need.</h2>
+                    <p className="d-close__lead d-in" style={{ '--i': 1 } as CSSProperties}>
+                        Alloys and polymers, designed, made and tested in one loop, with the proof attached.
+                    </p>
+                    <div className="d-close__actions d-in" style={{ '--i': 2 } as CSSProperties}>
+                        <Button href={`${LINKS.interest}?topic=investment`}>Register interest</Button>
+                        <Button variant="secondary" href="/">
+                            mirdyne.com
+                        </Button>
+                    </div>
+                    <p className="d-close__esa">
+                        Initial deployment of PRISM, for its first use cases, funded under ESA FLPP, FIRST! Simulation &amp;
+                        Intelligence.
+                    </p>
                 </div>
-                <p className="d-close__esa">
-                    Initial deployment of PRISM, for its first use cases, funded under ESA FLPP, FIRST! Simulation &amp;
-                    Intelligence.
-                </p>
-                <div className="d-close__meta">
-                    <span>Mirdyne is a spin-off of Bimo Tech.</span>
+                <div className="d-close__logos">
+                    <img className="d-close__mirdyne" src="/brand/mirdyne-lockup-white.png" alt="Mirdyne" width={355} height={97} />
+                    <span className="d-close__parent">
+                        A spin-off of <PartnerLogo p={BIMO} />
+                    </span>
                     <a href={LINKS.marc27} target="_blank" rel="noopener noreferrer">
                         Technology concept by marc27
                     </a>

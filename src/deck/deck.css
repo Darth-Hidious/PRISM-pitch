@@ -184,6 +184,13 @@
     outline-color: var(--on-chrome);
 }
 
+/* The Mirdyne logo, as the band's first item. */
+.deck-logo {
+    display: block;
+    width: auto;
+    height: 16px;
+}
+
 /* The legal pages, reachable from every slide. */
 .deck-law {
     margin-left: 10px;
@@ -1692,12 +1699,23 @@
     overflow: hidden;
 }
 
+/* Brand on top, the ask in the middle, the company's logos at the foot. */
 .d-close__copy {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 44px 64px 40px;
+}
+
+.d-close__brand {
+    align-self: flex-start;
+}
+
+.d-close__main {
+    display: flex;
+    flex-direction: column;
     gap: 26px;
-    padding: 64px;
 }
 
 .d-close__title {
@@ -1732,15 +1750,33 @@
     color: var(--ink-3);
 }
 
-.d-close__meta {
+.d-close__logos {
     display: flex;
     flex-wrap: wrap;
-    gap: 28px;
+    align-items: center;
+    gap: 16px 36px;
+    padding-top: 24px;
+    border-top: var(--hairline) solid var(--rule);
     font-size: 15px;
     color: var(--ink-2);
 }
 
-.d-close__meta a {
+.d-close__mirdyne {
+    display: block;
+    width: auto;
+    height: 34px;
+}
+
+.d-close__parent {
+    --logo-h: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink);
+}
+
+.d-close__logos a {
+    margin-left: auto;
     color: inherit;
 }
 
