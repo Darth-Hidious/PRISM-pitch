@@ -15,7 +15,10 @@
 
 Each page is its own HTML file (`index.html`, `platform/index.html`, …), listed
 in `vite.config.ts`; `vercel.json` also serves them without the trailing slash,
-and sends the old `/evidence/` address to `/method/#proof`.
+and sends the old `/evidence/` address to `/method/#proof`. Files under
+`/assets/` are cached for a year: Vite names each one after its content, so a
+changed file gets a new name. Files in `public/` keep their names, so they are
+not cached that way.
 
 Both are built from the same component library in `src/ds/` and the tokens in
 `src/styles/`, which are also published as the PRISM design system.
@@ -59,6 +62,10 @@ that changes.
   `api/interest-cleanup.ts` does that for the store once a day (`crons` in
   `vercel.json`, production only), authorised by the `CRON_SECRET`
   environment variable. The emails in the inbox have to be deleted there.
+- **QR code for print:** `public/prism-qr.png` (a card, 1890 px square) and
+  `public/prism-qr.svg` (the code alone, as a vector) open
+  https://www.mirdyne.com/interest/. They replace the Microsoft Forms code;
+  printed copies of that one still lead to the old form.
 - Locally, `npm run dev` does not run `api/`; the form then shows its error
   message. `vercel dev` runs both.
 
