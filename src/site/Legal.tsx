@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { COMPANY, MISSING, PRIVACY_UPDATED } from './legal';
+import { COMPANY, MISSING, PRIVACY_UPDATED, TO_CONFIRM } from './legal';
 
 /* ── Shared ───────────────────────────────────────────────────────────── */
 
@@ -8,13 +8,28 @@ function Blank({ children }: { children: ReactNode }) {
     return <mark className="legal__blank">{children}</mark>;
 }
 
-const or = (value: string | null, label: string) => value ?? <Blank>{label}</Blank>;
+/** A fact filled in but not yet confirmed. */
+function Unsure({ children }: { children: ReactNode }) {
+    return (
+        <mark className="legal__unsure" title="To be confirmed">
+            {children}
+        </mark>
+    );
+}
+
+/** A company fact: marked blank while missing, marked as unsure while it waits for confirmation. */
+const or = (value: string | null, label: string, key?: keyof typeof COMPANY) =>
+    value === null ? <Blank>{label}</Blank> : key && TO_CONFIRM[key] ? <Unsure>{value}</Unsure> : value;
+
+const UNSURE = Object.values(TO_CONFIRM);
 
 function Draft() {
-    if (!MISSING.length) return null;
+    if (!MISSING.length && !UNSURE.length) return null;
     return (
         <p className="legal__draft" role="note">
-            <b>Draft.</b> Fill in the marked details before this page goes live. Missing: {MISSING.join(', ')}.
+            <b>Draft.</b> Fill in the marked details before this page goes live.
+            {MISSING.length > 0 && <> Missing: {MISSING.join(', ')}.</>}
+            {UNSURE.length > 0 && <> To confirm: {UNSURE.join(', ')}.</>}
         </p>
     );
 }
@@ -24,7 +39,7 @@ function Address({ de = false }: { de?: boolean }) {
         <p className="legal__address">
             {or(COMPANY.name, de ? 'Firma mit Rechtsform' : 'company name with legal form')}
             <br />
-            {or(COMPANY.street, de ? 'Straße und Hausnummer' : 'street and number')}
+            {or(COMPANY.street, de ? 'Straße und Hausnummer' : 'street and number', 'street')}
             <br />
             {or(COMPANY.town, de ? 'Postleitzahl und Ort' : 'postcode and town')}
             <br />
@@ -71,7 +86,8 @@ export function Impressum() {
                 <h2>Information according to § 5 DDG</h2>
                 <Address />
                 <p>
-                    {many ? 'Managing directors' : 'Managing director'}: {md?.length ? md.join(', ') : <Blank>managing director</Blank>}
+                    {many ? 'Managing directors' : 'Managing director'}:{' '}
+                    {md?.length ? or(md.join(', '), '', 'managingDirectors') : <Blank>managing director</Blank>}
                 </p>
 
                 <h2>Contact</h2>
@@ -82,11 +98,18 @@ export function Impressum() {
                 </p>
 
                 <h2>Commercial register</h2>
-                <p>
-                    Register court: {or(COMPANY.registerCourt, 'e.g. Amtsgericht Gießen')}
-                    <br />
-                    Register number: {or(COMPANY.registerNumber, 'HRB number')}
-                </p>
+                {COMPANY.registered ? (
+                    <p>
+                        Register court: {or(COMPANY.registerCourt, 'e.g. Amtsgericht Gießen', 'registerCourt')}
+                        <br />
+                        Register number: {or(COMPANY.registerNumber, 'HRB number')}
+                    </p>
+                ) : (
+                    <p>
+                        The company is being formed (i. G.) and is not yet entered in the commercial register. The register
+                        court and number will be added here once it is.
+                    </p>
+                )}
 
                 {COMPANY.vatId && (
                     <>
@@ -108,7 +131,7 @@ export function Impressum() {
                 <Address de />
                 <p>
                     Vertreten durch {many ? 'die Geschäftsführer' : 'den Geschäftsführer'}:{' '}
-                    {md?.length ? md.join(', ') : <Blank>Geschäftsführung</Blank>}
+                    {md?.length ? or(md.join(', '), '', 'managingDirectors') : <Blank>Geschäftsführung</Blank>}
                 </p>
 
                 <h2>Kontakt</h2>
@@ -119,11 +142,18 @@ export function Impressum() {
                 </p>
 
                 <h2>Registereintrag</h2>
-                <p>
-                    Registergericht: {or(COMPANY.registerCourt, 'z. B. Amtsgericht Gießen')}
-                    <br />
-                    Registernummer: {or(COMPANY.registerNumber, 'HRB-Nummer')}
-                </p>
+                {COMPANY.registered ? (
+                    <p>
+                        Registergericht: {or(COMPANY.registerCourt, 'z. B. Amtsgericht Gießen', 'registerCourt')}
+                        <br />
+                        Registernummer: {or(COMPANY.registerNumber, 'HRB-Nummer')}
+                    </p>
+                ) : (
+                    <p>
+                        Die Gesellschaft befindet sich in Gründung (i. G.) und ist noch nicht im Handelsregister eingetragen.
+                        Registergericht und Registernummer werden hier ergänzt, sobald die Eintragung erfolgt ist.
+                    </p>
+                )}
 
                 {COMPANY.vatId && (
                     <>
@@ -152,7 +182,8 @@ function Controller({ de = false }: { de?: boolean }) {
     return (
         <p>
             {or(COMPANY.name, de ? 'Firma mit Rechtsform' : 'company name with legal form')},{' '}
-            {or(COMPANY.street, de ? 'Straße und Hausnummer' : 'street and number')}, {or(COMPANY.town, de ? 'Postleitzahl und Ort' : 'postcode and town')},{' '}
+            {or(COMPANY.street, de ? 'Straße und Hausnummer' : 'street and number', 'street')},{' '}
+            {or(COMPANY.town, de ? 'Postleitzahl und Ort' : 'postcode and town')},{' '}
             {de ? 'Deutschland' : COMPANY.country}. {de ? 'E-Mail' : 'Email'}: {email}.
         </p>
     );
