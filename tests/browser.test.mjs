@@ -112,17 +112,29 @@ async function visit(context, path) {
         await page.waitForTimeout(50);
         for (const t of await page.evaluate(textsOnPage)) texts.add(t);
     }
-    const controls = await page.locator('[role="tab"], button[aria-expanded], [aria-haspopup], summary').all();
-    for (const control of controls) {
-        await control.evaluate((el) => {
-            el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
-            el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
-            // Links would leave the page; hovering and focusing is what opens their menus.
-            if (!el.closest('a[href]')) el.click();
-        });
-        await page.waitForTimeout(80);
-        for (const t of await page.evaluate(textsOnPage)) texts.add(t);
-    }
+    // Every tab, menu and fold, including those that only appear once another is open. Done in the page,
+    // on the elements themselves: opening one can redraw the rest.
+    const opened = await page.evaluate(async (collect) => {
+        const textsNow = new Function(`return (${collect})()`);
+        const out = new Set();
+        const done = new Set();
+        for (let round = 0; round < 3; round++) {
+            const controls = [...document.querySelectorAll('[role="tab"], button[aria-expanded], [aria-haspopup], summary')].filter((el) => !done.has(el));
+            if (!controls.length) break;
+            for (const el of controls) {
+                done.add(el);
+                if (!el.isConnected) continue;
+                el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+                el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+                // Links would leave the page; hovering and focusing is what opens their menus.
+                if (!el.closest('a[href]')) el.click();
+                await new Promise((r) => setTimeout(r, 80));
+                for (const t of textsNow()) out.add(t);
+            }
+        }
+        return [...out];
+    }, textsOnPage.toString());
+    for (const t of opened) texts.add(t);
     const lang = await page.evaluate(() => document.documentElement.lang);
     await page.close();
     return { texts, errors, lang };
@@ -321,5 +333,11 @@ test('the German form: its own checks, every answer from the server, and the tha
         assert.ok(!de.shown[i].includes(m), `/de/interest/ shows the English ${JSON.stringify(m)}`);
         assert.ok(en.shown[i].includes(m), `/interest/ does not show ${JSON.stringify(m)}`);
     });
-    assert.deepEqual(leftInEnglish(en.texts, de.texts), [], '/de/interest/: the same as on /interest/');
+    // What the visitor typed comes back in the thank-you, the same in any language.
+    const typed = new Set([good.name, good.name.split(' ')[0], good.email, good.organisation]);
+    assert.deepEqual(
+        leftInEnglish(en.texts, de.texts).filter((t) => !typed.has(t)),
+        [],
+        '/de/interest/: the same as on /interest/',
+    );
 });

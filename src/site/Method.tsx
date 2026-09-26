@@ -225,11 +225,16 @@ function ProcessWindow() {
         ctx.font = `600 ${12.5 * dpr}px ${col('--font-sans')}`;
         ctx.fillStyle = col('--ink-2');
         ctx.textAlign = 'center';
-        ctx.fillText(t('Lack of fusion'), X(1560), Y(118));
-        ctx.fillText(t('Keyholing'), X(470), Y(410));
-        ctx.fillText(t('Balling'), X(1850), Y(380));
+        // Centred on its spot, but never past the plot's edges: German words run longer.
+        const label = (text: string, x: number, y: number) => {
+            const half = ctx.measureText(text).width / 2 + 2 * dpr;
+            ctx.fillText(text, Math.max(X(V_MIN) + half, Math.min(x, X(V_MAX) - half)), y);
+        };
+        label(t('Lack of fusion'), X(1560), Y(118));
+        label(t('Keyholing'), X(470), Y(410));
+        label(t('Balling'), X(1850), Y(380));
         ctx.fillStyle = col('--teal-text');
-        ctx.fillText(t('Window'), X(760), Y(228));
+        label(t('Window'), X(760), Y(228));
         ctx.restore();
 
         // Axes.

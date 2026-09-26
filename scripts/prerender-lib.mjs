@@ -173,6 +173,8 @@ export function toMarkdown(markup, { path, footer }) {
     });
     const body = turndown
         .turndown(main.innerHTML)
+        // Soft hyphens (where a long German word may break on a phone) would only get in the way of search.
+        .replace(/\u00ad/g, '')
         .replace(/[ \t]+$/gm, '')
         .replace(/\n{3,}/g, '\n\n')
         .trim();

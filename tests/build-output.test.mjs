@@ -19,6 +19,8 @@ const PAGES = [...MARKDOWN_PAGES.map((path) => ({ path, file: `${path.slice(1)}i
 /** The English pages; each has a German twin at /de/…. */
 const ENGLISH = MARKDOWN_PAGES.filter((p) => !p.startsWith('/de/'));
 const fileOf = (path) => `${path.slice(1)}index.html`;
+/** An attribute by its name in any case: React writes some in camel case (hrefLang), which HTML reads the same. */
+const attr = (el, name) => [...el.attributes].find((a) => a.name.toLowerCase() === name)?.value ?? null;
 /** German text the dictionary keeps as it is in English: names, and words that are the same in German. */
 const KEPT = new Set(Object.values(DE));
 
@@ -135,6 +137,9 @@ test('JSON-LD: Organization with contact point and postal address, matching the 
             assert.ok(cp.email || cp.telephone, 'email or telephone');
             if (cp.email) assert.ok(impressum.includes(cp.email), 'contact email as in the Impressum');
         }
+        // The description is in the page's language.
+        const english = graphFor(file.replace(/^de\//, '')).find((n) => n['@type'] === 'Organization').description;
+        if (file.startsWith('de/')) assert.notEqual(org.description, english, `${file}: the Organization's description is the English one`);
         const site = graph.find((n) => n['@type'] === 'WebSite');
         assert.equal(site?.publisher?.['@id'], org['@id'], `${file}: WebSite published by the Organization`);
         if (pageType) {
@@ -259,13 +264,15 @@ test('German pages: title, descriptions and preview text are German', () => {
     for (const path of ENGLISH) {
         const en = page(fileOf(path)).document;
         const de = page(fileOf(`/de${path}`)).document;
+        // The same as in English only where it is a name kept on purpose ("PRISM by Mirdyne").
+        const german = (d, e, what) => assert.ok(d !== e || KEPT.has(d), `/de${path}: ${what} is the English one: ${JSON.stringify(e)}`);
         assert.ok(text(de.querySelector('title')), `/de${path}: no title`);
-        assert.notEqual(text(de.querySelector('title')), text(en.querySelector('title')), `/de${path}: the title is the English one`);
+        german(text(de.querySelector('title')), text(en.querySelector('title')), 'the title');
         for (const sel of META) {
             const e = en.querySelector(sel)?.getAttribute('content');
             const d = de.querySelector(sel)?.getAttribute('content');
             assert.equal(Boolean(d), Boolean(e), `/de${path}: ${sel} present in one language only`);
-            if (e) assert.notEqual(d, e, `/de${path}: ${sel} is the English one`);
+            if (e) german(d, e, sel);
         }
     }
 });
@@ -276,8 +283,13 @@ test('German pages: no text left in English, in the plain copy or the Markdown',
         const de = page(fileOf(`/de${path}`)).copy.innerHTML;
         assert.deepEqual(untranslated(en, de, KEPT), [], `/de${path}: the same as on ${path}`);
         const md = read(`de${path}index.html.md`);
-        for (const words of ['This page on the web', 'Diagram:', 'This form needs JavaScript', 'Register interest']) {
+        // The words the build adds itself. (The legal pages hold an English version of their text on purpose.)
+        for (const words of ['Diagram:', 'This form needs JavaScript']) {
             assert.ok(!md.includes(words), `/de${path}index.html.md: "${words}"`);
+        }
+        const footer = md.slice(md.lastIndexOf('\n---\n'));
+        for (const words of ['This page on the web', 'Register interest', 'Pages:', 'Legal:']) {
+            assert.ok(!footer.includes(words), `/de${path}index.html.md, footer: "${words}"`);
         }
     }
 });
@@ -290,13 +302,15 @@ test('links stay in the page’s language; only the language switch crosses over
             const url = new URL(a.getAttribute('href'), `${SITE}${path}`);
             const toGerman = url.pathname.startsWith('/de/');
             if (url.origin !== SITE || !(ENGLISH.includes(url.pathname) || toGerman)) continue;
+            // A jump within the page (the legal pages' "English" and "Deutsch" versions) stays on it.
+            if (url.pathname === path && url.hash) continue;
             const where = `${path}: link to ${a.getAttribute('href')} ("${text(a)}")`;
-            const hreflang = a.getAttribute('hreflang');
+            const hreflang = attr(a, 'hreflang');
             if (hreflang) {
                 // The language switch: to the same page in the other language, marked as such.
                 switches++;
                 assert.equal(hreflang, german ? 'en' : 'de', where);
-                assert.equal(a.getAttribute('lang'), hreflang, where);
+                assert.equal(attr(a, 'lang'), hreflang, where);
                 assert.equal(url.pathname, german ? path.slice(3) : `/de${path}`, where);
             } else if (!a.closest('[lang]')) {
                 // Text marked as another language (the legal pages' two versions) may link either way.

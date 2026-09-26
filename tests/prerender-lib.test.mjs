@@ -62,6 +62,11 @@ test('toMarkdown: title first, absolute links, labels and numbers kept apart, a 
     assert.ok(md.endsWith('---\n\nThe footer.\n'));
 });
 
+test('toMarkdown leaves out soft hyphens, which only mark where a long word may break', () => {
+    const md = toMarkdown('<main><h1>Datenschutz\u00aderklärung</h1><p>Schlüssel\u00admaterialien</p></main>', { path: '/de/privacy/', footer: '' });
+    assert.ok(md.startsWith('# Datenschutzerklärung\n\nSchlüsselmaterialien'), md);
+});
+
 test('toMarkdown refuses a page without <main>', () => {
     assert.throws(() => toMarkdown('<div>No main</div>', { path: '/', footer: '' }), /no <main>/);
 });

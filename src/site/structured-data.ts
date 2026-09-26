@@ -33,7 +33,13 @@ function address() {
     };
 }
 
-function organization() {
+/** What Mirdyne does, in each of the site's languages. */
+const DESCRIPTION = {
+    en: 'Mirdyne designs new alloys and polymers with PRISM, its AI platform, then makes them, tests them against the customer’s requirement and hands over the proof.',
+    de: 'Mirdyne entwickelt mit PRISM, seiner KI-Plattform, neue Legierungen und Polymere, stellt sie her, prüft sie an der Anforderung des Kunden und übergibt den Nachweis.',
+};
+
+function organization(german: boolean) {
     return {
         '@type': 'Organization',
         '@id': ORG,
@@ -41,8 +47,7 @@ function organization() {
         legalName: required(COMPANY.name, 'name'),
         url: `${SITE}/`,
         logo: `${SITE}/mirdyne-mark.svg`,
-        description:
-            'Mirdyne designs new alloys and polymers with PRISM, its AI platform, then makes them, tests them against the customer’s requirement and hands over the proof.',
+        description: german ? DESCRIPTION.de : DESCRIPTION.en,
         brand: { '@type': 'Brand', name: 'PRISM' },
         email: COMPANY.email,
         address: address(),
@@ -89,11 +94,11 @@ export function structuredData(path: string): object | null {
     const page = german ? path.slice(3) : path;
     const graph =
         page === '/'
-            ? [organization(), website()]
+            ? [organization(german), website()]
             : page === '/company/'
-              ? [webPage('AboutPage', path, german ? 'Über Mirdyne' : 'About Mirdyne', german), organization(), website()]
+              ? [webPage('AboutPage', path, german ? 'Über Mirdyne' : 'About Mirdyne', german), organization(german), website()]
               : page === '/contact/'
-                ? [webPage('ContactPage', path, german ? 'Kontakt zu Mirdyne' : 'Contact Mirdyne', german), organization(), website()]
+                ? [webPage('ContactPage', path, german ? 'Kontakt zu Mirdyne' : 'Contact Mirdyne', german), organization(german), website()]
                 : null;
     return graph && { '@context': 'https://schema.org', '@graph': graph };
 }

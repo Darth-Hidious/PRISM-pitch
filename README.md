@@ -245,4 +245,8 @@ as short news items.
 
 The German says the same as the English, in plain German for engineers and
 investors, addressing the reader as *Sie*. Names stay as they are (PRISM,
-Mirdyne, Bimo Tech, CAMEO, Forager).
+Mirdyne, Bimo Tech, CAMEO, Forager). German runs longer: a compound word
+in a big headline that is wider than a phone gets a soft hyphen (`\u00ad`,
+as in `Datenschutz\u00aderklärung`) where it may break, and diagram labels
+must still fit their drawing; the layout checks in the browser test and a
+look at the page on a phone tell you.

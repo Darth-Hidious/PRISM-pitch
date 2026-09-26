@@ -233,7 +233,9 @@ function why(r: Rec, viewer: Party, a: Access, t: Translator) {
     if (a === 'compute') return t('Software may calculate with it, but no person can read the values. Not even Mirdyne.');
     if (viewer === 'Public') return t('Not public. Nothing is published unless its owner decides to.');
     if (r.state === 'private') return `${t('Private to')} ${t(r.owner)}. ${t('Nothing is shared by accident.')}`;
-    return `${t('Not shared with you.')} ${t(r.owner)} ${t('has shared it with')} ${r.releasedTo?.map((p) => t(p)).join(` ${t('and')} `)} ${t('only.')}`;
+    // One sentence to translate, so German can put "nur" where it belongs.
+    const partners = r.releasedTo?.map((p) => t(p)).join(` ${t('and')} `) ?? '';
+    return `${t('Not shared with you.')} ${t('{owner} has shared it with {partners} only.').replace('{owner}', t(r.owner)).replace('{partners}', partners)}`;
 }
 
 /** How a wire looks to this viewer: open if both ends can be read, sealed if either end is hidden. */
