@@ -6,11 +6,13 @@
  */
 
 import { chromium } from 'playwright';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, PDFString } from 'pdf-lib';
 import { writeFileSync } from 'fs';
 import { spawn, execFileSync } from 'child_process';
 
 const DEV_URL = 'http://localhost:5173/deck/';
+// Links in the PDF point at the live site, not at the local server the slides were captured from.
+const SITE = 'https://prism.mirdyne.com';
 const WIDTH = 1920;
 const HEIGHT = 1080;
 const OUTPUT = 'PRISM-Pitch-Deck.pdf';
@@ -34,10 +36,13 @@ async function main() {
         await new Promise((r) => setTimeout(r, 5000));
     }
 
-    const browser = await chromium.launch();
+    // PW_CHROMIUM points at a Chromium already on the machine, where Playwright's own is not installed.
+    const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
     const context = await browser.newContext({
         viewport: { width: WIDTH, height: HEIGHT },
         deviceScaleFactor: 1, // 1x for smaller file size
+        // Each slide as it looks once it has arrived: no entrance motion, no moving lights.
+        reducedMotion: 'reduce',
     });
     const page = await context.newPage();
 
@@ -83,7 +88,7 @@ async function main() {
                     y: rect.y / vh,
                     w: rect.width / vw,
                     h: rect.height / vh,
-                    href: a.href,
+                    href: a.href.startsWith(location.origin) ? a.href.slice(location.origin.length) : a.href,
                 };
             });
         });
@@ -128,7 +133,8 @@ async function main() {
                 A: {
                     Type: 'Action',
                     S: 'URI',
-                    URI: link.href,
+                    // A string, not a name: context.obj turns plain strings into names, which viewers ignore.
+                    URI: PDFString.of(link.href.startsWith('/') ? SITE + link.href : link.href),
                 },
             });
 
@@ -147,7 +153,7 @@ async function main() {
         }
     }
 
-    pdf.setTitle('PRISM — Investor briefing');
+    pdf.setTitle('PRISM by Mirdyne: investor briefing');
     pdf.setAuthor('Mirdyne');
     pdf.setSubject('Platform for Research in Intelligent Synthesis of Materials');
     pdf.setCreator('PRISM Pitch Generator');

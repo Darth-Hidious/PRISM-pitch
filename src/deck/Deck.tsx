@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ReactElement } from 'react';
 import { FooterBand } from '../ds';
+import { SlideContext } from './slideContext';
 
 export interface SlideDef {
     id: string;
@@ -9,6 +10,16 @@ export interface SlideDef {
     bleed?: boolean;
     render: () => ReactElement;
 }
+
+// Stable context values, so slides re-render only when they come and go.
+const ACTIVE = [
+    { active: true, reader: false },
+    { active: true, reader: true },
+];
+const IDLE = [
+    { active: false, reader: false },
+    { active: false, reader: true },
+];
 
 const STAGE_W = 1440;
 const STAGE_H = 810;
@@ -146,7 +157,7 @@ export default function Deck({ slides }: { slides: SlideDef[] }) {
             <div
                 ref={stageRef}
                 className="deck-stage"
-                style={reader ? undefined : { transform: `scale(${scale})` }}
+                style={reader ? undefined : { transform: `translate(-50%, -50%) scale(${scale})` }}
                 aria-roledescription="slide deck"
             >
                 {slides.map((s, i) => (
@@ -159,7 +170,7 @@ export default function Deck({ slides }: { slides: SlideDef[] }) {
                         aria-label={`${i + 1} of ${total}: ${s.title}`}
                         aria-hidden={!reader && i !== current}
                     >
-                        {s.render()}
+                        <SlideContext.Provider value={i === current ? ACTIVE[reader ? 1 : 0] : IDLE[reader ? 1 : 0]}>{s.render()}</SlideContext.Provider>
                     </section>
                 ))}
                 <div className="deck-chrome">
@@ -167,7 +178,7 @@ export default function Deck({ slides }: { slides: SlideDef[] }) {
                     <FooterBand
                         right={
                             reader ? (
-                                'Investor briefing'
+                                'Investor room'
                             ) : (
                                 <span className="deck-controls">
                                     <span aria-live="polite">{position}</span>

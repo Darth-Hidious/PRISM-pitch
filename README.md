@@ -10,7 +10,7 @@
 | `/company/` | Mirdyne and Bimo Tech, the founders, working with us | `src/site/pages/company.tsx` |
 | `/news/` | News, with the photographs | `src/site/pages/news.tsx` |
 | `/interest/` | Register interest: our own form (`/interest/?topic=investment` starts with a topic chosen) | `src/site/pages/interest.tsx`, `api/interest.ts` |
-| `/deck/` | The investor briefing: 12 slides on a 1440 × 810 stage, `/deck/#5` opens slide 5 | `src/deck/` |
+| `/deck/` | The investor room: 14 slides on a 1440 × 810 stage, scaled to any screen; `/deck/#5` opens slide 5; phones get the slides as one scrolling page | `src/deck/` |
 
 Each page is its own HTML file (`index.html`, `platform/index.html`, …), listed
 in `vite.config.ts`; `vercel.json` also serves them without the trailing slash,
@@ -46,7 +46,7 @@ npm install
 npm run dev        # http://localhost:5173/, /platform/, … and /deck/
 npm run build      # type-check and build every page into dist/
 npm run lint
-node scripts/capture-pdf.mjs   # rebuild PRISM-Pitch-Deck.pdf from /deck/
+node scripts/capture-pdf.mjs   # rebuild PRISM-Pitch-Deck.pdf from /deck/ (links point at prism.mirdyne.com)
 node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design system
 ```
 

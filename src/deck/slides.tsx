@@ -1,7 +1,12 @@
-import { Button, CapabilityStack, EvidenceLineage, Kicker, ObjectCard, ProcessChain, RightsState, SourceLine, Stat, StatusTable } from '../ds';
-import VideoBackground from '../components/VideoBackground';
+import type { CSSProperties } from 'react';
+import { Button, EvidenceLineage, Kicker, MaturityPill, PrismMark, RightsState, SourceLine, StatusTable } from '../ds';
+import type { Maturity } from '../ds/MaturityPill';
+import { Glyph } from '../site/glyphs';
 import { LINKS } from '../site/links';
+import { MarketCards } from '../site/Markets';
 import { CONSORTIUM, PartnerLogo } from '../site/partners';
+import { ALLOYS, YEARS_ALL, fmt } from './numbers';
+import { DotField, LoopWheel, ModuleMap, StackTower, type LoopStep, type Module, type TowerRow } from './visuals';
 
 function Head({ kicker, title, lead }: { kicker: string; title: string; lead?: string }) {
     return (
@@ -13,34 +18,50 @@ function Head({ kicker, title, lead }: { kicker: string; title: string; lead?: s
     );
 }
 
+
 /* ── 01 Cover ─────────────────────────────────────────────────────────── */
 
 export function Cover() {
     return (
-        <div className="d-cover">
-            <div className="d-cover__copy">
-                <Kicker>Investor briefing · Seed round 2026</Kicker>
-                <h1 className="pm-display">PRISM</h1>
-                <p className="pm-subtitle">Freedom to build beyond today’s materials.</p>
-                <p className="pm-lead">
-                    Specify the capability. PRISM designs the material, has it made and tested, and keeps the evidence
-                    attached.
+        <div className="d-hero">
+            <img
+                className="d-hero__img"
+                src="/img/dlr-vulcain2-p5.webp"
+                alt="A Vulcain 2 rocket engine firing on a test stand: flame pours out beneath the ribbed metal nozzle."
+                width={1348}
+                height={758}
+            />
+            <div className="d-hero__top">
+                <span className="d-hero__brand">
+                    <PrismMark title="" weight={20} />
+                    <b>PRISM</b>
+                    <span>by Mirdyne</span>
+                </span>
+                <span className="d-label">Investor briefing · Seed round 2026</span>
+            </div>
+            <div className="d-hero__copy">
+                <h1 className="d-hero__title d-in">Materials built for the extreme.</h1>
+                <p className="d-hero__lead d-in" style={{ '--i': 1 } as CSSProperties}>
+                    Designed with AI. Made and tested in Europe.
                 </p>
-                <div className="d-cover__meta">
-                    <img src="/brand/mirdyne-lockup-ink.png" alt="Mirdyne" width={170} height={46} />
-                    <SourceLine label="">Initial deployment of PRISM, for its first use cases, funded under ESA FLPP, FIRST! Simulation &amp; Intelligence.</SourceLine>
+            </div>
+            <div className="d-hero__foot d-in" style={{ '--i': 2 } as CSSProperties}>
+                <div className="d-hero__esa">
+                    <span className="d-label">Funded by the European Space Agency</span>
+                    <p>Initial deployment of PRISM, for its first use cases: ESA FLPP, FIRST! Simulation &amp; Intelligence.</p>
+                </div>
+                <div className="d-hero__partners">
+                    <span className="d-label">PRISM Alpha, with</span>
+                    <ul aria-label="PRISM Alpha consortium">
+                        {CONSORTIUM.map((p) => (
+                            <li key={p.id}>
+                                <PartnerLogo p={p} />
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
-            <figure className="d-cover__media" style={{ margin: 0 }}>
-                <img
-                    className="d-photo"
-                    src="/img/spark-furnace.webp"
-                    alt="View through the window of a vacuum-arc melting furnace: a glowing alloy button on the hearth."
-                    width={989}
-                    height={1144}
-                />
-                <figcaption className="d-cover__caption">Vacuum-arc melting, Project SPARK.</figcaption>
-            </figure>
+            <p className="d-hero__credit">Vulcain 2 on test stand P5, DLR Lampoldshausen. Photo: DLR, CC BY 3.0.</p>
         </div>
     );
 }
@@ -49,65 +70,71 @@ export function Cover() {
 
 export function Problem() {
     return (
-        <>
-            <Head
-                kicker="The problem"
-                title="There are far too many possible alloys to make them all."
-                lead="Pick five of nine high-melting metals and mix them in steps of 1%: 474 million possible alloys. Even at ten a day, making each one once would take about 130,000 years. And a new material still takes ten to twenty years to reach service."
-            />
-            <div className="d-body" style={{ display: 'grid', alignContent: 'center' }}>
-                <div className="d-stats-row">
-                    <Stat size="lg" value="10–20" label="Years to bring a material into service" />
-                    <Stat size="lg" value="474M" label="Possible alloys from five of nine metals" note="About 130,000 years to make, at ten a day" />
-                    <Stat size="lg" value="€170.7B" label="EU aerospace manufacturing turnover" note="The industry that waits on its materials" />
-                </div>
-            </div>
-            <div className="d-foot">
+        <div className="d-problem">
+            <div className="d-problem__copy">
+                <Head kicker="The problem" title="Far too many possible alloys to make them all." />
+                <dl className="d-figures">
+                    <div className="d-in">
+                        <dt>{fmt(ALLOYS)}</dt>
+                        <dd>possible alloys from five of nine high-melting metals, mixed in 1% steps</dd>
+                    </div>
+                    <div className="d-in" style={{ '--i': 1 } as CSSProperties}>
+                        <dt>{fmt(YEARS_ALL)} years</dt>
+                        <dd>to make each one once, at ten a day</dd>
+                    </div>
+                    <div className="d-in" style={{ '--i': 2 } as CSSProperties}>
+                        <dt>10–20 years</dt>
+                        <dd>for a new material to reach service today</dd>
+                    </div>
+                </dl>
                 <SourceLine label="Sources">
-                    Arithmetic: 126 ways to pick five of nine metals × 3,764,376 mixes in whole percent. Eurostat, EU
-                    aerospace manufacturing turnover 2023 (MKT3).
+                    Arithmetic: 126 ways to pick five of nine metals that melt above 1,650 °C × 3,764,376 mixes in whole
+                    percent. The field is to scale; its layout is illustrative.
                 </SourceLine>
             </div>
-        </>
+            <DotField />
+        </div>
     );
 }
 
 /* ── 03 Solution ──────────────────────────────────────────────────────── */
 
+const LOOP: (LoopStep & { text: string; maturity: Maturity })[] = [
+    { name: 'Requirement', glyph: 'target', text: 'You tell us what the part must survive.', maturity: 'prototype' },
+    { name: 'Design', glyph: 'lattice', text: 'AI suggests new mixes, from the whole range.', maturity: 'prototype' },
+    { name: 'Screen', glyph: 'funnel', text: 'Simulations rule most out, before anything is melted.', maturity: 'prototype' },
+    { name: 'Make', glyph: 'flame', text: 'We melt and 3D-print the best ideas.', maturity: 'in-use' },
+    { name: 'Test', glyph: 'gauge', text: 'Each sample is measured against your targets.', maturity: 'in-use' },
+    { name: 'Learn', glyph: 'cycle', text: 'Every result goes back into the models.', maturity: 'prototype' },
+];
+
 export function Solution() {
     return (
         <>
-            <Head
-                kicker="The solution"
-                title="Replace trial and error with a loop that learns from every batch."
-                lead="PRISM screens candidates computationally before any powder is weighed, so most failures happen in simulation. First target: refractory high-entropy alloys for liquid rocket engine preburners."
-            />
-            <div className="d-body" style={{ display: 'grid', gap: 36, alignContent: 'center' }}>
-                <div className="d-grid-3">
-                    <div className="d-card">
-                        <p className="pm-column">Target</p>
-                        <strong>Refractory high-entropy alloys for oxygen-rich preburners</strong>
-                    </div>
-                    <div className="d-card">
-                        <p className="pm-column">Replaces</p>
-                        <strong>Monel K500 and other legacy alloys</strong>
-                    </div>
-                    <div className="d-card">
-                        <p className="pm-column">Method</p>
-                        <strong>Two loops: computational inside, physical outside</strong>
-                    </div>
+            <Head kicker="The solution" title="One loop: design, make, test, learn." />
+            <div className="d-body d-solution">
+                <LoopWheel round={LOOP.slice(1)} />
+                <div className="d-solution__side">
+                    <ol className="d-loopsteps">
+                        {LOOP.map((s, i) => (
+                            <li key={s.name} className="d-in" style={{ '--i': i } as CSSProperties}>
+                                <span className="d-loopsteps__icon">
+                                    <Glyph name={s.glyph} className="d-glyph" size={22} />
+                                </span>
+                                <div>
+                                    <b>{s.name}</b>
+                                    <span>{s.text}</span>
+                                </div>
+                                <MaturityPill maturity={s.maturity} />
+                            </li>
+                        ))}
+                    </ol>
+                    <p className="d-solution__target">
+                        <span className="d-label">First target</span>
+                        Refractory high-entropy alloys for oxygen-rich preburners in rocket engines, to replace Monel K500
+                        and other legacy alloys.
+                    </p>
                 </div>
-                <ProcessChain
-                    label="The PRISM loop"
-                    steps={[
-                        { label: 'Requirement' },
-                        { label: 'Candidate' },
-                        { label: 'Physics' },
-                        { label: 'Coupon' },
-                        { label: 'Evidence' },
-                    ]}
-                    loop="Learn: test data changes the next prediction"
-                />
             </div>
         </>
     );
@@ -115,29 +142,25 @@ export function Solution() {
 
 /* ── 04 The stacks ────────────────────────────────────────────────────── */
 
+const TOWER: TowerRow[] = [
+    { name: 'Research', text: 'AI suggests mixes; physics simulations throw out what cannot work.', maturity: 'prototype' },
+    { name: 'Harness', text: 'Plans each round, runs the tools, scores the results, remembers failures.', maturity: 'prototype' },
+    { name: 'Autonomy', text: 'Robots weigh, melt and measure. People stay in charge.', maturity: 'development' },
+    { name: 'Manufacturing and test', text: 'Melting, metal 3D printing and testing, with Bimo Tech and Fraunhofer IAPT.', maturity: 'in-use' },
+    { name: 'Evidence', text: 'Every result keeps its source, its owner and its rules.', maturity: 'in-use' },
+];
+
 export function Stacks() {
     return (
         <>
-            <Head
-                kicker="The platform"
-                title="Five stacks. One system, from requirement to qualified part."
-            />
+            <Head kicker="The platform" title="Five stacks, one system." />
             <div className="d-body">
-                <CapabilityStack
-                    label="PRISM stacks"
-                    layers={[
-                        { name: 'Research', detail: 'Knowledge graph, generative samplers, physics funnel and active learning find the few candidates worth making.', maturity: 'prototype' },
-                        { name: 'Harness', detail: 'Campaign planner, playbooks, tool adapters and evaluator run the science as one system. Engineers sign off.', maturity: 'prototype' },
-                        { name: 'Autonomy', detail: 'Robotic synthesis, automated characterisation, Probes and instrument control take the human out of the sequence.', maturity: 'development' },
-                        { name: 'Manufacturing and test', detail: 'Powder, melting and laser powder-bed fusion with Bimo Tech and Fraunhofer IAPT; tests against the incumbent alloy.', maturity: 'in-use' },
-                        { name: 'Evidence', detail: 'Provenance and export classification today; machine-enforced data rights and controlled release next.', maturity: 'in-use' },
-                    ]}
-                />
+                <StackTower rows={TOWER} />
             </div>
             <div className="d-foot">
                 <SourceLine label="Maturity">
-                    In use: runs in current programmes. Prototype: PRISM software matured from TRL 3 to 4 within PRISM
-                    Alpha. In development: being built.
+                    Each block on a plate is one component, as tall as it is built. In use: runs in current programmes.
+                    Prototype: PRISM software, being taken from TRL 3 to 4 in PRISM Alpha. In development: being built.
                 </SourceLine>
             </div>
         </>
@@ -146,55 +169,40 @@ export function Stacks() {
 
 /* ── 05 Architecture ──────────────────────────────────────────────────── */
 
-function LoopGraphic() {
-    // Four modules on a loop; the dashes flow clockwise.
-    const nodes = [
-        { x: 100, y: 90, name: 'Evolver', c: '#a8b7c9' },
-        { x: 460, y: 90, name: 'Knowledge graph', c: '#ffffff' },
-        { x: 460, y: 330, name: 'Evaluator', c: '#2e8781' },
-        { x: 100, y: 330, name: 'Mutator fleet', c: '#6f91ba' },
-    ];
-    return (
-        <svg viewBox="0 0 560 420" role="img" aria-label="Four modules on one loop: Evolver, knowledge graph, evaluator and mutator fleet.">
-            <g fill="none" stroke="#6f91ba" strokeWidth="1.5" strokeDasharray="6 7">
-                <path d="M150 90 H410 M460 140 V280 M410 330 H150 M100 280 V140">
-                    <animate attributeName="stroke-dashoffset" from="26" to="0" dur="1.6s" repeatCount="indefinite" />
-                </path>
-            </g>
-            {nodes.map((n) => (
-                <g key={n.name}>
-                    <circle cx={n.x} cy={n.y} r="44" fill="#152333" stroke={n.c} strokeWidth="2" />
-                    <circle cx={n.x} cy={n.y} r="7" fill={n.c} />
-                    <text
-                        x={n.x}
-                        y={n.y > 200 ? n.y + 72 : n.y - 60}
-                        textAnchor="middle"
-                        fill="#ffffff"
-                        style={{ font: '700 17px var(--font-sans)' }}
-                    >
-                        {n.name}
-                    </text>
-                </g>
-            ))}
-            <text x="280" y="216" textAnchor="middle" fill="#c2cbd7" style={{ font: '700 15px var(--font-sans)', letterSpacing: '0.17em' }}>
-                PRISM
-            </text>
-        </svg>
-    );
-}
+const MODULES: Module[] = [
+    { id: 'evolver', type: 'EVOLVER', title: 'Campaign planner', glyph: 'curve', lines: ['Plans each round from the scores', 'of the last. Keeps what failed.'] },
+    { id: 'mutators', type: 'MUTATOR FLEET', title: 'Generative samplers', glyph: 'lattice', lines: ['Propose new candidates, spread', 'wide across the trade-offs.'] },
+    { id: 'evaluator', type: 'EVALUATOR', title: 'Simulation and lab', glyph: 'gauge', lines: ['Fast simulations screen, exact', 'ones confirm, the lab decides.'] },
+    { id: 'mkg', type: 'MKG', title: 'Knowledge graph', glyph: 'net', lines: ['Papers, patents and lab data,', 'linked with sources. Opens new', 'searches when progress stalls.'] },
+];
 
 export function Architecture() {
     return (
         <>
             <Head kicker="Architecture" title="Four modules, one loop." />
-            <div className="d-body d-loop">
-                <LoopGraphic />
-                <div className="d-modules">
-                    <ObjectCard type="Module · Evolver" title="Campaign planner" properties={[['How', 'Generator proposes, reflector scores the last batch, curator updates the playbook']]} />
-                    <ObjectCard type="Module · Mutator fleet" title="Generative samplers" properties={[['How', 'Diversity-weighted sampling so each batch spans the Pareto front']]} />
-                    <ObjectCard type="Module · Evaluator" title="Evaluator and laboratory" properties={[['How', 'Learned potentials, first principles, thermodynamics, then robotic synthesis for ground truth']]} />
-                    <ObjectCard type="Module · MKG" title="Materials knowledge graph" emphasis properties={[['How', 'Literature, patents and instrument data; opens new searches when progress stalls']]} />
-                </div>
+            <div className="d-body d-arch">
+                <ModuleMap modules={MODULES} />
+                <ol className="d-arch__list">
+                    {MODULES.map((m) => (
+                        <li key={m.id}>
+                            <span className="d-arch__icon">
+                                <Glyph name={m.glyph} className="d-glyph" size={22} />
+                            </span>
+                            <div>
+                                <span className="d-label">{m.type}</span>
+                                <b>{m.title}</b>
+                                <span>{m.lines.join(' ')}</span>
+                            </div>
+                        </li>
+                    ))}
+                </ol>
+            </div>
+            <div className="d-foot">
+                <SourceLine label="Loop">
+                    The planner sends a campaign; the samplers propose candidates; simulation and the lab test them;
+                    results are kept, with sources; what worked and what failed plans the next round. An engineer signs
+                    off what leaves.
+                </SourceLine>
             </div>
         </>
     );
@@ -212,13 +220,16 @@ export function Lab() {
     ];
     return (
         <div className="d-lab">
-            <img
-                className="d-photo d-lab__photo"
-                src="/img/lab-melt-spinner-tall.webp"
-                alt="A melt spinner in a university materials lab: a steel vacuum sphere with a round window above its control cabinet."
-                width={900}
-                height={1260}
-            />
+            <figure className="d-lab__media">
+                <img
+                    className="d-photo d-lab__photo"
+                    src="/img/lab-melt-spinner-tall.webp"
+                    alt="A melt spinner in a university materials lab: a steel vacuum sphere with a round window above its control cabinet."
+                    width={900}
+                    height={1260}
+                />
+                <figcaption>The melt spinner in the materials lab at WUST, Wrocław, where our alloys are melted. We rent the equipment.</figcaption>
+            </figure>
             <div style={{ display: 'grid', alignContent: 'center', gap: 24 }}>
                 <Head kicker="Autonomous laboratory" title="Physical synthesis supplies the reward signal the models train on." />
                 <ol className="d-steps">
@@ -238,12 +249,13 @@ export function Lab() {
     );
 }
 
-/* ── 07 Evidence and IP ───────────────────────────────────────────────── */
 
-export function EvidenceSlide() {
+/* ── 07 Proof, built in ───────────────────────────────────────────────── */
+
+export function Proof() {
     return (
         <>
-            <Head kicker="Evidence and IP" title="Every claim keeps its evidence, its owner and its rights attached." />
+            <Head kicker="Proof, built in" title="Every result carries its own proof." />
             <div className="d-body d-evidence">
                 <EvidenceLineage
                     label="Evidence lineage: NIST CAMEO, published work"
@@ -297,6 +309,7 @@ export function EvidenceSlide() {
         </>
     );
 }
+
 
 /* ── 08 Traction ──────────────────────────────────────────────────────── */
 
@@ -361,7 +374,28 @@ export function Traction() {
     );
 }
 
-/* ── 09 Market ────────────────────────────────────────────────────────── */
+
+/* ── 09 Where PRISM goes first ────────────────────────────────────────── */
+
+export function Markets() {
+    return (
+        <>
+            <Head kicker="Markets" title="Where PRISM goes first." />
+            <div className="d-body d-markets">
+                <MarketCards />
+            </div>
+            <div className="d-foot">
+                <SourceLine label="Photos">
+                    Aestus engine in test stand P4.2: DLR, CC BY 3.0 · EJ200 afterburner: Julian Herzog, CC BY 4.0 ·
+                    Wendelstein 7-X wall tiles: Christopher Roux, EUROfusion, CC BY 4.0 · Tungsten crystals:
+                    Alchemist-hp (pse-mendelejew.de), Free Art License. All cropped.
+                </SourceLine>
+            </div>
+        </>
+    );
+}
+
+/* ── 10 Market ────────────────────────────────────────────────────────── */
 
 // From the `EU Market` and `Sources` sheets of the PRISM financial model (research refresh, 27 Jul 2026).
 const BRIDGE = [
@@ -452,7 +486,8 @@ export function Market() {
     );
 }
 
-/* ── 10 Financials ────────────────────────────────────────────────────── */
+
+/* ── 11 Financials ────────────────────────────────────────────────────── */
 
 // PRISM financial model, research refresh 27 Jul 2026, checks pass. Upside re-evaluates the workbook's own formulas.
 const YEARS = [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
@@ -548,7 +583,73 @@ export function Financials() {
     );
 }
 
-/* ── 11 Ask ───────────────────────────────────────────────────────────── */
+
+/* ── 12 Team ──────────────────────────────────────────────────────────── */
+
+const FOUNDERS = [
+    {
+        name: 'Kevin Grüning',
+        initials: 'KG',
+        role: 'Managing Director',
+        text: 'Space Systems Lead at Bimo Tech. Physics and technology for space applications, JLU Giessen and THM.',
+    },
+    {
+        name: 'Siddhartha Yash Kovid',
+        initials: 'SK',
+        role: 'Technical Lead',
+        text: 'Technical lead of the ESA projects SPARK and PRISM Alpha at Bimo Tech. Applied AI and data science, MIT Professional Education; biomedical engineering, THM.',
+    },
+    {
+        name: 'Marcin Orzechowski',
+        initials: 'MO',
+        role: 'Co-founder',
+        text: 'CEO and Head of R&D at Bimo Tech, which supplies special metals and precision parts for space, energy and science. Wrocław University of Technology.',
+    },
+];
+
+const BIMO = CONSORTIUM.find((p) => p.id === 'bimo')!;
+
+export function Team() {
+    return (
+        <>
+            <Head kicker="Team" title="The team that runs PRISM’s ESA work." />
+            <div className="d-body d-team">
+                <ul className="d-team__people">
+                    {FOUNDERS.map((f, i) => (
+                        <li key={f.name} className="d-in" style={{ '--i': i } as CSSProperties}>
+                            <span className="d-team__mono" aria-hidden="true">
+                                {f.initials}
+                            </span>
+                            <b>{f.name}</b>
+                            <span className="d-team__role">{f.role}, Mirdyne</span>
+                            <p>{f.text}</p>
+                        </li>
+                    ))}
+                </ul>
+                <div className="d-team__bimo">
+                    <PartnerLogo p={BIMO} />
+                    <p>Mirdyne is a spin-off of Bimo Tech, which makes special metals and precision parts and supplies ITER.</p>
+                </div>
+                <div className="d-team__side">
+                    <figure className="d-team__award">
+                        <img
+                            src="/img/news-hessen-ideen-2026.webp"
+                            alt="Team PRISM on stage at the Hessen Ideen awards, holding the KI-Sonderpreis certificate, with the organisers."
+                            width={1600}
+                            height={1066}
+                        />
+                        <figcaption>
+                            <b>KI-Sonderpreis, Hessen Ideen 2026</b>
+                            <span>The special prize for artificial intelligence. Photo: Hessen Ideen.</span>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </>
+    );
+}
+
+/* ── 13 Ask ───────────────────────────────────────────────────────────── */
 
 // The model's own cost mix over the years that need funding (2026–2032), consolidated into four buckets.
 const ALLOCATION = [
@@ -613,35 +714,44 @@ export function Ask() {
     );
 }
 
-/* ── 12 Close ─────────────────────────────────────────────────────────── */
+
+/* ── 14 Close ─────────────────────────────────────────────────────────── */
 
 export function Close() {
     return (
         <div className="d-close">
-            <div className="d-close__video" aria-hidden="true">
-                <VideoBackground src="https://stream.mux.com/00qQnfNo7sSpn3pB1hYKkyeSDvxs01NxiQ3sr29uL3e028.m3u8" />
+            <div className="d-close__copy">
+                <Kicker>Mirdyne · Giessen, Germany</Kicker>
+                <h2 className="d-close__title d-in">Start with the capability you need.</h2>
+                <p className="d-close__lead d-in" style={{ '--i': 1 } as CSSProperties}>
+                    Alloys and polymers, designed, made and tested in one loop, with the proof attached.
+                </p>
+                <div className="d-close__actions d-in" style={{ '--i': 2 } as CSSProperties}>
+                    <Button href={`${LINKS.interest}?topic=investment`}>Register interest</Button>
+                    <Button variant="secondary" href="/">
+                        prism.mirdyne.com
+                    </Button>
+                </div>
+                <p className="d-close__esa">
+                    Initial deployment of PRISM, for its first use cases, funded under ESA FLPP, FIRST! Simulation &amp;
+                    Intelligence.
+                </p>
+                <div className="d-close__meta">
+                    <span>Mirdyne is a spin-off of Bimo Tech.</span>
+                    <a href={LINKS.marc27} target="_blank" rel="noopener noreferrer">
+                        Technology concept by marc27
+                    </a>
+                </div>
             </div>
-            <Kicker>Mirdyne · Giessen, Germany</Kicker>
-            <h2 className="pm-display" style={{ maxWidth: 1000 }}>
-                Start with the capability you need.
-            </h2>
-            <p className="pm-lead" style={{ maxWidth: 820 }}>
-                Alloy and polymer design, manufacture and test in one loop, with the evidence attached. PRISM is funded
-                under ESA FLPP, FIRST! Simulation &amp; Intelligence.
-            </p>
-            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                <Button href={LINKS.interest}>Register interest</Button>
-                <Button variant="secondary" href="/">
-                    prism.mirdyne.com
-                </Button>
-            </div>
-            <div className="d-close__meta">
-                <img src="/bimo-logo.svg" alt="Bimo Tech" width={110} height={40} />
-                <span>Mirdyne is a spin-off of Bimo Tech.</span>
-                <a href={LINKS.marc27} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
-                    Technology concept by marc27
-                </a>
-            </div>
+            <figure className="d-close__media">
+                <img
+                    className="d-photo"
+                    src="/img/spark-melt.webp"
+                    alt="An alloy melting in the vacuum-arc furnace, glowing orange through the viewport."
+                    width={1000}
+                    height={1000}
+                />
+            </figure>
         </div>
     );
 }
