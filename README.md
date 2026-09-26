@@ -2,6 +2,11 @@
 
 `mirdyne.com`: what PRISM is, how it works and where it stands. It replaces `prism.mirdyne.com`.
 
+The old addresses redirect here (`redirects` in `vercel.json`): `prism.mirdyne.com`,
+and `prism.marc27.com` through it, to the same page on `www.mirdyne.com`, except
+`/api/`, so the form and the daily clean-up keep working there; `mirdyne.eu` and
+`www.mirdyne.eu` to the home page.
+
 | Path | What | Source |
 | --- | --- | --- |
 | `/` | Home: the problem PRISM solves, why Europe, the loop, links to the other pages | `src/site/pages/home.tsx` |

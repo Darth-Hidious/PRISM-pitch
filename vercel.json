@@ -15,6 +15,39 @@
   ],
   "redirects": [
     {
+      "source": "/:path((?!api/).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "prism.mirdyne.com"
+        }
+      ],
+      "destination": "https://www.mirdyne.com/:path",
+      "permanent": true
+    },
+    {
+      "source": "/:path(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.mirdyne.eu"
+        }
+      ],
+      "destination": "https://www.mirdyne.com/",
+      "permanent": true
+    },
+    {
+      "source": "/:path(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "mirdyne.eu"
+        }
+      ],
+      "destination": "https://www.mirdyne.com/",
+      "permanent": true
+    },
+    {
       "source": "/evidence",
       "destination": "/method/#proof",
       "permanent": false
