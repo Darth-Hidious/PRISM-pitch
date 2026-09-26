@@ -12,7 +12,7 @@ import { spawn, execFileSync } from 'child_process';
 
 const DEV_URL = 'http://localhost:5173/deck/';
 // Links in the PDF point at the live site, not at the local server the slides were captured from.
-const SITE = 'https://prism.mirdyne.com';
+const SITE = 'https://www.mirdyne.com';
 const WIDTH = 1920;
 const HEIGHT = 1080;
 const OUTPUT = 'PRISM-Pitch-Deck.pdf';

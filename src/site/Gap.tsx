@@ -363,7 +363,10 @@ export function Gap({ n = '01' }: { n?: string }) {
                         <h2 id="gap-title" className="w-h2">
                             <Words>Materials decide what we can build.</Words>
                         </h2>
-                        <p className="w-lead">A new material still takes ten to twenty years to reach service.</p>
+                        <p className="w-lead">
+                            Materials discovery is accelerating. Materials development is not: a new material still
+                            takes ten to twenty years to reach service.
+                        </p>
                         <dl className="gap__stats">
                             <div className="gap__big">
                                 <dt>

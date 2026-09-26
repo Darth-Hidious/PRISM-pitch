@@ -50,8 +50,8 @@ export default function Proof({ n = '03' }: { n?: string }) {
                         <Words>Every result carries its own proof.</Words>
                     </h2>
                     <p className="w-lead">
-                        Every record knows where it came from and who may see it. Switch the viewer to see what each
-                        partner sees.
+                        A material is a proof system. Each record knows where it came from and who may see it; switch
+                        the viewer to see what each partner sees.
                     </p>
                 </header>
 

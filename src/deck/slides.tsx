@@ -729,7 +729,7 @@ export function Close() {
                 <div className="d-close__actions d-in" style={{ '--i': 2 } as CSSProperties}>
                     <Button href={`${LINKS.interest}?topic=investment`}>Register interest</Button>
                     <Button variant="secondary" href="/">
-                        prism.mirdyne.com
+                        mirdyne.com
                     </Button>
                 </div>
                 <p className="d-close__esa">
