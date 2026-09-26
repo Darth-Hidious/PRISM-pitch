@@ -1,0 +1,214 @@
+/*
+ * Engraved line drawings (src/site/engrave.tsx): ink on paper, after the fiziko look of the Forager
+ * diagrams. Shared by the site (loaded before site.css) and the investor deck, which replays the
+ * CAMEO lineage on its Proof slide.
+ */
+
+.eg {
+    --eg-ink: #1d1f24;
+    --eg-ink-2: #464a52;
+    --eg-muted: #6a6f78;
+    --eg-paper: #fdfcf8;
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: var(--font-sans);
+}
+
+.eg-t {
+    fill: var(--eg-ink-2);
+    font-size: 13.5px;
+}
+
+.eg-t--strong {
+    fill: var(--eg-ink);
+    font-size: 15.5px;
+    font-weight: 650;
+    transition: fill 0.3s;
+}
+
+.eg-t--small {
+    fill: var(--eg-muted);
+    font-size: 12.5px;
+}
+
+.eg-t--sym {
+    fill: var(--eg-ink);
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-style: italic;
+}
+
+.eg-t--head {
+    fill: var(--eg-muted);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.eg-line {
+    fill: none;
+    stroke: var(--eg-ink);
+    stroke-width: 1.15;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.eg-line--thin {
+    stroke-width: 0.7;
+}
+
+.eg-line--bold {
+    stroke-width: 1.7;
+}
+
+.eg-line--dashed {
+    stroke-width: 0.9;
+    stroke-dasharray: 4 4;
+}
+
+.eg-line--trail {
+    stroke-width: 1;
+    stroke-dasharray: 0.5 3.5;
+}
+
+.eg-arrowhead {
+    fill: var(--eg-ink);
+}
+
+.eg-hatchline {
+    stroke: var(--eg-ink);
+    stroke-width: 0.55;
+}
+
+.eg-solid {
+    fill: var(--eg-paper);
+    stroke: var(--eg-ink);
+    stroke-width: 1.15;
+    stroke-linejoin: round;
+}
+
+.eg-solid--open {
+    fill: none;
+}
+
+.eg-solid--top {
+    fill: #efece4;
+}
+
+.eg-frame {
+    fill: none;
+    stroke: var(--eg-ink);
+    stroke-width: 1.1;
+}
+
+.eg-fill {
+    stroke: none;
+}
+
+.eg-dot {
+    fill: var(--eg-ink);
+    opacity: 0.5;
+}
+
+.eg-mercury {
+    stroke: var(--eg-ink);
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.eg-melt {
+    fill: #8d887d;
+    stroke: var(--eg-ink);
+    stroke-width: 0.8;
+}
+
+.eg-halo {
+    fill: none;
+    stroke: var(--eg-ink);
+    stroke-width: 0.8;
+    stroke-dasharray: 2.5 2.5;
+}
+
+.eg-point {
+    fill: var(--eg-ink);
+    stroke: var(--eg-ink);
+    stroke-width: 1.2;
+}
+
+.eg-point--open {
+    fill: var(--eg-paper);
+}
+
+.eg-ball__body {
+    stroke: var(--eg-ink);
+    stroke-width: 1.05;
+}
+
+.eg-ball--white .eg-ball__body {
+    fill: #fdfcf8;
+}
+
+.eg-ball--light .eg-ball__body {
+    fill: #dcd7cb;
+}
+
+.eg-ball--mid .eg-ball__body {
+    fill: #b5ae9f;
+}
+
+.eg-ball--dark .eg-ball__body {
+    fill: #8d887d;
+}
+
+.eg-ball__ring {
+    fill: none;
+    stroke: var(--eg-ink);
+    stroke-width: 0.55;
+    opacity: 0.8;
+}
+
+.eg-ball__shade {
+    fill: none;
+    stroke: var(--eg-ink);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+}
+
+.eg-panel {
+    cursor: pointer;
+}
+
+.eg-panel__bg {
+    fill: var(--accent-tint);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.eg-panel.is-on .eg-panel__bg {
+    opacity: 1;
+}
+
+.eg-panel.is-on .eg-t--strong {
+    fill: var(--accent);
+}
+
+.eg-line--return {
+    transition:
+        stroke 0.3s,
+        stroke-width 0.3s;
+}
+
+.eg-panel--learn.is-on .eg-line--return {
+    stroke: var(--accent);
+    stroke-width: 2;
+}
+
+/* One sample spot on a wafer (the CAMEO drawings). */
+.eg-spot {
+    fill: var(--eg-ink);
+    stroke: none;
+    opacity: 0.72;
+}

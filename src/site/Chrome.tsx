@@ -4,7 +4,17 @@ import InterestMenu from './InterestMenu';
 import { LINKS } from './links';
 
 /** The site's pages. Home is `/`; each other page is its own HTML entry (see vite.config.ts). */
-export type PageId = 'home' | 'platform' | 'method' | 'company' | 'news' | 'interest' | 'impressum' | 'privacy';
+export type PageId =
+    | 'home'
+    | 'platform'
+    | 'method'
+    | 'company'
+    | 'news'
+    | 'interest'
+    | 'contact'
+    | 'impressum'
+    | 'privacy'
+    | 'notfound';
 
 const NAV: { id: PageId; href: string; label: string }[] = [
     { id: 'platform', href: '/platform/', label: 'Platform' },
@@ -123,9 +133,10 @@ export function SiteNav({ page }: { page: PageId }) {
     );
 }
 
-/** The footer's pages: the bar's four, then the two ways in. */
+/** The footer's pages: the bar's four, Contact, then the two ways in. */
 const FOOTER_PAGES: { id?: PageId; href: string; label: string }[] = [
     ...NAV,
+    { id: 'contact', href: '/contact/', label: 'Contact' },
     { id: 'interest', href: LINKS.interest, label: 'Register interest' },
     { href: LINKS.deck, label: 'Investor room' },
 ];

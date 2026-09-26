@@ -9,7 +9,8 @@ import Made from '../Made';
 import Markets from '../Markets';
 import SitePage from '../SitePage';
 
-mount(
+/** The page, for the browser (below) and for the build, which renders it to HTML (scripts/prerender.mjs). */
+export const page = (
     <SitePage page="home">
         <Hero />
         <Gap />
@@ -19,5 +20,7 @@ mount(
         <Markets n="04" />
         <Explore n="05" />
         <Contact />
-    </SitePage>,
+    </SitePage>
 );
+
+mount(page);

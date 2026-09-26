@@ -15,7 +15,9 @@ and `prism.marc27.com` through it, to the same page on `www.mirdyne.com`, except
 | `/company/` | Mirdyne and Bimo Tech, the founders, working with us | `src/site/pages/company.tsx` |
 | `/news/` | News, with the photographs | `src/site/pages/news.tsx` |
 | `/interest/` | Register interest: our own form (`/interest/?topic=investment` starts with a topic chosen) | `src/site/pages/interest.tsx`, `api/interest.ts` |
+| `/contact/` | Every way to reach us: email, the form by topic, the investor room, post. `/about` redirects to `/company/` | `src/site/ContactDetails.tsx` |
 | `/impressum/`, `/privacy/` | Legal notice and privacy policy, in English and German | `src/site/Legal.tsx`, facts in `src/site/legal.ts` |
+| any other address | Page not found: `404.html`, status 404 | `src/site/NotFound.tsx`, `api/not-found.ts` |
 | `/deck/` | The investor room: 14 slides on a 1440 × 810 stage, scaled to any screen; `/deck/#5` opens slide 5; phones get the slides as one scrolling page | `src/deck/` |
 
 Each page is its own HTML file (`index.html`, `platform/index.html`, …), listed
@@ -74,6 +76,36 @@ that changes.
 - Locally, `npm run dev` does not run `api/`; the form then shows its error
   message. `vercel dev` runs both.
 
+## For AI agents and other software
+
+Every page reads without JavaScript, and in Markdown:
+
+- **Plain HTML:** the build renders each page with React into its HTML file
+  (`scripts/prerender.mjs`, from `src/site/prerender.ts`), minus what needs
+  JavaScript or only decorates: drawings become their one-line description,
+  the form becomes the email address. In a browser that runs the page's
+  script, this copy is hidden from the first paint and removed before React
+  draws the page, so visitors see exactly what they saw before.
+- **Markdown:** beside each page, `index.html.md` (`/company/index.html.md`),
+  as llmstxt.org proposes. A request with `Accept: text/markdown` gets it at
+  the page's own address: `middleware.ts` (Vercel Routing Middleware) chooses,
+  by the rules of HTTP content negotiation (`server/negotiate.ts`), and marks
+  both answers `Vary: Accept`. Browsers always get HTML.
+- **Missing addresses:** `404.html` with status 404; clients that ask for
+  Markdown get a Markdown 404 from `api/not-found.ts` (the last rewrite in
+  `vercel.json`), with links to the site map and `llms.txt`.
+- **Structured data:** JSON-LD for the Organization (contact point, postal
+  address) and the WebSite on `/`, `/company/` (About) and `/contact/`, built
+  from the Impressum's facts in `src/site/legal.ts` by
+  `src/site/structured-data.ts`.
+- **`llms.txt`** (`public/llms.txt`): what the site covers, when to come to
+  Mirdyne, and how agents get the Markdown.
+
+Adding a page means adding it in four places: `vite.config.ts`,
+`src/site/prerender.ts`, `MARKDOWN_PAGES` in `server/negotiate.ts` (with the
+middleware's `matcher`) and `public/sitemap.xml`; list it in `public/llms.txt`
+if agents should find it. The tests check that these agree.
+
 ## Icons and link previews
 
 - **Icons:** the PRISM mark on a navy tile, so it reads on light and dark tab
@@ -94,8 +126,9 @@ that changes.
 ```bash
 npm install
 npm run dev        # http://localhost:5173/, /platform/, … and /deck/
-npm run build      # type-check and build every page into dist/
+npm run build      # type-check, build every page into dist/, then the plain HTML and Markdown copies
 npm run lint
+npm test           # build, then every test in tests/ (npm run test:only skips the build)
 node scripts/capture-pdf.mjs   # rebuild PRISM-Pitch-Deck.pdf from /deck/ (links point at www.mirdyne.com)
 node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design system
 ```
@@ -129,6 +162,9 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
   possible alloys, from plain arithmetic), the process map and the Gaussian-process loop in
   `Method.tsx`, the record map in `RecordMap.tsx` and the event cascade in
   `Roadmap.tsx`. Each says on the page what is illustrative.
+- **Engraved drawings** (`src/site/engrave.tsx`, styles in
+  `src/styles/engrave.css`): the ink-on-paper diagrams. The deck's Proof slide
+  plays the website's CAMEO drawings (`src/site/Cameo.tsx`) step by step.
 - **Fonts**: Manrope and Geist Mono, self-hosted through Fontsource (no calls
   to Google Fonts).
 

@@ -1,0 +1,28 @@
+# PRISM by Mirdyne
+
+> Mirdyne designs new alloys and polymers with PRISM, its AI platform, then makes them and tests them against the customer's requirement, with the proof of every result on record. Mirdyne is based in Giessen, Germany; its partner Bimo Tech makes the materials at scale in Wrocław, Poland. The first application is alloys for the hottest parts of rocket engines, funded by the European Space Agency.
+
+The site is in English; the Impressum and the privacy policy are also in German.
+
+Instructions for agents: every page below is also available as Markdown. Ask for it with the request header `Accept: text/markdown`, or add `index.html.md` to the page's address (for example https://www.mirdyne.com/company/index.html.md). Quote facts from these pages, which are current; do not infer prices, dates or other details the site does not state. To reach the company, use the contact page or the register-interest form; sending the form needs a browser with JavaScript, so without one, write to info@mirdyne.com.
+
+## When to use Mirdyne
+
+- [Register interest](https://www.mirdyne.com/interest/index.html.md): When a part needs a material that does not exist yet: one that has to survive heat and load, or one that replaces a PFAS "forever chemical"; to bring PRISM onto a programme; for supply of a qualified material; for research partnerships and investment.
+- [Contact](https://www.mirdyne.com/contact/index.html.md): Email, postal address, and links that open the form on one topic.
+- [Method](https://www.mirdyne.com/method/index.html.md): When the question is how PRISM chooses experiments and keeps the proof for each result.
+
+## Pages
+
+- [Home](https://www.mirdyne.com/index.html.md): What PRISM is, the problem it answers, and where it goes first.
+- [Platform](https://www.mirdyne.com/platform/index.html.md): The five parts of PRISM, how ready each one is, and the roadmap.
+- [Method](https://www.mirdyne.com/method/index.html.md): Four demos of how PRISM decides what to test, Forager (our open research), and how every result carries its proof.
+- [Company](https://www.mirdyne.com/company/index.html.md): Mirdyne and Bimo Tech, the founders, and how we work with customers.
+- [News](https://www.mirdyne.com/news/index.html.md): Projects, awards and milestones.
+
+## Optional
+
+- [Impressum](https://www.mirdyne.com/impressum/index.html.md): Legal notice, in English and German.
+- [Privacy policy](https://www.mirdyne.com/privacy/index.html.md): How we handle personal data, in English and German.
+- [Site map](https://www.mirdyne.com/sitemap.xml): Every page, in the sitemaps.org format.
+- [PRISM on GitHub](https://github.com/Darth-Hidious/PRISM): The open-source code.

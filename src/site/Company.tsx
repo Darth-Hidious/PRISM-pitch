@@ -6,6 +6,8 @@ import { Arrow, Idx, Words } from './ui';
 
 export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
     const H = h1 ? 'h1' : 'h2';
+    const Sub = h1 ? 'h2' : 'h3';
+    const Name = h1 ? 'h3' : 'h4';
     return (
         <section id="company" className="sec company" data-theme="paper" data-nav="paper" aria-labelledby="company-title">
             <div className="wrap">
@@ -75,10 +77,10 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                     <figcaption>Where our alloys are melted: the materials lab at WUST, Wrocław.</figcaption>
                 </figure>
                 <div className="founders rv">
-                    <p className="w-label">Founders</p>
+                    <Sub className="w-label">Founders</Sub>
                     <div className="founders__grid">
                         <article className="founder">
-                            <h3>Kevin Grüning</h3>
+                            <Name>Kevin Grüning</Name>
                             <p className="founder__role">Managing Director, Mirdyne</p>
                             <p>
                                 Space Systems Lead at Bimo Tech. Physics and technology for space applications, JLU
@@ -86,7 +88,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                             </p>
                         </article>
                         <article className="founder">
-                            <h3>Siddhartha Yash Kovid</h3>
+                            <Name>Siddhartha Yash Kovid</Name>
                             <p className="founder__role">Technical Lead, Mirdyne</p>
                             <p>
                                 Technical lead of the ESA projects SPARK and PRISM Alpha at Bimo Tech. Applied AI and
@@ -94,7 +96,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                             </p>
                         </article>
                         <article className="founder">
-                            <h3>Marcin Orzechowski</h3>
+                            <Name>Marcin Orzechowski</Name>
                             <p className="founder__role">Co-founder, Mirdyne</p>
                             <p>
                                 CEO and Head of R&amp;D at Bimo Tech, which supplies special metals and precision parts for
@@ -159,6 +161,7 @@ const NEWS: NewsItem[] = [
 
 export function News({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
     const H = h1 ? 'h1' : 'h2';
+    const Item = h1 ? 'h2' : 'h3';
     return (
         <section id="news" className="sec news" data-theme="paper" data-nav="paper" aria-labelledby="news-title">
             <div className="wrap">
@@ -193,7 +196,7 @@ export function News({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
                                     <span>{n.when}</span>
                                     <span className="news__tag">{n.tag}</span>
                                 </p>
-                                <h3>{n.title}</h3>
+                                <Item>{n.title}</Item>
                                 <p>{n.text}</p>
                             </div>
                         </li>

@@ -726,7 +726,9 @@ function FlowMap({ viewer, sel, onSelect, moving }: { viewer: Party; sel: string
 export default function RecordMap() {
     const [viewer, setViewer] = useState<Party>('Customer A');
     // Wide screens open on one record; phones open a record's details only when it is tapped.
-    const [sel, setSel] = useState(() => (window.matchMedia('(min-width: 900px)').matches ? 'EST-88' : ''));
+    const [sel, setSel] = useState(() =>
+        typeof window !== 'undefined' && window.matchMedia('(min-width: 900px)').matches ? 'EST-88' : '',
+    );
     const wide = useMediaQuery('(min-width: 900px)');
     const reduced = useReducedMotion();
     const box = useRef<HTMLDivElement>(null);

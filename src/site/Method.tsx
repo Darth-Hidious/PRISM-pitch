@@ -665,6 +665,10 @@ const demoFromHash = () => {
 
 export default function Method({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
     const H = h1 ? 'h1' : 'h2';
+    const Sub = h1 ? 'h2' : 'h3';
+    // The build renders the page to plain HTML (scripts/prerender.mjs). Without JavaScript the tabs cannot
+    // switch, so that copy shows every exhibit, one after another.
+    const all = typeof window === 'undefined';
     const [active, setActive] = useState(demoFromHash);
     const tabs = useRef<(HTMLButtonElement | null)[]>([]);
     const pick = (i: number) => {
@@ -729,13 +733,13 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                     ))}
                 </div>
                 <div id="demo-panel" role="tabpanel" aria-labelledby={`demo-tab-${EXHIBITS[active].id}`} className="method__panel">
-                    {active === 0 && (
+                    {(all || active === 0) && (
                         <article className="exhibit exhibit--wide" aria-labelledby="ex-ladder">
                             <div className="exhibit__text">
                                 <p className="w-label exhibit__tag">Exhibit A · The ladder</p>
-                                <h3 id="ex-ladder" className="w-h3">
+                                <Sub id="ex-ladder" className="w-h3">
                                     Cheap checks first. Expensive ones last.
-                                </h3>
+                                </Sub>
                                 <p className="a">
                                     <b>Most ideas stop early, where stopping is cheap.</b> A simulation takes seconds. A real
                                     test takes weeks.
@@ -755,13 +759,13 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                             </figure>
                         </article>
                     )}
-                    {active === 1 && (
+                    {(all || active === 1) && (
                         <article className="exhibit" aria-labelledby="ex-window">
                             <div className="exhibit__text">
                                 <p className="w-label exhibit__tag">Exhibit B · Safe settings</p>
-                                <h3 id="ex-window" className="w-h3">
+                                <Sub id="ex-window" className="w-h3">
                                     A safe range of settings, not one perfect recipe.
-                                </h3>
+                                </Sub>
                                 <p className="a">
                                     <b>Machines drift, so the recipe needs room to spare.</b> Drag the dot. The hatched area
                                     still gives solid metal when things drift.
@@ -776,13 +780,13 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                             </div>
                         </article>
                     )}
-                    {active === 2 && (
+                    {(all || active === 2) && (
                         <article className="exhibit" aria-labelledby="ex-al">
                             <div className="exhibit__text">
                                 <p className="w-label exhibit__tag">Exhibit C · Smart experiments</p>
-                                <h3 id="ex-al" className="w-h3">
+                                <Sub id="ex-al" className="w-h3">
                                     Each experiment is picked for what it will teach.
-                                </h3>
+                                </Sub>
                                 <p className="a">
                                     <b>Test where the model is least sure, near the best answer.</b> Press Run and watch the
                                     uncertainty shrink.
@@ -807,13 +811,13 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                             </div>
                         </article>
                     )}
-                    {active === 3 && (
+                    {(all || active === 3) && (
                         <article className="exhibit" aria-labelledby="ex-core">
                             <div className="exhibit__text">
                                 <p className="w-label exhibit__tag">Exhibit D · Reuse</p>
-                                <h3 id="ex-core" className="w-h3">
+                                <Sub id="ex-core" className="w-h3">
                                     One core. Swappable modules.
-                                </h3>
+                                </Sub>
                                 <p className="a">
                                     <b>New material, new modules. Same core.</b> That is how one platform moves from alloys to
                                     polymers.

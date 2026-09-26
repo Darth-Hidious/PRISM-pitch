@@ -21,8 +21,8 @@ export default defineConfig([
     },
   },
   {
-    // Vercel Functions: they run on Node, not in the browser.
-    files: ['api/**/*.ts'],
+    // Vercel Functions and Routing Middleware: they run on the server, not in the browser.
+    files: ['api/**/*.ts', 'server/**/*.ts', 'middleware.ts'],
     languageOptions: {
       globals: globals.node,
     },

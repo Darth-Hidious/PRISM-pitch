@@ -1,14 +1,11 @@
 import { mount } from '../boot';
-import Business from '../Business';
-import { Company, Contact } from '../Company';
+import NotFound from '../NotFound';
 import SitePage from '../SitePage';
 
 /** The page, for the browser (below) and for the build, which renders it to HTML (scripts/prerender.mjs). */
 export const page = (
-    <SitePage page="company">
-        <Company n="01" h1 />
-        <Business n="02" />
-        <Contact />
+    <SitePage page="notfound">
+        <NotFound />
     </SitePage>
 );
 

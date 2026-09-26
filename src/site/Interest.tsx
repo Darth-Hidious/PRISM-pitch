@@ -1,21 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { Button } from '../ds';
 import { useMediaQuery } from './hooks';
+import { AREAS, type AreaId } from './interest-areas';
 import { LINKS } from './links';
 import { CONSORTIUM, PartnerLogo } from './partners';
 
-/** What people can register interest in. The ids must match api/interest.ts. */
-const AREAS = [
-    { id: 'material', label: 'A new material for a part' },
-    { id: 'deployment', label: 'PRISM on our programme' },
-    { id: 'supply', label: 'Supply of a qualified material' },
-    { id: 'research', label: 'Research collaboration' },
-    { id: 'partnership', label: 'Partnership' },
-    { id: 'investment', label: 'Investment' },
-    { id: 'other', label: 'Something else' },
-] as const;
-
-type AreaId = (typeof AREAS)[number]['id'];
 type Field = 'name' | 'email' | 'organisation' | 'role' | 'areas' | 'message' | 'consent';
 type Errors = Partial<Record<Field, string>>;
 
@@ -47,6 +36,8 @@ function check(v: Values): Errors {
 
 /** A topic named in the link (`/interest/?topic=investment`) starts chosen. */
 function topicFromUrl(): AreaId[] {
+    // The build renders the page without a URL (scripts/prerender.mjs).
+    if (typeof window === 'undefined') return [];
     const t = new URLSearchParams(window.location.search).get('topic');
     return AREAS.some((a) => a.id === t) ? [t as AreaId] : [];
 }

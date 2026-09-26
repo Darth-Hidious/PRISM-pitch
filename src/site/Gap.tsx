@@ -306,10 +306,13 @@ function DotField({ step }: { step: number }) {
     return <canvas ref={ref} className="gap__canvas" aria-hidden="true" />;
 }
 
-/** Counts up from 1 to the value, in log space so big numbers read as orders of magnitude. */
+/**
+ * Counts up from 1 to the value, in log space so big numbers read as orders of magnitude. The build's
+ * plain-HTML copy of the page (rendered without a window) shows the value itself.
+ */
 function Counter({ value }: { value: number }) {
     const reduce = useReducedMotion();
-    const [shown, setShown] = useState(reduce ? value : 1);
+    const [shown, setShown] = useState(reduce || typeof window === 'undefined' ? value : 1);
     useEffect(() => {
         if (reduce) {
             const id = requestAnimationFrame(() => setShown(value));
