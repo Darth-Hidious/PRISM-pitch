@@ -21,8 +21,8 @@ const STEPS: Step[] = [
         name: 'Requirement',
         glyph: 'target',
         question: 'What must the part survive?',
-        lead: 'You tell us.',
-        text: 'Heat, loads, and the material it has to beat.',
+        lead: 'You tell us',
+        text: 'the heat and loads the part faces, and the material it has to beat.',
         stack: 'Evidence stack',
         maturity: 'prototype',
     },
@@ -30,8 +30,8 @@ const STEPS: Step[] = [
         name: 'Design',
         glyph: 'lattice',
         question: 'What could work?',
-        lead: 'AI suggests ideas.',
-        text: 'From the whole range of possible mixes.',
+        lead: 'AI proposes',
+        text: 'candidate mixes from the whole range of possibilities.',
         stack: 'Research stack',
         maturity: 'prototype',
     },
@@ -39,8 +39,8 @@ const STEPS: Step[] = [
         name: 'Screen',
         glyph: 'funnel',
         question: 'What survives the physics?',
-        lead: 'Most ideas stop here.',
-        text: 'Simulations rule them out before anything is melted.',
+        lead: 'Simulations rule out',
+        text: 'most ideas before anything is melted.',
         stack: 'Research stack',
         maturity: 'prototype',
     },
@@ -48,8 +48,8 @@ const STEPS: Step[] = [
         name: 'Make',
         glyph: 'flame',
         question: 'Can it be made, and made again?',
-        lead: 'Real machines make it.',
-        text: 'We melt and 3D-print the best ideas.',
+        lead: 'We melt and 3D-print',
+        text: 'the best candidates.',
         stack: 'Manufacturing and test stack',
         maturity: 'in-use',
     },
@@ -57,8 +57,8 @@ const STEPS: Step[] = [
         name: 'Test',
         glyph: 'gauge',
         question: 'Does it meet the requirement?',
-        lead: 'The sample answers.',
-        text: 'We measure it against your targets.',
+        lead: 'We measure',
+        text: 'each sample against your targets.',
         stack: 'Manufacturing and test stack',
         maturity: 'in-use',
     },
@@ -66,8 +66,8 @@ const STEPS: Step[] = [
         name: 'Learn',
         glyph: 'cycle',
         question: 'What should we try next?',
-        lead: 'Whatever teaches the most.',
-        text: 'Every result goes back into the models.',
+        lead: 'Every result',
+        text: 'goes back into the models and decides what we try next.',
         stack: 'Harness stack',
         maturity: 'prototype',
     },
@@ -261,7 +261,7 @@ export default function Loop({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>How it works</Idx>
                     <h2 id="loop-title" className="w-h2">
-                        <Words>One loop: design, make, test, learn.</Words>
+                        <Words>Every result feeds the next design.</Words>
                     </h2>
                 </header>
                 <div ref={ref} className="loop__body rv">

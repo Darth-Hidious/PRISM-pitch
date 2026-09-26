@@ -367,8 +367,8 @@ export function Gap({ n = '01' }: { n?: string }) {
                             <Words>Materials decide what we can build.</Words>
                         </h2>
                         <p className="w-lead">
-                            Materials discovery is accelerating. Materials development is not: a new material still
-                            takes ten to twenty years to reach service.
+                            Finding new materials has become faster. Putting one into service still takes ten to twenty
+                            years.
                         </p>
                         <dl className="gap__stats">
                             <div className="gap__big">
@@ -393,7 +393,7 @@ export function Gap({ n = '01' }: { n?: string }) {
                             </div>
                         </dl>
                         <p className="gap__close">
-                            <b>Nobody can make them all.</b> PRISM picks the few worth making.
+                            <b>Nobody can make them all,</b> so PRISM picks the few worth making.
                         </p>
                     </div>
                     <div className="gap__field" aria-hidden="true">

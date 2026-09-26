@@ -201,7 +201,7 @@ export default function Europe() {
                 <div className="wrap europe__inner">
                     <p className="w-label europe__kicker">Why Europe</p>
                     <h2 id="europe-title" className="w-h2">
-                        <Words>Europe can’t build what it can’t make.</Words>
+                        <Words>Europe depends on others for key materials.</Words>
                     </h2>
                     <div className="europe__more">
                         <p className="w-lead europe__lead">
@@ -210,7 +210,7 @@ export default function Europe() {
                         <dl className="europe__facts">
                             <div>
                                 <dt>65%</dt>
-                                <dd>The most of any strategic raw material the EU wants from one outside country by 2030.</dd>
+                                <dd>By 2030, the EU wants no more than this share of any strategic raw material to come from one outside country.</dd>
                             </div>
                             <div>
                                 <dt>SX500</dt>
@@ -218,7 +218,7 @@ export default function Europe() {
                             </div>
                         </dl>
                         <p className="europe__close">
-                            <b>PRISM builds that ability in Europe:</b> designed in Giessen, made by Bimo Tech in Wrocław.
+                            We design new alloys in Giessen, and Bimo Tech makes them in Wrocław.
                         </p>
                         <div className="europe__foot">
                             <Note>

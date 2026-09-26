@@ -14,17 +14,15 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                 <header className="sec-head rv">
                     <Idx n={n}>Company</Idx>
                     <H id="company-title" className="w-h2">
-                        Mirdyne discovers. Bimo Tech delivers.
+                        We design new materials, and Bimo Tech makes them.
                     </H>
-                    <p className="w-lead">One company finds and proves the material. The other makes it at scale.</p>
                 </header>
 
                 <div className="rel rel--two rv" aria-label="How Mirdyne and Bimo Tech share the work">
                     <article className="rel__card">
-                        <p className="w-label">Discovers</p>
+                        <p className="w-label">Giessen</p>
                         <img className="rel__logo" src="/brand/mirdyne-lockup-ink.png" alt="Mirdyne" width={183} height={50} />
-                        <p className="rel__head">Finds the material and proves it works.</p>
-                        <p>Designs materials with PRISM and proves them. Based in Giessen, Germany.</p>
+                        <p className="rel__head">Designs new materials with PRISM and proves that they work.</p>
                         <ul className="rel__tags" aria-label="What Mirdyne does">
                             <li>Design with PRISM</li>
                             <li>First samples</li>
@@ -36,10 +34,9 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                         <i aria-hidden="true" />
                     </p>
                     <article className="rel__card rel__card--bimo" data-theme="navy">
-                        <p className="w-label">Delivers</p>
+                        <p className="w-label">Wrocław</p>
                         <img className="rel__logo" src="/bimo-logo.png" alt="Bimo Tech" width={182} height={66} />
-                        <p className="rel__head">Makes it at scale and supplies it.</p>
-                        <p>Makes high-performance metal parts and alloys. A supplier to ITER, the fusion project.</p>
+                        <p className="rel__head">Makes them at scale and supplies them. Bimo Tech already supplies ITER, the fusion project.</p>
                         <ul className="rel__tags" aria-label="What Bimo Tech does">
                             <li>Scale-up</li>
                             <li>Powder and parts</li>

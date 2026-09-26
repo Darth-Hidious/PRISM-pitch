@@ -27,7 +27,7 @@ export default function Hero() {
                         Materials built for the&nbsp;extreme.
                     </h1>
                     <p className="w-lead hero__lead rise" style={{ animationDelay: '180ms' }}>
-                        Designed with AI. Made and tested in Europe.
+                        We design them with AI, and make and test them in Europe.
                     </p>
                     <div className="hero__actions rise" style={{ animationDelay: '260ms' }}>
                         <Button href={LINKS.interest}>Register interest</Button>

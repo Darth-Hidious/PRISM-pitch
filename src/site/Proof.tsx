@@ -16,7 +16,7 @@ const RULES = [
     'Anything made from data keeps the strictest rules of its inputs.',
     'Training AI on a partner’s data needs its own permission.',
     'Export rules travel with the data.',
-    'Partners can leave with their data. No lock-in.',
+    'Partners can leave at any time and take their data with them.',
 ];
 
 const GIVES = [
@@ -47,11 +47,11 @@ export default function Proof({ n = '03' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>Proof</Idx>
                     <h2 id="proof-title" className="w-h2">
-                        <Words>Every result carries its own proof.</Words>
+                        <Words>We keep the evidence for every result.</Words>
                     </h2>
                     <p className="w-lead">
-                        A material is a proof system. Each record knows where it came from and who may see it; switch
-                        the viewer to see what each partner sees.
+                        Each record shows where it came from and who may see it. Switch the viewer to see what each
+                        partner sees.
                     </p>
                 </header>
 
@@ -91,7 +91,7 @@ export default function Proof({ n = '03' }: { n?: string }) {
                     <div className="ip__head">
                         <p className="w-label trust__label">What stays yours</p>
                         <h3 id="ip-title" className="w-h2 ip__title">
-                            <Words>Anyone can analyse a part. Nobody can copy the proof.</Words>
+                            <Words>A finished part does not give away how it was made.</Words>
                         </h3>
                         <figure className="ip__photo">
                             <img

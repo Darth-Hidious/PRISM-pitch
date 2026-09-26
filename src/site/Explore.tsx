@@ -5,28 +5,28 @@ const PAGES = [
         href: '/platform/',
         img: '/img/spark-furnace-wide.webp',
         label: 'Platform',
-        title: 'Five stacks. One system.',
-        text: 'What PRISM is built from, and how ready each part is.',
+        title: 'What PRISM is built from.',
+        text: 'Five stacks, and how ready each part is.',
     },
     {
         href: '/method/',
         img: '/img/dlr-vinci-p41-wide.webp',
         label: 'Method',
-        title: 'Every experiment has to earn its place.',
+        title: 'PRISM chooses which experiments to run.',
         text: 'Four live demos, and Forager, our open research.',
     },
     {
         href: '/method/#proof',
         img: '/img/spark-button-wide.webp',
         label: 'Proof',
-        title: 'Every result carries its own proof.',
-        text: 'A live map of who sees what, a real lineage, and what a part gives away.',
+        title: 'We keep the evidence for every result.',
+        text: 'Who sees what, a published example, and what a part gives away.',
     },
     {
         href: '/company/',
         img: '/img/spark-hearth-column-wide.webp',
         label: 'Company',
-        title: 'Mirdyne discovers. Bimo Tech delivers.',
+        title: 'We design new materials, and Bimo Tech makes them.',
         text: 'Who we are, the founders, and how to work with us.',
     },
     {
@@ -44,9 +44,9 @@ export default function Explore({ n = '03' }: { n?: string }) {
         <section id="more" className="sec explore" data-theme="paper" data-nav="paper" aria-labelledby="explore-title">
             <div className="wrap">
                 <header className="explore__head rv">
-                    <Idx n={n}>More</Idx>
+                    <Idx n={n}>Explore</Idx>
                     <h2 id="explore-title" className="w-h2">
-                        Go deeper.
+                        More about PRISM and Mirdyne.
                     </h2>
                 </header>
                 <ul className="explore__grid">

@@ -185,7 +185,7 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>Progress</Idx>
                     <h2 id="roadmap-title" className="w-h2">
-                        <Words>Where PRISM stands, and where it goes.</Words>
+                        <Words>What PRISM has done, and what comes next.</Words>
                     </h2>
                 </header>
 
@@ -278,7 +278,7 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                 </figure>
 
                 <p className="roadmap__close rv">
-                    Different uses, one rule: every claim keeps its source and says how sure it is.
+                    Whatever PRISM is used for, every claim keeps its source and says how sure it is.
                 </p>
             </div>
         </section>

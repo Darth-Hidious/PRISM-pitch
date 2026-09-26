@@ -97,9 +97,9 @@ export default function Markets({ n = '04' }: { n?: string }) {
         <section id="markets" className="sec markets-home" data-theme="navy" data-nav="navy" aria-labelledby="markets-title">
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>Where it goes</Idx>
+                    <Idx n={n}>Markets</Idx>
                     <h2 id="markets-title" className="w-h2">
-                        <Words>Where PRISM goes first.</Words>
+                        <Words>Where PRISM is used first.</Words>
                     </h2>
                 </header>
                 <MarketCards />

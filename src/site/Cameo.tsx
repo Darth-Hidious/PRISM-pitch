@@ -331,13 +331,13 @@ export default function CameoLineage() {
     return (
         <div id="lineage" className="cameo" aria-labelledby="cameo-title">
             <header className="cameo__head rv">
-                <p className="w-label trust__label">A real lineage</p>
+                <p className="w-label trust__label">A published example</p>
                 <h3 id="cameo-title" className="w-h2 cameo__title">
-                    <Words>Every result should trace back like this.</Words>
+                    <Words>What a complete record looks like.</Words>
                 </h3>
                 <p className="w-lead">
-                    In 2020, NIST’s AI system CAMEO found a better memory material, with every step on record. PRISM
-                    keeps the same record for every result.
+                    In 2020, NIST’s AI system CAMEO found a better memory material and recorded every step. We keep
+                    the same kind of record for every result.
                 </p>
             </header>
 
@@ -381,8 +381,8 @@ export default function CameoLineage() {
             <div className="evidence__src">
                 <Note>
                     Kusne et al., Nature Communications 11, 5966 (2020); NIST news release, 24 November 2020. CAMEO is the
-                    work of NIST and its partners, not ours. We show it because it is the clearest public example of a
-                    full lineage.
+                    work of NIST and its partners, not ours. We show it because it is the clearest published example of a
+                    complete record.
                 </Note>
             </div>
         </div>

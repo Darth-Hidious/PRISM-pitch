@@ -29,8 +29,8 @@ export const STACKS: StackDef[] = [
         name: 'Research stack',
         short: 'Research',
         question: 'Out of millions of possible mixes, which are worth making?',
-        lead: 'A short list, ranked, with how sure we are.',
-        answer: 'AI suggests ideas. Physics simulations throw out what cannot work, before any powder is weighed.',
+        lead: 'PRISM ranks a short list of candidates',
+        answer: 'and says how sure it is about each. Physics simulations throw out what cannot work before any powder is weighed.',
         limit: 'It cannot see what a real machine does to the alloy. The manufacturing stack checks that.',
         layers: [
             {
@@ -65,8 +65,8 @@ export const STACKS: StackDef[] = [
         name: 'Harness stack',
         short: 'Harness',
         question: 'Who runs the work between the AI models?',
-        lead: 'The harness.',
-        answer: 'AI models only suggest. The harness plans each round, runs the tools, scores the results and remembers what failed.',
+        lead: 'The harness does.',
+        answer: 'The AI models only make suggestions. The harness plans each round, runs the tools, scores the results and remembers what failed.',
         limit: 'It never makes the final call. A named engineer signs off what leaves the loop.',
         layers: [
             {
@@ -101,8 +101,8 @@ export const STACKS: StackDef[] = [
         name: 'Autonomy stack',
         short: 'Autonomy',
         question: 'How do experiments stop being the slow part?',
-        lead: 'Robots do the repetitive steps. People stay in charge.',
-        answer: 'Robots weigh and heat, instruments measure on the spot, and the data flows straight back.',
+        lead: 'Robots do the repetitive steps, and people stay in charge.',
+        answer: 'They weigh and heat, instruments measure on the spot, and the data goes straight back into the loop.',
         limit: 'Most of this is still being built. The recipe writer works as a prototype today.',
         layers: [
             {
@@ -142,14 +142,14 @@ export const STACKS: StackDef[] = [
         name: 'Manufacturing and test stack',
         short: 'Manufacturing and test',
         question: 'Can it really be made? Does it hold up?',
-        lead: 'Only a real test can say.',
-        answer: 'Most computer-designed materials stop at the recipe. We melt and 3D-print the best ideas, then test them.',
+        lead: 'Only a real test can tell.',
+        answer: 'Most materials designed on a computer never get past the recipe. We melt and 3D-print the best ideas, then test them.',
         photo: {
             src: '/img/spark-furnace-wide.webp',
             alt: 'A vacuum-arc furnace, open: the steel chamber with its viewports lifted above the round copper hearth.',
             caption: 'The vacuum-arc furnace, open.',
         },
-        limit: 'A test sample is not a finished part. Certification is the goal, not a claim.',
+        limit: 'A test sample is not a finished part. Certification is our goal; we do not claim it yet.',
         layers: [
             {
                 name: 'Powder and melting',
@@ -183,8 +183,8 @@ export const STACKS: StackDef[] = [
         name: 'Evidence stack',
         short: 'Evidence',
         question: 'Where did this result come from, and who may see it?',
-        lead: 'Every result carries its source, its owner and its rules.',
-        answer: 'Every requirement, design, sample, test and decision is linked, like a family tree.',
+        lead: 'Every result records where it came from, who owns it and who may use it.',
+        answer: 'Requirements, designs, samples, tests and decisions are linked, like a family tree.',
         limit: 'Tracing and export labels work today. Automatic enforcement is being built.',
         layers: [
             {

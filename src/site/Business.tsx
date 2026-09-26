@@ -17,9 +17,8 @@ export default function Business({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>Working with us</Idx>
                     <h2 id="business-title" className="w-h2">
-                        <Words>The software is open. We earn when the material is real.</Words>
+                        <Words>Our tools are free. We are paid for projects and materials.</Words>
                     </h2>
-                    <p className="w-lead">Our prediction tools are free and open source. We are paid when a material has to exist.</p>
                 </header>
 
                 <ol className="ladder rv" aria-label="How Mirdyne works with you, from open source to supply">
@@ -39,7 +38,7 @@ export default function Business({ n = '02' }: { n?: string }) {
                 </p>
 
                 <div className="markets">
-                    <p className="w-label markets__label rv">Where PRISM goes first</p>
+                    <p className="w-label markets__label rv">Where PRISM is used first</p>
                     <MarketCards />
                 </div>
             </div>

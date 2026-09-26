@@ -371,9 +371,9 @@ export default function Stacks({ n = '01', h1 = false }: { n?: string; h1?: bool
                     <header className="stacks__head rv">
                         <Idx n={n}>The platform</Idx>
                         <H id="platform-title" className="w-h2">
-                            Five stacks. One system.
+                            What PRISM is built from.
                         </H>
-                        <p className="w-lead">Five layers, each with one job. Every part is labelled with how ready it is.</p>
+                        <p className="w-lead">PRISM has five stacks, each with one job. Every part is marked with how ready it is.</p>
                         <ul className="stacks__legend" aria-label="Maturity">
                             <li>
                                 <MaturityPill maturity="in-use" /> Used in our projects today

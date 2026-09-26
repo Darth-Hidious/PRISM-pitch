@@ -689,10 +689,10 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                 <header className="sec-head rv">
                     <Idx n={n}>The method</Idx>
                     <H id="method-title" className="w-h2">
-                        Every experiment has to earn its place.
+                        PRISM chooses which experiments to run.
                     </H>
                     <p className="w-lead">
-                        Real experiments are slow and expensive. PRISM spends them where they teach the most.
+                        Real experiments are slow and expensive, so PRISM runs the ones that will teach us the most.
                     </p>
                 </header>
 
@@ -738,11 +738,11 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                             <div className="exhibit__text">
                                 <p className="w-label exhibit__tag">Exhibit A · The ladder</p>
                                 <Sub id="ex-ladder" className="w-h3">
-                                    Cheap checks first. Expensive ones last.
+                                    Cheap checks come first, expensive ones last.
                                 </Sub>
                                 <p className="a">
-                                    <b>Most ideas stop early, where stopping is cheap.</b> A simulation takes seconds. A real
-                                    test takes weeks.
+                                    <b>Most ideas stop early,</b> in a simulation that takes seconds, long before a test that
+                                    takes weeks.
                                 </p>
                             </div>
                             <figure className="exhibit__stage">
@@ -764,11 +764,11 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                             <div className="exhibit__text">
                                 <p className="w-label exhibit__tag">Exhibit B · Safe settings</p>
                                 <Sub id="ex-window" className="w-h3">
-                                    A safe range of settings, not one perfect recipe.
+                                    We look for a safe range of settings.
                                 </Sub>
                                 <p className="a">
-                                    <b>Machines drift, so the recipe needs room to spare.</b> Drag the dot. The hatched area
-                                    still gives solid metal when things drift.
+                                    <b>Machines drift, so the recipe needs room to spare.</b> Drag the dot: anywhere in the
+                                    hatched area, the metal still comes out solid.
                                 </p>
                                 <Note label="Illustrative">
                                     Boundaries follow standard scaling rules: lack of fusion with P/v, keyholing with P/√v,
@@ -785,11 +785,11 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                             <div className="exhibit__text">
                                 <p className="w-label exhibit__tag">Exhibit C · Smart experiments</p>
                                 <Sub id="ex-al" className="w-h3">
-                                    Each experiment is picked for what it will teach.
+                                    Each experiment is chosen for what it will teach us.
                                 </Sub>
                                 <p className="a">
-                                    <b>Test where the model is least sure, near the best answer.</b> Press Run and watch the
-                                    uncertainty shrink.
+                                    <b>PRISM tests where the model is least sure,</b> close to the best answer. Press Run to
+                                    watch the uncertainty shrink.
                                 </p>
                                 <dl className="exhibit__stats">
                                     <div>
@@ -816,11 +816,10 @@ export default function Method({ n = '01', h1 = false }: { n?: string; h1?: bool
                             <div className="exhibit__text">
                                 <p className="w-label exhibit__tag">Exhibit D · Reuse</p>
                                 <Sub id="ex-core" className="w-h3">
-                                    One core. Swappable modules.
+                                    Only the modules change from one material to the next.
                                 </Sub>
                                 <p className="a">
-                                    <b>New material, new modules. Same core.</b> That is how one platform moves from alloys to
-                                    polymers.
+                                    The core stays the same. That is how one platform moves from alloys to polymers.
                                 </p>
                             </div>
                             <div className="exhibit__stage">

@@ -116,9 +116,9 @@ export default function Made({ n = '02' }: { n?: string }) {
                 <div ref={stage} className="made__stage">
                     <div className="wrap made__inner">
                         <header className="made__head rv">
-                            <Idx n={n}>Made for real</Idx>
+                            <Idx n={n}>From raw metal to a part</Idx>
                             <h2 id="made-title" className="w-h2">
-                                <Words>An idea only counts once it is metal.</Words>
+                                <Words>We make what we design.</Words>
                             </h2>
                         </header>
                         <div className="made__view rv">
