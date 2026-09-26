@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Button, PrismMark } from '../ds';
-import { CREDITS } from './credits';
 import InterestMenu from './InterestMenu';
 import { LINKS } from './links';
 
@@ -124,88 +123,49 @@ export function SiteNav({ page }: { page: PageId }) {
     );
 }
 
+/** The footer's pages: the bar's four, then the two ways in. */
+const FOOTER_PAGES: { id?: PageId; href: string; label: string }[] = [
+    ...NAV,
+    { id: 'interest', href: LINKS.interest, label: 'Register interest' },
+    { href: LINKS.deck, label: 'Investor room' },
+];
+
+const ELSEWHERE = [
+    { href: LINKS.forager, label: 'Forager' },
+    { href: LINKS.github, label: 'GitHub' },
+    { href: LINKS.bimotech, label: 'Bimo Tech' },
+    { href: LINKS.bimomaterials, label: 'Bimo Materials' },
+];
+
+/** Where to go next and the legal links; nothing else. Picture credits live in the Impressum. */
 export function SiteFooter({ page }: { page: PageId }) {
-    const credits = CREDITS[page];
     return (
         <footer className="footer" data-theme="navy" data-nav="navy">
             <div className="wrap">
-                <div className="footer__grid">
-                    <div className="footer__brand">
+                <div className="footer__top">
+                    <a className="footer__brand" href="/" aria-label="PRISM by Mirdyne, home">
                         <img src="/brand/mirdyne-lockup-white.png" alt="Mirdyne" width={150} height={41} />
-                        <p>
-                            PRISM · Freedom to build.
-                            <br />
-                            Initial deployment of PRISM, for its first use cases, funded under the ESA Future Launchers
-                            Preparatory Programme, FIRST! Simulation &amp; Intelligence.
-                        </p>
+                    </a>
+                    <div className="footer__navs">
+                        <nav className="footer__pages" aria-label="Pages">
+                            {FOOTER_PAGES.map((n) => (
+                                <a key={n.href} href={n.href} aria-current={n.id && n.id === page ? 'page' : undefined}>
+                                    {n.label}
+                                </a>
+                            ))}
+                        </nav>
+                        <nav className="footer__out" aria-label="Elsewhere">
+                            {ELSEWHERE.map((n) => (
+                                <a key={n.href} href={n.href} target="_blank" rel="noopener noreferrer">
+                                    {n.label}
+                                    <span aria-hidden="true"> ↗</span>
+                                </a>
+                            ))}
+                        </nav>
                     </div>
-                    <nav aria-label="Platform">
-                        <h2>Platform</h2>
-                        <ul>
-                            <li>
-                                <a href="/#loop">How it works</a>
-                            </li>
-                            <li>
-                                <a href="/platform/">The stacks</a>
-                            </li>
-                            <li>
-                                <a href="/method/">The method</a>
-                            </li>
-                            <li>
-                                <a href="/method/#proof">Proof, built in</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <nav aria-label="Company">
-                        <h2>Company</h2>
-                        <ul>
-                            <li>
-                                <a href="/company/">Mirdyne and Bimo Tech</a>
-                            </li>
-                            <li>
-                                <a href="/news/">News</a>
-                            </li>
-                            <li>
-                                <a href={LINKS.interest}>Register interest</a>
-                            </li>
-                            <li>
-                                <a href={LINKS.deck}>Investor room</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <nav aria-label="Elsewhere">
-                        <h2>Elsewhere</h2>
-                        <ul>
-                            <li>
-                                <a href={LINKS.forager} target="_blank" rel="noopener noreferrer">
-                                    Forager, open research
-                                </a>
-                            </li>
-                            <li>
-                                <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
-                                    Open-source layer on GitHub
-                                </a>
-                            </li>
-                            <li>
-                                <a href={LINKS.bimotech} target="_blank" rel="noopener noreferrer">
-                                    Bimo Tech
-                                </a>
-                            </li>
-                            <li>
-                                <a href={LINKS.bimomaterials} target="_blank" rel="noopener noreferrer">
-                                    Bimo Materials
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
-                {credits && (
-                    <p className="footer__credits">
-                        <span>Credits</span> {credits}
-                    </p>
-                )}
                 <div className="footer__legal">
-                    <span>© 2026 Mirdyne · Giessen, Germany · A spin-off of Bimo Tech</span>
+                    <span>© 2026 Mirdyne</span>
                     <nav className="footer__law" aria-label="Legal">
                         <a href="/impressum/" aria-current={page === 'impressum' ? 'page' : undefined}>
                             Impressum
@@ -213,6 +173,7 @@ export function SiteFooter({ page }: { page: PageId }) {
                         <a href="/privacy/" aria-current={page === 'privacy' ? 'page' : undefined}>
                             Privacy
                         </a>
+                        <a href="/impressum/#credits">Picture credits</a>
                     </nav>
                     <a className="footer__credit" href={LINKS.marc27} target="_blank" rel="noopener noreferrer">
                         Technology concept by marc27

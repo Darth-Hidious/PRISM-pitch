@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { COMPANY, MISSING, PRIVACY_UPDATED, TO_CONFIRM } from './legal';
+import { PICTURE_CREDITS } from './credits-data';
 
 /* ── Shared ───────────────────────────────────────────────────────────── */
 
@@ -75,6 +76,51 @@ function Page({ label, title, children }: { label: string; title: string; childr
                 </header>
                 {children}
             </div>
+        </section>
+    );
+}
+
+/* ── Picture credits ──────────────────────────────────────────────────── */
+
+const ext = { target: '_blank', rel: 'noopener noreferrer' } as const;
+
+/** Every picture that is not our own, once, for every page: the footers link here. */
+function PictureCredits() {
+    return (
+        <section id="credits" className="legal__body legal__credits" aria-labelledby="credits-title">
+            <h2 id="credits-title">
+                Picture credits <span lang="de">· Bildnachweis</span>
+            </h2>
+            <p>
+                All other photographs are our own. <span lang="de">Alle übrigen Fotos sind unsere eigenen.</span>
+            </p>
+            <ul className="legal__pics">
+                {PICTURE_CREDITS.map((c) => (
+                    <li key={c.picture}>
+                        <b>{c.source ? <a href={c.source} {...ext}>{c.picture}</a> : c.picture}</b>
+                        <span>
+                            {c.by}
+                            {c.licence && (
+                                <>
+                                    {' · '}
+                                    {c.licenceUrl ? (
+                                        <a href={c.licenceUrl} {...ext} rel="noopener noreferrer license">
+                                            {c.licence}
+                                        </a>
+                                    ) : (
+                                        c.licence
+                                    )}
+                                </>
+                            )}
+                            {c.change && ` · ${c.change}`}
+                            {` · ${c.pages}`}
+                        </span>
+                    </li>
+                ))}
+            </ul>
+            <p>
+                Partner logos belong to their owners. <span lang="de">Partnerlogos gehören ihren Inhabern.</span>
+            </p>
         </section>
     );
 }
@@ -172,6 +218,8 @@ export function Impressum() {
                 <h2>Verbraucherstreitbeilegung</h2>
                 <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
             </article>
+
+            <PictureCredits />
         </Page>
     );
 }

@@ -115,9 +115,10 @@ node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design syst
   run by the university), our own photos of raw metals, melting and parts, the
   Hessen Ideen award and ESA's mosaic of Europe. The painters in `src/ds/`
   (`LivePainting`, `Painting`) stay in the design system but are used nowhere.
-- **Credits and sources**: credits for other people's images sit once per page in
-  the footer (`src/site/credits.tsx`), not under each picture; our own photos
-  need none. Sources for facts and
+- **Credits and sources**: credits for other people's images are listed once, in
+  the Impressum under Picture credits (`/impressum/#credits`, data in
+  `src/site/credits-data.ts`), linked from every footer; our own photos need
+  none. Adding someone else's picture means adding a line there. Sources for facts and
   "illustrative" notes fold away under a small toggle (`Note` in `ui.tsx`).
 - **Brand**: the PRISM mark is `src/ds/PrismMark.tsx` (follows the text colour)
   and `public/brand/prism-logo-light-mode.svg` / `prism-logo-dark-mode.svg`.

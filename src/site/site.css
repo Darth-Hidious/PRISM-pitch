@@ -4793,39 +4793,35 @@ body {
 /* ── Footer ───────────────────────────────────────────────────────────── */
 
 .footer {
-    padding: 88px 0 32px;
+    padding: 72px 0 32px;
 }
 
-.footer__grid {
+.footer__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 36px 64px;
+}
+
+.footer__brand img {
+    display: block;
+    width: 150px;
+    height: auto;
+}
+
+.footer__navs {
     display: grid;
-    grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
-    gap: 40px;
+    justify-items: end;
+    gap: 18px;
 }
 
-.footer__brand p {
-    max-width: 30em;
-    margin-top: 20px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--ink-2);
-}
-
-.footer h2 {
-    margin-bottom: 16px;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-2);
-}
-
-.footer ul {
-    display: grid;
-    gap: 10px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+.footer__pages,
+.footer__out {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px 28px;
 }
 
 .footer a {
@@ -4838,62 +4834,77 @@ body {
     color: var(--accent);
 }
 
+/* The page you are on: underlined, not dimmed (the accent reads as grey on navy). */
+.footer__pages a[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 6px;
+}
+
+.footer__out a {
+    font-size: 13.5px;
+    color: var(--ink-2);
+}
+
 .footer__legal {
     display: flex;
     flex-wrap: wrap;
+    align-items: baseline;
     justify-content: space-between;
-    gap: 16px;
-    margin-top: 64px;
+    gap: 12px 24px;
+    margin-top: 56px;
     padding-top: 24px;
     border-top: 1px solid var(--rule);
     font-size: 13px;
     color: var(--ink-2);
 }
 
-.footer__legal .footer__credit {
+.footer__legal a {
     font-size: 13px;
+}
+
+.footer__legal .footer__credit {
     color: var(--ink-2);
 }
 
 .footer__law {
     display: flex;
-    gap: 20px;
-}
-
-.footer__law a {
-    color: var(--ink);
-    text-decoration: none;
+    flex-wrap: wrap;
+    gap: 8px 20px;
 }
 
 .footer__law a:hover,
 .footer__law a[aria-current='page'] {
+    color: var(--ink);
     text-decoration: underline;
     text-underline-offset: 4px;
 }
 
-/* Photo credits for the page, once, small, above the legal line. */
-.footer__credits {
-    max-width: 72em;
-    margin-top: 56px;
-    font-size: 11.5px;
-    line-height: 1.55;
-    color: var(--ink-3);
-}
+@media (max-width: 860px) {
+    .footer {
+        padding-top: 56px;
+    }
 
-.footer__credits span {
-    margin-right: 6px;
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
+    .footer__navs {
+        justify-items: start;
+        width: 100%;
+    }
 
-.footer__credits a {
-    color: inherit;
-}
+    /* Two columns of pages; the outside links run on, smaller, below. */
+    .footer__pages {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 24px;
+    }
 
-.footer__credits + .footer__legal {
-    margin-top: 20px;
+    .footer__out {
+        justify-content: flex-start;
+        gap: 10px 22px;
+    }
+
+    .footer__legal {
+        margin-top: 40px;
+    }
 }
 
 /* ── Sources, folded away ─────────────────────────────────────────────── */
@@ -4938,16 +4949,6 @@ body {
 .note p {
     max-width: 52em;
     margin-top: 6px;
-}
-
-@media (max-width: 860px) {
-    .footer__grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .footer__brand {
-        grid-column: 1 / -1;
-    }
 }
 
 /* ── Questions and answers, after the Forager notebook ───────────────── */
@@ -6989,3 +6990,33 @@ input:checked + span .tick__mark {
     line-height: 1.5;
 }
 
+
+/* Picture credits, in the Impressum: one line per picture. */
+.legal__pics {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.legal__pics li {
+    display: grid;
+    gap: 3px;
+    padding-bottom: 12px;
+    border-bottom: var(--hairline) solid var(--rule-soft);
+}
+
+.legal__pics b {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.legal__pics b a {
+    color: inherit;
+}
+
+.legal__pics span {
+    font-size: 14px;
+    color: var(--ink-2);
+}
