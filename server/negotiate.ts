@@ -85,7 +85,10 @@ export function prefersMarkdown(accept: string | null | undefined): boolean {
     return md.index < html.index;
 }
 
-/** The site's pages that have a Markdown copy, at `<page>index.html.md` (written by scripts/prerender.mjs). */
+/**
+ * The site's pages that have a Markdown copy, at `<page>index.html.md` (written by scripts/prerender.mjs),
+ * in English and in German under /de/.
+ */
 export const MARKDOWN_PAGES = [
     '/',
     '/platform/',
@@ -96,6 +99,15 @@ export const MARKDOWN_PAGES = [
     '/contact/',
     '/impressum/',
     '/privacy/',
+    '/de/',
+    '/de/platform/',
+    '/de/method/',
+    '/de/company/',
+    '/de/news/',
+    '/de/interest/',
+    '/de/contact/',
+    '/de/impressum/',
+    '/de/privacy/',
 ] as const;
 
 /** The Markdown copy for a request path, or null when the path is not one of those pages. */

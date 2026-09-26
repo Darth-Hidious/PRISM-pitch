@@ -98,6 +98,16 @@
       "source": "/about/",
       "destination": "/company/",
       "permanent": true
+    },
+    {
+      "source": "/de/about",
+      "destination": "/de/company/",
+      "permanent": true
+    },
+    {
+      "source": "/de/about/",
+      "destination": "/de/company/",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -136,6 +146,42 @@
     {
       "source": "/deck",
       "destination": "/deck/index.html"
+    },
+    {
+      "source": "/de",
+      "destination": "/de/index.html"
+    },
+    {
+      "source": "/de/platform",
+      "destination": "/de/platform/index.html"
+    },
+    {
+      "source": "/de/method",
+      "destination": "/de/method/index.html"
+    },
+    {
+      "source": "/de/company",
+      "destination": "/de/company/index.html"
+    },
+    {
+      "source": "/de/news",
+      "destination": "/de/news/index.html"
+    },
+    {
+      "source": "/de/interest",
+      "destination": "/de/interest/index.html"
+    },
+    {
+      "source": "/de/contact",
+      "destination": "/de/contact/index.html"
+    },
+    {
+      "source": "/de/impressum",
+      "destination": "/de/impressum/index.html"
+    },
+    {
+      "source": "/de/privacy",
+      "destination": "/de/privacy/index.html"
     },
     {
       "source": "/install.sh",

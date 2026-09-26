@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { SiteFooter, SiteNav, type PageId } from './Chrome';
+import { useT } from './i18n';
 
 /** Adds `in` to `.rv` elements as they scroll into view, once. */
 function useReveal() {
@@ -47,10 +48,11 @@ function useFragmentOnLoad() {
 export default function SitePage({ page, children }: { page: PageId; children: ReactNode }) {
     useReveal();
     useFragmentOnLoad();
+    const t = useT();
     return (
         <>
             <a className="skip-link" href="#main">
-                Skip to content
+                {t('Skip to content')}
             </a>
             <SiteNav page={page} />
             <main id="main" className={`page page--${page}`}>

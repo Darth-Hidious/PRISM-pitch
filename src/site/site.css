@@ -407,6 +407,12 @@ body {
     text-underline-offset: 8px;
 }
 
+/* The same page in the other language, set off from the pages by a hairline. */
+.nav__lang {
+    padding-left: 24px;
+    border-left: 1px solid var(--rule);
+}
+
 .nav__cta .pm-btn {
     min-height: 40px;
     padding: 0 18px;
@@ -624,6 +630,11 @@ body {
 }
 
 /* The menu on small screens ends with both ways in, side by side where they fit, else one above the other. */
+.nav__panel a.nav__panel-lang {
+    font-size: 16px;
+    color: var(--ink-2);
+}
+
 .nav__panel-ctas {
     display: flex;
     flex-wrap: wrap;

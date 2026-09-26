@@ -25,6 +25,18 @@ function fragment(markup) {
     return { document, root: document.getElementById('x') };
 }
 
+/** The few words the plain copy adds itself, in each language. */
+const WORDS = {
+    en: {
+        diagram: 'Diagram',
+        form: ['This form needs JavaScript. Without it, write to ', ' with your name, your organisation and what you need.'],
+    },
+    de: {
+        diagram: 'Diagramm',
+        form: ['Dieses Formular funktioniert nur mit JavaScript. Schreiben Sie uns sonst an ', ', mit Ihrem Namen, Ihrer Organisation und Ihrem Anliegen.'],
+    },
+};
+
 /** The drawing's own description: aria-label, or the text of its <title>. */
 function svgLabel(svg) {
     const label = svg.getAttribute('aria-label') || svg.querySelector('title')?.textContent || '';
@@ -43,7 +55,8 @@ function svgLabel(svg) {
  *   (display: none), and a browser never fetches lazy images there, so the page loads what it loaded
  *   before. Without the script, the pictures load as they scroll into view.
  */
-export function cleanMarkup(markup, { email }) {
+export function cleanMarkup(markup, { email, lang = 'en' }) {
+    const words = WORDS[lang];
     const { document, root } = fragment(markup);
     for (const el of root.querySelectorAll('[aria-hidden="true"], canvas, script, noscript, template, button, [role="tablist"], link')) {
         el.remove();
@@ -59,7 +72,7 @@ export function cleanMarkup(markup, { email }) {
         if (label && (role === 'img' || role === 'group')) {
             const p = document.createElement('p');
             p.setAttribute('class', 'prerender-figure');
-            p.textContent = `Diagram: ${label}`;
+            p.textContent = `${words.diagram}: ${label}`;
             svg.replaceWith(p);
         } else {
             svg.remove();
@@ -68,11 +81,7 @@ export function cleanMarkup(markup, { email }) {
     for (const form of root.querySelectorAll('form')) {
         const p = document.createElement('p');
         p.setAttribute('class', 'prerender-form');
-        p.append(
-            'This form needs JavaScript. Without it, write to ',
-            Object.assign(document.createElement('a'), { href: `mailto:${email}`, textContent: email }),
-            ' with your name, your organisation and what you need.',
-        );
+        p.append(words.form[0], Object.assign(document.createElement('a'), { href: `mailto:${email}`, textContent: email }), words.form[1]);
         form.replaceWith(p);
     }
     return root.innerHTML;
@@ -168,6 +177,42 @@ export function toMarkdown(markup, { path, footer }) {
         .replace(/\n{3,}/g, '\n\n')
         .trim();
     return `${body}\n\n---\n\n${footer.trim()}\n`;
+}
+
+/**
+ * Every piece of text a reader meets on a page: text, and the alt, aria-label, title and placeholder
+ * attributes. Parts marked with a language of their own (lang="…": the legal pages' English and German
+ * articles, the language switch) are left out; they are meant to be in that language.
+ */
+export function visibleTexts(markup) {
+    const { root } = fragment(markup);
+    for (const el of root.querySelectorAll('[lang]')) el.remove();
+    const out = new Set();
+    const walk = (node) => {
+        for (const child of node.childNodes) {
+            if (child.nodeType === 3) {
+                const text = child.textContent.replace(/\s+/g, ' ').trim();
+                if (text) out.add(text);
+            } else if (child.nodeType === 1) {
+                for (const a of ['alt', 'aria-label', 'title', 'placeholder']) {
+                    const v = child.getAttribute(a)?.replace(/\s+/g, ' ').trim();
+                    if (v) out.add(v);
+                }
+                walk(child);
+            }
+        }
+    };
+    walk(root);
+    return out;
+}
+
+/**
+ * Text a German page shows exactly as its English twin does, with words in it, that is not German from
+ * the dictionary (names and symbols count as German when the dictionary maps them to themselves).
+ */
+export function untranslated(englishMarkup, germanMarkup, keptTheSame) {
+    const english = visibleTexts(englishMarkup);
+    return [...visibleTexts(germanMarkup)].filter((t) => english.has(t) && /\p{L}{3}/u.test(t) && !keptTheSame.has(t));
 }
 
 /** JSON for inside <script>: nothing in it can close the element early. */

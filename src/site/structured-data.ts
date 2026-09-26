@@ -58,39 +58,42 @@ function organization() {
     };
 }
 
+/** The site, in English and German (/de/). */
 function website() {
     return {
         '@type': 'WebSite',
         '@id': WEBSITE,
         url: `${SITE}/`,
         name: 'PRISM by Mirdyne',
-        inLanguage: 'en-GB',
+        inLanguage: ['en-GB', 'de-DE'],
         publisher: { '@id': ORG },
     };
 }
 
-/** A page about the company itself: the About page (/company/) or the Contact page. */
-function webPage(type: 'AboutPage' | 'ContactPage', path: string, name: string) {
+/** A page about the company itself: the About page (/company/) or the Contact page, in either language. */
+function webPage(type: 'AboutPage' | 'ContactPage', path: string, name: string, german: boolean) {
     return {
         '@type': type,
         '@id': `${SITE}${path}#webpage`,
         url: `${SITE}${path}`,
         name,
-        inLanguage: 'en-GB',
+        inLanguage: german ? 'de-DE' : 'en-GB',
         isPartOf: { '@id': WEBSITE },
         about: { '@id': ORG },
     };
 }
 
-/** The JSON-LD graph for a page, or null for pages that carry none. */
+/** The JSON-LD graph for a page, or null for pages that carry none. German pages are the same, under /de/. */
 export function structuredData(path: string): object | null {
+    const german = path.startsWith('/de/');
+    const page = german ? path.slice(3) : path;
     const graph =
-        path === '/'
+        page === '/'
             ? [organization(), website()]
-            : path === '/company/'
-              ? [webPage('AboutPage', path, 'About Mirdyne'), organization(), website()]
-              : path === '/contact/'
-                ? [webPage('ContactPage', path, 'Contact Mirdyne'), organization(), website()]
+            : page === '/company/'
+              ? [webPage('AboutPage', path, german ? 'Über Mirdyne' : 'About Mirdyne', german), organization(), website()]
+              : page === '/contact/'
+                ? [webPage('ContactPage', path, german ? 'Kontakt zu Mirdyne' : 'Contact Mirdyne', german), organization(), website()]
                 : null;
     return graph && { '@context': 'https://schema.org', '@graph': graph };
 }
