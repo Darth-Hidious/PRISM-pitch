@@ -1596,7 +1596,8 @@
     line-height: 1.25;
 }
 
-.d-loopsteps span {
+/* The step's text only: the icon's circle and the maturity pill are spans too, with styles of their own. */
+.d-loopsteps li > div > span {
     display: block;
     font-size: 16px;
     line-height: 1.4;

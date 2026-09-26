@@ -3505,6 +3505,7 @@ body {
 
 .eg--icon {
     max-width: 240px;
+    margin-inline: auto;
 }
 
 .cameo__arrow {

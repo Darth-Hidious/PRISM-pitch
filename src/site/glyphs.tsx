@@ -31,13 +31,14 @@ const DRAWINGS: Record<GlyphName, ReactNode> = {
         </>
     ),
     coupon: <path d="M2.5 8h5.5l2 2.5h4l2-2.5h5.5v8H16l-2-2.5h-4l-2 2.5H2.5z" />,
+    // A half-circle sits low in its square: raised so that what is drawn, stroke included, is centred.
     gauge: (
-        <>
+        <g transform="translate(0 -1.1)">
             <path d="M3.5 17a8.5 8.5 0 0 1 17 0" />
             <path d="M12 17l4.5-6" />
             <circle cx="12" cy="17" r="1.4" className="fill" />
             <path d="M6 12.5l1.2 1M12 8.5v1.6M18 12.5l-1.2 1" />
-        </>
+        </g>
     ),
     net: (
         <>
@@ -70,13 +71,14 @@ const DRAWINGS: Record<GlyphName, ReactNode> = {
             <circle cx="12" cy="15.5" r="1.3" className="fill" />
         </>
     ),
+    // The dots above the funnel start at the top edge: lowered so that the whole is centred.
     funnel: (
-        <>
+        <g transform="translate(0 0.9)">
             <path d="M3.5 5h17l-6.5 7.5v6l-4 2v-8z" />
             <circle cx="7" cy="2.5" r="1" className="fill" />
             <circle cx="12" cy="2" r="1" className="fill" />
             <circle cx="17" cy="2.5" r="1" className="fill" />
-        </>
+        </g>
     ),
     cycle: (
         <>
