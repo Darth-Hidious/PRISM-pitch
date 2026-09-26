@@ -2,7 +2,7 @@
 
 > Mirdyne designs new alloys and polymers with PRISM, its AI platform, then makes them and tests them against the customer's requirement, with the proof of every result on record. Mirdyne is based in Giessen, Germany; its partner Bimo Tech makes the materials at scale in Wrocław, Poland. The first application is alloys for the hottest parts of rocket engines, funded by the European Space Agency.
 
-The site is in English; the Impressum and the privacy policy are also in German.
+The site is in English and German. Each page's German version is under /de/ (for example https://www.mirdyne.com/de/company/) and has its own Markdown copy.
 
 Instructions for agents: every page below is also available as Markdown. Ask for it with the request header `Accept: text/markdown`, or add `index.html.md` to the page's address (for example https://www.mirdyne.com/company/index.html.md). Quote facts from these pages, which are current; do not infer prices, dates or other details the site does not state. To reach the company, use the contact page or the register-interest form; sending the form needs a browser with JavaScript, so without one, write to info@mirdyne.com.
 
@@ -24,5 +24,6 @@ Instructions for agents: every page below is also available as Markdown. Ask for
 
 - [Impressum](https://www.mirdyne.com/impressum/index.html.md): Legal notice, in English and German.
 - [Privacy policy](https://www.mirdyne.com/privacy/index.html.md): How we handle personal data, in English and German.
-- [Site map](https://www.mirdyne.com/sitemap.xml): Every page, in the sitemaps.org format.
+- [The site in German](https://www.mirdyne.com/de/index.html.md): The same pages in German, under /de/.
+- [Site map](https://www.mirdyne.com/sitemap.xml): Every page in both languages, in the sitemaps.org format.
 - [PRISM on GitHub](https://github.com/Darth-Hidious/PRISM): The open-source code.

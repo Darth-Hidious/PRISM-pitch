@@ -57,9 +57,15 @@ ok(pages.length >= 9, `sitemap.xml lists ${pages.length} pages: ${pages.join(' '
 for (const path of pages) {
     const html = await get(path, { accept: BROWSER });
     const text = copyText(html.body);
+    const lang = /<html[^>]*\slang="([^"]*)"/.exec(html.body)?.[1];
     ok(
-        html.status === 200 && html.type.startsWith('text/html') && varies(html) && text.length >= 500 && (html.body.match(/<h1[\s>]/g) ?? []).length === 1,
-        `${path} as HTML: ${html.status}, ${html.type}, Vary: ${html.vary || '-'}, ${text.length} characters without JavaScript`,
+        html.status === 200 &&
+            html.type.startsWith('text/html') &&
+            varies(html) &&
+            text.length >= 500 &&
+            (html.body.match(/<h1[\s>]/g) ?? []).length === 1 &&
+            lang === (path.startsWith('/de/') ? 'de' : 'en'),
+        `${path} as HTML: ${html.status}, ${html.type}, Vary: ${html.vary || '-'}, lang ${lang}, ${text.length} characters without JavaScript`,
     );
     const any = await get(path, { accept: '*/*' });
     ok(any.status === 200 && any.type.startsWith('text/html'), `${path} for Accept: */*: ${any.type}`);
@@ -97,9 +103,14 @@ const nfasset = await get('/assets/no-such-file.js');
 ok(nfasset.status === 404, `missing asset: ${nfasset.status}`);
 
 // Redirects.
-for (const p of ['/about', '/about/']) {
+for (const [p, to] of [
+    ['/about', '/company/'],
+    ['/about/', '/company/'],
+    ['/de/about', '/de/company/'],
+    ['/de/about/', '/de/company/'],
+]) {
     const r = await get(p);
-    ok(r.status === 308 && r.headers.get('location') === '/company/', `${p} → ${r.status} ${r.headers.get('location')}`);
+    ok(r.status === 308 && r.headers.get('location') === to, `${p} → ${r.status} ${r.headers.get('location')}`);
 }
 const ev = await get('/evidence');
 ok(ev.status === 307 && ev.headers.get('location') === '/method/#proof', `/evidence → ${ev.status} ${ev.headers.get('location')}`);

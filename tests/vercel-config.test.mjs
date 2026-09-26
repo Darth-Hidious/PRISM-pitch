@@ -25,16 +25,25 @@ test('vercel.json is valid for Vercel', () => {
     assert.equal(error, null);
 });
 
-test('/about is the Company page', () => {
-    for (const p of ['/about', '/about/']) {
+test('/about is the Company page, in both languages', () => {
+    for (const [p, to] of [
+        ['/about', '/company/'],
+        ['/about/', '/company/'],
+        ['/de/about', '/de/company/'],
+        ['/de/about/', '/de/company/'],
+    ]) {
         const r = match(p, {}, 'before');
         assert.equal(r.status, 308, p);
-        assert.equal(r.headers.Location, '/company/');
+        assert.equal(r.headers.Location, to, p);
     }
 });
 
-test('/contact serves the Contact page', () => {
-    assert.equal(match('/contact', {}, 'after').dest, '/contact/index.html');
+test('each page answers without its trailing slash, in both languages', () => {
+    for (const page of ['platform', 'method', 'company', 'news', 'interest', 'contact', 'impressum', 'privacy']) {
+        assert.equal(match(`/${page}`, {}, 'after').dest, `/${page}/index.html`);
+        assert.equal(match(`/de/${page}`, {}, 'after').dest, `/de/${page}/index.html`);
+    }
+    assert.equal(match('/de', {}, 'after').dest, '/de/index.html');
 });
 
 test('a missing address asked for as Markdown goes to the Markdown 404, after the filesystem', () => {
@@ -55,4 +64,11 @@ test('Markdown copies are text/markdown and point to their HTML page as canonica
     const company = headersFor('/company/index.html.md');
     assert.equal(company['Content-Type'], 'text/markdown; charset=utf-8');
     assert.equal(company.Link.replace('$1', 'company'), '<https://www.mirdyne.com/company/>; rel="canonical"');
+    // The German copies, under /de/.
+    const de = headersFor('/de/index.html.md');
+    assert.equal(de['Content-Type'], 'text/markdown; charset=utf-8');
+    assert.equal(de.Link.replace('$1', 'de'), '<https://www.mirdyne.com/de/>; rel="canonical"');
+    const deCompany = headersFor('/de/company/index.html.md');
+    assert.equal(deCompany['Content-Type'], 'text/markdown; charset=utf-8');
+    assert.equal(deCompany.Link.replace('$1', 'company'), '<https://www.mirdyne.com/de/company/>; rel="canonical"');
 });

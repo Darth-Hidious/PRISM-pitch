@@ -59,5 +59,18 @@ test('each page maps to its Markdown copy, and nothing else does', () => {
     assert.equal(markdownCopy('/deck/'), null);
     assert.equal(markdownCopy('/company/extra'), null);
     assert.equal(markdownCopy('/api/interest'), null);
-    assert.equal(MARKDOWN_PAGES.length, 9);
+    assert.equal(markdownCopy('/de'), '/de/index.html.md');
+    assert.equal(markdownCopy('/de/company'), '/de/company/index.html.md');
+    assert.equal(markdownCopy('/de/company/'), '/de/company/index.html.md');
+    assert.equal(markdownCopy('/de/deck/'), null);
+    assert.equal(markdownCopy('/de/de/'), null);
+});
+
+test('every page is there in English and, under /de/, in German', () => {
+    const english = MARKDOWN_PAGES.filter((p) => !p.startsWith('/de/'));
+    assert.deepEqual(english, ['/', '/platform/', '/method/', '/company/', '/news/', '/interest/', '/contact/', '/impressum/', '/privacy/']);
+    assert.deepEqual(
+        MARKDOWN_PAGES.filter((p) => p.startsWith('/de/')),
+        english.map((p) => `/de${p}`),
+    );
 });

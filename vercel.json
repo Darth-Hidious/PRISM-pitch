@@ -38,6 +38,15 @@
           "value": "<https://www.mirdyne.com/:page/>; rel=\"canonical\""
         }
       ]
+    },
+    {
+      "source": "/de/:page/index.html.md",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "<https://www.mirdyne.com/de/:page/>; rel=\"canonical\""
+        }
+      ]
     }
   ],
   "redirects": [

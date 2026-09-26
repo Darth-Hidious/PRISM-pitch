@@ -17,6 +17,7 @@ and `prism.marc27.com` through it, to the same page on `www.mirdyne.com`, except
 | `/interest/` | Register interest: our own form (`/interest/?topic=investment` starts with a topic chosen) | `src/site/pages/interest.tsx`, `api/interest.ts` |
 | `/contact/` | Every way to reach us: email, the form by topic, the investor room, post. `/about` redirects to `/company/` | `src/site/ContactDetails.tsx` |
 | `/impressum/`, `/privacy/` | Legal notice and privacy policy, in English and German | `src/site/Legal.tsx`, facts in `src/site/legal.ts` |
+| `/de/`, `/de/platform/`, … | Every page above in German, from the same components (see [German](#german)) | `de/**/index.html`, `src/site/i18n-de.ts` |
 | any other address | Page not found: `404.html`, status 404 | `src/site/NotFound.tsx`, `api/not-found.ts` |
 | `/deck/` | The investor room: 14 slides on a 1440 × 810 stage, scaled to any screen; `/deck/#5` opens slide 5; phones get the slides as one scrolling page | `src/deck/` |
 
@@ -101,10 +102,39 @@ Every page reads without JavaScript, and in Markdown:
 - **`llms.txt`** (`public/llms.txt`): what the site covers, when to come to
   Mirdyne, and how agents get the Markdown.
 
-Adding a page means adding it in four places: `vite.config.ts`,
-`src/site/prerender.ts`, `MARKDOWN_PAGES` in `server/negotiate.ts` (with the
-middleware's `matcher`) and `public/sitemap.xml`; list it in `public/llms.txt`
-if agents should find it. The tests check that these agree.
+Adding a page means adding it, in both languages, in these places: its HTML
+file and its German twin under `de/`, `vite.config.ts`, `src/site/prerender.ts`,
+`PAGE_PATHS` in `src/site/i18n.tsx`, `MARKDOWN_PAGES` in `server/negotiate.ts`
+(with the middleware's `matcher`), and the rewrites in `vercel.json` that serve
+it without the trailing slash. The build writes `sitemap.xml` from the list in
+`src/site/prerender.ts`. List the page in `public/llms.txt` if agents should
+find it. The tests check that these agree.
+
+## German
+
+Every page is also in German, under `/de/` (`/de/company/`), built from the
+same components. A page knows its language from `<html lang>`; each German
+page has its own HTML file under `de/` with the German title and
+descriptions. The switch in the bar and the footer ("DE" / "EN") goes to the
+same page in the other language, and every page names both versions in its
+`<head>` (`hreflang`) and in the site map. The deck stays in English.
+
+- **Text:** every piece of text on the site goes through `t` (`useT()` from
+  `src/site/i18n.tsx`), including labels, alt text and what the canvases
+  draw. On English pages `t` returns the text as written; on German pages it
+  looks it up in `src/site/i18n-de.ts`, keyed by the exact English. Text
+  with a link or emphasis inside uses `t.rich` ("Write to `<0>`us`</0>`");
+  addresses inside the site use `t.link`, numbers `t.num` (474.311.376).
+  The browser loads the German only on German pages.
+- **Nothing left in English:** the build renders every German page and stops
+  if a text has no German, or if a German page shows a text exactly as its
+  English twin does (names and words that are the same in German are kept
+  on purpose by mapping them to themselves). The browser test does the same
+  after scrolling through each page and opening every tab and menu, and it
+  checks the form's messages, including every answer from the server.
+- **Changing English text** changes its key: change the key in
+  `src/site/i18n-de.ts` too, with the German. The build names any text it
+  cannot find.
 
 ## Icons and link previews
 
@@ -212,3 +242,7 @@ headline the site. Every capability carries its maturity:
 Data from ongoing projects (schedules, benchmarks, candidate counts, test
 conditions, consortium roles) stays off the website; programmes appear only
 as short news items.
+
+The German says the same as the English, in plain German for engineers and
+investors, addressing the reader as *Sie*. Names stay as they are (PRISM,
+Mirdyne, Bimo Tech, CAMEO, Forager).

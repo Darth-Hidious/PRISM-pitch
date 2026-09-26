@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { HEAD_SNIPPET, cleanMarkup, injectPage, scriptJson, toMarkdown } from '../scripts/prerender-lib.mjs';
+import { HEAD_SNIPPET, cleanMarkup, injectPage, scriptJson, toMarkdown, untranslated, visibleTexts } from '../scripts/prerender-lib.mjs';
 
 const email = 'info@example.com';
 
@@ -21,6 +21,15 @@ test('cleanMarkup keeps a labelled drawing as its description, and replaces form
     assert.match(out, /<p class="prerender-figure">Diagram: The loop, round again<\/p>/);
     assert.doesNotMatch(out, /<form|<input/);
     assert.match(out, /<a href="mailto:info@example.com">info@example.com<\/a>/);
+});
+
+test('cleanMarkup writes its own words in the page’s language', () => {
+    const markup = '<svg role="img" aria-label="Der Kreislauf"><path d="M0"/></svg><form><input name="email"></form>';
+    const de = cleanMarkup(markup, { email, lang: 'de' });
+    assert.match(de, /<p class="prerender-figure">Diagramm: Der Kreislauf<\/p>/);
+    assert.match(de, /Dieses Formular funktioniert nur mit JavaScript\. Schreiben Sie uns sonst an <a href="mailto:info@example\.com">/);
+    assert.doesNotMatch(de, /Diagram:|This form/);
+    assert.match(cleanMarkup(markup, { email }), /Diagram: Der Kreislauf/);
 });
 
 test('cleanMarkup makes every picture lazy and drops fetch priority, in any case', () => {
@@ -68,4 +77,21 @@ test('injectPage puts the copy in #root and the head additions before </head>', 
     assert.ok(html.includes(`<script type="application/ld+json">${scriptJson({ name: '</script><x>' })}</script>`));
     assert.doesNotMatch(scriptJson({ name: '</script>' }), /<\//);
     assert.throws(() => injectPage('<head></head><div id="root"><p>already</p></div>', { markup: '' }), /exactly one empty #root/);
+});
+
+test('visibleTexts: the text a reader meets, not the parts marked as another language', () => {
+    const texts = visibleTexts(
+        '<main><h1>Title</h1><img alt="A furnace"><a href="/" aria-label="Home" title="Go home">x</a>' +
+            '<input placeholder="Your name"><p>  spaced \n  out </p><div lang="de"><p>Deutsch</p></div>' +
+            '<a lang="en" href="/">EN</a></main>',
+    );
+    assert.deepEqual([...texts].sort(), ['A furnace', 'Go home', 'Home', 'Title', 'Your name', 'spaced out', 'x'].sort());
+});
+
+test('untranslated: what a German page shows exactly as its English twin, with words in it', () => {
+    const en = '<p>The platform</p><p>PRISM</p><p>01</p><p>km</p><p>Still English</p><img alt="A furnace">';
+    const de = '<p>Die Plattform</p><p>PRISM</p><p>01</p><p>km</p><p>Still English</p><img alt="A furnace">';
+    // Names the dictionary keeps as they are count as German; numbers and short symbols are not words.
+    assert.deepEqual(untranslated(en, de, new Set(['PRISM'])), ['Still English', 'A furnace']);
+    assert.deepEqual(untranslated(en, de, new Set(['PRISM', 'Still English', 'A furnace'])), []);
 });
