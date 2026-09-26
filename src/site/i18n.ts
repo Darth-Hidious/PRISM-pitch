@@ -1,4 +1,4 @@
-import { createContext, Fragment, useContext, type ReactNode } from 'react';
+import { createContext, createElement, Fragment, useContext, type ReactNode } from 'react';
 
 /**
  * The site in two languages: English at /…, German at /de/…, from the same components. Every piece of
@@ -45,7 +45,7 @@ export function richText(template: string, parts: ((inner: string) => ReactNode)
         if (m.index > last) out.push(template.slice(last, m.index));
         const make = parts[Number(m[1])];
         if (!make) throw new Error(`richText: no part <${m[1]}> for "${template}"`);
-        out.push(<Fragment key={out.length}>{make(m[2])}</Fragment>);
+        out.push(createElement(Fragment, { key: out.length }, make(m[2])));
         last = m.index + m[0].length;
     }
     if (last < template.length) out.push(template.slice(last));
@@ -95,6 +95,6 @@ export function useT(): Translator {
     return makeTranslator(useContext(LangContext));
 }
 
-export function LangProvider({ lang, children }: { lang: Lang; children: ReactNode }) {
-    return <LangContext.Provider value={lang}>{children}</LangContext.Provider>;
+export function LangProvider({ lang, children }: { lang: Lang; children?: ReactNode }) {
+    return createElement(LangContext.Provider, { value: lang }, children);
 }

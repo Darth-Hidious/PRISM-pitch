@@ -2,7 +2,7 @@
  * Loads a TypeScript module of the site's server side (middleware.ts, api/, server/) the way Vercel
  * builds it: bundled by esbuild, which resolves the `.js` specifiers to the `.ts` sources. Packages stay
  * outside the bundle and load from node_modules. Also loads the site's own modules that tests call
- * directly (src/site/i18n.tsx), with JSX compiled as Vite compiles it.
+ * directly (src/site/i18n.ts, src/site/i18n-de.ts).
  */
 import { build } from 'esbuild';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -19,7 +19,6 @@ export async function load(entry) {
         format: 'esm',
         platform: 'node',
         packages: 'external',
-        jsx: 'automatic',
         write: false,
         logLevel: 'silent',
     });

@@ -1,5 +1,5 @@
 /**
- * The two languages (src/site/i18n.tsx): English text as written, German from the dictionary
+ * The two languages (src/site/i18n.ts): English text as written, German from the dictionary
  * (src/site/i18n-de.ts), addresses and numbers in the page's language, and a dictionary that keeps what
  * the English says.
  */
@@ -9,7 +9,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { load } from './load.mjs';
 
-const i18n = await load('src/site/i18n.tsx');
+const i18n = await load('src/site/i18n.ts');
 const { DE } = await load('src/site/i18n-de.ts');
 const { MARKDOWN_PAGES } = await load('server/negotiate.ts');
 

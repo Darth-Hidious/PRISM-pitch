@@ -104,7 +104,7 @@ Every page reads without JavaScript, and in Markdown:
 
 Adding a page means adding it, in both languages, in these places: its HTML
 file and its German twin under `de/`, `vite.config.ts`, `src/site/prerender.ts`,
-`PAGE_PATHS` in `src/site/i18n.tsx`, `MARKDOWN_PAGES` in `server/negotiate.ts`
+`PAGE_PATHS` in `src/site/i18n.ts`, `MARKDOWN_PAGES` in `server/negotiate.ts`
 (with the middleware's `matcher`), and the rewrites in `vercel.json` that serve
 it without the trailing slash. The build writes `sitemap.xml` from the list in
 `src/site/prerender.ts`. List the page in `public/llms.txt` if agents should
@@ -120,7 +120,7 @@ same page in the other language, and every page names both versions in its
 `<head>` (`hreflang`) and in the site map. The deck stays in English.
 
 - **Text:** every piece of text on the site goes through `t` (`useT()` from
-  `src/site/i18n.tsx`), including labels, alt text and what the canvases
+  `src/site/i18n.ts`), including labels, alt text and what the canvases
   draw. On English pages `t` returns the text as written; on German pages it
   looks it up in `src/site/i18n-de.ts`, keyed by the exact English. Text
   with a link or emphasis inside uses `t.rich` ("Write to `<0>`us`</0>`");
