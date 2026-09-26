@@ -250,10 +250,12 @@ export function LoopWheel({ round }: { round: LoopStep[] }) {
                 );
             })}
             {live && (
-                <g className="d-wheel__comet">
+                <g className="d-wheel__comet" opacity={0}>
                     <circle r={14} className="d-wheel__halo" />
                     <circle r={6} />
-                    <animateMotion dur="9s" repeatCount="indefinite" path={WHEEL_PATH} begin="1.6s" />
+                    <animateMotion dur="9s" repeatCount="indefinite" path={WHEEL_PATH} />
+                    {/* Shows once the ring has drawn itself; until then it would sit in the corner. */}
+                    <animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.6s" fill="freeze" />
                 </g>
             )}
         </svg>
@@ -506,7 +508,8 @@ export function ModuleMap({ modules }: { modules: Module[] }) {
                                     <animateMotion
                                         dur="3.2s"
                                         repeatCount="indefinite"
-                                        begin={`${(j * 0.7 + n * 1.6).toFixed(1)}s`}
+                                        // Started as if earlier, so no drop waits at the corner for its turn.
+                                        begin={`-${(j * 0.7 + n * 1.6).toFixed(1)}s`}
                                         path={p.wire}
                                         keyPoints={(p.x > 600) === (dir === 'out') ? '0;1' : '1;0'}
                                         keyTimes="0;1"
