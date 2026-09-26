@@ -219,7 +219,7 @@ export function Contact() {
                     <div className="cta__actions">
                         <Button href={LINKS.interest}>Register interest</Button>
                         <Button variant="secondary" href={LINKS.github} external>
-                            Open-source layer on GitHub
+                            GitHub
                         </Button>
                     </div>
                 </div>

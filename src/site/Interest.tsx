@@ -206,7 +206,7 @@ function InterestForm() {
                 <div className="ask__done-actions">
                     <Button href={LINKS.deck}>Investor room</Button>
                     <Button variant="secondary" href="/">
-                        Back to the site
+                        Home
                     </Button>
                 </div>
             </div>
@@ -433,7 +433,7 @@ export default function Interest() {
                     ))}
                 </ol>
                 <p className="ask__investors">
-                    Investor? <a href={LINKS.deck}>Visit the investor room</a>
+                    For investors: <a href={LINKS.deck}>Investor room</a>
                 </p>
                 <div className="ask__partners">
                     <p className="w-label">PRISM Alpha, with</p>

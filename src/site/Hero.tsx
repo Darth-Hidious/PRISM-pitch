@@ -32,7 +32,7 @@ export default function Hero() {
                     <div className="hero__actions rise" style={{ animationDelay: '260ms' }}>
                         <Button href={LINKS.interest}>Register interest</Button>
                         <Button variant="secondary" href="#gap">
-                            See why it matters
+                            The problem
                         </Button>
                     </div>
                 </div>

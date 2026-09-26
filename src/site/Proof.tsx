@@ -34,7 +34,7 @@ const KEEPS = [
 ];
 
 /**
- * Proof, built in: on the Method page. Every record carries where it came from and who may see it,
+ * Proof: on the Method page. Every record carries where it came from and who may see it,
  * shown as a live map; then a real lineage (NIST's CAMEO) and what a finished part does and does not
  * give away.
  */
@@ -45,7 +45,7 @@ export default function Proof({ n = '03' }: { n?: string }) {
             <Grain />
             <div className="wrap">
                 <header className="sec-head rv">
-                    <Idx n={n}>Proof, built in</Idx>
+                    <Idx n={n}>Proof</Idx>
                     <h2 id="proof-title" className="w-h2">
                         <Words>Every result carries its own proof.</Words>
                     </h2>

@@ -50,7 +50,7 @@ export default function OpenResearch({ n = '02' }: { n?: string }) {
 
                 <div className="open__cta rv">
                     <Button href={LINKS.forager} external>
-                        Open Forager
+                        Forager
                     </Button>
                     <p>Forager uses only public data. It is separate from the projects above.</p>
                 </div>

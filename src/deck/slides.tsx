@@ -252,12 +252,12 @@ export function Lab() {
 }
 
 
-/* ── 07 Proof, built in ───────────────────────────────────────────────── */
+/* ── 07 Proof ─────────────────────────────────────────────────────────── */
 
 export function Proof() {
     return (
         <>
-            <Head kicker="Proof, built in" title="Every result carries its own proof." />
+            <Head kicker="Proof" title="Every result carries its own proof." />
             <div className="d-body d-evidence">
                 <EvidenceLineage
                     label="Evidence lineage: NIST CAMEO, published work"

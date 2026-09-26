@@ -18,7 +18,7 @@ const PAGES = [
     {
         href: '/method/#proof',
         img: '/img/spark-button-wide.webp',
-        label: 'Proof, built in',
+        label: 'Proof',
         title: 'Every result carries its own proof.',
         text: 'A live map of who sees what, a real lineage, and what a part gives away.',
     },
