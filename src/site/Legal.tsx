@@ -50,6 +50,10 @@ function Address({ de = false }: { de?: boolean }) {
 
 const email = <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>;
 
+/** The phone number as a link that dials it, or a marked blank. */
+const phone = (label: string) =>
+    COMPANY.phone ? <a href={`tel:${COMPANY.phone.replace(/[^\d+]/g, '')}`}>{COMPANY.phone}</a> : <Blank>{label}</Blank>;
+
 function Page({ label, title, children }: { label: string; title: string; children: ReactNode }) {
     return (
         <section className="sec legal" data-theme="paper" data-nav="paper" aria-labelledby="legal-title">
@@ -94,7 +98,7 @@ export function Impressum() {
                 <p>
                     Email: {email}
                     <br />
-                    Phone: {or(COMPANY.phone, 'phone number')}
+                    Phone: {phone('phone number')}
                 </p>
 
                 <h2>Commercial register</h2>
@@ -138,7 +142,7 @@ export function Impressum() {
                 <p>
                     E-Mail: {email}
                     <br />
-                    Telefon: {or(COMPANY.phone, 'Telefonnummer')}
+                    Telefon: {phone('Telefonnummer')}
                 </p>
 
                 <h2>Registereintrag</h2>

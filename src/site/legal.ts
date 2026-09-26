@@ -16,18 +16,18 @@ export const COMPANY = {
      */
     registered: false as boolean,
     /**
-     * The company's business address: the one that goes into the commercial register filing, where post and
-     * legal papers reach the company. No P.O. box. Never a founder's private home unless it is that address.
+     * The company's business address, as filed: where post and legal papers reach the company. No P.O. box.
+     * The company is moving around its registration; change this line (and the register) the day it does.
      */
-    street: null as string | null,
+    street: 'Eichendorffring 103' as string | null,
     /** Postcode and town. */
-    town: null as string | null,
+    town: '35394 Gießen' as string | null,
     country: 'Germany',
     /** Everyone registered as managing director (Geschäftsführer). */
     managingDirectors: ['Kevin Grüning'] as string[] | null,
     email: 'info@mirdyne.com',
     /** A phone number is the safest way to meet the "quick contact" rule. */
-    phone: null as string | null,
+    phone: '+49 179 4816656' as string | null,
     /** The commercial register entry, once the company is registered. The seat is Gießen, so: Amtsgericht Gießen. */
     registerCourt: null as string | null,
     registerNumber: null as string | null,
