@@ -320,3 +320,12 @@ test('links stay in the page’s language; only the language switch crosses over
         assert.ok(switches > 0, `${path}: no language switch`);
     }
 });
+
+test('German pages preload their dictionary; English pages load no German', () => {
+    const chunks = readdirSync(resolve(DIST, 'assets')).filter((f) => /^i18n-de-[\w-]+\.js$/.test(f));
+    assert.equal(chunks.length, 1, `German dictionaries in dist/assets: ${chunks.join(', ')}`);
+    for (const path of MARKDOWN_PAGES) {
+        const preloads = [...page(fileOf(path)).document.querySelectorAll('link[rel="modulepreload"]')].map((l) => l.getAttribute('href'));
+        assert.deepEqual(preloads, path.startsWith('/de/') ? [`/assets/${chunks[0]}`] : [], path);
+    }
+});

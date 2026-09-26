@@ -82,6 +82,9 @@ test('injectPage puts the copy in #root and the head additions before </head>', 
     assert.ok(html.includes(`<script type="application/ld+json">${scriptJson({ name: '</script><x>' })}</script>`));
     assert.doesNotMatch(scriptJson({ name: '</script>' }), /<\//);
     assert.throws(() => injectPage('<head></head><div id="root"><p>already</p></div>', { markup: '' }), /exactly one empty #root/);
+    // Scripts the page loads later are preloaded; none by default.
+    assert.match(injectPage(tpl, { markup: '', preload: ['/assets/i18n-de-x.js'] }), /<link rel="modulepreload" href="\/assets\/i18n-de-x\.js" \/>/);
+    assert.doesNotMatch(injectPage(tpl, { markup: '' }), /modulepreload/);
 });
 
 test('visibleTexts: the text a reader meets, not the parts marked as another language', () => {

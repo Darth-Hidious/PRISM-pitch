@@ -222,13 +222,15 @@ export const scriptJson = (value) => JSON.stringify(value).replace(/</g, '\\u003
 
 /**
  * The built page with the plain copy in #root, and in <head> the hiding rule, plus the link to the
- * page's Markdown and its JSON-LD where it has them.
+ * page's Markdown and its JSON-LD where it has them, and scripts the page will load later (German
+ * pages: the dictionary), so the browser fetches them alongside the page's own script.
  */
-export function injectPage(template, { markup, markdownHref, jsonLd }) {
+export function injectPage(template, { markup, markdownHref, jsonLd, preload = [] }) {
     const root = '<div id="root"></div>';
     if (template.split(root).length !== 2) throw new Error('injectPage: the page must have exactly one empty #root');
     if (template.split('</head>').length !== 2) throw new Error('injectPage: the page must have exactly one </head>');
     const head = [
+        ...preload.map((href) => `<link rel="modulepreload" href="${href}" />`),
         markdownHref ? `<link rel="alternate" type="text/markdown" href="${markdownHref}" />` : '',
         HEAD_SNIPPET,
         jsonLd ? `<script type="application/ld+json">${scriptJson(jsonLd)}</script>` : '',

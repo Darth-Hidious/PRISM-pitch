@@ -7,7 +7,7 @@
  * It renders the same React tree as the browser, from a server build of src/site/prerender.ts. The
  * browser still draws each page itself; see mount() in src/site/boot.ts.
  */
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { build } from 'vite';
@@ -26,6 +26,11 @@ await build({
 const { PAGES, COMPANY, render, structuredData, missingGerman, translate, keptTheSame } = await import(
     pathToFileURL(resolve(out, 'prerender.js')).href
 );
+// German pages load their dictionary after the page's script starts (src/site/boot.ts); a preload lets
+// the browser fetch both at once.
+const dictionary = (await readdir(resolve(dist, 'assets'))).filter((f) => /^i18n-de-[\w-]+\.js$/.test(f));
+if (dictionary.length !== 1) throw new Error(`prerender: expected one German dictionary in dist/assets, found ${dictionary.length}`);
+
 /** Each English page's raw render, to hold its German twin against. */
 const englishRender = new Map();
 const leftInEnglish = new Map();
@@ -66,6 +71,7 @@ for (const page of PAGES) {
         markup,
         markdownHref,
         jsonLd: page.path && structuredData(page.path),
+        preload: page.lang === 'de' ? [`/assets/${dictionary[0]}`] : [],
     });
     await writeFile(file, html);
     let note = '';
