@@ -1,12 +1,17 @@
-import type { CSSProperties, ReactElement } from 'react';
-import { Button, EvidenceLineage, Kicker, MaturityPill, PrismMark, RightsState, SourceLine, StatusPill } from '../ds';
+import type { ComponentType, CSSProperties, ReactElement } from 'react';
+import { Button, Kicker, MaturityPill, PrismMark, RightsState, SourceLine, StatusPill } from '../ds';
+import type { Visibility } from '../ds/RightsState';
 import type { StatusTone } from '../ds/StatusPill';
 import type { Maturity } from '../ds/MaturityPill';
+import { AnswerIcon, KnownIcon, MeasureIcon, OptionsIcon, ProofIcon, QuestionIcon } from '../site/Cameo';
 import { Glyph } from '../site/glyphs';
+import { useInView } from '../site/hooks';
 import { LINKS } from '../site/links';
 import { MarketCards } from '../site/Markets';
 import { CONSORTIUM, PartnerLogo } from '../site/partners';
 import { ALLOYS, YEARS_ALL, fmt } from './numbers';
+import { RightsMerge } from './proof-art';
+import { useLive } from './slideContext';
 import { HeaLattice, PolymerChain, TokamakSection, TrlSteps } from './traction-art';
 import { DotField, LoopWheel, ModuleMap, StackTower, type LoopStep, type Module, type TowerRow } from './visuals';
 
@@ -254,58 +259,118 @@ export function Lab() {
 
 /* ── 07 Proof ─────────────────────────────────────────────────────────── */
 
+/**
+ * NIST's CAMEO, told the way the website tells it (src/site/Cameo.tsx, the same drawings): six steps that
+ * play out one after another when the slide comes up. Every fact is from Kusne et al., Nature
+ * Communications 11, 5966 (2020), and NIST's release of 24 November 2020.
+ */
+const LINEAGE: { title: string; text: string; Icon: ComponentType }[] = [
+    { title: 'The question', text: 'Which Ge–Sb–Te mix changes most between glass and crystal?', Icon: QuestionIcon },
+    { title: 'The options', text: '177 mixes, side by side on one wafer.', Icon: OptionsIcon },
+    { title: 'What was known', text: 'A light scan of every spot, before the run.', Icon: KnownIcon },
+    { title: 'The measurements', text: '19 rounds. Each time, the AI picked what to X-ray.', Icon: MeasureIcon },
+    { title: 'The answer', text: 'Ge₄Sb₆Te₇: about three times the contrast of GST225.', Icon: AnswerIcon },
+    { title: 'The proof', text: 'Confirmed under an electron microscope and in a working device.', Icon: ProofIcon },
+];
+
+/** The time the 19 rounds took, against measuring every mix; the bars fill at speeds in proportion. */
+const RACE = [
+    { label: 'CAMEO, 19 rounds', value: 'about 10 hours', hours: 10 },
+    { label: 'Measuring all 177', value: 'more than 90 hours', hours: 90 },
+];
+
+const SHARING: { state: Visibility; text: string }[] = [
+    { state: 'private', text: 'Stays with its owner.' },
+    { state: 'computable', text: 'Software may use it. No person reads it.' },
+    { state: 'released', text: 'Shared with named partners.' },
+    { state: 'public', text: 'Published on purpose.' },
+];
+
 export function Proof() {
+    const { live, reader, reduced } = useLive();
+    // On the stage the slide plays when it comes up; in the phone reader, when it scrolls into view.
+    const [ref, seen] = useInView<HTMLDivElement>('0px 0px -20% 0px', true);
+    const play = live && (!reader || seen);
+    const waiting = reader && !seen && !reduced;
     return (
         <>
             <Head kicker="Proof" title="Every result carries its own proof." />
-            <div className="d-body d-evidence">
-                <EvidenceLineage
-                    label="Evidence lineage: NIST CAMEO, published work"
-                    nodes={[
-                        { type: 'Question', title: 'Largest optical contrast in Ge–Sb–Te', state: 'public' },
-                        { type: 'Candidates', title: '177 compositions on one wafer', state: 'public' },
-                        { type: 'Measurements', title: '19 closed-loop X-ray rounds', state: 'public' },
-                        { type: 'Result', title: 'Ge₄Sb₆Te₇: ΔEg nearly 3× GST225', state: 'public' },
-                        { type: 'Check', title: 'Electron microscopy and a working device', state: 'public' },
-                    ]}
-                    links={['posed over', 'sampled by', 'found', 'confirmed by']}
-                />
-                <div style={{ display: 'grid', gap: 16, alignContent: 'start' }}>
-                    <p className="pm-lead">
-                        Partners share data only when they keep control of it. Provenance and rights travel with every
-                        result, and derived results inherit the strictest rights of their inputs.
-                    </p>
-                    <div className="d-states">
-                        <div>
-                            <RightsState state="private" />
-                            <p>Stays with the organisation that produced it.</p>
-                        </div>
-                        <div>
-                            <RightsState state="computable" />
-                            <p>Approved workloads compute on it; nobody inspects it.</p>
-                        </div>
-                        <div>
-                            <RightsState state="released" />
-                            <p>An approved derivative, shared with named parties.</p>
-                        </div>
-                        <div>
-                            <RightsState state="public" />
-                            <p>Deliberately published.</p>
-                        </div>
+            <div ref={ref} className={`d-body d-proof${play ? ' is-live' : ''}${waiting ? ' is-waiting' : ''}`}>
+                <figure className="d-proof__plate" data-theme="paper">
+                    <figcaption className="d-label">A real lineage, published by NIST in 2020</figcaption>
+                    <ol className="d-proof__steps">
+                        {LINEAGE.map(({ title, text, Icon }, i) => (
+                            <li key={title} className="d-proof__step" style={{ '--i': i } as CSSProperties}>
+                                <div className="d-proof__icon">
+                                    <Icon />
+                                    {i < LINEAGE.length - 1 && (
+                                        <svg className="d-proof__arrow" viewBox="0 0 28 10" aria-hidden="true">
+                                            <path pathLength={1} d="M1,5 H24" />
+                                            <path className="d-proof__tip" d="M20,1.5 L27,5 L20,8.5 Z" />
+                                        </svg>
+                                    )}
+                                </div>
+                                <p className="d-proof__n">
+                                    {String(i + 1).padStart(2, '0')} · {title}
+                                </p>
+                                <p className="d-proof__text">{text}</p>
+                                <RightsState state="public" />
+                            </li>
+                        ))}
+                    </ol>
+                    <div
+                        className="d-proof__race"
+                        role="img"
+                        aria-label="CAMEO took 19 rounds and about 10 hours. Measuring all 177 mixes takes more than 90 hours."
+                    >
+                        {RACE.map((r) => (
+                            <div
+                                key={r.label}
+                                className={`d-proof__row${r.hours === 90 ? ' d-proof__row--all' : ''}`}
+                                style={{ '--w': `${(r.hours / 90) * 100}%`, '--t': `${(r.hours / 90) * 5.4}s` } as CSSProperties}
+                                aria-hidden="true"
+                            >
+                                <span className="d-proof__label">{r.label}</span>
+                                <span className="d-proof__val">{r.value}</span>
+                                <span className="d-proof__track">
+                                    <i className="d-proof__fill" />
+                                </span>
+                            </div>
+                        ))}
                     </div>
-                    <div className="d-ip">
-                        <p className="pm-emphasis">
-                            IP: generative sampling conditioned on thermodynamic feasibility reaches metastable alloys
-                            that equilibrium screening excludes. Patent filings in progress.
+                </figure>
+                <div className="d-proof__rights">
+                    <div className="d-proof__rule">
+                        <p className="d-label">Rights travel with every record</p>
+                        <RightsMerge />
+                        <p className="d-proof__note">A result keeps the strictest rights of its inputs.</p>
+                    </div>
+                    <div className="d-proof__levels">
+                        <p className="d-label">Four levels of sharing</p>
+                        <ul className="d-proof__states">
+                            {SHARING.map((st, i) => (
+                                <li key={st.state} style={{ '--i': i } as CSSProperties}>
+                                    <RightsState state={st.state} />
+                                    <span className="d-proof__caption">{st.text}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="d-proof__ip">
+                        <p className="d-label">What we protect</p>
+                        <p className="d-proof__ip-text">
+                            Generative sampling, conditioned on thermodynamic feasibility, reaches metastable alloys that
+                            equilibrium screening excludes.
                         </p>
+                        <StatusPill tone="crimson">Patent filings in progress</StatusPill>
                     </div>
                 </div>
             </div>
             <div className="d-foot">
-                <SourceLine label="Maturity">
-                    Provenance and export classification maintained on ESA work today; machine-enforced rights in
-                    development. Lineage shown: NIST's CAMEO, Kusne et al., Nature Communications 11, 5966 (2020),
-                    published work by NIST and partners, not PRISM's.
+                <SourceLine label="Sources">
+                    CAMEO is the work of NIST and its partners, not ours: Kusne et al., Nature Communications 11, 5966
+                    (2020). PRISM keeps the same record for every result: provenance and export labels on ESA work today,
+                    automatic enforcement of sharing rules in development.
                 </SourceLine>
             </div>
         </>

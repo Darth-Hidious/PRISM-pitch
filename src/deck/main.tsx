@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../styles/tokens.css';
 import '../styles/prism.css';
+import '../styles/engrave.css';
 import './deck.css';
 import Deck, { type SlideDef } from './Deck';
 import { Architecture, Ask, Close, Cover, Financials, Lab, Market, Markets, Problem, Proof, Solution, Stacks, Team, Traction } from './slides';

@@ -342,45 +342,441 @@
     color: var(--ink-2);
 }
 
-.d-evidence {
+/* Proof: NIST's CAMEO, step by step, on a paper plate like the website's (the same engraved drawings,
+   src/styles/engrave.css), then the sharing rules. The resting state is the finished picture: that is
+   what shows with reduced motion, in the PDF, and while the slide leaves. The film plays only while the
+   slide is live (.is-live), from the timeline at the end of this block. */
+.d-proof {
     display: grid;
-    grid-template-columns: 520px minmax(0, 1fr);
-    gap: 48px;
+    align-content: start;
+    gap: 18px;
 }
 
-.d-evidence .pm-lineage__node {
-    padding: 9px 14px;
+.d-proof__plate {
+    margin: 0;
+    padding: 16px 22px 16px;
+    border-radius: var(--radius-panel);
+    background: var(--ground);
+    color: var(--ink);
 }
 
-.d-evidence .pm-lineage__link {
-    padding-top: 3px;
-    padding-bottom: 3px;
-}
-
-.d-states {
+.d-proof__steps {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 24px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
 }
 
-.d-states > div {
-    display: grid;
+.d-proof__step {
+    display: flex;
+    flex-direction: column;
     gap: 6px;
-    padding: 14px;
-    border: var(--hairline) solid var(--rule);
-    border-radius: var(--radius-card);
+    min-width: 0;
 }
 
-.d-states p {
+.d-proof__icon {
+    position: relative;
+    margin-bottom: 4px;
+}
+
+.d-proof__arrow {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 24px;
+    height: 10px;
+    overflow: visible;
+    transform: translateY(-50%);
+}
+
+.d-proof__arrow path {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.2;
+}
+
+.d-proof__arrow .d-proof__tip {
+    fill: var(--ink);
+    stroke: none;
+}
+
+.d-proof__n {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.d-proof__text {
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+}
+
+.d-proof__step > .pm-rights {
+    align-self: flex-start;
+    margin-top: auto;
+}
+
+/* The clocks: CAMEO's 19 rounds against measuring every mix. */
+.d-proof__race {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: var(--hairline) solid var(--rule);
+}
+
+.d-proof__row {
+    display: grid;
+    grid-template-columns: 170px 160px minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+}
+
+.d-proof__label {
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.d-proof__val {
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+}
+
+.d-proof__track {
+    position: relative;
+    height: 12px;
+    margin-right: 10px;
+}
+
+.d-proof__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--w);
+    border: 1px solid var(--ink);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M-1,1 l2,-2 M0,6 l6,-6 M5,7 l2,-2' stroke='%23161714' stroke-width='0.75'/%3E%3C/svg%3E");
+}
+
+.d-proof__row--all .d-proof__fill {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2' stroke='%23161714' stroke-width='0.75'/%3E%3C/svg%3E");
+}
+
+/* More than 90 hours: the bar runs on past its end. */
+.d-proof__row--all .d-proof__fill::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -10px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid var(--ink);
+    transform: translateY(-50%);
+}
+
+/* Under the plate: the rule that lets partners share, the four levels, and the IP. */
+.d-proof__rights {
+    display: grid;
+    grid-template-columns: 430px minmax(0, 1fr) 320px;
+    gap: 36px;
+    align-items: start;
+}
+
+.d-proof__rule,
+.d-proof__ip {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
+}
+
+.d-proof__note {
     font-size: 15px;
     line-height: 1.4;
     color: var(--ink-2);
 }
 
-.d-ip {
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: var(--hairline) solid var(--rule);
+.d-merge {
+    display: grid;
+    grid-template-columns: auto 84px auto;
+    grid-template-rows: auto auto;
+    column-gap: 12px;
+    row-gap: 10px;
+    align-items: center;
+}
+
+.d-merge__in,
+.d-merge__out {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.d-merge__in--a {
+    grid-area: 1 / 1;
+}
+
+.d-merge__in--b {
+    grid-area: 2 / 1;
+}
+
+.d-merge__wires {
+    grid-area: 1 / 2 / 3 / 3;
+    width: 84px;
+    height: 56px;
+    overflow: visible;
+}
+
+.d-merge__wires path {
+    fill: none;
+    stroke: var(--ink-2);
+    stroke-width: 1.4;
+}
+
+.d-merge__wires .d-merge__tip {
+    fill: var(--ink-2);
+    stroke: none;
+}
+
+.d-merge__out {
+    grid-area: 1 / 3 / 3 / 4;
+}
+
+.d-merge__name {
+    font-size: 15px;
+    color: var(--ink-2);
+}
+
+.d-merge__out .d-merge__name {
+    color: var(--ink);
+    font-weight: 650;
+}
+
+.d-proof__levels {
+    display: grid;
+    gap: 12px;
+}
+
+.d-proof__states {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.d-proof__states li {
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+}
+
+.d-proof__caption {
+    font-size: 14.5px;
+    line-height: 1.35;
+    color: var(--ink-2);
+}
+
+.d-proof__ip-text {
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--ink);
+}
+
+/* The timeline: each step 620 ms after the one before; the clocks start with the measurements. */
+@media (prefers-reduced-motion: no-preference) {
+    .d-proof {
+        --p0: 250ms;
+        --step: 620ms;
+    }
+
+    /* The reader (phones) waits for the slide to scroll into view. */
+    .d-proof.is-waiting :is(.d-proof__step, .d-proof__race, .d-proof__rule, .d-proof__levels > .d-label, .d-proof__states li, .d-proof__ip) {
+        opacity: 0;
+    }
+
+    .d-proof.is-live .d-proof__step {
+        animation: d-rise 560ms var(--ease-rise) both;
+        animation-delay: calc(var(--p0) + var(--i) * var(--step));
+    }
+
+    .d-proof.is-live .d-proof__arrow path:first-child {
+        stroke-dasharray: 1;
+        animation: d-proof-draw 320ms ease-out both;
+        animation-delay: calc(var(--p0) + var(--i) * var(--step) + 360ms);
+    }
+
+    .d-proof.is-live .d-proof__arrow .d-proof__tip {
+        animation: d-fade 150ms ease both;
+        animation-delay: calc(var(--p0) + var(--i) * var(--step) + 640ms);
+    }
+
+    /* Each record is stamped with its rights as it appears. */
+    .d-proof.is-live .d-proof__step > .pm-rights {
+        animation: d-proof-pop 380ms var(--ease-rise) both;
+        animation-delay: calc(var(--p0) + var(--i) * var(--step) + 420ms);
+    }
+
+    /* 01 and 03: the light comes in. */
+    .d-proof.is-live .eg-beam {
+        animation: d-fade 500ms ease both;
+        animation-delay: calc(var(--p0) + var(--i) * var(--step) + 260ms);
+    }
+
+    /* 02: the 177 mixes appear, from the middle of the wafer out. */
+    .d-proof.is-live .eg-spot {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: d-proof-pop 260ms ease-out both;
+        animation-delay: calc(var(--p0) + var(--step) + 200ms + var(--k) * 5ms);
+    }
+
+    /* 04: the loop runs, pick, X-ray, learn, while the clocks do. */
+    .d-proof.is-live .eg-loop {
+        animation: d-proof-flow 600ms linear 9;
+        animation-delay: calc(var(--p0) + 3 * var(--step) + 350ms);
+    }
+
+    /* 05: the two bars grow, the old material first. */
+    .d-proof.is-live .eg-bar rect {
+        transform-box: fill-box;
+        transform-origin: 50% 100%;
+        animation: d-proof-grow 700ms var(--ease-rise) both;
+        animation-delay: calc(var(--p0) + 4 * var(--step) + 250ms + var(--k) * 320ms);
+    }
+
+    .d-proof.is-live .eg-bar :is(path, text) {
+        animation: d-fade 300ms ease both;
+        animation-delay: calc(var(--p0) + 4 * var(--step) + 850ms + var(--k) * 320ms);
+    }
+
+    /* 06: the device answers. */
+    .d-proof.is-live .eg-wave {
+        animation: d-fade 500ms ease both;
+        animation-delay: calc(var(--p0) + 5 * var(--step) + 300ms);
+    }
+
+    /* The clocks fill at speeds in proportion to the hours; each value shows when its bar is done. */
+    .d-proof.is-live .d-proof__race {
+        animation: d-fade 400ms ease both;
+        animation-delay: calc(var(--p0) + 3 * var(--step));
+    }
+
+    .d-proof.is-live .d-proof__fill {
+        animation: d-proof-fill var(--t) linear both;
+        animation-delay: calc(var(--p0) + 3 * var(--step) + 350ms);
+    }
+
+    .d-proof.is-live .d-proof__val {
+        animation: d-fade 300ms ease both;
+        animation-delay: calc(var(--p0) + 3 * var(--step) + 350ms + var(--t));
+    }
+
+    /* The rule: two inputs meet, and the result keeps the stricter rights. */
+    .d-proof.is-live :is(.d-proof__rule, .d-proof__ip) {
+        animation: d-rise 560ms var(--ease-rise) both;
+    }
+
+    .d-proof.is-live .d-proof__rule {
+        animation-delay: 3.9s;
+    }
+
+    .d-proof.is-live .d-merge__wires path:not(.d-merge__tip) {
+        stroke-dasharray: 1;
+        animation: d-proof-draw 500ms ease-out both;
+        animation-delay: 4.35s;
+    }
+
+    .d-proof.is-live .d-merge__wires .d-merge__tip {
+        animation: d-fade 150ms ease both;
+        animation-delay: 4.8s;
+    }
+
+    .d-proof.is-live .d-merge__out {
+        animation: d-proof-pop 420ms var(--ease-rise) both;
+        animation-delay: 4.9s;
+    }
+
+    .d-proof.is-live .d-merge__out .pm-rights__glyph {
+        animation: d-proof-pulse 1s ease-out both;
+        animation-delay: 5.25s;
+    }
+
+    .d-proof.is-live :is(.d-proof__levels > .d-label, .d-proof__states li) {
+        animation: d-rise 560ms var(--ease-rise) both;
+        animation-delay: calc(4.4s + var(--i, 0) * 120ms);
+    }
+
+    .d-proof.is-live .d-proof__ip {
+        animation-delay: 5.2s;
+    }
+}
+
+@keyframes d-proof-draw {
+    from {
+        stroke-dashoffset: 1;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes d-proof-pop {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes d-proof-grow {
+    from {
+        transform: scaleY(0);
+    }
+
+    to {
+        transform: none;
+    }
+}
+
+@keyframes d-proof-fill {
+    from {
+        width: 0;
+    }
+}
+
+@keyframes d-proof-flow {
+    from {
+        stroke-dasharray: 5 4;
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dasharray: 5 4;
+        stroke-dashoffset: -18;
+    }
+}
+
+@keyframes d-proof-pulse {
+    from {
+        box-shadow: 0 0 0 0 var(--accent);
+    }
+
+    to {
+        box-shadow: 0 0 0 12px transparent;
+    }
 }
 
 /* Traction: one card per programme, a drawing on top (traction-art.tsx). */
@@ -1805,7 +2201,7 @@
     .d-problem,
     .d-solution,
     .d-lab,
-    .d-evidence,
+    .d-proof__rights,
     .d-fin,
     .d-ask,
     .d-market__head,
@@ -1966,9 +2362,50 @@
     .d-context,
     .d-bridge,
     .d-boundary,
-    .d-states,
     .d-team__people {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Proof: the six steps two by two, no arrows between them; the clocks under their labels. */
+    .d-proof__steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 26px;
+    }
+
+    .d-proof__arrow {
+        display: none;
+    }
+
+    .d-proof__row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 6px 12px;
+    }
+
+    .d-proof__track {
+        grid-column: 1 / -1;
+    }
+
+    /* The rule, set like a sum: two inputs above a line, the result below it. */
+    .d-merge {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 8px;
+    }
+
+    .d-merge__wires {
+        display: none;
+    }
+
+    .d-merge__in,
+    .d-merge__out {
+        display: grid;
+        grid-template-columns: 9.5em auto;
+        justify-content: start;
+    }
+
+    .d-merge__out {
+        grid-area: 3 / 1;
+        padding-top: 8px;
+        border-top: var(--hairline) solid var(--ink-2);
     }
 
     .d-bridge__item + .d-bridge__item::before {

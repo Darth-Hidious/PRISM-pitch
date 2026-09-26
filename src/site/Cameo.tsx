@@ -37,13 +37,13 @@ function ray(x: number) {
     return `${d} L${x},42`;
 }
 
-function Question() {
+export function QuestionIcon() {
     const id = `${ID}-1`;
     return (
         <svg className="eg eg--icon" viewBox="0 0 180 120" aria-hidden="true">
             <Defs id={id} />
-            <Arrow id={id} d={ray(39)} className="eg-line--thin" />
-            <Arrow id={id} d={ray(141)} className="eg-line--thin" />
+            <Arrow id={id} d={ray(39)} className="eg-line--thin eg-beam" />
+            <Arrow id={id} d={ray(141)} className="eg-line--thin eg-beam" />
             <rect className="eg-frame" x={12} y={48} width={54} height={48} />
             {GLASS.map(([x, y]) => (
                 <Ball key={`${x}-${y}`} cx={x} cy={y} r={3.4} tone="light" />
@@ -107,15 +107,22 @@ const SOURCES: [string, number][] = [
     ['Te', 98],
 ];
 
-function Options() {
+export function OptionsIcon() {
     const id = `${ID}-2`;
     const { cx, cy, r } = WAFER;
     return (
         <svg className="eg eg--icon" viewBox="0 0 180 120" aria-hidden="true">
             <Defs id={id} />
             <path className="eg-solid" d={waferPath(WAFER)} />
-            {SPOTS.map(({ i, j }) => (
-                <circle key={`${i}-${j}`} className="eg-spot" cx={cx + i * PITCH} cy={cy - 1.5 + j * PITCH} r={1.55} />
+            {SPOTS.map(({ i, j }, k) => (
+                <circle
+                    key={`${i}-${j}`}
+                    className="eg-spot"
+                    cx={cx + i * PITCH}
+                    cy={cy - 1.5 + j * PITCH}
+                    r={1.55}
+                    style={{ '--k': k } as CSSProperties}
+                />
             ))}
             {SOURCES.map(([el, y]) => {
                 const dx = 146 - cx;
@@ -138,7 +145,7 @@ function Options() {
 
 /* ── 03 · What was known: a light scan of every spot ───────────────────── */
 
-function Known() {
+export function KnownIcon() {
     const id = `${ID}-3`;
     // The same wafer seen at a low angle: the spots foreshortened.
     const kx = 70 / WAFER.r;
@@ -161,9 +168,9 @@ function Known() {
             ))}
             {/* Polarised light in, reflected light out: ellipsometry. */}
             <rect className="eg-solid" x={12} y={11} width={26} height={13} rx={2} transform="rotate(44 25 17.5)" />
-            <Arrow id={id} d="M34,28 L86,79" />
-            <line className="eg-line" x1={55.5} y1={56.6} x2={62.5} y2={49.4} />
-            <path className="eg-line" d="M94,79 L146,28" />
+            <Arrow id={id} className="eg-beam" d="M34,28 L86,79" />
+            <line className="eg-line eg-beam" x1={55.5} y1={56.6} x2={62.5} y2={49.4} />
+            <path className="eg-line eg-beam" d="M94,79 L146,28" />
             <ellipse className="eg-line" cx={121} cy={52.5} rx={7} ry={2.6} transform="rotate(46 121 52.5)" />
             <rect className="eg-solid" x={142} y={11} width={26} height={13} rx={2} transform="rotate(-44 155 17.5)" />
             <Arrow id={id} dashed d="M44,114 H136" />
@@ -173,7 +180,7 @@ function Known() {
 
 /* ── 04 · The measurements: pick, X-ray, learn, nineteen times ─────────── */
 
-function Measure() {
+export function MeasureIcon() {
     const id = `${ID}-4`;
     return (
         <svg className="eg eg--icon" viewBox="0 0 180 120" aria-hidden="true">
@@ -196,7 +203,7 @@ function Measure() {
                 />
             ))}
             <rect className="eg-solid" x={150} y={2} width={7} height={52} />
-            <Arrow id={id} d="M153,64 C153,96 130,104 92,104 C52,104 26,98 22,48" />
+            <Arrow id={id} className="eg-loop" d="M153,64 C153,96 130,104 92,104 C52,104 26,98 22,48" />
             <T x={92} y={95} kind="sym">
                 × 19
             </T>
@@ -212,7 +219,7 @@ function Measure() {
 const EV = 95;
 const BASE = 100;
 
-function Answer() {
+export function AnswerIcon() {
     const id = `${ID}-5`;
     const bars = [
         { name: 'GST225', v: 0.23, x: 50, fill: 'hatch' },
@@ -224,12 +231,12 @@ function Answer() {
             <T x={16} y={58} kind="sym">
                 ΔE<tspan fontSize="12" dy="4">g</tspan>
             </T>
-            {bars.map((b) => {
+            {bars.map((b, i) => {
                 const top = BASE - b.v * EV;
                 const mid = b.x + 15;
                 const e = 0.03 * EV;
                 return (
-                    <g key={b.name}>
+                    <g key={b.name} className="eg-bar" style={{ '--k': i } as CSSProperties}>
                         <rect className="eg-fill" fill={`url(#${id}-${b.fill})`} x={b.x} y={top} width={30} height={BASE - top} />
                         <rect className="eg-frame" x={b.x} y={top} width={30} height={BASE - top} />
                         <path className="eg-line" d={`M${mid},${top - e} V${top + e} M${mid - 4},${top - e} H${mid + 4} M${mid - 4},${top + e} H${mid + 4}`} />
@@ -249,7 +256,7 @@ function Answer() {
 
 /* ── 06 · The proof: an electron microscope and a working device ──────── */
 
-function Proof() {
+export function ProofIcon() {
     const id = `${ID}-6`;
     let wave = 'M84,48';
     for (let k = 0; k < 10; k++) wave += ` H${92 + k * 8} V${k % 2 ? 48 : 30}`;
@@ -263,7 +270,7 @@ function Proof() {
             <ellipse className="eg-solid" cx={36} cy={56} rx={13} ry={4} />
             <rect className="eg-fill" fill={`url(#${id}-fine)`} x={20} y={86} width={32} height={5} />
             <rect className="eg-frame" x={20} y={86} width={32} height={5} />
-            <path className="eg-line" d={wave} />
+            <path className="eg-line eg-wave" d={wave} />
             <rect className="eg-fill" fill={`url(#${id}-hatch)`} x={80} y={92} width={90} height={6} />
             <rect className="eg-frame" x={80} y={92} width={90} height={6} />
             <rect className="eg-solid" x={80} y={64} width={90} height={28} />
@@ -286,32 +293,32 @@ const STEPS: Step[] = [
     {
         title: 'The question',
         text: 'Which mix of germanium, antimony and tellurium changes most between glass and crystal?',
-        Icon: Question,
+        Icon: QuestionIcon,
     },
     {
         title: 'The options',
         text: '177 different mixes, made side by side on one 3-inch wafer.',
-        Icon: Options,
+        Icon: OptionsIcon,
     },
     {
         title: 'What was known',
         text: 'Light scans of every spot, as glass and as crystal, taken before the run.',
-        Icon: Known,
+        Icon: KnownIcon,
     },
     {
         title: 'The measurements',
         text: '19 rounds. In each, CAMEO picked one spot to X-ray and learned from the result.',
-        Icon: Measure,
+        Icon: MeasureIcon,
     },
     {
         title: 'The answer',
         text: 'Ge₄Sb₆Te₇, found in round 19. About three times the contrast of the best-known material.',
-        Icon: Answer,
+        Icon: AnswerIcon,
     },
     {
         title: 'The proof',
         text: 'Checked two more ways: under an electron microscope, and in a working device.',
-        Icon: Proof,
+        Icon: ProofIcon,
     },
 ];
 
