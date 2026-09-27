@@ -525,6 +525,10 @@ export const DE: Readonly<Record<string, string>> = {
     weak: 'schwach',
     strong: 'stark',
     'Chance each programme is hit': 'Wahrscheinlichkeit, dass ein Programm getroffen wird',
+    'Impact peaks after': 'Größte Wirkung nach',
+    '<0>{n}</0> days': '<0>{n}</0> Tagen',
+    '1 in 20 disruptions reach': '1 von 20 Störungen erreichen',
+    '<0>{n}+</0> events': '<0>{n}+</0> Ereignisse',
     'We use the same model to forecast how a material degrades: sensor readings become events, and the model predicts when a part will fail.':
         'Dasselbe Modell nutzen wir, um vorherzusagen, wie ein Material altert: Aus Sensordaten werden Ereignisse, und das Modell schätzt, wann ein Bauteil versagt.',
     'The network and its rates are made up; the chances are computed exactly from the model, a Hawkes process. Our methods are adapted from Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities’ States behind Diffusion Processes”, KDD 2021, for supply chains, and from Repasky et al., “Modeling Discrete Coating Degradation Events via Hawkes Processes”, 2025, for degradation.':

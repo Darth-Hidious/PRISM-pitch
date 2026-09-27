@@ -4164,40 +4164,61 @@ body {
     color: var(--ink-3);
 }
 
-/* The chance each programme is hit */
+/* The chance each programme is hit, then two facts about the disruption as a whole. One grid, so that
+ * names, numbers and bars each sit on one line across all five, even where a name takes two lines. */
 
 .shock__odds {
     display: grid;
-    gap: 14px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: auto auto auto auto;
+    gap: 6px clamp(16px, 3vw, 48px);
     padding-top: 22px;
     border-top: 1px solid var(--rule);
 }
 
-/* Names, numbers and bars each on one line across the three, even where a name takes two lines. */
-.shock__odds ul {
+.shock__odds-head {
+    grid-column: 1 / 4;
+    margin-bottom: 8px;
+}
+
+.shock__odds ul,
+.shock__facts {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: auto auto auto;
-    gap: 6px clamp(16px, 3vw, 48px);
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    grid-row: 2 / 5;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.shock__odds li {
+.shock__odds ul {
+    grid-column: 1 / 4;
+}
+
+.shock__facts {
+    grid-column: 4 / 6;
+}
+
+.shock__odds li,
+.shock__facts > div {
     display: grid;
     grid-row: span 3;
     grid-template-rows: subgrid;
     align-content: end;
 }
 
+.shock__odds-name,
+.shock__facts dt {
+    font-size: 14px;
+    line-height: 1.35;
+    color: var(--ink-2);
+}
+
 .shock__odds-name {
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    font-size: 14px;
-    line-height: 1.35;
-    color: var(--ink-2);
 }
 
 .shock__odds-name::before {
@@ -4210,12 +4231,31 @@ body {
     background: var(--c);
 }
 
-.shock__odds strong {
+.shock__odds strong,
+.shock__facts dd {
+    margin: 0;
     font-size: clamp(28px, 3vw, 40px);
     font-weight: 300;
     line-height: 1.1;
     letter-spacing: -0.02em;
     font-variant-numeric: tabular-nums;
+    color: var(--ink);
+}
+
+/* "31 days", "49+ events": the number large, its unit at the size of the words above it, on one baseline. */
+.shock__facts dd {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 6px;
+    font-size: 14px;
+    letter-spacing: 0;
+    color: var(--ink-2);
+}
+
+.shock__facts dd strong {
+    font-size: clamp(28px, 3vw, 40px);
+    letter-spacing: -0.02em;
     color: var(--ink);
 }
 
@@ -4232,6 +4272,33 @@ body {
     border-radius: inherit;
     background: var(--c);
     transition: width 0.4s var(--ease-rise);
+}
+
+/* Phones: the three chances on one row, the two facts, half the width each, on the next. */
+@media (max-width: 700px) {
+    .shock__odds {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-rows: repeat(7, auto);
+    }
+
+    .shock__odds-head,
+    .shock__odds ul {
+        grid-column: 1 / -1;
+    }
+
+    .shock__odds li {
+        grid-column: span 2;
+    }
+
+    .shock__facts {
+        grid-column: 1 / -1;
+        grid-row: 5 / 8;
+        margin-top: 18px;
+    }
+
+    .shock__facts > div {
+        grid-column: span 3;
+    }
 }
 
 .shock__also {

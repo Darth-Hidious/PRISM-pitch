@@ -1,7 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
-import { hitProbability, scale, simulateCascade } from './hawkes';
+import { hitProbability, impulseResponse, quantile, scale, simulateCascade } from './hawkes';
 import { seeded, useInView, useMediaQuery, useReducedMotion } from './hooks';
-import { useT } from './i18n';
+import { richText, useT } from './i18n';
 import { BASE, COLUMNS, LINKS, MEAN_DELAY_DAYS, NODES, PROGRAMMES, SUPPLIERS, index } from './supply-model';
 
 /**
@@ -12,7 +12,9 @@ import { BASE, COLUMNS, LINKS, MEAN_DELAY_DAYS, NODES, PROGRAMMES, SUPPLIERS, in
  */
 
 const BETA = 1 / MEAN_DELAY_DAYS;
-/** The days one cascade is played for. */
+/** Cascades simulated for the worst 1 in 20. */
+const RUNS = 2000;
+/** The days one cascade is played for, and the days the peak is looked for in. */
 const HORIZON = 180;
 const DAYS_PER_SECOND = 12;
 /** The slider's range: the branching ratio ρ(A), how many events each event sets off in the long run. */
@@ -106,6 +108,19 @@ export default function SupplyShock() {
     const A = useMemo(() => scale(BASE, kappa), [kappa]);
     /** The exact chance that the cascade reaches each programme. */
     const hit = useMemo(() => PROGRAMMES.map((p) => hitProbability(A, source, p.i)), [A, source]);
+    /** The day the expected impact on the programmes is greatest, from h(t) = β A e^{−β(I − A)t} e_j. */
+    const peakDay = useMemo(() => {
+        const days = Array.from({ length: HORIZON + 1 }, (_, d) => d);
+        const total = impulseResponse(A, BETA, source, days, 0.25).map((h) => PROGRAMMES.reduce((s, p) => s + h[p.i], 0));
+        return total.indexOf(Math.max(...total));
+    }, [A, source]);
+    /** How big the worst 1 in 20 cascades get: 2,000 of them, the same ones for a given setting. */
+    const worst = useMemo(() => {
+        const rand = seeded(1000 + source * 97 + Math.round(kappa * 100));
+        const sizes = Array.from({ length: RUNS }, () => simulateCascade(A, BETA, source, rand).events.length);
+        return quantile(sizes.sort((a, b) => a - b), 0.95);
+    }, [A, source, kappa]);
+    const strong = (inner: string) => <strong>{inner}</strong>;
 
     /** One cascade to watch: its events in the order they happen, and which events each one set off. */
     const sample = useMemo(() => {
@@ -312,7 +327,7 @@ export default function SupplyShock() {
             </div>
 
             <div className="shock__odds">
-                <p className="w-label">{t('Chance each programme is hit')}</p>
+                <p className="w-label shock__odds-head">{t('Chance each programme is hit')}</p>
                 <ul>
                     {PROGRAMMES.map((p, k) => (
                         <li key={p.id} className={`shock__p${k}`}>
@@ -324,6 +339,16 @@ export default function SupplyShock() {
                         </li>
                     ))}
                 </ul>
+                <dl className="shock__facts">
+                    <div>
+                        <dt>{t('Impact peaks after')}</dt>
+                        <dd>{richText(t('<0>{n}</0> days').replace('{n}', t.num(peakDay)), [strong])}</dd>
+                    </div>
+                    <div>
+                        <dt>{t('1 in 20 disruptions reach')}</dt>
+                        <dd>{richText(t('<0>{n}+</0> events').replace('{n}', t.num(worst)), [strong])}</dd>
+                    </div>
+                </dl>
             </div>
 
             <p className="shock__also">

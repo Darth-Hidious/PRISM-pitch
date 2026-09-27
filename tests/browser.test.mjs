@@ -399,7 +399,7 @@ test('the supply-chain explorer: its controls change what it shows, and what it 
                 H.hitProbability(A, source.i, p.i).toLocaleString(locale, { style: 'percent', maximumSignificantDigits: 2 }),
             );
             await page.waitForFunction(
-                (w) => JSON.stringify([...document.querySelectorAll('.shock__odds strong')].map((e) => e.textContent)) === JSON.stringify(w),
+                (w) => JSON.stringify([...document.querySelectorAll('.shock__odds li strong')].map((e) => e.textContent)) === JSON.stringify(w),
                 want,
                 { timeout: 5000 },
             );
@@ -411,8 +411,12 @@ test('the supply-chain explorer: its controls change what it shows, and what it 
         await page.locator('.shock__coupling input').fill('0.3');
         await chancesAre(M.SUPPLIERS[2], 0.3);
         assert.doesNotMatch((await page.locator('.shock__odds').textContent()).replace(/\s+/g, ' '), /(^|[^\d.,])0 ?%/);
+        const worst = async () => Number((await page.locator('.shock__facts dd strong').nth(1).textContent()).replace(/\D/g, ''));
+        const weak = await worst();
         await page.locator('.shock__coupling input').fill('0.95');
         await chancesAre(M.SUPPLIERS[2], 0.95);
+        // Stronger knock-on effects: the worst 1 in 20 grows many times over.
+        assert.ok((await worst()) >= 10 * weak, `the worst 1 in 20 went from ${weak} to only ${await worst()}`);
         // Cascades play: the clock runs in the page's language, events light their nodes, and effects are
         // reached by a pulse along the link from their cause.
         await page.waitForFunction(

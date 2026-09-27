@@ -338,6 +338,16 @@ test('the supply-chain explorer, read without JavaScript: its words and each pro
     // What the page starts with: a disruption at the first supplier, knock-on effects at 0.85.
     const A = H.scale(M.BASE, 0.85);
     const j = M.SUPPLIERS[0].i;
+    const beta = 1 / M.MEAN_DELAY_DAYS;
+    // The day the expected impact on the programmes peaks, within the 180 days the page looks at.
+    const days = Array.from({ length: 181 }, (_, d) => d);
+    const total = H.impulseResponse(A, beta, j, days, 0.25).map((h) => M.PROGRAMMES.reduce((s, p) => s + h[p.i], 0));
+    const peak = total.indexOf(Math.max(...total));
+    // The worst 1 in 20 of the 2,000 cascades the page draws for this setting.
+    const { seeded } = await load('src/site/hooks.ts');
+    const rand = seeded(1000 + j * 97 + 85);
+    const sizes = Array.from({ length: 2000 }, () => H.simulateCascade(A, beta, j, rand).events.length);
+    const worst = H.quantile(sizes.sort((a, b) => a - b), 0.95);
     for (const [path, heading, locale] of [
         ['/platform/', 'How a disruption spreads', 'en-GB'],
         ['/de/platform/', 'Wie sich eine Störung ausbreitet', 'de-DE'],
@@ -351,5 +361,9 @@ test('the supply-chain explorer, read without JavaScript: its words and each pro
             const chance = H.hitProbability(A, j, p.i).toLocaleString(locale, { style: 'percent', maximumSignificantDigits: 2 });
             assert.ok(md.includes(`**${chance}**`), `${path}: ${p.id}'s chance of a hit, ${chance}, is not on the page`);
         }
+        // So are the day the impact peaks and the size the worst 1 in 20 cascades reach.
+        const german = locale === 'de-DE';
+        assert.ok(md.includes(`${peak} ${german ? 'Tagen' : 'days'}`), `${path}: the peak, day ${peak}, is not on the page`);
+        assert.ok(md.includes(`${worst}+ ${german ? 'Ereignisse' : 'events'}`), `${path}: the worst 1 in 20, ${worst}+, is not on the page`);
     }
 });

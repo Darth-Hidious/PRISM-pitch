@@ -54,6 +54,32 @@ export function spectralRadius(a: Matrix): number {
 }
 
 /**
+ * The expected extra event rate at every node, over time, after one shock at node j at time 0:
+ * h(t) = β A e^{−β (I − A) t} e_j, integrated from h′ = −β (I − A) h, h(0) = β A e_j with fourth-order
+ * Runge–Kutta. Returns one row per time in `times` (ascending, starting at 0 or later).
+ */
+export function impulseResponse(a: Matrix, beta: number, j: number, times: number[], step = 0.05): number[][] {
+    let h = a.map((row) => beta * row[j]);
+    const f = (x: number[]) => x.map((xi, i) => -beta * (xi - a[i].reduce((s, v, k) => s + v * x[k], 0)));
+    const add = (x: number[], k: number[], s: number) => x.map((xi, i) => xi + s * k[i]);
+    const out: number[][] = [];
+    let t = 0;
+    for (const target of times) {
+        while (t < target - 1e-12) {
+            const dt = Math.min(step, target - t);
+            const k1 = f(h);
+            const k2 = f(add(h, k1, dt / 2));
+            const k3 = f(add(h, k2, dt / 2));
+            const k4 = f(add(h, k3, dt));
+            h = h.map((hi, i) => hi + (dt / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+            t += dt;
+        }
+        out.push([...h]);
+    }
+    return out;
+}
+
+/**
  * The chance that the cascade after one shock at node j reaches node p at all, exactly. Let q_k be the
  * chance that the cascade an event at k starts never reaches p. An event at k sets off Poisson(α_ik)
  * events at each node i, so q_k = exp(Σ_i α_ik (q_i − 1)) for k ≠ p, and q_p = 0. Iterating that from
@@ -122,4 +148,10 @@ export function simulateCascade(a: Matrix, beta: number, j: number, rand: () => 
         if (capped) break;
     }
     return { events, capped };
+}
+
+/** The value below which a share q of the sorted sample lies (nearest rank). */
+export function quantile(sorted: number[], q: number): number {
+    if (!sorted.length) return NaN;
+    return sorted[Math.min(sorted.length - 1, Math.max(0, Math.ceil(q * sorted.length) - 1))];
 }

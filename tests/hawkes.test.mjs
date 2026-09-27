@@ -107,6 +107,36 @@ test('simulation: cascades match the exact results', () => {
     close(delays / links, M.MEAN_DELAY_DAYS, (4 * M.MEAN_DELAY_DAYS) / Math.sqrt(links), 'mean delay');
 });
 
+test('the response curve: exact for one node, and its area is the expected cascade less the shock', () => {
+    // One node with self-excitation a: h(t) = β a e^{−β (1 − a) t}.
+    const a = 0.6;
+    const times = [0, 1, 5, 20, 60];
+    const h = H.impulseResponse([[a]], BETA, 0, times, 0.25);
+    times.forEach((t, k) => close(h[k][0], BETA * a * Math.exp(-BETA * (1 - a) * t), 1e-9, `h(${t})`));
+
+    // The explorer's network: the area under each node's curve is the events expected there, less the
+    // shock itself: (A + A² + …) e_j.
+    const A = H.scale(M.BASE, 0.8);
+    const j = M.SUPPLIERS[0].i;
+    const days = Array.from({ length: 3001 }, (_, d) => d * 0.5);
+    const curve = H.impulseResponse(A, BETA, j, days, 0.25);
+    let generation = A.map((_, i) => (i === j ? 1 : 0));
+    const expected = generation.map(() => 0);
+    for (let g = 0; g < 400; g++) {
+        generation = matVec(A, generation);
+        generation.forEach((x, i) => (expected[i] += x));
+    }
+    for (let i = 0; i < M.NODES.length; i++) {
+        let area = 0;
+        for (let d = 1; d < days.length; d++) area += ((curve[d][i] + curve[d - 1][i]) / 2) * (days[d] - days[d - 1]);
+        close(area, expected[i], 1e-3, `area at ${M.NODES[i].id}`);
+    }
+    // The step the explorer uses (0.25 days) agrees with a much finer one.
+    const fine = H.impulseResponse(A, BETA, j, [10, 40, 90], 0.01);
+    const coarse = H.impulseResponse(A, BETA, j, [10, 40, 90], 0.25);
+    fine.forEach((row, k) => row.forEach((x, i) => close(coarse[k][i], x, 1e-9, `step at ${M.NODES[i].id}`)));
+});
+
 test('a cascade stops at the cap it is given', () => {
     // Twenty events per event: dying out before 50 has a chance of about e^−20.
     const { events, capped } = H.simulateCascade([[20]], BETA, 0, seeded(3), 50);
@@ -114,7 +144,7 @@ test('a cascade stops at the cap it is given', () => {
     assert.equal(events.length, 50);
 });
 
-test('Poisson draws', () => {
+test('Poisson draws, and quantiles', () => {
     const rand = seeded(11);
     const draws = Array.from({ length: 50000 }, () => H.poisson(rand, 0.7));
     const mean = sum(draws) / draws.length;
@@ -122,4 +152,9 @@ test('Poisson draws', () => {
     close(mean, 0.7, 0.02, 'mean');
     close(variance, 0.7, 0.03, 'variance');
     assert.equal(H.poisson(rand, 0), 0);
+    const sorted = Array.from({ length: 20 }, (_, i) => i + 1);
+    assert.equal(H.quantile(sorted, 0.95), 19);
+    assert.equal(H.quantile(sorted, 1), 20);
+    assert.equal(H.quantile(sorted, 0), 1);
+    assert.ok(Number.isNaN(H.quantile([], 0.5)));
 });
