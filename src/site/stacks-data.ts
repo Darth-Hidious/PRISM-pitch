@@ -143,7 +143,7 @@ export const STACKS: StackDef[] = [
         short: 'Manufacturing and test',
         question: 'Can it really be made? Does it hold up?',
         lead: 'Only a real test can tell.',
-        answer: 'Most materials designed on a computer never get past the recipe. We melt and 3D-print the best ideas, then test them.',
+        answer: 'Most materials designed on a computer never get past the recipe. We melt the best ideas, mill them down, make powder and print them, then test them.',
         photo: {
             src: '/img/spark-furnace-wide.webp',
             alt: 'A vacuum-arc furnace, open: the steel chamber with its viewports lifted above the round copper hearth.',
@@ -152,8 +152,8 @@ export const STACKS: StackDef[] = [
         limit: 'A test sample is not a finished part. Certification is our goal; we do not claim it yet.',
         layers: [
             {
-                name: 'Powder and melting',
-                detail: 'New alloys, prepared and melted in a vacuum-arc furnace.',
+                name: 'Melting and powder',
+                detail: 'Melted in a vacuum-arc furnace, milled down and made into powder.',
                 maturity: 'in-use',
             },
             {
@@ -163,7 +163,7 @@ export const STACKS: StackDef[] = [
             },
             {
                 name: 'Metal 3D printing',
-                detail: 'Industrial laser printing from metal powder, safe settings mapped.',
+                detail: 'Laser powder bed fusion, first at Fraunhofer IAPT, then on Bimo Tech’s industrial machines, with the safe settings carried across. DED too.',
                 maturity: 'in-use',
             },
             {

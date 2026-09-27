@@ -14,7 +14,7 @@ const PANELS = [
     { n: '01', name: 'requirement', sub: 'what the part must survive' },
     { n: '02', name: 'design', sub: 'AI suggests ideas' },
     { n: '03', name: 'screen', sub: 'physics checks; most stop here' },
-    { n: '04', name: 'make', sub: 'melted and 3D-printed for real' },
+    { n: '04', name: 'make', sub: 'melted, powdered, printed' },
     { n: '05', name: 'test', sub: 'measured against the targets' },
 ];
 const HANDOFFS = ['targets', 'ideas', 'survivors', 'samples'];

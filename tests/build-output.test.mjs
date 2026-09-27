@@ -367,3 +367,48 @@ test('the supply-chain explorer, read without JavaScript: its words and each pro
         assert.ok(md.includes(`${worst}+ ${german ? 'Ereignisse' : 'events'}`), `${path}: the worst 1 in 20, ${worst}+, is not on the page`);
     }
 });
+
+test('the making route, read without JavaScript: melted, milled, made into powder, printed, then coupons and tests', () => {
+    for (const [path, steps, diagram] of [
+        [
+            '/',
+            ['Raw metals, ready to melt', 'Loaded into the hearth', 'Melted with an electric arc', 'An alloy button, as cast', 'Milled down', 'Made into powder', 'Printed in a powder bed', 'Or built up by DED', 'Coupons, then tests'],
+            'Diagram:',
+        ],
+        [
+            '/de/',
+            ['Rohmetalle, bereit zum Schmelzen', 'In den Herd eingelegt', 'Im Lichtbogen geschmolzen', 'Ein Legierungsknopf im Gusszustand', 'Klein gefräst', 'Zu Pulver verarbeitet', 'Im Pulverbett gedruckt', 'Oder per DED aufgebaut', 'Proben, dann Tests'],
+            'Diagramm:',
+        ],
+    ]) {
+        const { copy } = page(fileOf(path));
+        const items = [...copy.querySelectorAll('.made__grid > li')];
+        // Each step in order, numbered 01 to 09, its caption first (a note may follow it).
+        assert.deepEqual(
+            items.map((li) => text(li.querySelector('.made__step'))),
+            steps.map((_, i) => String(i + 1).padStart(2, '0')),
+            `${path}: the steps' numbers`,
+        );
+        items.forEach((li, i) => {
+            const caption = text(li.querySelector('figcaption')).replace(/^\d\d\s*/, '');
+            assert.ok(caption.startsWith(steps[i]), `${path}: step ${i + 1} reads "${caption}", not "${steps[i]}"`);
+        });
+        // The first five are photographs; the four drawn steps say what they show.
+        assert.equal(items.slice(0, 5).filter((li) => li.querySelector('img')).length, 5, `${path}: five photographs first`);
+        for (const li of items.slice(5)) {
+            const d = text(li.querySelector('.prerender-figure'));
+            assert.ok(d.startsWith(diagram) && d.length > 40, `${path}: a drawn step without its description: "${d}"`);
+        }
+        // LPBF names both places it runs.
+        assert.match(text(items[6]), /Fraunhofer IAPT.*Bimo Tech/, `${path}: where the powder bed printing runs`);
+    }
+    // Nothing on the site still says the route ends in machining, or skips the powder.
+    for (const path of ENGLISH) {
+        const words = text(page(fileOf(path)).copy);
+        for (const wrong of ['Machined to shape', 'machined part', 'melt and 3D-print', 'melted and 3D-printed']) {
+            assert.ok(!words.includes(wrong), `${path}: "${wrong}"`);
+        }
+    }
+    const platform = text(page(fileOf('/platform/')).copy);
+    assert.match(platform, /melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons/, '/platform/: PRISM Alpha’s route');
+});

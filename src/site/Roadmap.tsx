@@ -50,6 +50,9 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                         <p className="alpha__lead">
                             {t('The first project built around the full PRISM loop, for European space transport.')}
                         </p>
+                        <p className="alpha__lead alpha__route">
+                            {t('The best candidates are melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons.')}
+                        </p>
                         <dl className="alpha__facts">
                             <div>
                                 <dt>{t('12 months')}</dt>

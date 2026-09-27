@@ -451,6 +451,30 @@ test('the supply-chain explorer without motion: one whole cascade at once, nothi
     await context.close();
 });
 
+test('the drawn steps of the making route move only on screen, and stand still without motion', { skip }, async () => {
+    for (const reducedMotion of ['no-preference', 'reduce']) {
+        const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion });
+        const page = await context.newPage();
+        await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+        const state = () =>
+            page.evaluate(() => {
+                const svgs = [...document.querySelectorAll('.made__grid svg.route')];
+                return { count: svgs.length, paused: svgs.map((s) => s.animationsPaused()), animations: document.querySelectorAll('.route animate, .route animateTransform').length };
+            });
+        const away = await state();
+        assert.equal(away.count, 4, 'four drawn steps');
+        if (reducedMotion === 'reduce') {
+            assert.equal(away.animations, 0, 'the drawings animate without motion');
+        } else {
+            assert.ok(away.animations > 0, 'the drawings do not animate');
+            assert.deepEqual(away.paused, [true, true, true, true], 'drawings move while off screen');
+            await page.locator('.made__drawn').first().scrollIntoViewIfNeeded();
+            await page.waitForFunction(() => [...document.querySelectorAll('.made__grid svg.route')].every((s) => !s.animationsPaused()));
+        }
+        await context.close();
+    }
+});
+
 test('if the page’s script cannot load, or hangs, the plain copy shows instead of a blank page', { skip }, async () => {
     const context = await browser.newContext();
     for (const [handle, within] of [

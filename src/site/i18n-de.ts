@@ -82,7 +82,7 @@ export const DE: Readonly<Record<string, string>> = {
         'Ein Schmelzspinner in einem Universitätslabor: eine stählerne Vakuumkugel mit rundem Fenster, daneben Netzteil und Gasflaschen.',
     'From raw metal to a part': 'Vom Rohmetall zum Bauteil',
     'We make what we design.': 'Wir stellen her, was wir entwickeln.',
-    'From raw metal to a machined part, in five photographs': 'Vom Rohmetall zum bearbeiteten Bauteil, in fünf Fotos',
+    'From raw metal to a tested coupon: five photographs, then four drawings': 'Vom Rohmetall zur getesteten Probe: fünf Fotos, dann vier Zeichnungen',
     'Small pieces of raw metal spread out on a paper towel before a melt.': 'Kleine Stücke Rohmetall, vor dem Schmelzen auf einem Papiertuch ausgebreitet.',
     'Raw metals, ready to melt': 'Rohmetalle, bereit zum Schmelzen',
     'Close-up of a copper hearth: small pieces of raw metal loaded into its hollows.': 'Nahaufnahme eines Kupferherds: kleine Stücke Rohmetall in seinen Mulden.',
@@ -93,9 +93,31 @@ export const DE: Readonly<Record<string, string>> = {
     'A cast alloy button with a crystalline surface pattern, resting in a red lid on a lab bench.':
         'Ein gegossener Legierungsknopf mit kristallinem Oberflächenmuster, in einem roten Deckel auf einem Labortisch.',
     'An alloy button, as cast': 'Ein Legierungsknopf im Gusszustand',
-    'A machined metal block covered in bright curled metal chips, with milled channels beside them.':
-        'Ein bearbeiteter Metallblock, bedeckt mit glänzenden Metallspänen, daneben gefräste Kanäle.',
-    'Machined to shape': 'Spanend bearbeitet',
+    'A metal block being milled down: bright curled chips cover it, with milled channels beside them.':
+        'Ein Metallblock wird klein gefräst: Glänzende, gekräuselte Späne bedecken ihn, daneben gefräste Kanäle.',
+    'Milled down': 'Klein gefräst',
+    'Made into powder': 'Zu Pulver verarbeitet',
+    'Printed in a powder bed': 'Im Pulverbett gedruckt',
+    'LPBF: research at Fraunhofer IAPT, industrial at Bimo Tech.': 'LPBF: erforscht bei Fraunhofer IAPT, industriell bei Bimo Tech.',
+    'Or built up by DED': 'Oder per DED aufgebaut',
+    'Directed energy deposition.': 'Laser-Pulver-Auftragschweißen.',
+    'Coupons, then tests': 'Proben, dann Tests',
+    'Density and flaws first, then real conditions.': 'Erst Dichte und Fehler, dann echte Bedingungen.',
+
+    // The drawn steps of the route (src/site/route-drawings.tsx)
+    'Metal chips go into a mill and come out as fine, round powder.': 'Metallspäne gehen in eine Mühle und kommen als feines, rundes Pulver heraus.',
+    chips: 'Späne',
+    powder: 'Pulver',
+    'A laser melts each layer of the part into a bed of metal powder; a blade then spreads the next layer.':
+        'Ein Laser schmilzt jede Schicht des Bauteils in ein Bett aus Metallpulver; eine Klinge verteilt dann die nächste Schicht.',
+    laser: 'Laser',
+    part: 'Bauteil',
+    'A nozzle blows metal powder into a laser beam and builds the part up, bead by bead.':
+        'Eine Düse bläst Metallpulver in einen Laserstrahl und baut das Bauteil Raupe für Raupe auf.',
+    'Test coupons on the build plate; a scan looks inside one and finds the flaws.':
+        'Testproben auf der Bauplatte; ein Scan blickt in eine hinein und findet die Fehler.',
+    coupons: 'Proben',
+    flaw: 'Fehler',
 
     // Why Europe (src/site/Europe.tsx)
     'A satellite view of the Earth turning to Europe, with Giessen and Wrocław marked.':
@@ -137,14 +159,15 @@ export const DE: Readonly<Record<string, string>> = {
     'You tell us': 'Sie nennen uns',
     'AI proposes': 'Die KI schlägt',
     'Simulations rule out': 'Simulationen schließen',
-    'We melt and 3D-print': 'Wir schmelzen und 3D-drucken',
+    'We melt the best candidates,': 'Wir schmelzen die besten Kandidaten,',
     'We measure': 'Wir messen',
     'Every result': 'Jedes Ergebnis',
     'the heat and loads the part faces, and the material it has to beat.':
         'die Temperaturen und Lasten, denen das Bauteil ausgesetzt ist, und das Material, das übertroffen werden muss.',
     'candidate mixes from the whole range of possibilities.': 'Mischungen aus dem ganzen Spektrum der Möglichkeiten vor.',
     'most ideas before anything is melted.': 'die meisten Ideen aus, bevor überhaupt etwas geschmolzen wird.',
-    'the best candidates.': 'die besten Kandidaten.',
+    'mill them down, turn them into powder and print them by laser powder bed fusion or DED.':
+        'fräsen sie klein, machen daraus Pulver und drucken sie per Laser-Pulverbettschmelzen oder DED.',
     'each sample against your targets.': 'jede Probe an Ihren Zielwerten.',
     'goes back into the models and decides what we try next.': 'fließt in die Modelle zurück und bestimmt, was wir als Nächstes versuchen.',
     'The PRISM loop: your requirement in the middle; design, screen, make, test and learn around it, and round again.':
@@ -458,17 +481,18 @@ export const DE: Readonly<Record<string, string>> = {
     'Manufacturing and test': 'Fertigung und Test',
     'Can it really be made? Does it hold up?': 'Lässt es sich wirklich herstellen? Hält es stand?',
     'Only a real test can tell.': 'Das zeigt nur ein echter Test.',
-    'Most materials designed on a computer never get past the recipe. We melt and 3D-print the best ideas, then test them.':
-        'Die meisten am Computer entworfenen Materialien kommen nie über das Rezept hinaus. Wir schmelzen die besten Ideen, drucken sie in 3D und testen sie dann.',
+    'Most materials designed on a computer never get past the recipe. We melt the best ideas, mill them down, make powder and print them, then test them.':
+        'Die meisten am Computer entworfenen Materialien kommen nie über das Rezept hinaus. Wir schmelzen die besten Ideen, fräsen sie klein, machen daraus Pulver, drucken sie und testen sie dann.',
     'A vacuum-arc furnace, open: the steel chamber with its viewports lifted above the round copper hearth.':
         'Ein Vakuum-Lichtbogenofen, geöffnet: die stählerne Kammer mit ihren angehobenen Sichtfenstern über dem runden Kupferherd.',
     'The vacuum-arc furnace, open.': 'Der Vakuum-Lichtbogenofen, geöffnet.',
     'A test sample is not a finished part. Certification is our goal; we do not claim it yet.':
         'Eine Testprobe ist kein fertiges Bauteil. Die Zertifizierung ist unser Ziel; erreicht haben wir sie noch nicht.',
-    'Powder and melting': 'Pulver und Schmelzen',
-    'New alloys, prepared and melted in a vacuum-arc furnace.': 'Neue Legierungen, vorbereitet und geschmolzen in einem Vakuum-Lichtbogenofen.',
+    'Melting and powder': 'Schmelzen und Pulver',
+    'Melted in a vacuum-arc furnace, milled down and made into powder.': 'Im Vakuum-Lichtbogenofen geschmolzen, klein gefräst und zu Pulver verarbeitet.',
     'Can it be 3D-printed? Checked before any build starts.': 'Lässt es sich 3D-drucken? Das wird geprüft, bevor ein Baujob startet.',
-    'Industrial laser printing from metal powder, safe settings mapped.': 'Industrieller Laserdruck aus Metallpulver, mit kartierten sicheren Einstellungen.',
+    'Laser powder bed fusion, first at Fraunhofer IAPT, then on Bimo Tech’s industrial machines, with the safe settings carried across. DED too.':
+        'Laser-Pulverbettschmelzen, zuerst bei Fraunhofer IAPT, dann auf den Industrieanlagen von Bimo Tech; die sicheren Einstellungen werden übertragen. Auch DED.',
     Testing: 'Prüfung',
     'Density and inner structure first, then strength and heat.': 'Zuerst Dichte und innere Struktur, dann Festigkeit und Hitzebeständigkeit.',
     'Certification file': 'Zertifizierungsakte',
@@ -497,6 +521,8 @@ export const DE: Readonly<Record<string, string>> = {
     'Running now · funded by ESA': 'Läuft · gefördert von der ESA',
     'The first project built around the full PRISM loop, for European space transport.':
         'Das erste Projekt, das auf dem vollständigen PRISM-Kreislauf aufbaut, für den europäischen Raumtransport.',
+    'The best candidates are melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons.':
+        'Die besten Kandidaten werden geschmolzen, klein gefräst und zu Pulver verarbeitet, bei Fraunhofer IAPT und dann bei Bimo Tech gedruckt und als Proben getestet.',
     '12 months': '12 Monate',
     'candidate alloys': 'Kandidatenlegierungen',
     'complete closed loop': 'vollständiger geschlossener Kreislauf',
@@ -834,7 +860,7 @@ export const DE: Readonly<Record<string, string>> = {
     'what the part must survive': 'was das Bauteil überstehen muss',
     'AI suggests ideas': 'KI schlägt Ideen vor',
     'physics checks; most stop here': 'Prüfung der Physik; die meisten scheitern hier',
-    'melted and 3D-printed for real': 'real geschmolzen und 3D-gedruckt',
+    'melted, powdered, printed': 'geschmolzen, zu Pulver gemahlen, gedruckt',
     'measured against the targets': 'an den Zielwerten gemessen',
     targets: 'Zielwerte',
     ideas: 'Ideen',

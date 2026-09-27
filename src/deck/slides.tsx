@@ -110,7 +110,7 @@ const LOOP: (LoopStep & { text: string; maturity: Maturity })[] = [
     { name: 'Requirement', glyph: 'target', text: 'You tell us what the part must survive.', maturity: 'prototype' },
     { name: 'Design', glyph: 'lattice', text: 'AI suggests new mixes, from the whole range.', maturity: 'prototype' },
     { name: 'Screen', glyph: 'funnel', text: 'Simulations rule most out, before anything is melted.', maturity: 'prototype' },
-    { name: 'Make', glyph: 'flame', text: 'We melt and 3D-print the best ideas.', maturity: 'in-use' },
+    { name: 'Make', glyph: 'flame', text: 'We melt the best ideas, make powder and print them.', maturity: 'in-use' },
     { name: 'Test', glyph: 'gauge', text: 'Each sample is measured against your targets.', maturity: 'in-use' },
     { name: 'Learn', glyph: 'cycle', text: 'Every result goes back into the models.', maturity: 'prototype' },
 ];
@@ -153,7 +153,7 @@ const TOWER: TowerRow[] = [
     { name: 'Research', text: 'AI suggests mixes; physics simulations throw out what cannot work.', maturity: 'prototype' },
     { name: 'Harness', text: 'Plans each round, runs the tools, scores the results, remembers failures.', maturity: 'prototype' },
     { name: 'Autonomy', text: 'Robots weigh, melt and measure. People stay in charge.', maturity: 'development' },
-    { name: 'Manufacturing and test', text: 'Melting, metal 3D printing and testing, with Bimo Tech and Fraunhofer IAPT.', maturity: 'in-use' },
+    { name: 'Manufacturing and test', text: 'Melting, powder, laser printing and testing, with Bimo Tech and Fraunhofer IAPT.', maturity: 'in-use' },
     { name: 'Evidence', text: 'Every result keeps its source, its owner and its rules.', maturity: 'in-use' },
 ];
 
