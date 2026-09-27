@@ -635,7 +635,7 @@ export function Financials() {
 
 const MOMENTUM: { when: string; who: string; figure?: string; text: string; ours?: boolean; href?: string }[] = [
     { when: '2024', who: 'PRISM', text: 'The idea and the first concept.', ours: true },
-    { when: 'Jul 2025', who: 'PRISM to ESA', text: 'Put to ESA through OSIP, its platform for new ideas.', ours: true, href: LINKS.osip },
+    { when: 'Jul 2025', who: 'PRISM to ESA', text: 'Put to ESA through OSIP, its platform for new ideas.', ours: true, href: LINKS.osipSubmission },
     { when: 'Jul 2025', who: 'Radical AI', figure: '$55M', text: 'Seed round, for AI and self-driving labs for materials.' },
     { when: 'Sep 2025', who: 'Periodic Labs', figure: '$300M', text: 'Seed round, to automate scientific discovery.' },
     { when: 'Oct 2025', who: 'Lila Sciences', figure: '$550M', text: 'Raised in total, for AI science factories.' },

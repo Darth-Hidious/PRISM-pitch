@@ -436,9 +436,14 @@ test('PRISM Alpha is placed in ESA’s launcher programme (FLPP), and the July 2
         assert.ok(words.includes(osip), `${path}: no OSIP submission`);
         const hrefs = [...copy.querySelectorAll('a')].map((a) => attr(a, 'href'));
         assert.ok(hrefs.some((h) => h?.includes('esa.int') && h.includes('OSIP')), `${path}: no link to OSIP`);
+        assert.ok(hrefs.some((h) => h?.startsWith('https://ideas.esa.int/') && h.includes('OSIP.pdf')), `${path}: no link to our submission`);
         assert.ok(hrefs.some((h) => h?.includes('Future_space_transportation')), `${path}: no link to FLPP`);
     }
-    for (const path of ['/news/', '/de/news/']) assert.match(text(page(fileOf(path)).copy), /FLPP/, `${path}: PRISM Alpha without FLPP`);
+    for (const path of ['/news/', '/de/news/']) {
+        const { copy } = page(fileOf(path));
+        assert.match(text(copy), /FLPP/, `${path}: PRISM Alpha without FLPP`);
+        assert.ok([...copy.querySelectorAll('a')].some((a) => attr(a, 'href')?.includes('OSIP.pdf')), `${path}: no link to our submission`);
+    }
 });
 
 test('the company page names its two advisors, and no one else from the partners', () => {

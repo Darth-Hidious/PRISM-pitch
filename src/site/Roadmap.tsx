@@ -97,11 +97,19 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                             <p className="w-label">{t('Done so far')}</p>
                             <ul>
                                 <li>
-                                    {t.rich('July 2025: we put PRISM to ESA through <0>OSIP</0>, its platform for new ideas.', (s) => (
-                                        <a href={LINKS.osip} target="_blank" rel="noopener noreferrer">
-                                            {s}
-                                        </a>
-                                    ))}
+                                    {t.rich(
+                                        'July 2025: we put PRISM to ESA through <0>OSIP</0>, its platform for new ideas: <1>our submission (PDF)</1>.',
+                                        (s) => (
+                                            <a href={LINKS.osip} target="_blank" rel="noopener noreferrer">
+                                                {s}
+                                            </a>
+                                        ),
+                                        (s) => (
+                                            <a href={LINKS.osipSubmission} target="_blank" rel="noopener noreferrer">
+                                                {s}
+                                            </a>
+                                        ),
+                                    )}
                                 </li>
                                 <li>{t('Project SPARK: eight candidate alloys narrowed to two, made as real metal.')}</li>
                                 <li>{t('PRISM Alpha, a full ESA project in the launcher programme FLPP, kicked off in July 2026.')}</li>

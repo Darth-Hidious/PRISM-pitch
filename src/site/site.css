@@ -4737,6 +4737,23 @@ body {
     gap: 12px;
 }
 
+/* A source to read, under the story. */
+.news__link {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.news__link:hover {
+    color: var(--accent);
+}
+
 /* The lead story spans the row: photograph beside the text. */
 .news__item--lead {
     grid-column: 1 / -1;

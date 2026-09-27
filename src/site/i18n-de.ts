@@ -592,8 +592,9 @@ export const DE: Readonly<Record<string, string>> = {
     // ESA's own names, kept in English.
     'Future Launchers Preparatory Programme': 'Future Launchers Preparatory Programme',
     OSIP: 'OSIP',
-    'July 2025: we put PRISM to ESA through <0>OSIP</0>, its platform for new ideas.':
-        'Juli 2025: Wir haben PRISM über <0>OSIP</0>, die Ideenplattform der ESA, eingereicht.',
+    'July 2025: we put PRISM to ESA through <0>OSIP</0>, its platform for new ideas: <1>our submission (PDF)</1>.':
+        'Juli 2025: Wir haben PRISM über <0>OSIP</0>, die Ideenplattform der ESA, eingereicht: <1>unsere Einreichung (PDF)</1>.',
+    'Read our submission (PDF)': 'Unsere Einreichung lesen (PDF)',
     'PRISM Alpha, a full ESA project in the launcher programme FLPP, kicked off in July 2026.':
         'PRISM Alpha, ein vollwertiges ESA-Projekt im Trägerraketenprogramm FLPP, gestartet im Juli 2026.',
     'Our first privately funded project, for PFAS‑free polymers, is signed.': 'Unser erstes privat finanziertes Projekt, für PFAS‑freie Polymere, ist unterzeichnet.',

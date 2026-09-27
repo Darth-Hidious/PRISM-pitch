@@ -131,6 +131,7 @@ interface NewsItem {
     title: string;
     text: string;
     image?: { src: string; alt: string; width: number; height: number; credit?: string };
+    link?: { href: string; label: string };
 }
 
 const NEWS: NewsItem[] = [
@@ -175,6 +176,7 @@ const NEWS: NewsItem[] = [
         tag: 'Proposal',
         title: 'PRISM put to ESA',
         text: 'We submitted PRISM to ESA’s Open Space Innovation Platform (OSIP), where ESA collects new ideas. PRISM Alpha, which followed, is a larger project, in ESA’s launcher programme FLPP.',
+        link: { href: LINKS.osipSubmission, label: 'Read our submission (PDF)' },
     },
 ];
 
@@ -218,6 +220,11 @@ export function News({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
                                 </p>
                                 <Item>{t(n.title)}</Item>
                                 <p>{t(n.text)}</p>
+                                {n.link && (
+                                    <a className="news__link" href={n.link.href} target="_blank" rel="noopener noreferrer">
+                                        {t(n.link.label)} <Arrow external />
+                                    </a>
+                                )}
                             </div>
                         </li>
                     ))}
