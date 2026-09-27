@@ -334,7 +334,7 @@ export const DE: Readonly<Record<string, string>> = {
 
     // Working with us (src/site/Business.tsx)
     'Working with us': 'Zusammenarbeit mit uns',
-    'Our tools are free. We earn from development contracts and licensing.': 'Unsere Werkzeuge sind kostenlos. Wir verdienen an Entwicklungsaufträgen und Lizenzen.',
+    'Our tools are free. We earn from development contracts and licensing.': 'Unsere Werkzeuge sind kostenlos. Wir verdienen an Entwick\u00adlungs\u00adaufträgen und Lizenzen.',
     'Customers want the material now, for what it can do. Certifying a part takes ten years or more; that comes later.':
         'Kunden wollen das Material jetzt, für das, was es kann. Die Zertifizierung eines Bauteils dauert zehn Jahre oder länger; sie kommt später.',
     'How Mirdyne works with you, from open source to supply': 'Wie Mirdyne mit Ihnen zusammenarbeitet, von Open Source bis zur Lieferung',
