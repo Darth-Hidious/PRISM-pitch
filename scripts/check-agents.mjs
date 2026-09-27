@@ -2,13 +2,13 @@
  * Checks a deployed site the way an agent meets it: every page in the site map as HTML and as Markdown,
  * the 404s, the redirects, and each machine-readable file.
  *
- *   node scripts/check-agents.mjs [base URL]      (default https://www.mirdyne.com)
+ *   node scripts/check-agents.mjs [base URL]      (default https://prism.mirdyne.com)
  *
  * A protected preview needs its cookie: CHECK_COOKIE='_vercel_jwt=…'. Behind a proxy, set
  * NODE_USE_ENV_PROXY=1 so fetch uses it. Exits with 1 if anything is wrong.
  */
-const BASE = (process.argv[2] ?? 'https://www.mirdyne.com').replace(/\/$/, '');
-const SITE = 'https://www.mirdyne.com';
+const BASE = (process.argv[2] ?? 'https://prism.mirdyne.com').replace(/\/$/, '');
+const SITE = 'https://prism.mirdyne.com';
 const BROWSER = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8';
 
 let failures = 0;
@@ -46,7 +46,7 @@ console.log(`Checking ${BASE}\n`);
 // robots.txt and the site map: the list of pages comes from the site itself.
 const robots = await get('/robots.txt');
 ok(robots.status === 200 && robots.type.startsWith('text/plain'), `robots.txt: ${robots.status} ${robots.type}`);
-ok(/^Sitemap: https:\/\/www\.mirdyne\.com\/sitemap\.xml$/m.test(robots.body), 'robots.txt names the site map');
+ok(/^Sitemap: https:\/\/prism\.mirdyne\.com\/sitemap\.xml$/m.test(robots.body), 'robots.txt names the site map');
 const sitemap = await get('/sitemap.xml');
 ok(sitemap.status === 200 && /xml/.test(sitemap.type), `sitemap.xml: ${sitemap.status} ${sitemap.type}`);
 ok(sitemap.body.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'), 'sitemap.xml uses the sitemaps.org schema');
@@ -124,7 +124,7 @@ ok(ev.status === 307 && ev.headers.get('location') === '/method/#proof', `/evide
 const llms = await get('/llms.txt');
 ok(llms.status === 200 && llms.type.startsWith('text/plain') && llms.body.startsWith('# '), `llms.txt: ${llms.status} ${llms.type}`);
 ok(/^## When to use/m.test(llms.body) && /Accept: text\/markdown/.test(llms.body), 'llms.txt has a when-to-use section and instructions for agents');
-for (const [, url] of llms.body.matchAll(/\]\((https:\/\/www\.mirdyne\.com[^)\s]*)\)/g)) {
+for (const [, url] of llms.body.matchAll(/\]\((https:\/\/prism\.mirdyne\.com[^)\s]*)\)/g)) {
     const r = await get(new URL(url).pathname, { redirect: 'follow' });
     ok(r.status === 200, `llms.txt link ${url}: ${r.status} ${r.type}`);
 }

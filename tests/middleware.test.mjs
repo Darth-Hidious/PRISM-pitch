@@ -6,13 +6,13 @@ const { default: middleware, config } = await load('middleware.ts');
 const { MARKDOWN_PAGES } = await load('server/negotiate.ts');
 
 const call = (path, accept) =>
-    middleware(new Request(`https://www.mirdyne.com${path}`, { headers: accept ? { accept } : {} }));
+    middleware(new Request(`https://prism.mirdyne.com${path}`, { headers: accept ? { accept } : {} }));
 
 test('Accept: text/markdown gets the page’s Markdown copy, marked text/markdown and Vary: Accept', () => {
     for (const page of MARKDOWN_PAGES) {
         for (const path of new Set([page, page.replace(/\/$/, '') || '/'])) {
             const res = call(path, 'text/markdown');
-            assert.equal(res.headers.get('x-middleware-rewrite'), `https://www.mirdyne.com${page}index.html.md`, path);
+            assert.equal(res.headers.get('x-middleware-rewrite'), `https://prism.mirdyne.com${page}index.html.md`, path);
             assert.equal(res.headers.get('content-type'), 'text/markdown; charset=utf-8');
             assert.equal(res.headers.get('vary'), 'Accept');
         }

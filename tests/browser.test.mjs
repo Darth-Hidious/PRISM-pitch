@@ -242,11 +242,11 @@ test('the German form: its own checks, every answer from the server, and the tha
     delete process.env.SMTP_PASS;
     const { POST } = await load('api/interest.ts');
     const good = { name: 'Ada Lovelace', email: 'ada@example.com', organisation: 'Analytical Engines', role: '', areas: ['material'], message: '', consent: true, website: '', elapsed: 5000, from: '/interest/' };
-    const ask = async (body, { origin = 'https://www.mirdyne.com', raw } = {}) => {
+    const ask = async (body, { origin = 'https://prism.mirdyne.com', raw } = {}) => {
         const res = await POST(
-            new Request('https://www.mirdyne.com/api/interest', {
+            new Request('https://prism.mirdyne.com/api/interest', {
                 method: 'POST',
-                headers: { origin, host: 'www.mirdyne.com', 'content-type': 'application/json' },
+                headers: { origin, host: 'prism.mirdyne.com', 'content-type': 'application/json' },
                 body: raw ?? JSON.stringify(body),
             }),
         );

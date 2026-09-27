@@ -60,10 +60,10 @@ test('toMarkdown: title first, absolute links, labels and numbers kept apart, a 
     const lines = md.split('\n');
     assert.equal(lines[0], '# Title');
     assert.doesNotMatch(md, /Kicker/);
-    assert.match(md, /!\[An engine\]\(https:\/\/www\.mirdyne\.com\/hero\.webp\)/);
+    assert.match(md, /!\[An engine\]\(https:\/\/prism\.mirdyne\.com\/hero\.webp\)/);
     assert.match(md, /Funded by \*\*ESA\*\*/);
     assert.match(md, /01 You tell us\./);
-    assert.match(md, /\[Contact\]\(https:\/\/www\.mirdyne\.com\/contact\/\)\./);
+    assert.match(md, /\[Contact\]\(https:\/\/prism\.mirdyne\.com\/contact\/\)\./);
     assert.match(md, /\*Sources:\* A paper\./);
     assert.match(md, /Line one\\\nLine two/);
     assert.match(md, /- {1,3}\*\*19\*\* rounds/);

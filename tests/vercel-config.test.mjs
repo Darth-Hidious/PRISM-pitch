@@ -60,15 +60,36 @@ test('Markdown copies are text/markdown and point to their HTML page as canonica
     const headersFor = (path) =>
         Object.assign({}, ...routes.filter((r) => r.continue && r.headers && new RegExp(r.src).test(path)).map((r) => r.headers));
     assert.equal(headersFor('/index.html.md')['Content-Type'], 'text/markdown; charset=utf-8');
-    assert.equal(headersFor('/index.html.md').Link, '<https://www.mirdyne.com/>; rel="canonical"');
+    assert.equal(headersFor('/index.html.md').Link, '<https://prism.mirdyne.com/>; rel="canonical"');
     const company = headersFor('/company/index.html.md');
     assert.equal(company['Content-Type'], 'text/markdown; charset=utf-8');
-    assert.equal(company.Link.replace('$1', 'company'), '<https://www.mirdyne.com/company/>; rel="canonical"');
+    assert.equal(company.Link.replace('$1', 'company'), '<https://prism.mirdyne.com/company/>; rel="canonical"');
     // The German copies, under /de/.
     const de = headersFor('/de/index.html.md');
     assert.equal(de['Content-Type'], 'text/markdown; charset=utf-8');
-    assert.equal(de.Link.replace('$1', 'de'), '<https://www.mirdyne.com/de/>; rel="canonical"');
+    assert.equal(de.Link.replace('$1', 'de'), '<https://prism.mirdyne.com/de/>; rel="canonical"');
     const deCompany = headersFor('/de/company/index.html.md');
     assert.equal(deCompany['Content-Type'], 'text/markdown; charset=utf-8');
-    assert.equal(deCompany.Link.replace('$1', 'company'), '<https://www.mirdyne.com/de/company/>; rel="canonical"');
+    assert.equal(deCompany.Link.replace('$1', 'company'), '<https://prism.mirdyne.com/de/company/>; rel="canonical"');
+});
+
+test('prism.mirdyne.com is the site; our other addresses send each visitor there', () => {
+    const redirectFor = (host, path) =>
+        routes.find((r) => r.src && new RegExp(r.src).test(path) && (r.has ?? []).some((h) => h.type === 'host' && h.value === host));
+    // www.mirdyne.com: the same page on prism.mirdyne.com, for good.
+    for (const path of ['/', '/platform/', '/de/company/', '/deck/', '/llms.txt']) {
+        const r = redirectFor('www.mirdyne.com', path);
+        assert.equal(r?.status, 308, path);
+        assert.equal(path.replace(new RegExp(r.src), r.headers.Location), `https://prism.mirdyne.com${path}`, path);
+    }
+    // Except the functions, so that a page still open at the old address can send its form.
+    assert.equal(redirectFor('www.mirdyne.com', '/api/interest'), undefined);
+    // The .eu addresses: the home page.
+    for (const host of ['mirdyne.eu', 'www.mirdyne.eu']) {
+        const r = redirectFor(host, '/anything');
+        assert.equal(r?.status, 308, host);
+        assert.equal(r.headers.Location, 'https://prism.mirdyne.com/', host);
+    }
+    // Nothing sends prism.mirdyne.com anywhere else.
+    assert.ok(!routes.some((r) => (r.has ?? []).some((h) => h.type === 'host' && h.value === 'prism.mirdyne.com')));
 });

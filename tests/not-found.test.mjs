@@ -5,7 +5,7 @@ import { load } from './load.mjs';
 const { default: handler, MARKDOWN_404, MARKDOWN_404_DE } = await load('api/not-found.ts');
 
 const call = (accept, method = 'GET') =>
-    handler.fetch(new Request('https://www.mirdyne.com/no/such/page', { method, headers: { accept } }));
+    handler.fetch(new Request('https://prism.mirdyne.com/no/such/page', { method, headers: { accept } }));
 
 test('Markdown 404: status 404, text/markdown, links to the site map and llms.txt', async () => {
     const res = call('text/markdown');
@@ -16,8 +16,8 @@ test('Markdown 404: status 404, text/markdown, links to the site map and llms.tx
     assert.equal(body, MARKDOWN_404);
     assert.ok(body.length >= 20);
     assert.match(body, /^# Page not found$/m);
-    assert.match(body, /\]\(https:\/\/www\.mirdyne\.com\/sitemap\.xml\)/);
-    assert.match(body, /\]\(https:\/\/www\.mirdyne\.com\/llms\.txt\)/);
+    assert.match(body, /\]\(https:\/\/prism\.mirdyne\.com\/sitemap\.xml\)/);
+    assert.match(body, /\]\(https:\/\/prism\.mirdyne\.com\/llms\.txt\)/);
 });
 
 test('a client that lists Markdown but prefers HTML gets an HTML 404', async () => {
@@ -37,7 +37,7 @@ test('HEAD: the same status and headers, no body', async () => {
 test('under /de/ the 404 is German, in either form; anywhere else it is English', async () => {
     // vercel.json passes the missing address on as ?path=, without its leading slash.
     const at = (path, accept) =>
-        handler.fetch(new Request(`https://www.mirdyne.com/api/not-found?path=${encodeURIComponent(path)}`, { headers: { accept } }));
+        handler.fetch(new Request(`https://prism.mirdyne.com/api/not-found?path=${encodeURIComponent(path)}`, { headers: { accept } }));
     for (const path of ['de/no/such/page', 'de', 'de/']) {
         const md = at(path, 'text/markdown');
         assert.equal(md.status, 404);
@@ -45,9 +45,9 @@ test('under /de/ the 404 is German, in either form; anywhere else it is English'
         const body = await md.text();
         assert.equal(body, MARKDOWN_404_DE);
         assert.match(body, /^# Seite nicht gefunden$/m);
-        assert.match(body, /\]\(https:\/\/www\.mirdyne\.com\/de\/\)/);
-        assert.match(body, /\]\(https:\/\/www\.mirdyne\.com\/sitemap\.xml\)/);
-        assert.match(body, /\]\(https:\/\/www\.mirdyne\.com\/llms\.txt\)/);
+        assert.match(body, /\]\(https:\/\/prism\.mirdyne\.com\/de\/\)/);
+        assert.match(body, /\]\(https:\/\/prism\.mirdyne\.com\/sitemap\.xml\)/);
+        assert.match(body, /\]\(https:\/\/prism\.mirdyne\.com\/llms\.txt\)/);
         const html = at(path, 'text/html, text/markdown;q=0.5');
         assert.match(await html.text(), /<html lang="de">[\s\S]*<h1>Seite nicht gefunden<\/h1>/);
     }

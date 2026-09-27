@@ -1,11 +1,13 @@
 # PRISM — website and investor briefing
 
-`mirdyne.com`: what PRISM is, how it works and where it stands. It replaces `prism.mirdyne.com`.
+`prism.mirdyne.com`: what PRISM is, how it works and where it stands.
 
-The old addresses redirect here (`redirects` in `vercel.json`): `prism.mirdyne.com`,
-and `prism.marc27.com` through it, to the same page on `www.mirdyne.com`, except
-`/api/`, so the form and the daily clean-up keep working there; `mirdyne.eu` and
-`www.mirdyne.eu` to the home page.
+Our other addresses redirect here. `www.mirdyne.com` goes to the same page on
+`prism.mirdyne.com` (`redirects` in `vercel.json`), except `/api/`, so a page
+still open at the old address can send its form; `mirdyne.com` goes there
+through `www.mirdyne.com` (its own redirect, in the Vercel domain settings);
+`prism.marc27.com` goes straight to `prism.mirdyne.com` (domain settings);
+`mirdyne.eu` and `www.mirdyne.eu` go to the home page (`vercel.json`).
 
 | Path | What | Source |
 | --- | --- | --- |
@@ -72,7 +74,8 @@ that changes.
   environment variable. The emails in the inbox have to be deleted there.
 - **QR code for print:** `public/prism-qr.png` (a card, 1890 px square) and
   `public/prism-qr.svg` (the code alone, as a vector) open
-  https://www.mirdyne.com/interest/. They replace the Microsoft Forms code;
+  https://www.mirdyne.com/interest/, which redirects to the same page on
+  prism.mirdyne.com. They replace the Microsoft Forms code;
   printed copies of that one still lead to the old form.
 - Locally, `npm run dev` does not run `api/`; the form then shows its error
   message. `vercel dev` runs both.
@@ -144,7 +147,7 @@ same page in the other language, and every page names both versions in its
   `site.webmanifest`. `node scripts/make-icons.mjs` draws them all again.
 - **Link previews:** what WhatsApp, LinkedIn, Slack and iMessage show when a
   link is shared. Every page names its image and its address on
-  `www.mirdyne.com` (`og:` tags and `rel="canonical"`, so search engines count
+  `prism.mirdyne.com` (`og:` tags and `rel="canonical"`, so search engines count
   every copy of a page as one). The deck has its own picture and stays out of
   search (`noindex`, no canonical). `node scripts/make-previews.mjs` draws the
   pictures again; change the words there.
@@ -159,8 +162,8 @@ npm run dev        # http://localhost:5173/, /platform/, … and /deck/
 npm run build      # type-check, build every page into dist/, then the plain HTML and Markdown copies
 npm run lint
 npm test           # build, then every test in tests/ (npm run test:only skips the build)
-node scripts/check-agents.mjs [url]   # check a deployed site as an agent meets it (default www.mirdyne.com)
-node scripts/capture-pdf.mjs   # rebuild PRISM-Pitch-Deck.pdf from /deck/ (links point at www.mirdyne.com)
+node scripts/check-agents.mjs [url]   # check a deployed site as an agent meets it (default prism.mirdyne.com)
+node scripts/capture-pdf.mjs   # rebuild PRISM-Pitch-Deck.pdf from /deck/ (links point at prism.mirdyne.com)
 node scripts/build-design-system.mjs <dir>   # bundle src/ds for the design system
 ```
 

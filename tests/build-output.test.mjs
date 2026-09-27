@@ -228,7 +228,7 @@ test('sitemap.xml links each page with its twin in the other language, both ways
 
 test('robots.txt allows the site and names the site map', () => {
     const robots = read('robots.txt');
-    assert.match(robots, /^Sitemap: https:\/\/www\.mirdyne\.com\/sitemap\.xml$/m);
+    assert.match(robots, /^Sitemap: https:\/\/prism\.mirdyne\.com\/sitemap\.xml$/m);
     assert.doesNotMatch(robots, /^Disallow: \/\s*$/m);
 });
 

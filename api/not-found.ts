@@ -6,7 +6,7 @@ import { prefersMarkdown } from '../server/negotiate.js';
  * where to go instead, in the form the client prefers, and in German for addresses under /de/.
  */
 
-const SITE = 'https://www.mirdyne.com';
+const SITE = 'https://prism.mirdyne.com';
 
 export const MARKDOWN_404 = `# Page not found
 

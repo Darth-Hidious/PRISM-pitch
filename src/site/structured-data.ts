@@ -5,7 +5,7 @@ import { COMPANY } from './legal';
  * so the two cannot drift apart. scripts/prerender.mjs writes it into the built pages.
  */
 
-export const SITE = 'https://www.mirdyne.com';
+export const SITE = 'https://prism.mirdyne.com';
 const ORG = `${SITE}/#organization`;
 const WEBSITE = `${SITE}/#website`;
 

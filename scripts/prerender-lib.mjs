@@ -12,7 +12,7 @@
 import { parseHTML } from 'linkedom';
 import TurndownService from 'turndown';
 
-export const SITE = 'https://www.mirdyne.com';
+export const SITE = 'https://prism.mirdyne.com';
 
 /**
  * Hides the plain copy from the first paint wherever the page's script will run and draw the page itself.

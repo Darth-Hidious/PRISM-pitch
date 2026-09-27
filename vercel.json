@@ -26,7 +26,7 @@
       "headers": [
         {
           "key": "Link",
-          "value": "<https://www.mirdyne.com/>; rel=\"canonical\""
+          "value": "<https://prism.mirdyne.com/>; rel=\"canonical\""
         }
       ]
     },
@@ -35,7 +35,7 @@
       "headers": [
         {
           "key": "Link",
-          "value": "<https://www.mirdyne.com/:page/>; rel=\"canonical\""
+          "value": "<https://prism.mirdyne.com/:page/>; rel=\"canonical\""
         }
       ]
     },
@@ -44,7 +44,7 @@
       "headers": [
         {
           "key": "Link",
-          "value": "<https://www.mirdyne.com/de/:page/>; rel=\"canonical\""
+          "value": "<https://prism.mirdyne.com/de/:page/>; rel=\"canonical\""
         }
       ]
     }
@@ -55,10 +55,10 @@
       "has": [
         {
           "type": "host",
-          "value": "prism.mirdyne.com"
+          "value": "www.mirdyne.com"
         }
       ],
-      "destination": "https://www.mirdyne.com/:path",
+      "destination": "https://prism.mirdyne.com/:path",
       "permanent": true
     },
     {
@@ -69,7 +69,7 @@
           "value": "www.mirdyne.eu"
         }
       ],
-      "destination": "https://www.mirdyne.com/",
+      "destination": "https://prism.mirdyne.com/",
       "permanent": true
     },
     {
@@ -80,7 +80,7 @@
           "value": "mirdyne.eu"
         }
       ],
-      "destination": "https://www.mirdyne.com/",
+      "destination": "https://prism.mirdyne.com/",
       "permanent": true
     },
     {
