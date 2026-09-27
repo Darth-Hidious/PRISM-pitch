@@ -1,13 +1,14 @@
 import { put } from '@vercel/blob';
 import { waitUntil } from '@vercel/functions';
 import { createTransport } from 'nodemailer';
-import { interestMail } from '../server/interest-mail.js';
+import { confirmationMail, interestMail } from '../server/interest-mail.js';
 
 /**
  * Register interest. Checks a submission from the form at /interest/, keeps it as one private JSON file
  * in the project's Blob store in Frankfurt, and emails it to info@mirdyne.com through Zoho ZeptoMail
  * (Zoho's sending service, EU), with the visitor as the reply-to address. Nothing else is kept: no IP
- * address, no cookies. The areas below must match the form (src/site/Interest.tsx).
+ * address, no cookies. The visitor then gets a short confirmation in the language of the form they used.
+ * The areas below must match the form (src/site/Interest.tsx).
  *
  * The email needs SMTP_PASS in the project's environment: the ZeptoMail "Send Mail token" for the
  * verified domain mirdyne.com. No mailbox password is used. Optional: SMTP_HOST (default
@@ -25,6 +26,16 @@ const AREA_NAMES: Record<string, string> = {
     partnership: 'Partnership',
     investment: 'Investment',
     other: 'Something else',
+};
+/** The same areas in German, as the German form words them (src/site/i18n-de.ts), for the confirmation. */
+const AREA_NAMES_DE: Record<string, string> = {
+    material: 'Ein neues Material für ein Bauteil',
+    deployment: 'PRISM in unserem Programm',
+    supply: 'Lieferung eines qualifizierten Materials',
+    research: 'Forschungskooperation',
+    partnership: 'Partnerschaft',
+    investment: 'Investition',
+    other: 'Etwas anderes',
 };
 const AREAS = Object.keys(AREA_NAMES);
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -81,6 +92,8 @@ function check(body: Record<string, unknown>) {
         message: para(body.message),
         // The page they came from on our site, if any.
         from: line(body.from).startsWith('/') ? line(body.from) : '',
+        // The language of the form they used, for our confirmation.
+        lang: (body.lang === 'de' ? 'de' : 'en') as 'en' | 'de',
     };
     const problems: Problem[] = [];
     if (entry.name.length < 2) problems.push({ field: 'name', error: 'Please enter your name.' });
@@ -156,8 +169,8 @@ const why = (err: unknown) => (err instanceof Error ? err.message : String(err))
 type Entry = ReturnType<typeof check>['entry'];
 
 /**
- * Emails one submission to our inbox. Replying to the email answers the visitor. Returns 'off' when no
- * mail password is set, so the site works (storing only) before the mailbox is connected.
+ * Emails one submission to our inbox (replying to it answers the visitor), then sends the visitor a short
+ * confirmation. Returns 'off' when no mail token is set, so the site works (storing only) without it.
  */
 async function mail(entry: Entry, at: Date, saved: string | null): Promise<'sent' | 'off'> {
     const pass = process.env.SMTP_PASS;
@@ -194,5 +207,24 @@ async function mail(entry: Entry, at: Date, saved: string | null): Promise<'sent
         text,
         html,
     });
+    // Then a short confirmation to the visitor, in their language. If it fails, our copy still arrived.
+    try {
+        const confirm = confirmationMail({
+            lang: entry.lang,
+            name: entry.name,
+            email: entry.email,
+            areas: entry.areas.map((a) => (entry.lang === 'de' ? AREA_NAMES_DE : AREA_NAMES)[a] ?? a),
+        });
+        await transport.sendMail({
+            from: { name: 'Mirdyne', address: process.env.INTEREST_MAIL_FROM || 'info@mirdyne.com' },
+            to: { name: entry.name, address: entry.email },
+            replyTo: process.env.INTEREST_MAIL_TO || 'info@mirdyne.com',
+            subject: confirm.subject,
+            text: confirm.text,
+            html: confirm.html,
+        });
+    } catch (err) {
+        console.error('interest: could not send the confirmation:', why(err));
+    }
     return 'sent';
 }

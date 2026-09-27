@@ -324,8 +324,9 @@ export function Privacy() {
                     GDPR).
                 </p>
                 <p>
-                    Each submission is stored with Vercel in Frankfurt, Germany, and a copy is emailed to {email}. Our email is hosted
-                    by {ZOHO}, the Netherlands, in its data centres in the EU, also on our behalf.
+                    Each submission is stored with Vercel in Frankfurt, Germany, and a copy is emailed to {email}. You also get a short
+                    confirmation at the address you gave us. Our email is hosted by {ZOHO}, the Netherlands, in its data centres in the
+                    EU, also on our behalf.
                 </p>
                 <p>
                     We delete submissions after twelve months, or sooner if you ask or withdraw your consent. If your enquiry leads to
@@ -424,9 +425,9 @@ export function Privacy() {
                     auf Ihre Anfrage erfolgen (Art. 6 Abs. 1 lit. b DSGVO).
                 </p>
                 <p>
-                    Jede Anfrage wird bei Vercel in Frankfurt am Main gespeichert, und eine Kopie geht per E-Mail an {email}. Unsere
-                    E-Mails werden von der {ZOHO}, Niederlande, in ihren Rechenzentren in der EU betrieben, ebenfalls in unserem
-                    Auftrag.
+                    Jede Anfrage wird bei Vercel in Frankfurt am Main gespeichert, und eine Kopie geht per E-Mail an {email}. Sie
+                    erhalten außerdem eine kurze Bestätigung an die angegebene Adresse. Unsere E-Mails werden von der {ZOHO},
+                    Niederlande, in ihren Rechenzentren in der EU betrieben, ebenfalls in unserem Auftrag.
                 </p>
                 <p>
                     Wir löschen Anfragen nach zwölf Monaten, oder früher, wenn Sie es wünschen oder Ihre Einwilligung widerrufen. Führt

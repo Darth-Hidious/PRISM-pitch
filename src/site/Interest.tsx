@@ -163,6 +163,7 @@ function InterestForm() {
                     website: trap,
                     elapsed: Date.now() - opened.current,
                     from: cameFrom(),
+                    lang: t.lang,
                 }),
             });
             const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string; field?: Field } | null;
