@@ -56,13 +56,14 @@ that changes.
   in the project's Blob store `prism-interest` (Frankfurt), under
   `interest/<year-month>/`. It keeps what the form asks for and the page the
   visitor came from; no IP address and no cookies.
-- **Email:** each submission is also emailed to info@mirdyne.com, sent through
-  our own Zoho mailbox (`smtppro.zoho.eu`, port 465). Reply to the email to
-  answer the visitor. It needs one setting in Vercel: `SMTP_PASS`, an app
-  password for info@mirdyne.com (Zoho → My Account → Security → App
-  Passwords). Until it is set, submissions are stored but not emailed. On
-  Zoho's free plan use `SMTP_HOST=smtp.zoho.eu`. `SMTP_USER`,
-  `INTEREST_MAIL_TO` and `INTEREST_MAIL_FROM` change the sender and recipient.
+- **Email:** each submission is also emailed to info@mirdyne.com, sent from
+  info@mirdyne.com through Zoho ZeptoMail, Zoho's sending service in the EU
+  (`smtp.zeptomail.eu`, port 465). No mailbox password is used. Reply to the
+  email to answer the visitor. It needs one setting in Vercel: `SMTP_PASS`,
+  the ZeptoMail "Send Mail token" for the verified domain mirdyne.com (ZeptoMail
+  → Mail Agents → SMTP). Until it is set, submissions are stored but not
+  emailed. `SMTP_HOST`, `SMTP_USER`, `INTEREST_MAIL_TO` and
+  `INTEREST_MAIL_FROM` change the server, sender and recipient.
   If the store fails, the email is sent before the visitor is thanked, so a
   submission is never lost silently.
 - **Reading them:** Vercel dashboard → Storage → `prism-interest` → Browser.

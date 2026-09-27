@@ -633,17 +633,21 @@ export function Financials() {
 
 /* ── 11 Momentum: the market is moving ────────────────────────────────── */
 
-const MOMENTUM: { when: string; who: string; figure?: string; text: string; ours?: boolean; href?: string }[] = [
-    { when: '2024', who: 'PRISM', text: 'The idea and the first concept.', ours: true },
-    { when: 'Jul 2025', who: 'PRISM to ESA', text: 'Put to ESA through OSIP, its platform for new ideas.', ours: true, href: LINKS.osipSubmission },
-    { when: 'Jul 2025', who: 'Radical AI', figure: '$55M', text: 'Seed round, for AI and self-driving labs for materials.' },
-    { when: 'Sep 2025', who: 'Periodic Labs', figure: '$300M', text: 'Seed round, to automate scientific discovery.' },
-    { when: 'Oct 2025', who: 'Lila Sciences', figure: '$550M', text: 'Raised in total, for AI science factories.' },
-    { when: 'Nov 2025', who: 'Genesis Mission', text: 'A US government programme for AI-driven science and automated labs.' },
-    { when: 'Jul 2026', who: 'PRISM Alpha', text: 'A full ESA project in FLPP, the programme for Europe’s next launchers.', ours: true, href: LINKS.flpp },
-    { when: 'Aug 2026', who: 'Discovery Loop', text: 'Founded by top Google researchers to automate experiments. Raised hundreds of millions.' },
-    { when: 'Aug 2026', who: 'First private project', text: 'PFAS-free polymers, with an industrial partner under NDA.', ours: true },
+/** In order. Our steps run down the left lane, the money raised in the US down the right; `usd` sizes the bubble. */
+const MOMENTUM: { when: string; who: string; text: string; usd?: number; ours?: boolean; href?: string }[] = [
+    { when: '2024', who: 'PRISM', text: 'The idea', ours: true },
+    { when: 'Jul 2025', who: 'PRISM to ESA', text: 'Submitted to OSIP', ours: true, href: LINKS.osipSubmission },
+    { when: 'Jul 2025', who: 'Radical AI', text: 'Seed round', usd: 55 },
+    { when: 'Sep 2025', who: 'Periodic Labs', text: 'Seed round', usd: 300 },
+    { when: 'Oct 2025', who: 'Lila Sciences', text: 'Raised in total', usd: 550 },
+    { when: 'Nov 2025', who: 'Genesis Mission', text: 'US government programme' },
+    { when: 'Jul 2026', who: 'PRISM Alpha', text: 'ESA project in FLPP', ours: true, href: LINKS.flpp },
+    { when: 'Aug 2026', who: 'Discovery Loop', text: 'Hundreds of millions raised' },
+    { when: 'Aug 2026', who: 'First private project', text: 'PFAS-free polymers', ours: true },
 ];
+/** The biggest raise sets the largest bubble; area follows the money. */
+const BUBBLE_MAX = 44;
+const bubble = (usd: number) => Math.round(BUBBLE_MAX * Math.sqrt(usd / 550));
 
 export function Momentum() {
     return (
@@ -652,25 +656,38 @@ export function Momentum() {
             <div className="d-body d-momentum__body">
                 <MomentumGlobe />
                 <div className="d-momentum__side">
-                <ol className="d-momentum">
-                    {MOMENTUM.map((m, i) => (
-                        <li key={m.who} className={`d-in${m.ours ? ' d-momentum--ours' : ''}`} style={{ '--i': i } as CSSProperties}>
-                            <span className="pm-data-label">{m.when}</span>
-                            <b>
-                                {m.href ? (
-                                    <a href={m.href} target="_blank" rel="noopener noreferrer">
-                                        {m.who}
-                                    </a>
-                                ) : (
-                                    m.who
-                                )}
-                            </b>
-                            {m.figure && <strong>{m.figure}</strong>}
-                            <p>{m.text}</p>
-                        </li>
-                    ))}
-                </ol>
-                <p className="pm-lead d-momentum__close">Almost all this money is in the US. PRISM designs, makes and tests in Europe.</p>
+                    <p className="d-lanes__head" aria-hidden="true">
+                        <span>PRISM, in Europe</span>
+                        <span>The money, in the US</span>
+                    </p>
+                    <ol className="d-lanes">
+                        {MOMENTUM.map((m, i) => (
+                            <li key={m.who} className={`d-in d-lane d-lane--${m.ours ? 'eu' : 'us'}`} style={{ '--i': i } as CSSProperties}>
+                                <span className="d-lane__when">{m.when}</span>
+                                <div className="d-lane__body">
+                                    {!m.ours && (
+                                        <span className="d-lane__coin" aria-hidden="true">
+                                            {m.usd && <i style={{ '--s': `${bubble(m.usd)}px` } as CSSProperties} />}
+                                        </span>
+                                    )}
+                                    <p>
+                                        <b>
+                                            {m.href ? (
+                                                <a href={m.href} target="_blank" rel="noopener noreferrer">
+                                                    {m.who}
+                                                </a>
+                                            ) : (
+                                                m.who
+                                            )}
+                                        </b>
+                                        {m.usd && <strong>${m.usd}M</strong>}
+                                        <span>{m.text}</span>
+                                    </p>
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
+                    <p className="pm-lead d-momentum__close">Almost all this money is in the US. PRISM designs, makes and tests in Europe.</p>
                 </div>
             </div>
             <div className="d-foot">
@@ -786,7 +803,7 @@ export function Ask() {
             <div className="d-ask__figure" style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
                 <Kicker>The ask</Kicker>
                 <span className="pm-numeral">€4M</span>
-                <p className="pm-subtitle">Seed round, closing 15 November 2026.</p>
+                <p className="pm-subtitle">Seed round, closing 15 December 2026.</p>
                 <p className="pm-body">
                     The plan needs €2.91M never to run out of cash. We are raising €4M so the plan survives being wrong,
                     and so the downside gate closes before the money does.

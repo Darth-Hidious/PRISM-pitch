@@ -4,14 +4,15 @@ import { createTransport } from 'nodemailer';
 
 /**
  * Register interest. Checks a submission from the form at /interest/, keeps it as one private JSON file
- * in the project's Blob store in Frankfurt, and emails it to info@mirdyne.com through our own Zoho
- * mailbox, with the visitor as the reply-to address. Nothing else is kept: no IP address, no cookies.
- * The areas below must match the form (src/site/Interest.tsx).
+ * in the project's Blob store in Frankfurt, and emails it to info@mirdyne.com through Zoho ZeptoMail
+ * (Zoho's sending service, EU), with the visitor as the reply-to address. Nothing else is kept: no IP
+ * address, no cookies. The areas below must match the form (src/site/Interest.tsx).
  *
- * The email needs SMTP_PASS (an app password for the sending mailbox) in the project's environment.
- * Optional: SMTP_USER (default info@mirdyne.com), SMTP_HOST (default smtppro.zoho.eu, Zoho's server for
- * paid company plans; smtp.zoho.eu on the free plan), SMTP_PORT (default 465), INTEREST_MAIL_TO
- * (default info@mirdyne.com) and INTEREST_MAIL_FROM (default: SMTP_USER).
+ * The email needs SMTP_PASS in the project's environment: the ZeptoMail "Send Mail token" for the
+ * verified domain mirdyne.com. No mailbox password is used. Optional: SMTP_HOST (default
+ * smtp.zeptomail.eu), SMTP_PORT (default 465), SMTP_USER (default emailapikey, ZeptoMail's fixed user
+ * name), INTEREST_MAIL_TO (default info@mirdyne.com) and INTEREST_MAIL_FROM (default info@mirdyne.com,
+ * which must be on the verified domain).
  */
 
 /** Each area, as the form words it. */
@@ -166,10 +167,10 @@ async function mail(entry: Entry, at: Date, saved: string | null): Promise<'sent
         console.warn('interest: SMTP_PASS is not set, so no email was sent.');
         return 'off';
     }
-    const user = process.env.SMTP_USER || 'info@mirdyne.com';
+    const user = process.env.SMTP_USER || 'emailapikey';
     const port = Number(process.env.SMTP_PORT) || 465;
     const transport = createTransport({
-        host: process.env.SMTP_HOST || 'smtppro.zoho.eu',
+        host: process.env.SMTP_HOST || 'smtp.zeptomail.eu',
         port,
         secure: port === 465,
         auth: { user, pass },
@@ -209,7 +210,7 @@ ${rows.map(([k, v]) => `<tr><td style="padding:4px 20px 4px 0;color:#5f625e;vert
 <p style="margin:24px 0 0;font-size:13px;color:#5f625e">Reply to this email to answer ${esc(entry.name)}. ${esc(kept)}</p>
 </div>`;
     await transport.sendMail({
-        from: { name: 'PRISM website', address: process.env.INTEREST_MAIL_FROM || user },
+        from: { name: 'PRISM website', address: process.env.INTEREST_MAIL_FROM || 'info@mirdyne.com' },
         to: process.env.INTEREST_MAIL_TO || 'info@mirdyne.com',
         replyTo: { name: entry.name, address: entry.email },
         subject: `Register interest: ${entry.name}, ${entry.organisation}`,
