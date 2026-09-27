@@ -33,9 +33,9 @@ const PHOTOS = [
 ];
 
 /**
- * The steps after milling, which we have no photographs of our own of yet: photographs of the same steps
- * in other labs (credited in the Impressum, credits-data.ts), and a drawing where no free photograph was
- * good enough.
+ * The steps after milling. Our own photograph of a coupon; for the steps we have no photographs of our own
+ * of yet, photographs of the same steps in other labs (credited in the Impressum, credits-data.ts), and a
+ * drawing where no free photograph was good enough.
  */
 type Later = { caption: string; note?: string } & ({ src: string; alt: string } | { Art: () => ReactElement });
 const LATER: Later[] = [
@@ -52,8 +52,8 @@ const LATER: Later[] = [
     },
     { Art: DedDrawing, caption: 'Or built up by DED', note: 'Directed energy deposition.' },
     {
-        src: '/img/route-coupons.webp',
-        alt: 'Freshly printed test coupons, shaped to be pulled apart in a strength test, still standing in powder on the build plate.',
+        src: '/img/ippt-coupon.webp',
+        alt: 'A small round test coupon held between two fingers in the lab at IPPT PAN, Warsaw.',
         caption: 'Coupons, then tests',
         note: 'Density and flaws first, then real conditions.',
     },
@@ -152,7 +152,7 @@ export default function Made({ n = '02' }: { n?: string }) {
                                 <Words>{t('We make what we design.')}</Words>
                             </h2>
                             <Note label={t('Photos')}>
-                                {t('01 to 05 are our own photographs. 06, 07 and 09 show the same steps in other labs, until we have our own; 08 is drawn.')}
+                                {t('01 to 05 and 09 are our own photographs. 06 and 07 show the same steps in other labs, until we have our own; 08 is drawn.')}
                             </Note>
                         </header>
                         <div className="made__view rv">

@@ -105,14 +105,14 @@ export const DE: Readonly<Record<string, string>> = {
 
     'From raw metal to a tested coupon, in nine steps': 'Vom Rohmetall zur getesteten Probe, in neun Schritten',
     Photos: 'Fotos',
-    '01 to 05 are our own photographs. 06, 07 and 09 show the same steps in other labs, until we have our own; 08 is drawn.':
-        '01 bis 05 sind unsere eigenen Fotos. 06, 07 und 09 zeigen dieselben Schritte in anderen Laboren, bis wir eigene haben; 08 ist gezeichnet.',
+    '01 to 05 and 09 are our own photographs. 06 and 07 show the same steps in other labs, until we have our own; 08 is drawn.':
+        '01 bis 05 und 09 sind unsere eigenen Fotos. 06 und 07 zeigen dieselben Schritte in anderen Laboren, bis wir eigene haben; 08 ist gezeichnet.',
     'Metal powder for 3D printing under an electron microscope: tiny, almost perfect spheres.':
         'Metallpulver für den 3D-Druck unter dem Elektronenmikroskop: winzige, fast perfekte Kugeln.',
     'Through the tinted safety window of a laser powder-bed printer: small test pieces stand in the metal powder they were printed from.':
         'Durch das getönte Schutzfenster eines Laser-Pulverbettdruckers: Kleine Testteile stehen in dem Metallpulver, aus dem sie gedruckt wurden.',
-    'Freshly printed test coupons, shaped to be pulled apart in a strength test, still standing in powder on the build plate.':
-        'Frisch gedruckte Proben, geformt für den Zugversuch, stehen noch im Pulver auf der Bauplatte.',
+    'A small round test coupon held between two fingers in the lab at IPPT PAN, Warsaw.':
+        'Eine kleine runde Probe zwischen zwei Fingern, im Labor des IPPT PAN in Warschau.',
 
     // The drawn step of the route (src/site/route-drawings.tsx)
     powder: 'Pulver',
@@ -1045,7 +1045,6 @@ export const DE: Readonly<Record<string, string>> = {
     'René Volfík, FZU – Institute of Physics of the Czech Academy of Sciences ·':
         'René Volfík, FZU – Physikalisches Institut der Tschechischen Akademie der Wissenschaften ·',
     'CC BY-SA 4.0': 'CC BY-SA 4.0',
-    'Printed test coupons on the build plate': 'Gedruckte Proben auf der Bauplatte',
     'Vulcain 2 on test stand P5, DLR Lampoldshausen': 'Vulcain 2 auf Prüfstand P5, DLR Lampoldshausen',
     DLR: 'DLR',
     'CC BY 3.0': 'CC BY 3.0',

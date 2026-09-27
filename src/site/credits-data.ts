@@ -114,15 +114,6 @@ export const PICTURE_CREDITS: PictureCredit[] = [
         pages: 'Home',
     },
     {
-        picture: 'Printed test coupons on the build plate',
-        source: 'https://commons.wikimedia.org/wiki/File:FZU_3Dprinting_4.jpg',
-        by: 'René Volfík, FZU – Institute of Physics of the Czech Academy of Sciences',
-        licence: 'CC BY-SA 4.0',
-        licenceUrl: CC_BY_SA_4,
-        change: 'cropped and resized',
-        pages: 'Home',
-    },
-    {
         picture: 'Europe from Envisat',
         source: 'https://www.esa.int/ESA_Multimedia/Images/2010/09/MERIS_mosaic_of_Europe',
         by: 'ESA',

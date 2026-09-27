@@ -415,8 +415,8 @@ test('the making route, read without JavaScript: melted, milled, made into powde
     }
     // The photographs that are not ours are credited in the Impressum, in both languages.
     for (const [path, credits] of [
-        ['/impressum/', ['Metal powder under an electron microscope', 'Test pieces in a laser powder-bed printer', 'Printed test coupons on the build plate']],
-        ['/de/impressum/', ['Metallpulver unter dem Elektronenmikroskop', 'Testteile in einem Laser-Pulverbettdrucker', 'Gedruckte Proben auf der Bauplatte']],
+        ['/impressum/', ['Metal powder under an electron microscope', 'Test pieces in a laser powder-bed printer']],
+        ['/de/impressum/', ['Metallpulver unter dem Elektronenmikroskop', 'Testteile in einem Laser-Pulverbettdrucker']],
     ]) {
         const words = text(page(fileOf(path)).copy.querySelector('#credits'));
         for (const c of credits) assert.ok(words.includes(c), `${path}: no credit for "${c}"`);
