@@ -80,7 +80,7 @@ export const DE: Readonly<Record<string, string>> = {
     // Made (src/site/Made.tsx)
     'A melt spinner in a university materials lab: a steel vacuum sphere with a round window, its power supply and gas bottles beside it.':
         'Ein Schmelzspinner in einem Universitätslabor: eine stählerne Vakuumkugel mit rundem Fenster, daneben Netzteil und Gasflaschen.',
-    'From raw metal to a part': 'Vom Rohmetall zum Bauteil',
+    'From recipe to tested metal': 'Vom Rezept zum geprüften Metall',
     'We make what we design.': 'Wir stellen her, was wir entwickeln.',
     'Small pieces of raw metal spread out on a paper towel before a melt.': 'Kleine Stücke Rohmetall, vor dem Schmelzen auf einem Papiertuch ausgebreitet.',
     'Raw metals, ready to melt': 'Rohmetalle, bereit zum Schmelzen',
@@ -128,8 +128,9 @@ export const DE: Readonly<Record<string, string>> = {
         'Mehrere Modelle bewerten jedes Rezept. Wo sie sich uneinig sind, zählt die Bewertung weniger.',
     'Exact check': 'Exakte Prüfung',
     'A safe range that still works when powder and machine change.': 'Ein sicherer Bereich, der auch noch funktioniert, wenn Pulver und Maschine wechseln.',
-    'A generator proposes': 'Ein Generator schlägt',
-    'a whole batch of promising recipes, not one best guess.': 'eine ganze Reihe vielversprechender Rezepte vor, nicht nur einen besten Tipp.',
+    'Our generative models propose': 'Unsere generativen Modelle schlagen',
+    'a whole batch of promising recipes in those classes, not one best guess.':
+        'in diesen Klassen eine ganze Reihe vielversprechender Rezepte vor, nicht nur einen besten Tipp.',
     'Several models judge each one,': 'Mehrere Modelle bewerten jedes,',
     'an exact calculation settles the doubtful ones, and most ideas stop here.': 'eine exakte Rechnung klärt die unsicheren, und die meisten Ideen enden hier.',
     'How PRISM chooses': 'Wie PRISM auswählt',
@@ -203,6 +204,10 @@ export const DE: Readonly<Record<string, string>> = {
     Test: 'Test',
     Learn: 'Lernen',
     'What must the part survive?': 'Was muss das Bauteil überstehen?',
+    'What is already known?': 'Was ist schon bekannt?',
+    'PRISM reads the literature': 'PRISM liest die Fachliteratur',
+    'on your requirement, and we pick the classes of material worth researching.':
+        'zu Ihrer Anforderung, und wir wählen die Werkstoffklassen aus, die sich zu erforschen lohnen.',
     'What could work?': 'Was könnte funktionieren?',
     'What survives the physics?': 'Was hält der Physik stand?',
     'Can it be made, and made again?': 'Lässt es sich herstellen, und das wiederholbar?',
@@ -218,8 +223,8 @@ export const DE: Readonly<Record<string, string>> = {
         'fräsen sie klein, machen daraus Pulver und drucken sie per Laser-Pulverbettschmelzen oder DED.',
     'each sample against your targets.': 'jede Probe an Ihren Zielwerten.',
     'goes back into the models and decides what we try next.': 'fließt in die Modelle zurück und bestimmt, was wir als Nächstes versuchen.',
-    'The PRISM loop: your requirement in the middle; design, screen, make, test and learn around it, and round again.':
-        'Der PRISM-Kreislauf: Ihre Anforderung in der Mitte, darum Entwurf, Screening, Herstellung, Test und Lernen, und wieder von vorn.',
+    'The PRISM loop: your requirement in the middle; research, design, screen, make, test and learn around it, and round again.':
+        'Der PRISM-Kreislauf: Ihre Anforderung in der Mitte, darum Forschung, Entwurf, Screening, Herstellung, Test und Lernen, und wieder von vorn.',
     Your: 'Ihre',
     requirement: 'Anforderung',
     'How it works': 'So funktioniert es',
@@ -913,22 +918,25 @@ export const DE: Readonly<Record<string, string>> = {
     'To be confirmed': 'Noch zu bestätigen',
 
     // The procedure diagram (src/site/diagrams.tsx: ProcedureDiagram)
-    'The PRISM loop: a requirement, then design, screen, make and test; every result goes back to design. Evidence is recorded at every step.':
-        'Der PRISM-Kreislauf: eine Anforderung, dann Entwurf, Screening, Herstellung und Test; jedes Ergebnis fließt zurück in den Entwurf. Bei jedem Schritt werden Nachweise festgehalten.',
+    'The PRISM loop: a requirement, then research, design, screen, make and test; every result goes back to design. Evidence is recorded at every step.':
+        'Der PRISM-Kreislauf: eine Anforderung, dann Forschung, Entwurf, Screening, Herstellung und Test; jedes Ergebnis fließt zurück in den Entwurf. Bei jedem Schritt werden Nachweise festgehalten.',
     'evidence · every step is recorded: what went in, who owns it, who may see it':
         'Nachweis · jeder Schritt wird erfasst: was eingeflossen ist, wem es gehört, wer es sehen darf',
     learn: 'Lernen',
     'every result, good or bad, updates the models and picks the next experiment': 'jedes Ergebnis, gut oder schlecht, aktualisiert die Modelle und wählt das nächste Experiment',
+    research: 'Forschung',
     design: 'Entwurf',
     screen: 'Screening',
     make: 'Herstellung',
     test: 'Test',
     'what the part must survive': 'was das Bauteil überstehen muss',
-    'AI suggests ideas': 'KI schlägt Ideen vor',
+    'literature, then classes': 'Literatur, dann Klassen',
+    'generative models propose': 'generative Modelle schlagen vor',
     'physics checks; most stop here': 'Prüfung der Physik; die meisten scheitern hier',
     'melted, powdered, printed': 'geschmolzen, gemahlen, gedruckt',
     'measured against the targets': 'an den Zielwerten gemessen',
     targets: 'Zielwerte',
+    classes: 'Klassen',
     ideas: 'Ideen',
     survivors: 'Verbliebene',
     samples: 'Proben',

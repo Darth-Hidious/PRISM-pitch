@@ -63,7 +63,7 @@ const LATER: Later[] = [
 const SLIDE = '(max-width: 900px) and (prefers-reduced-motion: no-preference)';
 
 /**
- * Home: the ideas are real metal. The lab, then the route from raw metal to a tested coupon: our own
+ * Home: once PRISM has chosen the recipes, we make them. The lab, then the route from raw metal to a tested coupon: our own
  * photographs up to the milled chips, then the steps we have no photographs of our own of yet.
  * Nothing here scrolls sideways: where the row is wider than the screen, the section holds still and
  * the page's own scroll moves the photographs across, the way Apple's product pages do.
@@ -147,7 +147,7 @@ export default function Made({ n = '02' }: { n?: string }) {
                 <div ref={stage} className="made__stage">
                     <div className="wrap made__inner">
                         <header className="made__head rv">
-                            <Idx n={n}>{t('From raw metal to a part')}</Idx>
+                            <Idx n={n}>{t('From recipe to tested metal')}</Idx>
                             <h2 id="made-title" className="w-h2">
                                 <Words>{t('We make what we design.')}</Words>
                             </h2>

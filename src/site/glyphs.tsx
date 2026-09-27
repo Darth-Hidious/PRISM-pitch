@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 /** Small line drawings, one per kind of thing, drawn in the text colour. */
-export type GlyphName = 'target' | 'lattice' | 'layers' | 'coupon' | 'gauge' | 'net' | 'curve' | 'seal' | 'lock' | 'funnel' | 'flame' | 'cycle';
+export type GlyphName = 'target' | 'book' | 'lattice' | 'layers' | 'coupon' | 'gauge' | 'net' | 'curve' | 'seal' | 'lock' | 'funnel' | 'flame' | 'cycle';
 
 const DRAWINGS: Record<GlyphName, ReactNode> = {
     target: (
@@ -10,6 +10,13 @@ const DRAWINGS: Record<GlyphName, ReactNode> = {
             <circle cx="12" cy="12" r="4.5" />
             <circle cx="12" cy="12" r="1" className="fill" />
             <path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4" />
+        </>
+    ),
+    book: (
+        <>
+            <path d="M12 6.5C10 5 6.5 4.5 3 5v13c3.5-.5 7 0 9 1.5 2-1.5 5.5-2 9-1.5V5c-3.5-.5-7 0-9 1.5z" />
+            <path d="M12 6.5v13" />
+            <path d="M5.5 8.5c1.6-.1 3.3.1 4.5.6M5.5 11.5c1.6-.1 3.3.1 4.5.6M14 9.1c1.2-.5 2.9-.7 4.5-.6" />
         </>
     ),
     lattice: (

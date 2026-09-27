@@ -28,11 +28,20 @@ const STEPS: Step[] = [
         maturity: 'prototype',
     },
     {
+        name: 'Research',
+        glyph: 'book',
+        question: 'What is already known?',
+        lead: 'PRISM reads the literature',
+        text: 'on your requirement, and we pick the classes of material worth researching.',
+        stack: 'Research stack',
+        maturity: 'prototype',
+    },
+    {
         name: 'Design',
         glyph: 'lattice',
         question: 'What could work?',
-        lead: 'A generator proposes',
-        text: 'a whole batch of promising recipes, not one best guess.',
+        lead: 'Our generative models propose',
+        text: 'a whole batch of promising recipes in those classes, not one best guess.',
         stack: 'Research stack',
         maturity: 'prototype',
     },
@@ -85,17 +94,18 @@ const RING_MQ = '((max-width: 760px) or ((max-height: 500px) and (min-aspect-rat
 const CX = 200;
 const CY = 180;
 const R = 112;
-/** Design, Screen, Make, Test and Learn go round the ring; the requirement sits in the middle. */
+/** Research, Design, Screen, Make, Test and Learn go round the ring; the requirement sits in the middle. */
 const ROUND = STEPS.slice(1);
+const STEP_DEG = 360 / ROUND.length;
 const at = (k: number, r = R) => {
-    const a = ((-90 + k * 72) * Math.PI) / 180;
+    const a = ((-90 + k * STEP_DEG) * Math.PI) / 180;
     return { x: CX + r * Math.cos(a), y: CY + r * Math.sin(a), c: Math.cos(a), s: Math.sin(a) };
 };
 const CIRC = 2 * Math.PI * R;
 
 /**
  * The section holds still while scrolling takes it round: first the requirement lights in the middle,
- * then a light travels from Design to Learn and back to Design, and the step it reaches is spelled
+ * then a light travels from Research to Learn and back to Research, and the step it reaches is spelled
  * out below. With reduced motion, phones get the plain list instead.
  */
 function LoopRing() {
@@ -123,7 +133,7 @@ function LoopRing() {
             const r = p.getBoundingClientRect();
             const room = Math.max(1, r.height - st.getBoundingClientRect().height);
             const t = Math.min(1, Math.max(0, (nav - r.top) / room));
-            // Six equal parts: the requirement, then one for each station round the ring.
+            // Equal parts: the requirement, then one for each station round the ring.
             const now = Math.min(STEPS.length - 1, Math.floor(t * STEPS.length));
             const q = Math.min(ROUND.length, Math.max(0, t * STEPS.length - 1));
             arc.current?.setAttribute('stroke-dashoffset', (CIRC * (1 - q / ROUND.length)).toFixed(1));
@@ -176,7 +186,7 @@ function LoopRing() {
                     <b>{t(s.name)}</b>
                     <MaturityPill maturity={s.maturity} label={t(MATURITY_LABEL[s.maturity])} />
                 </p>
-                <svg className="loopring__svg" viewBox="0 0 400 360" role="img" aria-label={t('The PRISM loop: your requirement in the middle; design, screen, make, test and learn around it, and round again.')}>
+                <svg className="loopring__svg" viewBox="0 0 400 360" role="img" aria-label={t('The PRISM loop: your requirement in the middle; research, design, screen, make, test and learn around it, and round again.')}>
                     <circle className="loopring__track" cx={CX} cy={CY} r={R} />
                     <circle
                         ref={arc}
@@ -191,7 +201,7 @@ function LoopRing() {
                     {ROUND.map((_, k) => {
                         // Small arrowheads between stations: the loop only goes one way.
                         const m = at(k + 0.5);
-                        const deg = -90 + (k + 0.5) * 72 + 90;
+                        const deg = (k + 0.5) * STEP_DEG;
                         return <path key={k} className="loopring__tick" d="M-4,-4 L1,0 L-4,4" transform={`translate(${m.x.toFixed(1)} ${m.y.toFixed(1)}) rotate(${deg.toFixed(1)})`} />;
                     })}
                     <g ref={middle} className="loopring__middle">

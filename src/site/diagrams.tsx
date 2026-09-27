@@ -7,17 +7,19 @@ import { Arrow, Ball, Defs, T } from './engrave';
 import type { Tone } from './engrave';
 import { useT } from './i18n';
 
-/* ── The procedure: requirement, design, screen, make, test, learn ─────── */
+/* ── The procedure: requirement, research, design, screen, make, test, learn ── */
 
-const PX = [110, 355, 600, 845, 1090];
+const PX = [120, 355, 590, 825, 1060, 1295];
 const PANELS = [
     { n: '01', name: 'requirement', sub: 'what the part must survive' },
-    { n: '02', name: 'design', sub: 'AI suggests ideas' },
-    { n: '03', name: 'screen', sub: 'physics checks; most stop here' },
-    { n: '04', name: 'make', sub: 'melted, powdered, printed' },
-    { n: '05', name: 'test', sub: 'measured against the targets' },
+    { n: '02', name: 'research', sub: 'literature, then classes' },
+    { n: '03', name: 'design', sub: 'generative models propose' },
+    { n: '04', name: 'screen', sub: 'physics checks; most stop here' },
+    { n: '05', name: 'make', sub: 'melted, powdered, printed' },
+    { n: '06', name: 'test', sub: 'measured against the targets' },
 ];
-const HANDOFFS = ['targets', 'ideas', 'survivors', 'samples'];
+const HANDOFFS = ['targets', 'classes', 'ideas', 'survivors', 'samples'];
+const LEARN = PANELS.length;
 
 function Requirement({ px }: { px: number }) {
     return (
@@ -33,6 +35,33 @@ function Requirement({ px }: { px: number }) {
                 <line key={y} className="eg-line eg-line--thin" x1={px + 48} y1={y} x2={px + 55} y2={y} />
             ))}
             <Ball cx={px + 40} cy={230} r={10} tone="mid" />
+        </g>
+    );
+}
+
+/** Papers read for the requirement, and the classes of material chosen from them. */
+function Research({ px }: { px: number }) {
+    return (
+        <g>
+            {[12, 6, 0].map((o) => (
+                <rect key={o} className="eg-solid" x={px - 88 + o} y={122 + o} width={74} height={96} rx={3} />
+            ))}
+            {[0, 1, 2, 3, 4, 5].map((k) => (
+                <line key={k} className="eg-line eg-line--thin" x1={px - 66} y1={148 + k * 11} x2={px - 66 + (k % 3 === 1 ? 34 : 48)} y2={148 + k * 11} />
+            ))}
+            <circle className="eg-solid eg-solid--open" cx={px - 30} cy={196} r={20} />
+            <line className="eg-line" x1={px - 16} y1={210} x2={px + 2} y2={230} />
+            {[
+                [138, 'white'],
+                [170, 'mid'],
+                [202, 'light'],
+            ].map(([y, tone], k) => (
+                <g key={k}>
+                    <rect className={k === 1 ? 'eg-solid' : 'eg-line'} x={px + 22} y={Number(y) - 11} width={60} height={22} rx={11} />
+                    <Ball cx={px + 36} cy={Number(y)} r={5.5} tone={tone as Tone} />
+                    <line className="eg-line eg-line--thin" x1={px + 48} y1={Number(y)} x2={px + 72} y2={Number(y)} />
+                </g>
+            ))}
         </g>
     );
 }
@@ -132,15 +161,15 @@ function Test({ px, id }: { px: number; id: string }) {
     );
 }
 
-/** `active` 0–4 marks a panel, 5 marks the return arrow (learn). */
+/** `active` 0–5 marks a panel, 6 marks the return arrow (learn). */
 export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (i: number) => void }) {
     const id = 'eg-proc';
     const t = useT();
     return (
-        <svg className="eg eg--procedure" viewBox="0 0 1200 400" role="img" aria-labelledby={`${id}-title`}>
+        <svg className="eg eg--procedure" viewBox="0 0 1415 400" role="img" aria-labelledby={`${id}-title`}>
             <title id={`${id}-title`}>
                 {t(
-                    'The PRISM loop: a requirement, then design, screen, make and test; every result goes back to design. Evidence is recorded at every step.',
+                    'The PRISM loop: a requirement, then research, design, screen, make and test; every result goes back to design. Evidence is recorded at every step.',
                 )}
             </title>
             <Defs id={id} />
@@ -150,7 +179,7 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
                 </pattern>
             </defs>
 
-            <line className="eg-line eg-line--dashed" x1={40} y1={30} x2={1160} y2={30} />
+            <line className="eg-line eg-line--dashed" x1={40} y1={30} x2={1375} y2={30} />
             <T x={40} y={18} kind="small" anchor="start">
                 {t('evidence · every step is recorded: what went in, who owns it, who may see it')}
             </T>
@@ -168,10 +197,11 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
                         {t(p.sub)}
                     </T>
                     {i === 0 && <Requirement px={PX[i]} />}
-                    {i === 1 && <Design px={PX[i]} />}
-                    {i === 2 && <Screen px={PX[i]} id={id} />}
-                    {i === 3 && <Make px={PX[i]} id={id} />}
-                    {i === 4 && <Test px={PX[i]} id={id} />}
+                    {i === 1 && <Research px={PX[i]} />}
+                    {i === 2 && <Design px={PX[i]} />}
+                    {i === 3 && <Screen px={PX[i]} id={id} />}
+                    {i === 4 && <Make px={PX[i]} id={id} />}
+                    {i === 5 && <Test px={PX[i]} id={id} />}
                 </g>
             ))}
 
@@ -184,16 +214,16 @@ export function ProcedureDiagram({ active, onPick }: { active: number; onPick: (
                 </g>
             ))}
 
-            <g className={`eg-panel eg-panel--learn${active === 5 ? ' is-on' : ''}`} onClick={() => onPick(5)}>
+            <g className={`eg-panel eg-panel--learn${active === LEARN ? ' is-on' : ''}`} onClick={() => onPick(LEARN)}>
                 <Arrow
                     id={id}
                     className="eg-line--return"
-                    d={`M${PX[4]},292 C${PX[4]},332 ${PX[4] - 20},338 ${PX[4] - 50},338 H${PX[1] + 50} C${PX[1] + 20},338 ${PX[1]},332 ${PX[1]},296`}
+                    d={`M${PX[5]},292 C${PX[5]},332 ${PX[5] - 20},338 ${PX[5] - 50},338 H${PX[2] + 50} C${PX[2] + 20},338 ${PX[2]},332 ${PX[2]},296`}
                 />
-                <T x={(PX[1] + PX[4]) / 2} y={364} kind="strong">
-                    06 · {t('learn')}
+                <T x={(PX[2] + PX[5]) / 2} y={364} kind="strong">
+                    07 · {t('learn')}
                 </T>
-                <T x={(PX[1] + PX[4]) / 2} y={382} kind="small">
+                <T x={(PX[2] + PX[5]) / 2} y={382} kind="small">
                     {t('every result, good or bad, updates the models and picks the next experiment')}
                 </T>
             </g>

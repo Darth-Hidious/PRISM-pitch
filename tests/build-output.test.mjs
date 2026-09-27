@@ -446,6 +446,21 @@ test('PRISM Alpha is placed in ESA’s launcher programme (FLPP), and the July 2
     }
 });
 
+test('the home page starts from the requirement: how PRISM works comes before the metal, and research comes before design', () => {
+    for (const [path, steps, made] of [
+        ['/', ['Requirement', 'Research', 'Design', 'Screen', 'Make', 'Test', 'Learn'], 'From recipe to tested metal'],
+        ['/de/', ['Anforderung', 'Forschung', 'Entwurf', 'Screening', 'Herstellung', 'Test', 'Lernen'], 'Vom Rezept zum geprüften Metall'],
+    ]) {
+        const { copy } = page(fileOf(path));
+        const order = [...copy.querySelectorAll('section[id]')].map((s) => s.id);
+        assert.ok(order.indexOf('loop') < order.indexOf('made'), `${path}: ${order.join(', ')}`);
+        const names = [...copy.querySelectorAll('#loop .loop__list-name')].map((p) => text(p).replace(/\s*(Prototype|In use|Prototyp|Im Einsatz)$/, ''));
+        assert.deepEqual(names, steps, `${path}: loop steps`);
+        assert.ok(text(copy.querySelector('#made')).includes(made), `${path}: the making section's label`);
+        assert.ok(!text(copy).includes('From raw metal to a part'), `${path}: the old label`);
+    }
+});
+
 test('the company page names its two advisors, and no one else from the partners', () => {
     for (const [path, heading] of [['/company/', 'Advisors'], ['/de/company/', 'Beirat']]) {
         const { copy } = page(fileOf(path));
@@ -487,7 +502,8 @@ test('how PRISM chooses, read without JavaScript: six steps in plain words, the 
     }
     // The loop and the research stack tell the same story.
     const home = text(page(fileOf('/')).copy);
-    assert.match(home, /A generator proposes a whole batch of promising recipes/);
+    assert.match(home, /PRISM reads the literature on your requirement, and we pick the classes of material worth researching/);
+    assert.match(home, /Our generative models propose a whole batch of promising recipes in those classes/);
     assert.match(home, /Several models judge each one, an exact calculation settles the doubtful ones/);
     const platform = text(page(fileOf('/platform/')).copy);
     for (const layer of ['Generator', 'Judges and trust meter', 'Exact check', 'A window, not a point']) assert.ok(platform.includes(layer), `/platform/: "${layer}"`);
