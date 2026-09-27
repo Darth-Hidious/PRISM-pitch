@@ -156,7 +156,7 @@ const NEWS: NewsItem[] = [
         when: 'July 2026',
         tag: 'Programme',
         title: 'PRISM Alpha kicks off',
-        text: 'The ESA-funded project PRISM Alpha has started, led by Bimo Tech with ArianeGroup, Fraunhofer IAPT and amsight. It is the first project built around the full PRISM loop, for European space transport. The award ceremony follows in October.',
+        text: 'PRISM Alpha has started: a project in ESA’s Future Launchers Preparatory Programme (FLPP), led by Bimo Tech with ArianeGroup, Fraunhofer IAPT and amsight. It is the first project built around the full PRISM loop, for European space transport. The award ceremony follows in October.',
     },
     {
         when: 'Ongoing',
@@ -169,6 +169,12 @@ const NEWS: NewsItem[] = [
             width: 1600,
             height: 1067,
         },
+    },
+    {
+        when: 'July 2025',
+        tag: 'Proposal',
+        title: 'PRISM put to ESA',
+        text: 'We submitted PRISM to ESA’s Open Space Innovation Platform (OSIP), where ESA collects new ideas. PRISM Alpha, which followed, is a larger project, in ESA’s launcher programme FLPP.',
     },
 ];
 

@@ -319,8 +319,13 @@ export const DE: Readonly<Record<string, string>> = {
     'Mirdyne has signed its first privately funded project, with an industrial partner under NDA. We will design PFAS‑free polymers with PRISM, to replace “forever chemicals”. Work starts next.':
         'Mirdyne hat sein erstes privat finanziertes Projekt unterzeichnet, mit einem Industriepartner unter Geheimhaltungsvereinbarung. Wir entwickeln mit PRISM PFAS‑freie Polymere als Ersatz für „Ewigkeitschemikalien“. Die Arbeit daran beginnt als Nächstes.',
     'PRISM Alpha kicks off': 'PRISM Alpha startet',
-    'The ESA-funded project PRISM Alpha has started, led by Bimo Tech with ArianeGroup, Fraunhofer IAPT and amsight. It is the first project built around the full PRISM loop, for European space transport. The award ceremony follows in October.':
-        'Das von der ESA geförderte Projekt PRISM Alpha hat begonnen, unter der Leitung von Bimo Tech mit ArianeGroup, Fraunhofer IAPT und amsight. Es ist das erste Projekt, das auf dem vollständigen PRISM-Kreislauf aufbaut, für den europäischen Raumtransport. Die feierliche Vergabe folgt im Oktober.',
+    'PRISM Alpha has started: a project in ESA’s Future Launchers Preparatory Programme (FLPP), led by Bimo Tech with ArianeGroup, Fraunhofer IAPT and amsight. It is the first project built around the full PRISM loop, for European space transport. The award ceremony follows in October.':
+        'PRISM Alpha hat begonnen: ein Projekt im Future Launchers Preparatory Programme (FLPP) der ESA, unter der Leitung von Bimo Tech mit ArianeGroup, Fraunhofer IAPT und amsight. Es ist das erste Projekt, das auf dem vollständigen PRISM-Kreislauf aufbaut, für den europäischen Raumtransport. Die feierliche Vergabe folgt im Oktober.',
+    'July 2025': 'Juli 2025',
+    Proposal: 'Vorschlag',
+    'PRISM put to ESA': 'PRISM bei der ESA eingereicht',
+    'We submitted PRISM to ESA’s Open Space Innovation Platform (OSIP), where ESA collects new ideas. PRISM Alpha, which followed, is a larger project, in ESA’s launcher programme FLPP.':
+        'Wir haben PRISM über die Open Space Innovation Platform (OSIP) eingereicht, auf der die ESA neue Ideen sammelt. PRISM Alpha, das darauf folgte, ist ein größeres Projekt, im Trägerraketenprogramm FLPP der ESA.',
     'Project SPARK: our first alloys are real': 'Projekt SPARK: Unsere ersten Legierungen gibt es als echtes Metall',
     'In SPARK, an ESA project led by Bimo Tech, eight candidate alloys from our early screening were narrowed to two and made as real metal. Testing continues.':
         'Im ESA-Projekt SPARK unter der Leitung von Bimo Tech wurden acht Kandidatenlegierungen aus unserem frühen Screening auf zwei eingegrenzt und als echtes Metall hergestellt. Die Tests laufen weiter.',
@@ -572,8 +577,8 @@ export const DE: Readonly<Record<string, string>> = {
     Progress: 'Fortschritt',
     'What PRISM has done, and what comes next.': 'Was PRISM erreicht hat und was als Nächstes kommt.',
     'Running now · funded by ESA': 'Läuft · gefördert von der ESA',
-    'The first project built around the full PRISM loop, for European space transport.':
-        'Das erste Projekt, das auf dem vollständigen PRISM-Kreislauf aufbaut, für den europäischen Raumtransport.',
+    'A project in ESA’s <0>Future Launchers Preparatory Programme</0> (FLPP), and the first built around the full PRISM loop, for European space transport.':
+        'Ein Projekt im <0>Future Launchers Preparatory Programme</0> (FLPP) der ESA und das erste, das auf dem vollständigen PRISM-Kreislauf aufbaut, für den europäischen Raumtransport.',
     'The best candidates are melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons.':
         'Die besten Kandidaten werden geschmolzen, klein gefräst und zu Pulver verarbeitet, bei Fraunhofer IAPT und dann bei Bimo Tech gedruckt und als Proben getestet.',
     '12 months': '12 Monate',
@@ -584,7 +589,13 @@ export const DE: Readonly<Record<string, string>> = {
     'Done so far': 'Bisher erreicht',
     'Project SPARK: eight candidate alloys narrowed to two, made as real metal.':
         'Projekt SPARK: acht Kandidatenlegierungen auf zwei eingegrenzt, als echtes Metall hergestellt.',
-    'PRISM Alpha, funded by ESA, kicked off in July 2026.': 'PRISM Alpha, gefördert von der ESA, gestartet im Juli 2026.',
+    // ESA's own names, kept in English.
+    'Future Launchers Preparatory Programme': 'Future Launchers Preparatory Programme',
+    OSIP: 'OSIP',
+    'July 2025: we put PRISM to ESA through <0>OSIP</0>, its platform for new ideas.':
+        'Juli 2025: Wir haben PRISM über <0>OSIP</0>, die Ideenplattform der ESA, eingereicht.',
+    'PRISM Alpha, a full ESA project in the launcher programme FLPP, kicked off in July 2026.':
+        'PRISM Alpha, ein vollwertiges ESA-Projekt im Trägerraketenprogramm FLPP, gestartet im Juli 2026.',
     'Our first privately funded project, for PFAS‑free polymers, is signed.': 'Unser erstes privat finanziertes Projekt, für PFAS‑freie Polymere, ist unterzeichnet.',
     'PRISM won the AI special prize (KI‑Sonderpreis) at Hessen Ideen 2026.': 'PRISM gewann den KI‑Sonderpreis bei Hessen Ideen 2026.',
     'Still to prove': 'Noch zu beweisen',

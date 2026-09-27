@@ -614,6 +614,28 @@ test('the market momentum globe on phones: every tag on screen, nothing to scrol
     }
 });
 
+test('the market slide: the dots narrow step by step when it arrives, and show every step at once without motion', { skip }, async () => {
+    for (const reducedMotion of ['no-preference', 'reduce']) {
+        const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion });
+        const first = await context.newPage();
+        await first.goto(`${base}/deck/`, { waitUntil: 'networkidle' });
+        const n = await first.evaluate(() => [...document.querySelectorAll('.deck-slide')].findIndex((s) => s.querySelector('.d-funnel')) + 1);
+        await first.close();
+        const page = await context.newPage();
+        await page.goto(`${base}/deck/#${n}`, { waitUntil: 'networkidle' });
+        const lit = () => page.evaluate(() => document.querySelectorAll('.d-funnel__steps li[data-on="true"]').length);
+        if (reducedMotion === 'reduce') {
+            assert.equal(await lit(), 4, 'every step at once');
+        } else {
+            assert.ok((await lit()) < 4, 'the steps did not wait for the slide');
+            await page.waitForFunction(() => document.querySelectorAll('.d-funnel__steps li[data-on="true"]').length === 4, null, { timeout: 8000 });
+        }
+        const dots = await page.evaluate(() => ['k0', 'k1', 'k2'].map((k) => document.querySelectorAll(`.d-funnel__dots circle.${k}`).length));
+        assert.deepEqual(dots, [472 - 189, 189 - 80, 80], 'the dots do not add up');
+        await context.close();
+    }
+});
+
 test('if the page’s script cannot load, or hangs, the plain copy shows instead of a blank page', { skip }, async () => {
     const context = await browser.newContext();
     for (const [handle, within] of [

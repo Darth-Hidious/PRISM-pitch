@@ -11,6 +11,7 @@ import { MarketCards } from '../site/Markets';
 import { CONSORTIUM, PartnerLogo } from '../site/partners';
 import { ALLOYS, YEARS_ALL, fmt } from './numbers';
 import { RightsMerge } from './proof-art';
+import { EarnLine, MarketFunnel } from './market-art';
 import { MomentumGlobe } from './momentum-globe';
 import { useLive } from './slideContext';
 import { HeaLattice, PolymerChain, TokamakSection, TrlSteps } from './traction-art';
@@ -490,90 +491,18 @@ export function Markets() {
 
 /* ── 10 Market ────────────────────────────────────────────────────────── */
 
-// From the `EU Market` and `Sources` sheets of the PRISM financial model (research refresh, 27 Jul 2026).
-const BRIDGE = [
-    { value: '472', label: 'EU aerospace enterprises', sub: '20+ staff · EU27 2024 provisional', tag: 'MKT2', external: true },
-    { value: '189', label: 'Filtered technical fit', sub: '40% · materials, propulsion, qualification', tag: 'Model inference', external: false },
-    { value: '80', label: 'Reachable accounts', sub: '42% · relationship pool 2026–31', tag: 'Assumptions C8', external: false },
-    { value: '€600k', label: 'Annual wallet per account', sub: 'Process development and qualification spend', tag: 'Assumptions C9', external: false },
-];
-
-const CONTEXT = [
-    { v: '€170.7B', k: 'EU aerospace manufacturing turnover', s: 'MKT3' },
-    { v: '€8.84B', k: 'European space manufacturing final sales', s: 'MKT4' },
-    { v: '€8.26B', k: 'ESA annual budget, 2026', s: 'MKT6' },
-    { v: '69.6%', k: 'Public-customer share of space sales', s: 'MKT5' },
-];
-
-const PAID = [
-    { name: 'Programme', desc: 'Development contract: a campaign accepted against customer requirements.' },
-    { name: 'Pilot', desc: 'Probe deployment, calibration and a reference run.' },
-    { name: 'Deployment', desc: 'PRISM run by us for the customer’s programme, under their sign-off.' },
-    { name: 'Support', desc: 'Recalibration, traceability and versioned releases.' },
-    { name: 'Supply', desc: 'The qualified material, made at scale by Bimo Tech.' },
-    { name: 'Licensing', desc: 'The right to use the materials and methods we develop.' },
-];
-
 export function Market() {
     return (
         <>
-            <header className="d-head" style={{ marginBottom: 16 }}>
-                <Kicker>Market and business</Kicker>
-            </header>
-            <div className="d-market__head">
-                <div className="d-market__wallet">
-                    <span className="pm-numeral">€48M</span>
-                    <div>
-                        <p className="pm-subtitle">Serviceable annual wallet</p>
-                        <p className="pm-small">Base case: the upper bound on annual spend across reachable accounts.</p>
-                    </div>
-                </div>
-                <div className="d-context">
-                    {CONTEXT.map((c) => (
-                        <div key={c.s}>
-                            <strong>{c.v}</strong>
-                            <span>{c.k}</span>
-                            <span className="pm-data-label" style={{ marginTop: 4 }}>
-                                {c.s}
-                            </span>
-                        </div>
-                    ))}
-                </div>
+            <Head kicker="Market and business" title="80 companies we can reach spend €48M a year." />
+            <div className="d-body d-market">
+                <MarketFunnel />
+                <EarnLine />
             </div>
-            <p className="pm-column" style={{ marginBottom: 10 }}>
-                Serviceable account bridge
-            </p>
-            <div className="d-bridge">
-                {BRIDGE.map((b) => (
-                    <div key={b.label} className={`d-bridge__item${b.external ? ' d-bridge__item--external' : ''}`}>
-                        <strong>{b.value}</strong>
-                        <b>{b.label}</b>
-                        <span>{b.sub}</span>
-                        <span className="pm-data-label">{b.tag}</span>
-                    </div>
-                ))}
-            </div>
-            <p className="pm-column" style={{ marginBottom: 10 }}>
-                Monetisation boundary
-            </p>
-            <div className="d-boundary">
-                <div className="d-boundary__open">
-                    <span className="pm-data-label">Open source</span>
-                    <b>Some of our tools</b>
-                    <p>Free to use and check. Our own models are not: cluster expansions, short-range order, property prediction. We license them.</p>
-                </div>
-                {PAID.map((p) => (
-                    <div key={p.name}>
-                        <i aria-hidden="true" />
-                        <b>{p.name}</b>
-                        <p>{p.desc}</p>
-                    </div>
-                ))}
-            </div>
-            <div className="d-foot" style={{ marginTop: 'auto' }}>
-                <SourceLine label="Base case">
-                    €18.0M revenue by 2035 · EBITDA-positive from 2028 · 61% gross margin. External figures carry their
-                    source IDs from the model’s evidence register.
+            <div className="d-foot">
+                <SourceLine label="Sources">
+                    Companies: EU27, 2024 (provisional), from the evidence register of the PRISM financial model. Fit, reach and
+                    spend per company are the model’s assumptions (research refresh, 27 Jul 2026).
                 </SourceLine>
             </div>
         </>
@@ -600,50 +529,57 @@ const UPSIDE = {
     breakeven: 2027,
 };
 const eurM = (n: number) => `${n < 0 ? '−' : ''}€${Math.abs(n / 1_000_000).toFixed(2)}M`;
+const eurM1 = (n: number) => `€${(n / 1_000_000).toFixed(1)}M`;
 
 export function Financials() {
+    const { live, reader } = useLive();
+    const [ref, seen] = useInView<HTMLDivElement>('0px 0px -20% 0px', true);
+    const play = live && (!reader || seen);
     const cL = 48;
     // The end values sit to the right of the lines, never across them.
     const cR = 590;
-    const cT = 20;
+    const cT = 40;
     const cB = 360;
     const hi = Math.max(...UPSIDE.revenue);
     const x = (i: number) => cL + (i * (cR - cL)) / (YEARS.length - 1);
     const y = (v: number) => cB - (v / hi) * (cB - cT);
     const line = (vals: number[]) => 'M ' + vals.map((v, i) => `${x(i)} ${y(v)}`).join(' L ');
     const area = (vals: number[]) => `M ${x(0)} ${cB} ` + vals.map((v, i) => `L ${x(i)} ${y(v)}`).join(' ') + ` L ${x(YEARS.length - 1)} ${cB} Z`;
-    const rows = [
-        ['Operating revenue 2035', eurM(BASE.revenue[9]), eurM(UPSIDE.revenue[9])],
-        ['EBITDA 2035, before grants', eurM(BASE.ebitda2035), eurM(UPSIDE.ebitda2035)],
-        ['Gross margin 2035', `${Math.round(BASE.grossMargin * 100)}%`, `${Math.round(UPSIDE.grossMargin * 100)}%`],
-        ['EBITDA-positive from', `${BASE.breakeven}`, `${UPSIDE.breakeven}`],
-        ['Cumulative equity required', eurM(BASE.equity), eurM(UPSIDE.equity)],
-    ];
+    const even = x(YEARS.indexOf(BASE.breakeven));
+    const pct = (v: number) => `${Math.round(v * 100)}%`;
     return (
         <>
             <Head kicker="Financials" title="Ten-year operating plan." />
-            <div className="d-body d-fin">
+            <div ref={ref} className={`d-body d-fin${play ? ' is-live' : ''}`}>
                 <div>
-                    <svg viewBox="0 0 740 400" role="img" aria-label="Operating revenue 2026 to 2035, base and upside cases.">
+                    <svg viewBox="0 0 740 400" role="img" aria-label="Operating revenue 2026 to 2035, base and upside cases, and the year the base case turns profitable.">
                         <line x1={cL} y1={cB} x2={cR} y2={cB} stroke="var(--rule)" />
-                        <path d={area(UPSIDE.revenue)} fill="var(--teal-tint)" />
-                        <path d={line(UPSIDE.revenue)} fill="none" stroke="var(--teal)" strokeWidth="2.5" strokeLinejoin="round" />
-                        <path d={area(BASE.revenue)} fill="var(--accent-tint)" />
-                        <path d={line(BASE.revenue)} fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinejoin="round" />
-                        <circle cx={x(9)} cy={y(UPSIDE.revenue[9])} r="4.5" fill="var(--teal)" />
-                        <text x={x(9) + 16} y={y(UPSIDE.revenue[9]) - 2} fill="var(--teal-text)" style={{ font: '600 13px var(--font-sans)' }}>
-                            Upside
-                        </text>
-                        <text x={x(9) + 16} y={y(UPSIDE.revenue[9]) + 19} fill="var(--teal-text)" style={{ font: '700 19px var(--font-sans)' }}>
-                            {eurM(UPSIDE.revenue[9])}
-                        </text>
-                        <circle cx={x(9)} cy={y(BASE.revenue[9])} r="4.5" fill="var(--accent)" />
-                        <text x={x(9) + 16} y={y(BASE.revenue[9]) - 2} fill="var(--accent)" style={{ font: '600 13px var(--font-sans)' }}>
-                            Base
-                        </text>
-                        <text x={x(9) + 16} y={y(BASE.revenue[9]) + 19} fill="var(--accent)" style={{ font: '700 19px var(--font-sans)' }}>
-                            {eurM(BASE.revenue[9])}
-                        </text>
+                        <g className="d-fin__even">
+                            <line x1={even} y1={cB} x2={even} y2={cT - 8} stroke="var(--ink-3)" strokeDasharray="3 4" />
+                            <text x={even + 8} y={cT - 2} fill="var(--ink-2)" style={{ font: '600 13px var(--font-sans)' }}>
+                                EBITDA-positive from {BASE.breakeven}
+                            </text>
+                        </g>
+                        <path className="d-fin__area" d={area(UPSIDE.revenue)} fill="var(--teal-tint)" />
+                        <path className="d-fin__line" pathLength={1} d={line(UPSIDE.revenue)} fill="none" stroke="var(--teal)" strokeWidth="2.5" strokeLinejoin="round" />
+                        <path className="d-fin__area" d={area(BASE.revenue)} fill="var(--accent-tint)" />
+                        <path className="d-fin__line" pathLength={1} d={line(BASE.revenue)} fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinejoin="round" />
+                        <g className="d-fin__end">
+                            <circle cx={x(9)} cy={y(UPSIDE.revenue[9])} r="4.5" fill="var(--teal)" />
+                            <text x={x(9) + 16} y={y(UPSIDE.revenue[9]) - 2} fill="var(--teal-text)" style={{ font: '600 13px var(--font-sans)' }}>
+                                Upside
+                            </text>
+                            <text x={x(9) + 16} y={y(UPSIDE.revenue[9]) + 19} fill="var(--teal-text)" style={{ font: '700 19px var(--font-sans)' }}>
+                                {eurM(UPSIDE.revenue[9])}
+                            </text>
+                            <circle cx={x(9)} cy={y(BASE.revenue[9])} r="4.5" fill="var(--accent)" />
+                            <text x={x(9) + 16} y={y(BASE.revenue[9]) - 2} fill="var(--accent)" style={{ font: '600 13px var(--font-sans)' }}>
+                                Base
+                            </text>
+                            <text x={x(9) + 16} y={y(BASE.revenue[9]) + 19} fill="var(--accent)" style={{ font: '700 19px var(--font-sans)' }}>
+                                {eurM(BASE.revenue[9])}
+                            </text>
+                        </g>
                         {YEARS.map((yr, i) =>
                             i % 3 === 0 || i === YEARS.length - 1 ? (
                                 <text key={yr} x={x(i)} y={cB + 26} textAnchor="middle" fill="var(--ink-2)" style={{ font: '500 13px var(--font-mono)' }}>
@@ -654,31 +590,41 @@ export function Financials() {
                     </svg>
                     <p className="pm-column">Operating revenue, excluding grants</p>
                 </div>
-                <div className="d-fin__table">
-                    <div className="d-fin__row d-fin__row--head">
-                        <span />
-                        <span className="pm-column" style={{ color: 'var(--accent)' }}>
-                            Base
-                        </span>
-                        <span className="pm-column" style={{ color: 'var(--teal-text)' }}>
-                            Upside
-                        </span>
-                    </div>
-                    {rows.map(([k, b, u]) => (
-                        <div key={k} className="d-fin__row">
-                            <span>{k}</span>
-                            <b>{b}</b>
-                            <b style={{ color: 'var(--teal-text)' }}>{u}</b>
+                <div className="d-fin__facts">
+                    <div className="d-fin__fact d-in" style={{ '--i': 2 } as CSSProperties}>
+                        <svg className="d-fin__ring" viewBox="0 0 120 120" aria-hidden="true">
+                            <circle cx="60" cy="60" r="52" className="d-fin__track" />
+                            <circle cx="60" cy="60" r="52" pathLength={1} className="d-fin__arc d-fin__arc--up" style={{ '--v': UPSIDE.grossMargin } as CSSProperties} />
+                            <circle cx="60" cy="60" r="38" className="d-fin__track" />
+                            <circle cx="60" cy="60" r="38" pathLength={1} className="d-fin__arc" style={{ '--v': BASE.grossMargin } as CSSProperties} />
+                        </svg>
+                        <div>
+                            <strong>{pct(BASE.grossMargin)}</strong>
+                            <span>gross margin in 2035</span>
+                            <em>Upside {pct(UPSIDE.grossMargin)}</em>
                         </div>
-                    ))}
-                    <p className="pm-small" style={{ marginTop: 16 }}>
-                        Revenue is capacity-constrained in both cases: programmes are recognised only up to the delivery
-                        capacity left after pilots, deployments and support, so the hiring plan sets the growth rate.
+                    </div>
+                    <div className="d-fin__fact d-in" style={{ '--i': 3 } as CSSProperties}>
+                        <strong>{BASE.breakeven}</strong>
+                        <span>the first year with a positive EBITDA</span>
+                        <em>Upside {UPSIDE.breakeven}</em>
+                    </div>
+                    <div className="d-fin__fact d-in" style={{ '--i': 4 } as CSSProperties}>
+                        <strong>{eurM1(BASE.equity)}</strong>
+                        <span>equity needed in total</span>
+                        <em>Upside {eurM1(UPSIDE.equity)}</em>
+                    </div>
+                    <p className="pm-small">
+                        Growth is set by the hiring plan: programmes count as revenue only up to the delivery capacity left after
+                        pilots, deployments and support.
                     </p>
                 </div>
             </div>
             <div className="d-foot">
-                <SourceLine label="Source">PRISM financial model, research refresh 27 Jul 2026 · checks pass · € nominal.</SourceLine>
+                <SourceLine label="Source">
+                    PRISM financial model, research refresh 27 Jul 2026 · checks pass · € nominal. EBITDA 2035, before grants:{' '}
+                    {eurM(BASE.ebitda2035)} base, {eurM(UPSIDE.ebitda2035)} upside.
+                </SourceLine>
             </div>
         </>
     );
@@ -687,13 +633,14 @@ export function Financials() {
 
 /* ── 11 Momentum: the market is moving ────────────────────────────────── */
 
-const MOMENTUM: { when: string; who: string; figure?: string; text: string; ours?: boolean }[] = [
+const MOMENTUM: { when: string; who: string; figure?: string; text: string; ours?: boolean; href?: string }[] = [
     { when: '2024', who: 'PRISM', text: 'The idea and the first concept.', ours: true },
+    { when: 'Jul 2025', who: 'PRISM to ESA', text: 'Put to ESA through OSIP, its platform for new ideas.', ours: true, href: LINKS.osip },
     { when: 'Jul 2025', who: 'Radical AI', figure: '$55M', text: 'Seed round, for AI and self-driving labs for materials.' },
     { when: 'Sep 2025', who: 'Periodic Labs', figure: '$300M', text: 'Seed round, to automate scientific discovery.' },
     { when: 'Oct 2025', who: 'Lila Sciences', figure: '$550M', text: 'Raised in total, for AI science factories.' },
     { when: 'Nov 2025', who: 'Genesis Mission', text: 'A US government programme for AI-driven science and automated labs.' },
-    { when: 'Jul 2026', who: 'PRISM Alpha', text: 'Funded by ESA: PRISM’s first deployment.', ours: true },
+    { when: 'Jul 2026', who: 'PRISM Alpha', text: 'A full ESA project in FLPP, the programme for Europe’s next launchers.', ours: true, href: LINKS.flpp },
     { when: 'Aug 2026', who: 'Discovery Loop', text: 'Founded by top Google researchers to automate experiments. Raised hundreds of millions.' },
     { when: 'Aug 2026', who: 'First private project', text: 'PFAS-free polymers, with an industrial partner under NDA.', ours: true },
 ];
@@ -709,13 +656,21 @@ export function Momentum() {
                     {MOMENTUM.map((m, i) => (
                         <li key={m.who} className={`d-in${m.ours ? ' d-momentum--ours' : ''}`} style={{ '--i': i } as CSSProperties}>
                             <span className="pm-data-label">{m.when}</span>
-                            <b>{m.who}</b>
+                            <b>
+                                {m.href ? (
+                                    <a href={m.href} target="_blank" rel="noopener noreferrer">
+                                        {m.who}
+                                    </a>
+                                ) : (
+                                    m.who
+                                )}
+                            </b>
                             {m.figure && <strong>{m.figure}</strong>}
                             <p>{m.text}</p>
                         </li>
                     ))}
                 </ol>
-                <p className="pm-lead d-momentum__close">Almost all of this money is in the United States. PRISM designs, makes and tests in Europe.</p>
+                <p className="pm-lead d-momentum__close">Almost all this money is in the US. PRISM designs, makes and tests in Europe.</p>
                 </div>
             </div>
             <div className="d-foot">
@@ -809,14 +764,25 @@ const ALLOCATION = [
 ];
 
 const PHASES = [
-    { id: 'I', months: '6 months', title: 'Computational validation', desc: 'The full discovery loop running the first PRISM campaigns.' },
-    { id: 'II', months: '12 months', title: 'Hybrid loop', desc: 'Integration with Fraunhofer IAPT additive-manufacturing data.' },
-    { id: 'III', months: '24 months', title: 'Autonomous laboratory', desc: 'Direct instrument control closes the loop with no human in the sequence.' },
+    { id: 'I', months: '6 months', at: 0.25, title: 'Computational validation', desc: 'The full discovery loop running the first PRISM campaigns.' },
+    { id: 'II', months: '12 months', at: 0.5, title: 'Hybrid loop', desc: 'Integration with Fraunhofer IAPT additive-manufacturing data.' },
+    { id: 'III', months: '24 months', at: 1, title: 'Autonomous laboratory', desc: 'Direct instrument control closes the loop with no human in the sequence.' },
 ];
 
+/** Where the €4M goes, as a ring: each share is a slice of the circle, in the order of the list. */
+const ALLOC_COLOURS = ['var(--ink)', 'var(--teal)', 'var(--accent)', 'var(--crimson)'];
+
 export function Ask() {
+    const { live, reader } = useLive();
+    const [ref, seen] = useInView<HTMLDivElement>('0px 0px -20% 0px', true);
+    const play = live && (!reader || seen);
+    const slices = ALLOCATION.map((a, i) => ({
+        ...a,
+        from: ALLOCATION.slice(0, i).reduce((sum, b) => sum + b.pct, 0) / 100,
+        colour: ALLOC_COLOURS[i],
+    }));
     return (
-        <div className="d-ask">
+        <div ref={ref} className={`d-ask${play ? ' is-live' : ''}`}>
             <div className="d-ask__figure" style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
                 <Kicker>The ask</Kicker>
                 <span className="pm-numeral">€4M</span>
@@ -826,38 +792,56 @@ export function Ask() {
                     and so the downside gate closes before the money does.
                 </p>
             </div>
-            <div style={{ display: 'grid', gap: 20, alignContent: 'start', paddingTop: 36 }}>
-                <p className="pm-column">Allocation</p>
+            <div className="d-ask__col">
+                <p className="pm-column">Where the money goes</p>
                 <div className="d-alloc">
-                    {ALLOCATION.map((a) => (
-                        <div key={a.label} className="d-alloc__row">
-                            <div className="d-alloc__top">
-                                <span>{a.label}</span>
+                    <svg className="d-alloc__ring" viewBox="0 0 200 200" role="img" aria-label={ALLOCATION.map((a) => `${a.label} ${a.pct}%`).join(', ')}>
+                        <circle cx="100" cy="100" r="80" className="d-alloc__track" />
+                        {slices.map((a, i) => (
+                            <circle
+                                key={a.label}
+                                cx="100"
+                                cy="100"
+                                r="80"
+                                pathLength={1}
+                                className="d-alloc__slice"
+                                stroke={a.colour}
+                                style={{ '--v': a.pct / 100 - 0.008, '--o': -a.from, '--i': i } as CSSProperties}
+                            />
+                        ))}
+                        <text x="100" y="108" textAnchor="middle" className="d-alloc__sum">
+                            €4M
+                        </text>
+                    </svg>
+                    <ul className="d-alloc__list">
+                        {slices.map((a, i) => (
+                            <li key={a.label} className="d-in" style={{ '--i': i + 2 } as CSSProperties}>
+                                <i style={{ background: a.colour }} aria-hidden="true" />
+                                <b>{a.label}</b>
                                 <span className="pm-tabular">{a.pct}%</span>
-                            </div>
-                            <div className="d-alloc__bar">
-                                <i style={{ width: `${a.pct}%` }} />
-                            </div>
-                            <p>{a.desc}</p>
-                        </div>
-                    ))}
+                                <p>{a.desc}</p>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
-            <div style={{ display: 'grid', gap: 20, alignContent: 'start', paddingTop: 36 }}>
+            <div className="d-ask__col">
                 <p className="pm-column">Roadmap · 24 months</p>
-                <ol className="d-steps">
-                    {PHASES.map((p) => (
-                        <li key={p.id}>
-                            <b>{p.id}</b>
-                            <div>
+                <div className="d-road">
+                    <span className="d-road__track" aria-hidden="true">
+                        <i />
+                    </span>
+                    <span className="d-road__now">Now</span>
+                    <ol>
+                        {PHASES.map((p) => (
+                            <li key={p.id} style={{ '--at': p.at, '--i': p.at * 4 } as CSSProperties}>
+                                <span className="d-road__when">{p.months}</span>
                                 <strong>{p.title}</strong>
-                                <span>
-                                    {p.months}. {p.desc}
-                                </span>
-                            </div>
-                        </li>
-                    ))}
-                </ol>
+                                <span>{p.desc}</span>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
             </div>
         </div>
     );

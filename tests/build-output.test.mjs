@@ -425,6 +425,22 @@ test('the making route, read without JavaScript: melted, milled, made into powde
     assert.match(platform, /melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons/, '/platform/: PRISM Alpha’s route');
 });
 
+test('PRISM Alpha is placed in ESA’s launcher programme (FLPP), and the July 2025 OSIP submission links to OSIP', () => {
+    for (const [path, flpp, osip] of [
+        ['/platform/', 'A project in ESA’s Future Launchers Preparatory Programme (FLPP)', 'July 2025: we put PRISM to ESA through OSIP'],
+        ['/de/platform/', 'Ein Projekt im Future Launchers Preparatory Programme (FLPP) der ESA', 'Juli 2025: Wir haben PRISM über OSIP'],
+    ]) {
+        const { copy } = page(fileOf(path));
+        const words = text(copy);
+        assert.ok(words.includes(flpp), `${path}: no FLPP`);
+        assert.ok(words.includes(osip), `${path}: no OSIP submission`);
+        const hrefs = [...copy.querySelectorAll('a')].map((a) => attr(a, 'href'));
+        assert.ok(hrefs.some((h) => h?.includes('esa.int') && h.includes('OSIP')), `${path}: no link to OSIP`);
+        assert.ok(hrefs.some((h) => h?.includes('Future_space_transportation')), `${path}: no link to FLPP`);
+    }
+    for (const path of ['/news/', '/de/news/']) assert.match(text(page(fileOf(path)).copy), /FLPP/, `${path}: PRISM Alpha without FLPP`);
+});
+
 test('the company page names its two advisors, and no one else from the partners', () => {
     for (const [path, heading] of [['/company/', 'Advisors'], ['/de/company/', 'Beirat']]) {
         const { copy } = page(fileOf(path));

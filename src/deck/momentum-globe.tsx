@@ -82,9 +82,16 @@ export function MomentumGlobe() {
                 const q = projectPoint(view, pl.lat, pl.lon);
                 const tw = (widths[i] ??= (pin.querySelector('.d-globe__tag') as HTMLElement | null)?.offsetWidth ?? 0);
                 const x = q.x + pl.dx;
-                const [from, to] = pl.at === 'r' ? [x, x + tw] : pl.at === 'l' ? [x - tw, x] : [x - tw / 2, x + tw / 2];
+                let [from, to] = pl.at === 'r' ? [x + 2, x + 2 + tw] : pl.at === 'l' ? [x - 2 - tw, x - 2] : [x - tw / 2, x + tw / 2];
+                // A tag above its place may slide sideways to stay inside; the others wait until they fit.
+                if (pl.at === 't') {
+                    const shift = Math.max(0, -from) + Math.min(0, w - to);
+                    from += shift;
+                    to += shift;
+                    pin.style.setProperty('--sx', `${shift.toFixed(1)}px`);
+                }
                 pin.style.transform = `translate(${q.x.toFixed(1)}px, ${q.y.toFixed(1)}px)`;
-                pin.dataset.show = q.front > 0.2 && from >= -8 && to <= w + 8 ? 'true' : 'false';
+                pin.dataset.show = q.front > 0.2 && from >= 0 && to <= w ? 'true' : 'false';
             });
         };
 

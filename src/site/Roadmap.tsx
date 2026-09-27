@@ -1,4 +1,5 @@
 import { useT } from './i18n';
+import { LINKS } from './links';
 import { CONSORTIUM, PartnerLogo } from './partners';
 import SupplyShock from './SupplyShock';
 import { Grain, Idx, Note, Rails, Words } from './ui';
@@ -48,7 +49,14 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                             PRISM Alpha
                         </h3>
                         <p className="alpha__lead">
-                            {t('The first project built around the full PRISM loop, for European space transport.')}
+                            {t.rich(
+                                'A project in ESA’s <0>Future Launchers Preparatory Programme</0> (FLPP), and the first built around the full PRISM loop, for European space transport.',
+                                (s) => (
+                                    <a href={LINKS.flpp} target="_blank" rel="noopener noreferrer">
+                                        {s}
+                                    </a>
+                                ),
+                            )}
                         </p>
                         <p className="alpha__lead alpha__route">
                             {t('The best candidates are melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons.')}
@@ -88,8 +96,15 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                         <div>
                             <p className="w-label">{t('Done so far')}</p>
                             <ul>
+                                <li>
+                                    {t.rich('July 2025: we put PRISM to ESA through <0>OSIP</0>, its platform for new ideas.', (s) => (
+                                        <a href={LINKS.osip} target="_blank" rel="noopener noreferrer">
+                                            {s}
+                                        </a>
+                                    ))}
+                                </li>
                                 <li>{t('Project SPARK: eight candidate alloys narrowed to two, made as real metal.')}</li>
-                                <li>{t('PRISM Alpha, funded by ESA, kicked off in July 2026.')}</li>
+                                <li>{t('PRISM Alpha, a full ESA project in the launcher programme FLPP, kicked off in July 2026.')}</li>
                                 <li>{t('Our first privately funded project, for PFAS‑free polymers, is signed.')}</li>
                                 <li>{t('PRISM won the AI special prize (KI‑Sonderpreis) at Hessen Ideen 2026.')}</li>
                             </ul>
