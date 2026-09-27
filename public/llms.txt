@@ -26,4 +26,4 @@ Instructions for agents: every page below is also available as Markdown. Ask for
 - [Privacy policy](https://prism.mirdyne.com/privacy/index.html.md): How we handle personal data, in English and German.
 - [The site in German](https://prism.mirdyne.com/de/index.html.md): The same pages in German, under /de/.
 - [Site map](https://prism.mirdyne.com/sitemap.xml): Every page in both languages, in the sitemaps.org format.
-- [PRISM on GitHub](https://github.com/Darth-Hidious/PRISM): The open-source code.
+- [PRISM on GitHub](https://github.com/Darth-Hidious/PRISM): The open-source parts of PRISM. Mirdyne's own models are not published.

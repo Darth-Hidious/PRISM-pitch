@@ -3,7 +3,7 @@ import { useT } from './i18n';
 import { Idx, Words } from './ui';
 
 const LADDER = [
-    { name: 'Open source', text: 'Tools anyone can use and check.', tag: 'Free' },
+    { name: 'Our models', text: 'Our own models predict how an alloy’s atoms arrange and what it will do.', tag: 'Licensed' },
     { name: 'Project', text: 'We solve your requirement. You judge the test results.' },
     { name: 'Pilot', text: 'A first trial on your problem, with our sensors.' },
     { name: 'Deployment', text: 'PRISM at work on your programme, run by us.' },
@@ -19,16 +19,16 @@ export default function Business({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>{t('Working with us')}</Idx>
                     <h2 id="business-title" className="w-h2">
-                        <Words>{t('Our tools are free. We earn from development contracts and licensing.')}</Words>
+                        <Words>{t('We earn from development contracts and licensing.')}</Words>
                     </h2>
                     <p className="w-lead">
                         {t('Customers want the material now, for what it can do. Certifying a part takes ten years or more; that comes later.')}
                     </p>
                 </header>
 
-                <ol className="ladder rv" aria-label={t('How Mirdyne works with you, from open source to supply')}>
+                <ol className="ladder rv" aria-label={t('How Mirdyne works with you, from our models to supply')}>
                     {LADDER.map((s, i) => (
-                        <li key={s.name} className={`ladder__step${i === 0 ? ' ladder__step--open' : ''}`} style={{ ['--i' as string]: i }}>
+                        <li key={s.name} className="ladder__step" style={{ ['--i' as string]: i }}>
                             <span className="ladder__num">{String(i + 1).padStart(2, '0')}</span>
                             <h3>{t(s.name)}</h3>
                             <p>{t(s.text)}</p>
@@ -37,7 +37,7 @@ export default function Business({ n = '02' }: { n?: string }) {
                     ))}
                 </ol>
                 <p className="ladder__axis rv" aria-hidden="true">
-                    <span>{t('Open software')}</span>
+                    <span>{t('Our models')}</span>
                     <i />
                     <span>{t('Materials on your line')}</span>
                 </p>

@@ -71,7 +71,7 @@ export default function ContactDetails() {
 
                     <h2>{t('Code')}</h2>
                     <p>
-                        {t.rich('PRISM’s software is open source. Code and issues are on <0>GitHub</0>.', (s) => (
+                        {t.rich('Parts of PRISM are open source; our models are our own. The open code and its issues are on <0>GitHub</0>.', (s) => (
                             <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
                                 {s}
                             </a>

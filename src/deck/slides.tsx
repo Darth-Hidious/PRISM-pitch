@@ -557,9 +557,9 @@ export function Market() {
             </p>
             <div className="d-boundary">
                 <div className="d-boundary__open">
-                    <span className="pm-data-label">Free and open source</span>
-                    <b>Prediction, ranking, materials informatics</b>
-                    <p>€0 in every scenario. Revenue is booked only on delivery.</p>
+                    <span className="pm-data-label">Open source</span>
+                    <b>Some of our tools</b>
+                    <p>Free to use and check. Our own models are not: cluster expansions, short-range order, property prediction. We license them.</p>
                 </div>
                 {PAID.map((p) => (
                     <div key={p.name}>
@@ -684,6 +684,45 @@ export function Financials() {
 }
 
 
+/* ── 11 Momentum: the market is moving ────────────────────────────────── */
+
+const MOMENTUM: { when: string; who: string; figure?: string; text: string; ours?: boolean }[] = [
+    { when: '2024', who: 'PRISM', text: 'The idea and the first concept.', ours: true },
+    { when: 'Jul 2025', who: 'Radical AI', figure: '$55M', text: 'Seed round, for AI and self-driving labs for materials.' },
+    { when: 'Sep 2025', who: 'Periodic Labs', figure: '$300M', text: 'Seed round, to automate scientific discovery.' },
+    { when: 'Oct 2025', who: 'Lila Sciences', figure: '$550M', text: 'Raised in total, for AI science factories.' },
+    { when: 'Nov 2025', who: 'Genesis Mission', text: 'A US government programme for AI-driven science and automated labs.' },
+    { when: 'Jul 2026', who: 'PRISM Alpha', text: 'Funded by ESA: PRISM’s first deployment.', ours: true },
+    { when: 'Aug 2026', who: 'First private project', text: 'PFAS-free polymers, with an industrial partner under NDA.', ours: true },
+];
+
+export function Momentum() {
+    return (
+        <>
+            <Head kicker="Market momentum" title="The money is moving into AI that makes materials." />
+            <div className="d-body d-momentum__body">
+                <ol className="d-momentum">
+                    {MOMENTUM.map((m, i) => (
+                        <li key={m.who} className={`d-in${m.ours ? ' d-momentum--ours' : ''}`} style={{ '--i': i } as CSSProperties}>
+                            <span className="pm-data-label">{m.when}</span>
+                            <b>{m.who}</b>
+                            {m.figure && <strong>{m.figure}</strong>}
+                            <p>{m.text}</p>
+                        </li>
+                    ))}
+                </ol>
+                <p className="pm-lead d-momentum__close">Almost all of this money is in the United States. PRISM designs, makes and tests in Europe.</p>
+            </div>
+            <div className="d-foot">
+                <SourceLine label="Sources">
+                    Company announcements: Radical AI, July 2025; Periodic Labs, 30 September 2025; Lila Sciences, October 2025 (seed and
+                    Series A in total). The White House, “Launching the Genesis Mission”, 24 November 2025.
+                </SourceLine>
+            </div>
+        </>
+    );
+}
+
 /* ── 12 Team ──────────────────────────────────────────────────────────── */
 
 const FOUNDERS = [
@@ -729,6 +768,13 @@ export function Team() {
                 <div className="d-team__bimo">
                     <PartnerLogo p={BIMO} />
                     <p>Mirdyne is a spin-off of Bimo Tech, which makes special metals and precision parts and supplies ITER.</p>
+                </div>
+                <div className="d-team__experts">
+                    <span className="pm-data-label">Experts who work with us</span>
+                    <p>
+                        Prof. Jan Wróbel, Warsaw University of Technology · Prof. Dariusz Jarząbek, IPPT PAN · Matthäus Cyperling, Dr Vishnuu Jothi
+                        Prakash and Dr Benjamin Neding, Fraunhofer IAPT
+                    </p>
                 </div>
                 <div className="d-team__side">
                     <figure className="d-team__award">

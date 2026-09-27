@@ -2468,6 +2468,78 @@
     }
 }
 
+/* Market momentum: the year's raises and PRISM's own steps, in order, in the middle of the slide. */
+.d-momentum__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.d-momentum {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.d-momentum li {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    padding: 16px 14px 18px;
+    border-top: 2px solid var(--ink-3);
+    background: var(--surface);
+    border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+}
+
+.d-momentum li.d-momentum--ours {
+    border-top-color: var(--crimson);
+}
+
+.d-momentum b {
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+.d-momentum strong {
+    font-size: 34px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.d-momentum p {
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ink-2);
+}
+
+.d-momentum__close {
+    margin-top: 32px;
+    max-width: 44em;
+}
+
+/* The team slide: the experts who work with us, under Bimo Tech. */
+.d-team__experts {
+    grid-column: 1;
+    display: grid;
+    gap: 4px;
+}
+
+.d-team__experts p {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink-2);
+}
+
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
+    .d-momentum {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
 /* Upright tablets read the deck as a page too; two programme cards fit side by side. */
 @media (min-width: 600px) and (max-aspect-ratio: 4/5) {
     .d-prog {

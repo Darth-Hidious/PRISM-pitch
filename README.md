@@ -21,7 +21,7 @@ through `www.mirdyne.com` (its own redirect, in the Vercel domain settings);
 | `/impressum/`, `/privacy/` | Legal notice and privacy policy, in English and German | `src/site/Legal.tsx`, facts in `src/site/legal.ts` |
 | `/de/`, `/de/platform/`, … | Every page above in German, from the same components (see [German](#german)) | `de/**/index.html`, `src/site/i18n-de.ts` |
 | any other address | Page not found: `404.html`, status 404 | `src/site/NotFound.tsx`, `api/not-found.ts` |
-| `/deck/` | The investor room: 14 slides on a 1440 × 810 stage, scaled to any screen; `/deck/#5` opens slide 5; phones get the slides as one scrolling page | `src/deck/` |
+| `/deck/` | The investor room: 15 slides on a 1440 × 810 stage, scaled to any screen; `/deck/#5` opens slide 5; phones get the slides as one scrolling page | `src/deck/` |
 
 Each page is its own HTML file (`index.html`, `platform/index.html`, …), listed
 in `vite.config.ts`; `vercel.json` also serves them without the trailing slash,

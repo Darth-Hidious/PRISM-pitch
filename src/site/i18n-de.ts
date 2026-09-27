@@ -334,12 +334,13 @@ export const DE: Readonly<Record<string, string>> = {
 
     // Working with us (src/site/Business.tsx)
     'Working with us': 'Zusammenarbeit mit uns',
-    'Our tools are free. We earn from development contracts and licensing.': 'Unsere Werkzeuge sind kostenlos. Wir verdienen an Entwick\u00adlungs\u00adaufträgen und Lizenzen.',
+    'We earn from development contracts and licensing.': 'Wir verdienen an Entwick\u00adlungs\u00adaufträgen und Lizenzen.',
     'Customers want the material now, for what it can do. Certifying a part takes ten years or more; that comes later.':
         'Kunden wollen das Material jetzt, für das, was es kann. Die Zertifizierung eines Bauteils dauert zehn Jahre oder länger; sie kommt später.',
-    'How Mirdyne works with you, from open source to supply': 'Wie Mirdyne mit Ihnen zusammenarbeitet, von Open Source bis zur Lieferung',
-    'Open source': 'Open Source',
-    'Tools anyone can use and check.': 'Werkzeuge, die jeder nutzen und prüfen kann.',
+    'How Mirdyne works with you, from our models to supply': 'Wie Mirdyne mit Ihnen zusammenarbeitet, von unseren Modellen bis zur Lieferung',
+    'Our models': 'Unsere Modelle',
+    'Our own models predict how an alloy’s atoms arrange and what it will do.':
+        'Unsere eigenen Modelle sagen voraus, wie sich die Atome einer Legierung anordnen und was sie leisten wird.',
     Pilot: 'Pilotprojekt',
     'A first trial on your problem, with our sensors.': 'Ein erster Versuch an Ihrer Aufgabe, mit unseren Sensoren.',
     Deployment: 'Einsatz',
@@ -347,9 +348,24 @@ export const DE: Readonly<Record<string, string>> = {
     'We solve your requirement. You judge the test results.': 'Wir erfüllen Ihre Anforderung. Sie beurteilen die Testergebnisse.',
     'Updates, recalibration, traceable data.': 'Updates, Neukalibrierung, nachvollziehbare Daten.',
     'The qualified material, made at scale by Bimo Tech.': 'Das qualifizierte Material, im industriellen Maßstab von Bimo Tech hergestellt.',
-    Free: 'Kostenlos',
-    'Open software': 'Offene Software',
+    Licensed: 'Lizenziert',
     'Materials on your line': 'Materialien für Ihre Fertigung',
+    'Experts who work with us': 'Expertinnen und Experten, die mit uns arbeiten',
+    'Prof. Jan Wróbel': 'Prof. Jan Wróbel',
+    'Prof. Dariusz Jarząbek': 'Prof. Dariusz Jarząbek',
+    'Matthäus Cyperling': 'Matthäus Cyperling',
+    'Dr Vishnuu Jothi Prakash': 'Dr. Vishnuu Jothi Prakash',
+    'Dr Benjamin Neding': 'Dr. Benjamin Neding',
+    'Warsaw University of Technology': 'Technische Universität Warschau',
+    'Computer models of how the atoms in an alloy arrange, and what that does to it.':
+        'Computermodelle dafür, wie sich die Atome einer Legierung anordnen und was das bewirkt.',
+    'IPPT PAN, Warsaw': 'IPPT PAN, Warschau',
+    'Materials research, from powder to how a sample holds up under load.':
+        'Werkstoffforschung, vom Pulver bis dazu, wie eine Probe unter Last standhält.',
+    'Fraunhofer IAPT, Hamburg': 'Fraunhofer IAPT, Hamburg',
+    'Head of NextGen Mobility.': 'Leiter NextGen Mobility.',
+    'Digital twins: watching metal printing as it happens.': 'Digitale Zwillinge: Metalldruck beobachten, während er läuft.',
+    'Tuning laser printing for new alloys.': 'Laserdruck für neue Legierungen einstellen.',
     'Where PRISM is used first': 'Wo PRISM zuerst eingesetzt wird',
 
     // The method (src/site/Method.tsx)
@@ -841,7 +857,8 @@ export const DE: Readonly<Record<string, string>> = {
     'Legal details are in the <0>Impressum</0>. How we handle what you send us is in the <1>privacy policy</1>.':
         'Die rechtlichen Angaben stehen im <0>Impressum</0>. Wie wir mit Ihren Angaben umgehen, lesen Sie in der <1>Datenschutzerklärung</1>.',
     Code: 'Code',
-    'PRISM’s software is open source. Code and issues are on <0>GitHub</0>.': 'Die Software von PRISM ist Open Source. Code und Issues finden Sie auf <0>GitHub</0>.',
+    'Parts of PRISM are open source; our models are our own. The open code and its issues are on <0>GitHub</0>.':
+        'Teile von PRISM sind Open Source; unsere Modelle gehören uns. Den offenen Code und seine Issues finden Sie auf <0>GitHub</0>.',
 
     // Register interest form (src/site/Interest.tsx)
     Optional: 'Optional',

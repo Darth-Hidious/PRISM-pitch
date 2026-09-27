@@ -5,7 +5,7 @@ import '../styles/prism.css';
 import '../styles/engrave.css';
 import './deck.css';
 import Deck, { type SlideDef } from './Deck';
-import { Architecture, Ask, Close, Cover, Financials, Lab, Market, Markets, Problem, Proof, Solution, Stacks, Team, Traction } from './slides';
+import { Architecture, Ask, Close, Cover, Financials, Lab, Market, Markets, Momentum, Problem, Proof, Solution, Stacks, Team, Traction } from './slides';
 
 const SLIDES: SlideDef[] = [
     { id: 'cover', title: 'PRISM', theme: 'navy', bleed: true, render: () => <Cover /> },
@@ -18,6 +18,7 @@ const SLIDES: SlideDef[] = [
     { id: 'traction', title: 'Traction', theme: 'paper', render: () => <Traction /> },
     { id: 'markets', title: 'Where PRISM goes first', theme: 'navy', render: () => <Markets /> },
     { id: 'market', title: 'Market and business', theme: 'paper', render: () => <Market /> },
+    { id: 'momentum', title: 'Market momentum', theme: 'navy', render: () => <Momentum /> },
     { id: 'financials', title: 'Financials', theme: 'paper', render: () => <Financials /> },
     { id: 'team', title: 'Team', theme: 'paper', render: () => <Team /> },
     { id: 'ask', title: 'The ask', theme: 'navy', render: () => <Ask /> },
