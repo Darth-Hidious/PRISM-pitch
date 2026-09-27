@@ -16,7 +16,7 @@ Instructions for agents: every page below is also available as Markdown. Ask for
 
 - [Home](https://prism.mirdyne.com/index.html.md): What PRISM is, the problem it answers, and where it goes first.
 - [Platform](https://prism.mirdyne.com/platform/index.html.md): The five parts of PRISM, how ready each one is, and the roadmap.
-- [Method](https://prism.mirdyne.com/method/index.html.md): Four demos of how PRISM decides what to test, Forager (our open research), and how we keep the evidence for every result.
+- [Method](https://prism.mirdyne.com/method/index.html.md): Four demos of how PRISM decides what to test, how it chooses which recipes are worth making, Forager (our open research), and how we keep the evidence for every result.
 - [Company](https://prism.mirdyne.com/company/index.html.md): Mirdyne and Bimo Tech, the founders, and how we work with customers.
 - [News](https://prism.mirdyne.com/news/index.html.md): Projects, awards and milestones.
 

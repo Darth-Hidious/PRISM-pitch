@@ -43,7 +43,7 @@ const BAND = 38;
 const JUDGES = [300, 332, 364, 396];
 const SCALE = { x0: 300, x1: 424, y: 112 };
 
-/** Distance from a point to the line through two others, positive inside the triangle. */
+/** Signed distance from a point to the line through two others. Taking the edges A→B→C, inside is negative. */
 const side = (p: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }) =>
     ((b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x)) / Math.hypot(b.x - a.x, b.y - a.y);
 const inside = (p: { x: number; y: number }, m: number) => -side(p, A, B) >= m && -side(p, B, C) >= m && -side(p, C, A) >= m;
@@ -70,7 +70,7 @@ function propose(): Cand[] {
         inside(p, 12) &&
         out.every((q) => Math.hypot(q.x - p.x, q.y - p.y) > 17) &&
         // Room for the window's label below the window.
-        !(Math.abs(p.x - W.x) < 40 && p.y > W.y + 34 && p.y < W.y + 64);
+        !(Math.abs(p.x - W.x) < 48 && p.y > W.y + 30 && p.y < W.y + 70);
     for (let tries = 0; out.length < 14 && tries < 2000; tries++) {
         const p = { x: W.x + gauss() * 36, y: W.y + gauss() * 24 };
         if (free(p)) out.push(p);
@@ -107,9 +107,9 @@ const FOCUS = CANDS.filter((c) => c.check).sort((a, b) => a.y - a.x - (b.y - b.x
 const EXACT = SCALE.x0 + (SCALE.x1 - SCALE.x0) * 0.66;
 const TICKS = [-0.22, -0.07, 0.09, 0.2].map((o) => EXACT + o * (SCALE.x1 - SCALE.x0) * (0.4 + FOCUS.doubt));
 
-/** A strip along the left edge, BAND wide: where recipes are hard to print. */
-const n = { x: (A.y - B.y) / Math.hypot(A.x - B.x, A.y - B.y), y: (B.x - A.x) / Math.hypot(A.x - B.x, A.y - B.y) };
-const STRIP = `M${A.x},${A.y} L${B.x},${B.y} L${B.x - n.x * BAND},${B.y - n.y * BAND} L${A.x - n.x * BAND},${A.y - n.y * BAND} Z`;
+/** A strip along the left edge, BAND wide: where recipes are hard to print. OUT points away from the triangle. */
+const OUT = { x: (A.y - B.y) / Math.hypot(A.x - B.x, A.y - B.y), y: (B.x - A.x) / Math.hypot(A.x - B.x, A.y - B.y) };
+const STRIP = `M${A.x},${A.y} L${B.x},${B.y} L${B.x - OUT.x * BAND},${B.y - OUT.y * BAND} L${A.x - OUT.x * BAND},${A.y - OUT.y * BAND} Z`;
 
 /**
  * The scene at one step, or everything at once (`step` of -1) where motion is unwelcome. Each step adds a
