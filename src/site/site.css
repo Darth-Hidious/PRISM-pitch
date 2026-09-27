@@ -3916,81 +3916,580 @@ body {
     max-width: 52em;
 }
 
-.net__svg {
+/* ── Supply-chain explorer (SupplyShock.tsx) ──
+ * Crimson is the disruption: events, the links they travel and the tail of the size distribution. Each
+ * programme keeps one colour (--c) on the network, the bars, the curves and the timeline. */
+
+.shock {
+    display: grid;
+    gap: 28px;
+}
+
+.shock__head {
+    display: grid;
+    gap: 12px;
+    max-width: 44em;
+}
+
+.shock__lead {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    text-wrap: pretty;
+}
+
+.shock__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 20px 40px;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-panel);
+}
+
+.shock__sources {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.shock__sources legend {
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+.shock__pills {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    padding: 3px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-card);
+    background: var(--ground);
+}
+
+.shock__source {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 14px;
+    border-radius: 3px;
+    color: var(--ink-2);
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.shock__source input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.shock__source:hover {
+    color: var(--ink);
+}
+
+.shock__source.is-on {
+    background: var(--emphasis);
+    color: var(--on-emphasis);
+}
+
+.shock__source:has(input:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+.shock__coupling {
+    display: grid;
+    gap: 10px;
+    flex: 1 1 300px;
+    max-width: 440px;
+}
+
+.shock__coupling-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.shock__sym {
+    font-family: 'STIX Two Math', 'Cambria Math', 'Latin Modern Math', math, serif;
+    font-size: 16px;
+    color: var(--ink);
+}
+
+.shock__coupling output {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+}
+
+.shock__coupling input[type='range'] {
+    width: 100%;
+    margin: 0;
+    accent-color: var(--emphasis);
+}
+
+.shock__hint {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink-3);
+}
+
+.shock__again {
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-card);
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.shock__again:hover {
+    border-color: var(--ink-2);
+}
+
+.shock__again:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+}
+
+/* The network */
+
+.shock__stage {
+    display: grid;
+    gap: 6px;
+}
+
+.shock__net {
+    display: block;
     width: 100%;
     height: auto;
     overflow: visible;
 }
 
-.net__col {
+.shock__net--upright {
+    max-width: 420px;
+    margin-inline: auto;
+}
+
+.shock__p0 {
+    --c: #f6a21f;
+}
+
+.shock__p1 {
+    --c: #73afab;
+}
+
+.shock__p2 {
+    --c: #a58be0;
+}
+
+.shock__col {
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    fill: var(--ink-2);
+    fill: var(--ink-3);
+    paint-order: stroke;
+    stroke: var(--ground);
+    stroke-width: 5px;
+    stroke-linejoin: round;
 }
 
-.net__edge {
+.shock__edge {
     fill: none;
-    stroke: #324157;
+    stroke: var(--rule-soft);
     stroke-width: 1.4;
+    transition: stroke 0.6s ease;
 }
 
-.net__edge.is-hit {
-    animation: net-edge 1.5s ease-out;
+.shock__edge--back {
+    stroke: var(--rule);
+    stroke-dasharray: 4 5;
 }
 
-@keyframes net-edge {
-    0% {
-        stroke: #e27a8b;
-        stroke-width: 2.6;
-    }
-    100% {
-        stroke: #324157;
-        stroke-width: 1.4;
-    }
+.shock__edge.was-hit {
+    stroke: rgba(226, 122, 139, 0.55);
 }
 
-.net__dot {
-    fill: var(--ground);
-    stroke: var(--steel);
-    stroke-width: 2;
+.shock__arrowhead {
+    fill: var(--rule);
 }
 
-.net__halo {
-    fill: #d12f49;
+.shock__pulse {
+    fill: none;
+    stroke: var(--crimson-text);
+    stroke-width: 3;
+    stroke-linecap: round;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.shock__back-label {
+    font-size: 13px;
+    fill: var(--ink-3);
+}
+
+.shock__halo {
+    fill: var(--crimson);
     opacity: 0;
     transform-box: fill-box;
     transform-origin: center;
+    pointer-events: none;
 }
 
-.net__node.is-hit .net__halo {
-    animation: net-halo 1.7s ease-out;
+.shock__dot {
+    fill: var(--ground);
+    stroke: var(--c, var(--steel));
+    stroke-width: 2;
+    transition: stroke 0.6s ease;
 }
 
-.net__node.is-hit .net__dot {
-    animation: net-dot 1.7s ease-out;
+.shock__core {
+    fill: var(--ink);
+    opacity: 0;
+    pointer-events: none;
 }
 
-@keyframes net-halo {
-    0% {
-        opacity: 0.6;
-        transform: scale(0.4);
+.shock__node.was-hit .shock__dot {
+    stroke: var(--crimson-text);
+}
+
+.shock__node.is-source .shock__dot {
+    stroke: var(--crimson);
+    stroke-width: 3.5;
+}
+
+.shock__node--pick {
+    cursor: pointer;
+}
+
+.shock__node--pick:hover .shock__dot {
+    stroke: var(--ink);
+}
+
+.shock__label {
+    font-size: 13.5px;
+    fill: var(--ink-2);
+    paint-order: stroke;
+    stroke: var(--ground);
+    stroke-width: 5px;
+    stroke-linejoin: round;
+}
+
+.shock__node.is-source .shock__label {
+    fill: var(--ink);
+    font-weight: 650;
+}
+
+.shock__clock {
+    justify-self: end;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-3);
+}
+
+/* The panels */
+
+.shock__panels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.shock__panel {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 18px 20px 20px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-panel);
+}
+
+.shock__h {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.shock__sub {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink-3);
+}
+
+.shock__bars {
+    display: grid;
+    gap: 14px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.shock__bars li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 6px 12px;
+}
+
+.shock__bar-name {
+    font-size: 14px;
+    color: var(--ink);
+}
+
+.shock__bar-value {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    text-align: right;
+    white-space: nowrap;
+}
+
+.shock__bar-value strong {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.shock__bar {
+    grid-column: 1 / -1;
+    height: 6px;
+    overflow: hidden;
+    border-radius: 3px;
+    background: var(--rule-soft);
+}
+
+.shock__bar > span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--c);
+    transition: width 0.4s var(--ease-rise);
+}
+
+.shock__chart {
+    display: block;
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    overflow: visible;
+}
+
+.shock__axis {
+    stroke: var(--rule);
+    stroke-width: 1;
+}
+
+.shock__grid {
+    stroke: var(--rule-soft);
+    stroke-width: 1;
+    stroke-dasharray: 2 4;
+}
+
+.shock__tickl {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    fill: var(--ink-3);
+}
+
+.shock__curve {
+    fill: none;
+    stroke: var(--c);
+    stroke-width: 2;
+    stroke-linejoin: round;
+}
+
+.shock__tick {
+    stroke: var(--c);
+    stroke-width: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.shock__tick.is-on {
+    opacity: 1;
+}
+
+.shock__cursor {
+    stroke: var(--ink-3);
+    stroke-width: 1;
+    stroke-dasharray: 2 3;
+}
+
+.shock__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12.5px;
+    color: var(--ink-2);
+}
+
+.shock__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.shock__legend li::before {
+    content: '';
+    width: 14px;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--c);
+}
+
+.shock__col-bar {
+    fill: var(--rule);
+    transition:
+        y 0.4s var(--ease-rise),
+        height 0.4s var(--ease-rise);
+}
+
+.shock__col-bar.is-tail {
+    fill: var(--crimson);
+}
+
+.shock__note {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--ink-2);
+}
+
+.shock__note strong {
+    font-weight: 650;
+    color: var(--crimson-text);
+}
+
+/* The mathematics */
+
+.shock__math {
+    display: grid;
+    gap: 16px;
+}
+
+.shock__eqs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.shock__eq {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 18px 20px;
+    border: 1px solid var(--rule-soft);
+    border-radius: var(--radius-panel);
+}
+
+.shock__formula {
+    font-size: 20px;
+    color: var(--ink);
+}
+
+.shock__formula math {
+    font-family: 'STIX Two Math', 'Cambria Math', 'Latin Modern Math', math;
+}
+
+.shock__eq p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    text-wrap: pretty;
+}
+
+.shock__defs {
+    max-width: 60em;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-2);
+}
+
+/* Narrower screens: the network is drawn smaller, so its words are set larger. */
+@media (max-width: 1100px) {
+    .shock__label,
+    .shock__back-label {
+        font-size: 16px;
     }
-    100% {
-        opacity: 0;
-        transform: scale(1.5);
+
+    .shock__col {
+        font-size: 14px;
     }
 }
 
-@keyframes net-dot {
-    0% {
-        fill: #fff;
-        stroke: #e27a8b;
+/* Three panels side by side only where each is wide enough for its chart; else two, the last below. */
+@media (max-width: 1180px) {
+    .shock__panels {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    100% {
-        fill: #061832;
-        stroke: #6f91ba;
+
+    .shock__panels > :last-child {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .shock__panels {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .shock__eqs {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .shock__label,
+    .shock__back-label {
+        font-size: 19px;
+    }
+
+    .shock__col {
+        font-size: 16px;
+    }
+}
+
+/* Upright phones draw the network 360 units wide at about its own size. */
+@media (max-width: 760px) and (max-aspect-ratio: 1/1) {
+    .shock__net--upright .shock__label {
+        font-size: 11.5px;
+    }
+
+    .shock__net--upright .shock__col {
+        font-size: 10.5px;
+    }
+
+    .shock__formula {
+        font-size: 17px;
     }
 }
 
@@ -4027,13 +4526,6 @@ body {
     .track__item {
         padding: 0 0 22px 34px;
     }
-}
-
-/* Phones draw the network upright (see Roadmap.tsx), so it fits the screen as it is. */
-.net__svg--upright {
-    display: block;
-    max-width: 420px;
-    margin-inline: auto;
 }
 
 /* ── 08 Company ───────────────────────────────────────────────────────── */

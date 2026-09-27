@@ -14,9 +14,16 @@ import TurndownService from 'turndown';
 
 export const SITE = 'https://www.mirdyne.com';
 
-/** Hides the plain copy from the first paint wherever the page's script will run and draw the page itself. */
+/**
+ * Hides the plain copy from the first paint wherever the page's script will run and draw the page itself.
+ * Should that script fail to load, or not have drawn the page after FALLBACK_MS, the copy shows after all
+ * (the script removes it when it draws the page), so a reader never faces a blank page.
+ */
+export const FALLBACK_MS = 8000;
 export const HEAD_SNIPPET =
-    `<script>if('noModule' in HTMLScriptElement.prototype)document.documentElement.classList.add('js')</script>` +
+    `<script>!function(d){if(!('noModule' in HTMLScriptElement.prototype))return;` +
+    `var f=function(){document.querySelector('[data-prerender]')&&d.classList.remove('js')};d.classList.add('js');` +
+    `addEventListener('error',function(e){e.target&&e.target.tagName=='SCRIPT'&&f()},true);setTimeout(f,${FALLBACK_MS})}(document.documentElement)</script>` +
     `<style>.js [data-prerender]{display:none}</style>`;
 
 /** A document with `markup` inside <div id="x">, and that div. */
@@ -46,7 +53,8 @@ function svgLabel(svg) {
 /**
  * The rendered page without what needs JavaScript or only decorates:
  * - anything aria-hidden, canvases and scripts;
- * - buttons (menus, tabs and toggles do nothing without the script);
+ * - buttons (menus, tabs and toggles do nothing without the script), and controls marked
+ *   data-interactive (the supply-chain explorer's: without the script, they would change nothing);
  * - drawings (SVG): one that describes itself (role="img" or "group" with a label) becomes that
  *   description as text, the rest go;
  * - forms: sending one needs the script, and a plain browser would put the answers into the address, so
@@ -58,7 +66,7 @@ function svgLabel(svg) {
 export function cleanMarkup(markup, { email, lang = 'en' }) {
     const words = WORDS[lang];
     const { document, root } = fragment(markup);
-    for (const el of root.querySelectorAll('[aria-hidden="true"], canvas, script, noscript, template, button, [role="tablist"], link')) {
+    for (const el of root.querySelectorAll('[aria-hidden="true"], canvas, script, noscript, template, button, [role="tablist"], [data-interactive], link')) {
         el.remove();
     }
     for (const img of root.querySelectorAll('img')) {
@@ -155,6 +163,12 @@ export function toMarkdown(markup, { path, footer }) {
         em.textContent = `${label}:`;
         p.append(em, ' ', details.textContent.replace(/\s+/g, ' ').trim());
         details.replaceWith(p);
+    }
+    // A formula (MathML) reads as its plain-text form, which the page gives as its alttext.
+    for (const math of main.querySelectorAll('math')) {
+        const code = document.createElement('code');
+        code.textContent = (math.getAttribute('alttext') ?? math.textContent).trim();
+        math.replaceWith(code);
     }
     for (const a of main.querySelectorAll('a[href]')) a.setAttribute('href', new URL(a.getAttribute('href'), base).href);
     for (const img of main.querySelectorAll('img')) {

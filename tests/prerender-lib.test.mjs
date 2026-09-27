@@ -14,6 +14,15 @@ test('cleanMarkup drops what needs JavaScript or only decorates', () => {
     assert.equal(out, '<main><p>Keep</p></main>');
 });
 
+test('cleanMarkup drops controls marked data-interactive, and keeps formulas', () => {
+    const out = cleanMarkup(
+        '<main><div data-interactive=""><fieldset><legend>Start at</legend><input type="radio"></fieldset>' +
+            '<input type="range"></div><p>Kept</p><math alttext="ρ(A) < 1"><mi>ρ</mi></math></main>',
+        { email },
+    );
+    assert.equal(out, '<main><p>Kept</p><math alttext="ρ(A) < 1"><mi>ρ</mi></math></main>');
+});
+
 test('cleanMarkup keeps a labelled drawing as its description, and replaces forms', () => {
     const out = cleanMarkup('<svg role="img" aria-label="The loop, round again"><path d="M0"/></svg><form><input name="email"></form>', {
         email,
@@ -65,6 +74,17 @@ test('toMarkdown: title first, absolute links, labels and numbers kept apart, a 
 test('toMarkdown leaves out soft hyphens, which only mark where a long word may break', () => {
     const md = toMarkdown('<main><h1>Datenschutz\u00aderklärung</h1><p>Schlüssel\u00admaterialien</p></main>', { path: '/de/privacy/', footer: '' });
     assert.ok(md.startsWith('# Datenschutzerklärung\n\nSchlüsselmaterialien'), md);
+});
+
+test('toMarkdown writes a formula as its plain-text form, in code', () => {
+    const md = toMarkdown(
+        '<main><h1>T</h1><div><math display="block" alttext="h(t) = β A e^(−β (I − A) t) e_j"><mi>h</mi><mo>(</mo><mi>t</mi></math></div>' +
+            '<p>Inline <math alttext="ρ(A) &lt; 1"><mi>ρ</mi></math> too.</p></main>',
+        { path: '/platform/', footer: '' },
+    );
+    assert.match(md, /^`h\(t\) = β A e\^\(−β \(I − A\) t\) e_j`$/m);
+    assert.match(md, /Inline `ρ\(A\) < 1` too\./);
+    assert.doesNotMatch(md, /<math|<mi>/);
 });
 
 test('toMarkdown refuses a page without <main>', () => {

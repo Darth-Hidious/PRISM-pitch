@@ -378,3 +378,96 @@ test('the 404 page is German under /de/ and English anywhere else', { skip }, as
     assert.deepEqual(leftInEnglish(en.texts, de.texts), [], '/de/no-such-page/: the same as on /no-such-page/');
     await context.close();
 });
+
+test('the supply-chain explorer: its controls change what it shows, and what it shows is the mathematics', { skip }, async () => {
+    const H = await load('src/site/hawkes.ts');
+    const M = await load('src/site/supply-model.ts');
+    for (const [path, locale, day] of [
+        ['/platform/', 'en-GB', 'Day'],
+        ['/de/platform/', 'de-DE', 'Tag'],
+    ]) {
+        const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+        const page = await context.newPage();
+        const errors = [];
+        page.on('pageerror', (e) => errors.push(e.message));
+        await page.goto(base + path, { waitUntil: 'networkidle' });
+        await page.locator('.shock__stage').scrollIntoViewIfNeeded();
+        // Each programme's chance of a hit, as the page shows it, is the exact one for the setting.
+        const chancesAre = async (source, kappa) => {
+            const A = H.scale(M.BASE, kappa);
+            const want = M.PROGRAMMES.map((p) =>
+                H.hitProbability(A, source.i, p.i).toLocaleString(locale, { style: 'percent', maximumSignificantDigits: 2 }),
+            );
+            await page.waitForFunction(
+                (w) => JSON.stringify([...document.querySelectorAll('.shock__bar-value strong')].map((e) => e.textContent)) === JSON.stringify(w),
+                want,
+                { timeout: 5000 },
+            );
+        };
+        await chancesAre(M.SUPPLIERS[0], 0.85);
+        await page.locator('input[value="refinery"]').check();
+        await chancesAre(M.SUPPLIERS[2], 0.85);
+        // At the bottom of the scale the chances are below 1 %, and still shown, not rounded to 0 %.
+        await page.locator('.shock__coupling input').fill('0.3');
+        await chancesAre(M.SUPPLIERS[2], 0.3);
+        assert.doesNotMatch((await page.locator('.shock__panels').textContent()).replace(/\s+/g, ' '), /(^|[^\d.,])0 ?%|0[.,]00 /);
+        await page.locator('.shock__coupling input').fill('0.95');
+        await chancesAre(M.SUPPLIERS[2], 0.95);
+        assert.equal(await page.locator('.shock__coupling output').textContent(), (0.95).toLocaleString(locale, { minimumFractionDigits: 2 }));
+        // Cascades play: the clock runs in the page's language, events light their nodes, and effects are
+        // reached by a pulse along the link from their cause.
+        await page.waitForFunction(
+            () => document.getAnimations().some((a) => a.effect?.target?.classList?.contains('shock__pulse')),
+            null,
+            { timeout: 20000 },
+        );
+        await page.waitForFunction(() => document.querySelectorAll('.shock__node.was-hit').length > 0, null, { timeout: 5000 });
+        assert.match(await page.locator('.shock__clock').textContent(), new RegExp(`^${day} \\d+ · \\d+ \\S+$`));
+        assert.deepEqual(errors, [], `${path}: page errors`);
+        await context.close();
+    }
+});
+
+test('the supply-chain explorer without motion: one whole cascade at once, nothing moving', { skip }, async () => {
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto(`${base}/platform/`, { waitUntil: 'networkidle' });
+    await page.locator('.shock__stage').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+    const state = await page.evaluate(() => ({
+        lit: document.querySelectorAll('.shock__node.was-hit').length,
+        moving: document.getAnimations().filter((a) => a.effect?.target?.closest?.('.shock')).length,
+        clock: document.querySelector('.shock__clock').textContent,
+    }));
+    assert.ok(state.lit >= 1, 'the cascade is not shown');
+    assert.equal(state.moving, 0, 'something moves');
+    assert.match(state.clock, /^Day \d+ · \d+ events?$/);
+    // Another cascade on request.
+    await page.locator('.shock__again').click();
+    assert.ok((await page.locator('.shock__node.was-hit').count()) >= 1);
+    await context.close();
+});
+
+test('if the page’s script cannot load, or hangs, the plain copy shows instead of a blank page', { skip }, async () => {
+    const context = await browser.newContext();
+    for (const [handle, within] of [
+        [(route) => route.abort(), 3000],
+        // A script that never arrives: the copy shows after the snippet's wait (FALLBACK_MS, 8 s).
+        [() => {}, 12000],
+    ]) {
+        const page = await context.newPage();
+        await page.route('**/assets/*.js', handle);
+        // Not 'domcontentloaded': a module script that never arrives holds that back for good.
+        await page.goto(`${base}/platform/`, { waitUntil: 'commit' });
+        await page.waitForFunction(
+            () => {
+                const copy = document.querySelector('[data-prerender]');
+                return copy && getComputedStyle(copy).display !== 'none' && copy.querySelector('h1').getBoundingClientRect().height > 0;
+            },
+            null,
+            { timeout: within },
+        );
+        await page.close();
+    }
+    await context.close();
+});

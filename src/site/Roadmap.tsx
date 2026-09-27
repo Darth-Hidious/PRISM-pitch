@@ -1,7 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { seeded, useInView, useMediaQuery, useReducedMotion } from './hooks';
 import { useT } from './i18n';
 import { CONSORTIUM, PartnerLogo } from './partners';
+import SupplyShock from './SupplyShock';
 import { Grain, Idx, Note, Rails, Words } from './ui';
 
 type TrackState = 'done' | 'current' | 'next';
@@ -27,156 +26,6 @@ const BRANCHES: { name: string; text: string; items: { title: string; status: st
         ],
     },
 ];
-
-/* ── Event network: a change propagating from a supplier ──────────────── */
-
-const COLUMNS = ['Suppliers', 'Materials', 'Processes', 'Components', 'Programmes'];
-const COUNTS = [4, 4, 3, 4, 3];
-const W = 1200;
-const H = 380;
-
-interface Net {
-    nodes: { id: string; col: number; x: number; y: number }[];
-    edges: { id: string; from: string; to: string }[];
-}
-
-function buildNet(): Net {
-    const rand = seeded(2021);
-    const nodes: Net['nodes'] = [];
-    COUNTS.forEach((n, c) => {
-        for (let k = 0; k < n; k++) {
-            nodes.push({
-                id: `${c}-${k}`,
-                col: c,
-                x: 90 + c * 255,
-                y: 70 + ((k + 0.5) / n) * 290 + (rand() - 0.5) * 30,
-            });
-        }
-    });
-    const edges: Net['edges'] = [];
-    for (let c = 0; c < COUNTS.length - 1; c++) {
-        const here = nodes.filter((n) => n.col === c);
-        const next = nodes.filter((n) => n.col === c + 1);
-        const hit = new Set<string>();
-        for (const a of here) {
-            const k = 1 + (rand() < 0.55 ? 1 : 0);
-            const targets = [...next].sort((p, q) => Math.abs(p.y - a.y) - Math.abs(q.y - a.y) + (rand() - 0.5) * 120).slice(0, k);
-            for (const b of targets) {
-                edges.push({ id: `${a.id}>${b.id}`, from: a.id, to: b.id });
-                hit.add(b.id);
-            }
-        }
-        for (const b of next) {
-            if (hit.has(b.id)) continue;
-            const a = here[Math.floor(rand() * here.length)];
-            edges.push({ id: `${a.id}>${b.id}`, from: a.id, to: b.id });
-        }
-    }
-    return { nodes, edges };
-}
-
-const NET = buildNet();
-
-/** Phones: the same network turned on its side, flowing down the screen instead of across it. */
-const VW = 360;
-const ROW = 132;
-const VH = 64 + ROW * (COLUMNS.length - 1) + 40;
-const Y_MIN = 91;
-const Y_MAX = 339;
-const upright = (n: Net['nodes'][number]) => ({
-    x: 36 + ((n.y - Y_MIN) / (Y_MAX - Y_MIN)) * (VW - 72),
-    y: 64 + n.col * ROW,
-});
-
-function EventNetwork() {
-    const net = NET;
-    const t = useT();
-    const [ref, inView] = useInView<HTMLDivElement>('-10% 0px');
-    const reduce = useReducedMotion();
-    const svgRef = useRef<SVGSVGElement>(null);
-
-    useEffect(() => {
-        const svg = svgRef.current;
-        if (!svg || !inView || reduce) return;
-        const timers: ReturnType<typeof setTimeout>[] = [];
-        const rand = seeded(7 + Math.floor(performance.now()));
-        const flash = (sel: string) => {
-            const el = svg.querySelector<SVGElement>(sel);
-            if (!el) return;
-            el.classList.remove('is-hit');
-            el.getBoundingClientRect(); // restart the animation
-            el.classList.add('is-hit');
-        };
-        // A self-exciting cascade: each activation may excite its neighbours downstream.
-        const fire = (id: string, depth: number) => {
-            flash(`[data-node="${id}"]`);
-            for (const e of net.edges) {
-                if (e.from !== id) continue;
-                if (rand() > 0.82 - depth * 0.04) continue;
-                const delay = 420 + rand() * 520;
-                timers.push(setTimeout(() => flash(`[data-edge="${e.id}"]`), delay * 0.15));
-                timers.push(setTimeout(() => fire(e.to, depth + 1), delay));
-            }
-        };
-        const start = () => {
-            const sources = net.nodes.filter((n) => n.col === 0);
-            fire(sources[Math.floor(rand() * sources.length)].id, 0);
-        };
-        start();
-        const id = setInterval(start, 5200);
-        return () => {
-            clearInterval(id);
-            timers.forEach(clearTimeout);
-        };
-    }, [inView, reduce, net]);
-
-    const vertical = useMediaQuery('(max-width: 760px) and (max-aspect-ratio: 1/1)');
-    const at = (id: string) => {
-        const n = net.nodes.find((m) => m.id === id)!;
-        return vertical ? upright(n) : n;
-    };
-    return (
-        <div ref={ref} className="net">
-            <svg
-                ref={svgRef}
-                className={`net__svg${vertical ? ' net__svg--upright' : ''}`}
-                viewBox={vertical ? `0 0 ${VW} ${VH}` : `0 0 ${W} ${H}`}
-                role="img"
-                aria-label={t('Illustrative network: an event at a supplier propagating through materials and processes to components and programmes.')}
-            >
-                {COLUMNS.map((c, i) =>
-                    vertical ? (
-                        <text key={c} className="net__col" x={0} y={64 + i * ROW - 30} textAnchor="start">
-                            {t(c)}
-                        </text>
-                    ) : (
-                        <text key={c} className="net__col" x={90 + i * 255} y="22" textAnchor="middle">
-                            {t(c)}
-                        </text>
-                    ),
-                )}
-                {net.edges.map((e) => {
-                    const a = at(e.from);
-                    const b = at(e.to);
-                    const m = vertical ? (a.y + b.y) / 2 : (a.x + b.x) / 2;
-                    const d = vertical
-                        ? `M${a.x},${a.y} C${a.x},${m} ${b.x},${m} ${b.x},${b.y}`
-                        : `M${a.x},${a.y} C${m},${a.y} ${m},${b.y} ${b.x},${b.y}`;
-                    return <path key={e.id} data-edge={e.id} className="net__edge" d={d} />;
-                })}
-                {net.nodes.map((n) => {
-                    const p = at(n.id);
-                    return (
-                        <g key={n.id} data-node={n.id} className="net__node">
-                            <circle className="net__halo" cx={p.x} cy={p.y} r="22" />
-                            <circle className="net__dot" cx={p.x} cy={p.y} r="7" />
-                        </g>
-                    );
-                })}
-            </svg>
-        </div>
-    );
-}
 
 export default function Roadmap({ n = '02' }: { n?: string }) {
     const t = useT();
@@ -271,10 +120,10 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                 </div>
 
                 <figure className="roadmap__net rv">
-                    <EventNetwork />
+                    <SupplyShock />
                     <figcaption>
                         <Note label={t('Illustrative')}>
-                            {t('How a change at one supplier spreads to the programmes that depend on it. Method adapted from Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities”, KDD 2021.')}
+                            {t('The network and its rates are made up; the mathematics is exact. The model is a multivariate Hawkes process (Hawkes, 1971), simulated through its branching structure (Hawkes and Oakes, 1974). On Granger causality in it: Eichler, Dahlhaus and Dueck, 2017. On its uses in finance: Bacry, Mastromatteo and Muzy, 2015. Our method for supply chains is adapted from Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities’ States behind Diffusion Processes”, KDD 2021.')}
                         </Note>
                     </figcaption>
                 </figure>
