@@ -123,7 +123,7 @@ export default function Roadmap({ n = '02' }: { n?: string }) {
                     <SupplyShock />
                     <figcaption>
                         <Note label={t('Illustrative')}>
-                            {t('The network and its rates are made up; the mathematics is exact. The model is a multivariate Hawkes process (Hawkes, 1971), simulated through its branching structure (Hawkes and Oakes, 1974). On Granger causality in it: Eichler, Dahlhaus and Dueck, 2017. On its uses in finance: Bacry, Mastromatteo and Muzy, 2015. Our method for supply chains is adapted from Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities’ States behind Diffusion Processes”, KDD 2021.')}
+                            {t('The network and its rates are made up; the chances are computed exactly from the model, a Hawkes process. Our methods are adapted from Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities’ States behind Diffusion Processes”, KDD 2021, for supply chains, and from Repasky et al., “Modeling Discrete Coating Degradation Events via Hawkes Processes”, 2025, for degradation.')}
                         </Note>
                     </figcaption>
                 </figure>

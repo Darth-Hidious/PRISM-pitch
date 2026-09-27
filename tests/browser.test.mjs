@@ -399,7 +399,7 @@ test('the supply-chain explorer: its controls change what it shows, and what it 
                 H.hitProbability(A, source.i, p.i).toLocaleString(locale, { style: 'percent', maximumSignificantDigits: 2 }),
             );
             await page.waitForFunction(
-                (w) => JSON.stringify([...document.querySelectorAll('.shock__bar-value strong')].map((e) => e.textContent)) === JSON.stringify(w),
+                (w) => JSON.stringify([...document.querySelectorAll('.shock__odds strong')].map((e) => e.textContent)) === JSON.stringify(w),
                 want,
                 { timeout: 5000 },
             );
@@ -410,10 +410,9 @@ test('the supply-chain explorer: its controls change what it shows, and what it 
         // At the bottom of the scale the chances are below 1 %, and still shown, not rounded to 0 %.
         await page.locator('.shock__coupling input').fill('0.3');
         await chancesAre(M.SUPPLIERS[2], 0.3);
-        assert.doesNotMatch((await page.locator('.shock__panels').textContent()).replace(/\s+/g, ' '), /(^|[^\d.,])0 ?%|0[.,]00 /);
+        assert.doesNotMatch((await page.locator('.shock__odds').textContent()).replace(/\s+/g, ' '), /(^|[^\d.,])0 ?%/);
         await page.locator('.shock__coupling input').fill('0.95');
         await chancesAre(M.SUPPLIERS[2], 0.95);
-        assert.equal(await page.locator('.shock__coupling output').textContent(), (0.95).toLocaleString(locale, { minimumFractionDigits: 2 }));
         // Cascades play: the clock runs in the page's language, events light their nodes, and effects are
         // reached by a pulse along the link from their cause.
         await page.waitForFunction(
@@ -442,9 +441,9 @@ test('the supply-chain explorer without motion: one whole cascade at once, nothi
     assert.ok(state.lit >= 1, 'the cascade is not shown');
     assert.equal(state.moving, 0, 'something moves');
     assert.match(state.clock, /^Day \d+ · \d+ events?$/);
-    // Another cascade on request.
-    await page.locator('.shock__again').click();
-    assert.ok((await page.locator('.shock__node.was-hit').count()) >= 1);
+    // Another supplier, another cascade, shown whole.
+    await page.locator('input[value="gas"]').check();
+    await page.waitForFunction(() => document.querySelector('.shock__node.is-source .shock__dot') && document.querySelector('.shock__node.is-source').classList.contains('was-hit'));
     await context.close();
 });
 

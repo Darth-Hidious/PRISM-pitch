@@ -164,12 +164,6 @@ export function toMarkdown(markup, { path, footer }) {
         p.append(em, ' ', details.textContent.replace(/\s+/g, ' ').trim());
         details.replaceWith(p);
     }
-    // A formula (MathML) reads as its plain-text form, which the page gives as its alttext.
-    for (const math of main.querySelectorAll('math')) {
-        const code = document.createElement('code');
-        code.textContent = (math.getAttribute('alttext') ?? math.textContent).trim();
-        math.replaceWith(code);
-    }
     for (const a of main.querySelectorAll('a[href]')) a.setAttribute('href', new URL(a.getAttribute('href'), base).href);
     for (const img of main.querySelectorAll('img')) {
         if (!img.getAttribute('alt')) img.remove();

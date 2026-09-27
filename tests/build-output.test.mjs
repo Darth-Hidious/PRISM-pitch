@@ -332,30 +332,21 @@ test('German pages preload their dictionary; English pages load no German', () =
     }
 });
 
-test('the supply-chain explorer, read without JavaScript: its words, numbers and formulas, not its controls', async () => {
+test('the supply-chain explorer, read without JavaScript: its words and each programme’s chance, not its controls', async () => {
     const H = await load('src/site/hawkes.ts');
     const M = await load('src/site/supply-model.ts');
-    // What the page starts with: a disruption at the first supplier, ρ(A) = 0.85.
+    // What the page starts with: a disruption at the first supplier, knock-on effects at 0.85.
     const A = H.scale(M.BASE, 0.85);
     const j = M.SUPPLIERS[0].i;
-    const total = H.expectedCascade(A, j).reduce((s, x) => s + x, 0);
     for (const [path, heading, locale] of [
         ['/platform/', 'How a disruption spreads', 'en-GB'],
         ['/de/platform/', 'Wie sich eine Störung ausbreitet', 'de-DE'],
     ]) {
         const { copy } = page(fileOf(path));
-        const h3 = [...copy.querySelectorAll('h3')].find((h) => text(h) === heading);
-        assert.ok(h3, `${path}: no heading "${heading}"`);
-        assert.equal(copy.querySelectorAll('[data-interactive], input, output').length, 0, `${path}: controls in the plain copy`);
-        const formulas = [...copy.querySelectorAll('math')];
-        assert.equal(formulas.length, 4, `${path}: formulas`);
-        for (const m of formulas) assert.ok(m.getAttribute('alttext'), `${path}: a formula without alttext`);
-
+        assert.ok([...copy.querySelectorAll('h3')].some((h) => text(h) === heading), `${path}: no heading "${heading}"`);
+        assert.equal(copy.querySelectorAll('[data-interactive], input').length, 0, `${path}: controls in the plain copy`);
+        // The chances on the page are the exact ones.
         const md = read(`${path.slice(1)}index.html.md`);
-        for (const m of formulas) assert.ok(md.includes(`\`${m.getAttribute('alttext')}\``), `${path}: ${m.getAttribute('alttext')} not in the Markdown`);
-        // The numbers on the page are the mathematics': the expected cascade, and each programme's exact chance of a hit.
-        const fmt = (x) => x.toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-        assert.ok(md.includes(fmt(total)), `${path}: the expected cascade ${fmt(total)} is not on the page`);
         for (const p of M.PROGRAMMES) {
             const chance = H.hitProbability(A, j, p.i).toLocaleString(locale, { style: 'percent', maximumSignificantDigits: 2 });
             assert.ok(md.includes(`**${chance}**`), `${path}: ${p.id}'s chance of a hit, ${chance}, is not on the page`);

@@ -1,8 +1,7 @@
 /**
  * The mathematics behind the supply-chain explorer (src/site/hawkes.ts), checked against results known in
- * closed form, against each other, and against simulation, on the explorer's own network
- * (src/site/supply-model.ts). Random draws come from a seeded generator, so every run checks the same
- * draws.
+ * closed form and against simulation, on the explorer's own network (src/site/supply-model.ts). Random
+ * draws come from a seeded generator, so every run checks the same draws.
  */
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -16,6 +15,7 @@ const BETA = 1 / M.MEAN_DELAY_DAYS;
 const close = (actual, expected, tolerance, what) =>
     assert.ok(Math.abs(actual - expected) <= tolerance, `${what}: ${actual} is not within ${tolerance} of ${expected}`);
 const sum = (v) => v.reduce((s, x) => s + x, 0);
+const matVec = (a, v) => a.map((row) => sum(row.map((x, j) => x * v[j])));
 
 test('spectral radius: known matrices', () => {
     close(H.spectralRadius([[0.5]]), 0.5, 1e-12, '1 × 1');
@@ -28,10 +28,9 @@ test('spectral radius: known matrices', () => {
     // No loops at all: every cascade stops.
     assert.equal(H.spectralRadius([[0, 1, 0], [0, 0, 1], [0, 0, 0]]), 0);
     // The 2 × 2 case in closed form: ρ = (tr + √(tr² − 4 det)) / 2 for real eigenvalues.
-    const a = [[0.3, 0.4], [0.2, 0.1]];
     const tr = 0.4;
     const det = 0.3 * 0.1 - 0.4 * 0.2;
-    close(H.spectralRadius(a), (tr + Math.sqrt(tr * tr - 4 * det)) / 2, 1e-9, '2 × 2');
+    close(H.spectralRadius([[0.3, 0.4], [0.2, 0.1]]), (tr + Math.sqrt(tr * tr - 4 * det)) / 2, 1e-9, '2 × 2');
 });
 
 test('the explorer’s matrix: ρ(A) is exactly the value the slider sets', () => {
@@ -46,56 +45,6 @@ test('the explorer’s matrix: ρ(A) is exactly the value the slider sets', () =
             else assert.equal(M.BASE[i][j] > 0, links.has(`${i},${j}`), `A[${i}][${j}]`);
         }
     }
-});
-
-test('solve: M x = v', () => {
-    const rand = seeded(7);
-    const n = 6;
-    const m = Array.from({ length: n }, () => Array.from({ length: n }, () => rand() - 0.5));
-    const v = Array.from({ length: n }, () => rand());
-    const x = H.solve(m, v);
-    H.matVec(m, x).forEach((y, i) => close(y, v[i], 1e-12, `row ${i}`));
-    assert.throws(() => H.solve([[1, 2], [2, 4]], [1, 1]), /singular/);
-});
-
-test('the expected cascade (I − A)⁻¹ e_j is the sum of the generations I + A + A² + …', () => {
-    const a = H.scale(M.BASE, 0.85);
-    for (const s of M.SUPPLIERS) {
-        const formula = H.expectedCascade(a, s.i);
-        // Sum the generations until they no longer matter: the n-th shrinks like 0.85ⁿ.
-        let generation = a.map((_, i) => (i === s.i ? 1 : 0));
-        const total = generation.slice();
-        for (let g = 0; g < 400; g++) {
-            generation = H.matVec(a, generation);
-            generation.forEach((x, i) => (total[i] += x));
-        }
-        formula.forEach((x, i) => close(x, total[i], 1e-9, `${s.id} → ${M.NODES[i].id}`));
-    }
-});
-
-test('the response curve: exact for one node, and its area is the expected cascade less the shock', () => {
-    // One node with self-excitation a: h(t) = β a e^{−β (1 − a) t}.
-    const a = 0.6;
-    const times = [0, 1, 5, 20, 60];
-    const h = H.impulseResponse([[a]], BETA, 0, times, 0.25);
-    times.forEach((t, k) => close(h[k][0], BETA * a * Math.exp(-BETA * (1 - a) * t), 1e-9, `h(${t})`));
-
-    // The explorer's network: the area under each node's curve is (I − A)⁻¹ e_j − e_j.
-    const A = H.scale(M.BASE, 0.8);
-    const j = M.SUPPLIERS[0].i;
-    const days = Array.from({ length: 3001 }, (_, d) => d * 0.5);
-    const curve = H.impulseResponse(A, BETA, j, days, 0.25);
-    const expected = H.expectedCascade(A, j);
-    for (let i = 0; i < M.NODES.length; i++) {
-        let area = 0;
-        for (let d = 1; d < days.length; d++) area += ((curve[d][i] + curve[d - 1][i]) / 2) * (days[d] - days[d - 1]);
-        close(area, expected[i] - (i === j ? 1 : 0), 1e-3, `area at ${M.NODES[i].id}`);
-    }
-
-    // The step the explorer uses (0.25 days) agrees with a much finer one.
-    const fine = H.impulseResponse(A, BETA, j, [10, 40, 90], 0.01);
-    const coarse = H.impulseResponse(A, BETA, j, [10, 40, 90], 0.25);
-    fine.forEach((row, k) => row.forEach((x, i) => close(coarse[k][i], x, 1e-9, `step at ${M.NODES[i].id}`)));
 });
 
 test('hit probability: closed forms, and the equation it solves', () => {
@@ -114,7 +63,7 @@ test('hit probability: closed forms, and the equation it solves', () => {
     assert.ok(q >= Math.exp(-alpha / (1 - s)) - 1e-12, 'Jensen');
 });
 
-test('simulation: cascades match the formulas', () => {
+test('simulation: cascades match the exact results', () => {
     const A = H.scale(M.BASE, 0.8);
     const j = M.SUPPLIERS[0].i;
     const runs = 20000;
@@ -138,14 +87,21 @@ test('simulation: cascades match the formulas', () => {
             links++;
         });
     }
-    // The mean size: within four standard errors of (I − A)⁻¹ e_j summed.
+    // The mean size: within four standard errors of the exact mean, the sum over generations
+    // (I + A + A² + …) e_j, which shrink like 0.8ⁿ.
+    let generation = A.map((_, i) => (i === j ? 1 : 0));
+    let exact = 1;
+    for (let g = 0; g < 400; g++) {
+        generation = matVec(A, generation);
+        exact += sum(generation);
+    }
     const mean = sum(sizes) / runs;
     const sd = Math.sqrt(sum(sizes.map((x) => (x - mean) ** 2)) / (runs - 1));
-    close(mean, sum(H.expectedCascade(A, j)), (4 * sd) / Math.sqrt(runs), 'mean cascade size');
-    // The chance of reaching each programme.
+    close(mean, exact, (4 * sd) / Math.sqrt(runs), 'mean cascade size');
+    // The chance of reaching each programme, which the explorer shows.
     M.PROGRAMMES.forEach((p, k) => {
-        const exact = H.hitProbability(A, j, p.i);
-        close(hits[k] / runs, exact, 4 * Math.sqrt((exact * (1 - exact)) / runs), `hit ${p.id}`);
+        const chance = H.hitProbability(A, j, p.i);
+        close(hits[k] / runs, chance, 4 * Math.sqrt((chance * (1 - chance)) / runs), `hit ${p.id}`);
     });
     // The delays are exponential with mean 1/β.
     close(delays / links, M.MEAN_DELAY_DAYS, (4 * M.MEAN_DELAY_DAYS) / Math.sqrt(links), 'mean delay');
@@ -158,7 +114,7 @@ test('a cascade stops at the cap it is given', () => {
     assert.equal(events.length, 50);
 });
 
-test('Poisson draws and quantiles', () => {
+test('Poisson draws', () => {
     const rand = seeded(11);
     const draws = Array.from({ length: 50000 }, () => H.poisson(rand, 0.7));
     const mean = sum(draws) / draws.length;
@@ -166,9 +122,4 @@ test('Poisson draws and quantiles', () => {
     close(mean, 0.7, 0.02, 'mean');
     close(variance, 0.7, 0.03, 'variance');
     assert.equal(H.poisson(rand, 0), 0);
-    const sorted = Array.from({ length: 20 }, (_, i) => i + 1);
-    assert.equal(H.quantile(sorted, 0.95), 19);
-    assert.equal(H.quantile(sorted, 1), 20);
-    assert.equal(H.quantile(sorted, 0), 1);
-    assert.ok(Number.isNaN(H.quantile([], 0.5)));
 });

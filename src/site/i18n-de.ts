@@ -515,18 +515,20 @@ export const DE: Readonly<Record<string, string>> = {
         'Roboter, die Proben herstellen, und Software, die die Instrumente steuert, in einer echten Fertigungslinie.',
     'A material taken from test sample to real part, with the evidence certification needs.':
         'Ein Material, das von der Testprobe zum echten Bauteil geführt wird, mit den Nachweisen, die die Zertifizierung braucht.',
-    'The network and its rates are made up; the mathematics is exact. The model is a multivariate Hawkes process (Hawkes, 1971), simulated through its branching structure (Hawkes and Oakes, 1974). On Granger causality in it: Eichler, Dahlhaus and Dueck, 2017. On its uses in finance: Bacry, Mastromatteo and Muzy, 2015. Our method for supply chains is adapted from Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities’ States behind Diffusion Processes”, KDD 2021.':
-        'Das Netz und seine Raten sind erfunden; die Mathematik ist exakt. Das Modell ist ein multivariater Hawkes-Prozess (Hawkes, 1971), simuliert über seine Verzweigungsstruktur (Hawkes und Oakes, 1974). Zur Granger-Kausalität darin: Eichler, Dahlhaus und Dueck, 2017. Zu seinen Anwendungen im Finanzwesen: Bacry, Mastromatteo und Muzy, 2015. Unsere Methode für Lieferketten ist angelehnt an Okawa et al., „Dynamic Hawkes Processes for Discovering Time-evolving Communities’ States behind Diffusion Processes“, KDD 2021.',
 
     // The supply-chain explorer (src/site/SupplyShock.tsx, src/site/supply-model.ts)
     'How a disruption spreads': 'Wie sich eine Störung ausbreitet',
-    'Pick the supplier where the trouble starts. Each flash is an event; the line that runs into it shows what set it off.':
-        'Wählen Sie den Zulieferer, bei dem die Störung beginnt. Jedes Aufblitzen ist ein Ereignis; die Linie, die hineinläuft, zeigt, was es ausgelöst hat.',
     'Trouble starts at': 'Die Störung beginnt bei',
-    'Branching ratio': 'Verzweigungsrate',
-    'How many events each event sets off, in the long run. At 1, the expected cascade is infinite.':
-        'Wie viele Ereignisse jedes Ereignis auf lange Sicht auslöst. Bei 1 wird die erwartete Kaskade unendlich groß.',
-    'Another cascade': 'Weitere Kaskade',
+    'Pick the supplier where trouble starts, then watch it spread to the programmes that depend on it.':
+        'Wählen Sie den Zulieferer, bei dem die Störung beginnt, und sehen Sie zu, wie sie sich zu den Programmen ausbreitet, die von ihm abhängen.',
+    'Knock-on effects': 'Folgewirkungen',
+    weak: 'schwach',
+    strong: 'stark',
+    'Chance each programme is hit': 'Wahrscheinlichkeit, dass ein Programm getroffen wird',
+    'We use the same model to forecast how a material degrades: sensor readings become events, and the model predicts when a part will fail.':
+        'Dasselbe Modell nutzen wir, um vorherzusagen, wie ein Material altert: Aus Sensordaten werden Ereignisse, und das Modell schätzt, wann ein Bauteil versagt.',
+    'The network and its rates are made up; the chances are computed exactly from the model, a Hawkes process. Our methods are adapted from Okawa et al., “Dynamic Hawkes Processes for Discovering Time-evolving Communities’ States behind Diffusion Processes”, KDD 2021, for supply chains, and from Repasky et al., “Modeling Discrete Coating Degradation Events via Hawkes Processes”, 2025, for degradation.':
+        'Das Netz und seine Raten sind erfunden; die Wahrscheinlichkeiten sind exakt aus dem Modell berechnet, einem Hawkes-Prozess. Unsere Methoden sind angelehnt an Okawa et al., „Dynamic Hawkes Processes for Discovering Time-evolving Communities’ States behind Diffusion Processes“, KDD 2021, für Lieferketten, und an Repasky et al., „Modeling Discrete Coating Degradation Events via Hawkes Processes“, 2025, für die Alterung von Materialien.',
     'Illustrative supply network from mines to programmes, with feedback from the programmes back to the mines.':
         'Beispielhaftes Liefernetz von den Minen bis zu den Programmen, mit Rückkopplung von den Programmen zu den Minen.',
     'rush orders: trouble downstream lands back on the mines': 'Eilbestellungen: Probleme weiter unten in der Kette schlagen auf die Minen zurück',
@@ -551,37 +553,6 @@ export const DE: Readonly<Record<string, string>> = {
     Day: 'Tag',
     event: 'Ereignis',
     events: 'Ereignisse',
-    'Where it lands': 'Wo sie ankommt',
-    'The chance that each programme is hit, and the events expected there':
-        'Die Wahrscheinlichkeit, dass ein Programm getroffen wird, und die dort erwarteten Ereignisse',
-    expected: 'erwartet',
-    'When it lands': 'Wann sie ankommt',
-    'Expected extra events per day at each programme, and this cascade’s events below':
-        'Erwartete zusätzliche Ereignisse pro Tag je Programm, darunter die Ereignisse dieser Kaskade',
-    'Curves of the expected extra events per day at each programme over the 180 days after the shock.':
-        'Kurven der erwarteten zusätzlichen Ereignisse pro Tag je Programm über die 180 Tage nach dem Schock.',
-    'days after the shock': 'Tage nach dem Schock',
-    'Expected activity at the programmes peaks on day {n}.': 'Die erwartete Aktivität bei den Programmen ist an Tag {n} am höchsten.',
-    'How big it gets': 'Wie groß sie wird',
-    'Events in 2,000 simulated cascades': 'Ereignisse in 2.000 simulierten Kaskaden',
-    'Histogram of the number of events in 2,000 simulated cascades.': 'Histogramm der Zahl der Ereignisse in 2.000 simulierten Kaskaden.',
-    'events in the cascade': 'Ereignisse in der Kaskade',
-    'The 2,000 runs average {mean} ± {ci} events (95% confidence); the formula says {formula}.':
-        'Die 2.000 Läufe ergeben im Mittel {mean} ± {ci} Ereignisse (95 % Konfidenz); die Formel ergibt {formula}.',
-    '1 in 20 cascades reaches {q} or more.': '1 von 20 Kaskaden erreicht {q} oder mehr.',
-    'The mathematics': 'Die Mathematik',
-    'Events at node i come at a background rate μᵢ, plus a fading kick from each earlier event it depends on. Node j Granger-causes node i exactly when αᵢⱼ > 0.':
-        'Ereignisse an Knoten i treten mit einer Grundrate μᵢ auf, dazu kommt ein abklingender Anstoß durch jedes frühere Ereignis, von dem i abhängt. Knoten j ist genau dann Granger-kausal für Knoten i, wenn αᵢⱼ > 0.',
-    'Expected events everywhere after one shock at j: the shock, what it sets off, what that sets off, and so on. Economists know (I − A)⁻¹ as the Leontief inverse.':
-        'Erwartete Ereignisse überall nach einem Schock bei j: der Schock, was er auslöst, was das wiederum auslöst, und so weiter. Ökonomen kennen (I − A)⁻¹ als Leontief-Inverse.',
-    'The expected cascade is finite only while ρ(A), the largest eigenvalue of A, stays below 1. The slider sets it.':
-        'Die erwartete Kaskade ist nur endlich, solange ρ(A), der größte Eigenwert von A, unter 1 bleibt. Der Schieberegler stellt ihn ein.',
-    'The expected extra rate over time, exactly: the curves under ‘When it lands’.':
-        'Die erwartete zusätzliche Rate über die Zeit, exakt: die Kurven unter „Wann sie ankommt“.',
-    'A = [αᵢⱼ]: how many events at i one event at j sets off. 1/β = {delay} days, the mean delay.':
-        'A = [αᵢⱼ]: wie viele Ereignisse bei i ein Ereignis bei j auslöst. 1/β = {delay} Tage, die mittlere Verzögerung.',
-    'As set now ({source}): ρ(A) = {rho}, and {total} events in all on average.':
-        'Wie jetzt eingestellt ({source}): ρ(A) = {rho}, im Mittel {total} Ereignisse insgesamt.',
     'Whatever PRISM is used for, every claim keeps its source and says how sure it is.':
         'Wofür PRISM auch eingesetzt wird: Jede Aussage behält ihre Quelle und sagt, wie sicher sie ist.',
     Suppliers: 'Zulieferer',

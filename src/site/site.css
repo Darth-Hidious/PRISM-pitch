@@ -3917,8 +3917,8 @@ body {
 }
 
 /* ── Supply-chain explorer (SupplyShock.tsx) ──
- * Crimson is the disruption: events, the links they travel and the tail of the size distribution. Each
- * programme keeps one colour (--c) on the network, the bars, the curves and the timeline. */
+ * Crimson is the disruption: events and the links they travel. Each programme keeps one colour (--c),
+ * on the network and in the chances below it. */
 
 .shock {
     display: grid;
@@ -3942,11 +3942,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: 20px 40px;
-    padding: 20px;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-panel);
+    gap: 20px 48px;
 }
 
 .shock__sources {
@@ -3968,7 +3964,7 @@ body {
     padding: 3px;
     border: 1px solid var(--rule);
     border-radius: var(--radius-card);
-    background: var(--ground);
+    background: var(--surface);
 }
 
 .shock__source {
@@ -4014,30 +4010,8 @@ body {
 .shock__coupling {
     display: grid;
     gap: 10px;
-    flex: 1 1 300px;
-    max-width: 440px;
-}
-
-.shock__coupling-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.shock__sym {
-    font-family: 'STIX Two Math', 'Cambria Math', 'Latin Modern Math', math, serif;
-    font-size: 16px;
-    color: var(--ink);
-}
-
-.shock__coupling output {
-    font-family: var(--font-mono);
-    font-size: 24px;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    font-variant-numeric: tabular-nums;
-    color: var(--ink);
+    flex: 1 1 260px;
+    max-width: 360px;
 }
 
 .shock__coupling input[type='range'] {
@@ -4046,33 +4020,11 @@ body {
     accent-color: var(--emphasis);
 }
 
-.shock__hint {
+.shock__ends {
+    display: flex;
+    justify-content: space-between;
     font-size: 13px;
-    line-height: 1.45;
     color: var(--ink-3);
-}
-
-.shock__again {
-    min-height: 40px;
-    padding: 0 16px;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-card);
-    background: none;
-    color: var(--ink);
-    font: inherit;
-    font-size: 14px;
-    font-weight: 650;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-}
-
-.shock__again:hover {
-    border-color: var(--ink-2);
-}
-
-.shock__again:focus-visible {
-    outline: 2px solid var(--focus);
-    outline-offset: 2px;
 }
 
 /* The network */
@@ -4212,76 +4164,65 @@ body {
     color: var(--ink-3);
 }
 
-/* The panels */
+/* The chance each programme is hit */
 
-.shock__panels {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-}
-
-.shock__panel {
-    display: grid;
-    align-content: start;
-    gap: 10px;
-    padding: 18px 20px 20px;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-panel);
-}
-
-.shock__h {
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-}
-
-.shock__sub {
-    font-size: 13px;
-    line-height: 1.45;
-    color: var(--ink-3);
-}
-
-.shock__bars {
+.shock__odds {
     display: grid;
     gap: 14px;
-    margin: 6px 0 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+}
+
+/* Names, numbers and bars each on one line across the three, even where a name takes two lines. */
+.shock__odds ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    gap: 6px clamp(16px, 3vw, 48px);
+    margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.shock__bars li {
+.shock__odds li {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: baseline;
-    gap: 6px 12px;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    align-content: end;
 }
 
-.shock__bar-name {
+.shock__odds-name {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
     font-size: 14px;
-    color: var(--ink);
+    line-height: 1.35;
+    color: var(--ink-2);
 }
 
-.shock__bar-value {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ink-3);
-    text-align: right;
-    white-space: nowrap;
+.shock__odds-name::before {
+    content: '';
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin-top: 0.35em;
+    border-radius: 50%;
+    background: var(--c);
 }
 
-.shock__bar-value strong {
-    font-size: 16px;
-    font-weight: 500;
+.shock__odds strong {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
     color: var(--ink);
 }
 
 .shock__bar {
-    grid-column: 1 / -1;
-    height: 6px;
+    height: 4px;
     overflow: hidden;
-    border-radius: 3px;
+    border-radius: 2px;
     background: var(--rule-soft);
 }
 
@@ -4293,145 +4234,12 @@ body {
     transition: width 0.4s var(--ease-rise);
 }
 
-.shock__chart {
-    display: block;
-    width: 100%;
-    max-width: 460px;
-    height: auto;
-    overflow: visible;
-}
-
-.shock__axis {
-    stroke: var(--rule);
-    stroke-width: 1;
-}
-
-.shock__grid {
-    stroke: var(--rule-soft);
-    stroke-width: 1;
-    stroke-dasharray: 2 4;
-}
-
-.shock__tickl {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    fill: var(--ink-3);
-}
-
-.shock__curve {
-    fill: none;
-    stroke: var(--c);
-    stroke-width: 2;
-    stroke-linejoin: round;
-}
-
-.shock__tick {
-    stroke: var(--c);
-    stroke-width: 2;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.shock__tick.is-on {
-    opacity: 1;
-}
-
-.shock__cursor {
-    stroke: var(--ink-3);
-    stroke-width: 1;
-    stroke-dasharray: 2 3;
-}
-
-.shock__legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 16px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-size: 12.5px;
-    color: var(--ink-2);
-}
-
-.shock__legend li {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.shock__legend li::before {
-    content: '';
-    width: 14px;
-    height: 2px;
-    border-radius: 1px;
-    background: var(--c);
-}
-
-.shock__col-bar {
-    fill: var(--rule);
-    transition:
-        y 0.4s var(--ease-rise),
-        height 0.4s var(--ease-rise);
-}
-
-.shock__col-bar.is-tail {
-    fill: var(--crimson);
-}
-
-.shock__note {
-    font-size: 13.5px;
-    line-height: 1.5;
-    color: var(--ink-2);
-}
-
-.shock__note strong {
-    font-weight: 650;
-    color: var(--crimson-text);
-}
-
-/* The mathematics */
-
-.shock__math {
-    display: grid;
-    gap: 16px;
-}
-
-.shock__eqs {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-}
-
-.shock__eq {
-    display: grid;
-    align-content: start;
-    gap: 10px;
-    padding: 18px 20px;
-    border: 1px solid var(--rule-soft);
-    border-radius: var(--radius-panel);
-}
-
-.shock__formula {
-    font-size: 20px;
-    color: var(--ink);
-}
-
-.shock__formula math {
-    font-family: 'STIX Two Math', 'Cambria Math', 'Latin Modern Math', math;
-}
-
-.shock__eq p {
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--ink-2);
-    text-wrap: pretty;
-}
-
-.shock__defs {
-    max-width: 60em;
-    font-size: 14px;
+.shock__also {
+    max-width: 44em;
+    font-size: 16px;
     line-height: 1.55;
     color: var(--ink-2);
+    text-wrap: pretty;
 }
 
 /* Narrower screens: the network is drawn smaller, so its words are set larger. */
@@ -4446,28 +4254,7 @@ body {
     }
 }
 
-/* Three panels side by side only where each is wide enough for its chart; else two, the last below. */
-@media (max-width: 1180px) {
-    .shock__panels {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .shock__panels > :last-child {
-        grid-column: 1 / -1;
-    }
-}
-
-@media (max-width: 700px) {
-    .shock__panels {
-        grid-template-columns: minmax(0, 1fr);
-    }
-}
-
 @media (max-width: 900px) {
-    .shock__eqs {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
     .shock__label,
     .shock__back-label {
         font-size: 19px;
@@ -4486,10 +4273,6 @@ body {
 
     .shock__net--upright .shock__col {
         font-size: 10.5px;
-    }
-
-    .shock__formula {
-        font-size: 17px;
     }
 }
 
