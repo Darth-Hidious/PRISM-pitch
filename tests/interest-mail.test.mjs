@@ -70,16 +70,18 @@ test('the confirmation never repeats a link or address typed as a name, and carr
     }
 });
 
-test('both emails bring their own dark colours, for Apple Mail and for Outlook', () => {
+test('both emails leave the colours to the mail app, so they follow its light or dark theme', () => {
     const mails = [
         interestMail(base).html,
         confirmationMail({ lang: 'en', name: 'Ada', email: 'ada@example.com', areas: ['Investment'] }).html,
     ];
     for (const html of mails) {
         assert.match(html, /<meta name="color-scheme" content="light dark">/);
-        assert.match(html, /@media \(prefers-color-scheme: dark\)/);
-        assert.match(html, /\[data-ogsc\] \.m-ink/);
-        assert.match(html, /\[data-ogsb\] \.m-card/);
+        assert.match(html, /<body style="margin:0;padding:0">/, 'the body sets a colour');
+        assert.doesNotMatch(html, /prefers-color-scheme|data-ogs|<style/, 'dark-mode overrides are back');
+        // The only fixed colours: the navy logo badge, and crimson for the rule, the labels and the button.
+        const colours = new Set(html.match(/#[0-9a-f]{6}\b/gi).map((c) => c.toLowerCase()));
+        assert.deepEqual([...colours].sort(), ['#061832', '#d12f49', '#ffffff'], [...colours].join(', '));
     }
 });
 
