@@ -82,7 +82,6 @@ export const DE: Readonly<Record<string, string>> = {
         'Ein Schmelzspinner in einem Universitätslabor: eine stählerne Vakuumkugel mit rundem Fenster, daneben Netzteil und Gasflaschen.',
     'From raw metal to a part': 'Vom Rohmetall zum Bauteil',
     'We make what we design.': 'Wir stellen her, was wir entwickeln.',
-    'From raw metal to a tested coupon: five photographs, then four drawings': 'Vom Rohmetall zur getesteten Probe: fünf Fotos, dann vier Zeichnungen',
     'Small pieces of raw metal spread out on a paper towel before a melt.': 'Kleine Stücke Rohmetall, vor dem Schmelzen auf einem Papiertuch ausgebreitet.',
     'Raw metals, ready to melt': 'Rohmetalle, bereit zum Schmelzen',
     'Close-up of a copper hearth: small pieces of raw metal loaded into its hollows.': 'Nahaufnahme eines Kupferherds: kleine Stücke Rohmetall in seinen Mulden.',
@@ -104,20 +103,23 @@ export const DE: Readonly<Record<string, string>> = {
     'Coupons, then tests': 'Proben, dann Tests',
     'Density and flaws first, then real conditions.': 'Erst Dichte und Fehler, dann echte Bedingungen.',
 
-    // The drawn steps of the route (src/site/route-drawings.tsx)
-    'Metal chips go into a mill and come out as fine, round powder.': 'Metallspäne gehen in eine Mühle und kommen als feines, rundes Pulver heraus.',
-    chips: 'Späne',
+    'From raw metal to a tested coupon, in nine steps': 'Vom Rohmetall zur getesteten Probe, in neun Schritten',
+    Photos: 'Fotos',
+    '01 to 05 are our own photographs. 06, 07 and 09 show the same steps in other labs, until we have our own; 08 is drawn.':
+        '01 bis 05 sind unsere eigenen Fotos. 06, 07 und 09 zeigen dieselben Schritte in anderen Laboren, bis wir eigene haben; 08 ist gezeichnet.',
+    'Metal powder for 3D printing under an electron microscope: tiny, almost perfect spheres.':
+        'Metallpulver für den 3D-Druck unter dem Elektronenmikroskop: winzige, fast perfekte Kugeln.',
+    'Through the tinted safety window of a laser powder-bed printer: small test pieces stand in the metal powder they were printed from.':
+        'Durch das getönte Schutzfenster eines Laser-Pulverbettdruckers: Kleine Testteile stehen in dem Metallpulver, aus dem sie gedruckt wurden.',
+    'Freshly printed test coupons, shaped to be pulled apart in a strength test, still standing in powder on the build plate.':
+        'Frisch gedruckte Proben, geformt für den Zugversuch, stehen noch im Pulver auf der Bauplatte.',
+
+    // The drawn step of the route (src/site/route-drawings.tsx)
     powder: 'Pulver',
-    'A laser melts each layer of the part into a bed of metal powder; a blade then spreads the next layer.':
-        'Ein Laser schmilzt jede Schicht des Bauteils in ein Bett aus Metallpulver; eine Klinge verteilt dann die nächste Schicht.',
     laser: 'Laser',
     part: 'Bauteil',
     'A nozzle blows metal powder into a laser beam and builds the part up, bead by bead.':
         'Eine Düse bläst Metallpulver in einen Laserstrahl und baut das Bauteil Raupe für Raupe auf.',
-    'Test coupons on the build plate; a scan looks inside one and finds the flaws.':
-        'Testproben auf der Bauplatte; ein Scan blickt in eine hinein und findet die Fehler.',
-    coupons: 'Proben',
-    flaw: 'Fehler',
 
     // How PRISM chooses (src/site/Chooses.tsx)
     'Judges and trust meter': 'Gutachter und Vertrauensmesser',
@@ -1034,6 +1036,16 @@ export const DE: Readonly<Record<string, string>> = {
     Datenschutz: 'Datenschutz',
 
     // Picture credits (src/site/credits-data.ts, shown in the Impressum)
+    'Metal powder under an electron microscope': 'Metallpulver unter dem Elektronenmikroskop',
+    '3D Lab (3dlab.pl)': '3D Lab (3dlab.pl)',
+    '3D Lab (3dlab.pl) ·': '3D Lab (3dlab.pl) ·',
+    'Test pieces in a laser powder-bed printer': 'Testteile in einem Laser-Pulverbettdrucker',
+    'René Volfík, FZU – Institute of Physics of the Czech Academy of Sciences':
+        'René Volfík, FZU – Physikalisches Institut der Tschechischen Akademie der Wissenschaften',
+    'René Volfík, FZU – Institute of Physics of the Czech Academy of Sciences ·':
+        'René Volfík, FZU – Physikalisches Institut der Tschechischen Akademie der Wissenschaften ·',
+    'CC BY-SA 4.0': 'CC BY-SA 4.0',
+    'Printed test coupons on the build plate': 'Gedruckte Proben auf der Bauplatte',
     'Vulcain 2 on test stand P5, DLR Lampoldshausen': 'Vulcain 2 auf Prüfstand P5, DLR Lampoldshausen',
     DLR: 'DLR',
     'CC BY 3.0': 'CC BY 3.0',

@@ -4847,7 +4847,7 @@ body {
     list-style: none;
 }
 
-/* Wide screens: the five photographs in one row, the four drawings in the row below. */
+/* Wide screens: our five photographs in one row, the four later steps in the row below. */
 @media (min-width: 901px) {
     .made__grid {
         grid-template-columns: repeat(20, minmax(0, 1fr));
@@ -4858,12 +4858,12 @@ body {
         grid-column: span 4;
     }
 
-    .made__grid > li.made__drawn {
+    .made__grid > li.made__later {
         grid-column: span 5;
     }
 }
 
-/* A drawn step: an engraved drawing on a paper card, the size of a photograph. */
+/* The drawn step: an engraved drawing on a paper card, the size of a photograph. */
 .made__art {
     display: grid;
     place-items: center;
@@ -4893,7 +4893,7 @@ body {
     color: var(--ink-2);
 }
 
-/* The moving parts of the drawn steps (route-drawings.tsx): the laser, the melt, the powder, the scan. */
+/* The moving parts of the drawn step (route-drawings.tsx): the laser, the melt and the powder. */
 /* Labels a little larger than in the wide drawings: these tiles are small on a phone. */
 .route .eg-t--small {
     font-size: 15px;
@@ -4919,16 +4919,6 @@ body {
     fill: #f1dcc2;
 }
 
-.route-scan {
-    stroke: var(--accent);
-    stroke-width: 1.6;
-}
-
-.route-found {
-    fill: none;
-    stroke: var(--crimson);
-    stroke-width: 1.3;
-}
 
 .made__grid figure {
     margin: 0;
@@ -5065,7 +5055,7 @@ body {
     }
 }
 
-/* Reduced motion: nothing slides; the photographs stack two to a row. On a phone each drawing takes a row of its own, so its labels stay readable. */
+/* Reduced motion: nothing slides; the photographs stack two to a row. On a phone each later step takes a row of its own, so the drawing's labels stay readable. */
 @media (max-width: 900px) and (prefers-reduced-motion: reduce) {
     .made__grid {
         grid-auto-flow: row;
@@ -5077,7 +5067,7 @@ body {
 }
 
 @media (max-width: 560px) and (prefers-reduced-motion: reduce) {
-    .made__grid > li.made__drawn {
+    .made__grid > li.made__later {
         grid-column: 1 / -1;
     }
 }

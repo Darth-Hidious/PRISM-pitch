@@ -451,7 +451,7 @@ test('the supply-chain explorer without motion: one whole cascade at once, nothi
     await context.close();
 });
 
-test('the drawn steps of the making route move only on screen, and stand still without motion', { skip }, async () => {
+test('the drawn step of the making route moves only on screen, and stands still without motion', { skip }, async () => {
     for (const reducedMotion of ['no-preference', 'reduce']) {
         const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion });
         const page = await context.newPage();
@@ -462,13 +462,13 @@ test('the drawn steps of the making route move only on screen, and stand still w
                 return { count: svgs.length, paused: svgs.map((s) => s.animationsPaused()), animations: document.querySelectorAll('.route animate, .route animateTransform').length };
             });
         const away = await state();
-        assert.equal(away.count, 4, 'four drawn steps');
+        assert.equal(away.count, 1, 'one drawn step');
         if (reducedMotion === 'reduce') {
-            assert.equal(away.animations, 0, 'the drawings animate without motion');
+            assert.equal(away.animations, 0, 'the drawing animates without motion');
         } else {
-            assert.ok(away.animations > 0, 'the drawings do not animate');
-            assert.deepEqual(away.paused, [true, true, true, true], 'drawings move while off screen');
-            await page.locator('.made__drawn').first().scrollIntoViewIfNeeded();
+            assert.ok(away.animations > 0, 'the drawing does not animate');
+            assert.deepEqual(away.paused, [true], 'the drawing moves while off screen');
+            await page.locator('.made__art').first().scrollIntoViewIfNeeded();
             await page.waitForFunction(() => [...document.querySelectorAll('.made__grid svg.route')].every((s) => !s.animationsPaused()));
         }
         await context.close();

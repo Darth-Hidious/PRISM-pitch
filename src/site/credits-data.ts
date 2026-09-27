@@ -18,6 +18,7 @@ export interface PictureCredit {
 
 const CC_BY_3 = 'https://creativecommons.org/licenses/by/3.0/';
 const CC_BY_4 = 'https://creativecommons.org/licenses/by/4.0/';
+const CC_BY_SA_4 = 'https://creativecommons.org/licenses/by-sa/4.0/';
 const CC_BY_SA_IGO = 'https://creativecommons.org/licenses/by-sa/3.0/igo/';
 const CC0 = 'https://creativecommons.org/publicdomain/zero/1.0/';
 const FAL = 'https://artlibre.org/licence/lal/en/';
@@ -93,6 +94,33 @@ export const PICTURE_CREDITS: PictureCredit[] = [
         licenceUrl: CC0,
         change: 'cropped',
         pages: 'Home, Company',
+    },
+    {
+        picture: 'Metal powder under an electron microscope',
+        source: 'https://commons.wikimedia.org/wiki/File:SEM_photo_of_316L_Stainless_Steel_metal_powder_atomized_with_ATO_Lab_Plus_ultrasonic_metal_atomizer.jpg',
+        by: '3D Lab (3dlab.pl)',
+        licence: 'CC BY 4.0',
+        licenceUrl: CC_BY_4,
+        change: 'cropped',
+        pages: 'Home',
+    },
+    {
+        picture: 'Test pieces in a laser powder-bed printer',
+        source: 'https://commons.wikimedia.org/wiki/File:FZU_3Dprinting_1.jpg',
+        by: 'René Volfík, FZU – Institute of Physics of the Czech Academy of Sciences',
+        licence: 'CC BY-SA 4.0',
+        licenceUrl: CC_BY_SA_4,
+        change: 'cropped and resized',
+        pages: 'Home',
+    },
+    {
+        picture: 'Printed test coupons on the build plate',
+        source: 'https://commons.wikimedia.org/wiki/File:FZU_3Dprinting_4.jpg',
+        by: 'René Volfík, FZU – Institute of Physics of the Czech Academy of Sciences',
+        licence: 'CC BY-SA 4.0',
+        licenceUrl: CC_BY_SA_4,
+        change: 'cropped and resized',
+        pages: 'Home',
     },
     {
         picture: 'Europe from Envisat',

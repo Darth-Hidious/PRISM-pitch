@@ -393,12 +393,16 @@ test('the making route, read without JavaScript: melted, milled, made into powde
             const caption = text(li.querySelector('figcaption')).replace(/^\d\d\s*/, '');
             assert.ok(caption.startsWith(steps[i]), `${path}: step ${i + 1} reads "${caption}", not "${steps[i]}"`);
         });
-        // The first five are photographs; the four drawn steps say what they show.
-        assert.equal(items.slice(0, 5).filter((li) => li.querySelector('img')).length, 5, `${path}: five photographs first`);
-        for (const li of items.slice(5)) {
-            const d = text(li.querySelector('.prerender-figure'));
-            assert.ok(d.startsWith(diagram) && d.length > 40, `${path}: a drawn step without its description: "${d}"`);
-        }
+        // Every step is a photograph with its description, except DED (08), which is drawn and described.
+        items.forEach((li, i) => {
+            if (i === 7) {
+                const d = text(li.querySelector('.prerender-figure'));
+                assert.ok(d.startsWith(diagram) && d.length > 40, `${path}: the drawn step without its description: "${d}"`);
+            } else {
+                const alt = li.querySelector('img')?.getAttribute('alt') ?? '';
+                assert.ok(alt.length > 40, `${path}: step ${i + 1} has no photograph with a description`);
+            }
+        });
         // LPBF names both places it runs.
         assert.match(text(items[6]), /Fraunhofer IAPT.*Bimo Tech/, `${path}: where the powder bed printing runs`);
     }
@@ -408,6 +412,14 @@ test('the making route, read without JavaScript: melted, milled, made into powde
         for (const wrong of ['Machined to shape', 'machined part', 'melt and 3D-print', 'melted and 3D-printed']) {
             assert.ok(!words.includes(wrong), `${path}: "${wrong}"`);
         }
+    }
+    // The photographs that are not ours are credited in the Impressum, in both languages.
+    for (const [path, credits] of [
+        ['/impressum/', ['Metal powder under an electron microscope', 'Test pieces in a laser powder-bed printer', 'Printed test coupons on the build plate']],
+        ['/de/impressum/', ['Metallpulver unter dem Elektronenmikroskop', 'Testteile in einem Laser-Pulverbettdrucker', 'Gedruckte Proben auf der Bauplatte']],
+    ]) {
+        const words = text(page(fileOf(path)).copy.querySelector('#credits'));
+        for (const c of credits) assert.ok(words.includes(c), `${path}: no credit for "${c}"`);
     }
     const platform = text(page(fileOf('/platform/')).copy);
     assert.match(platform, /melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons/, '/platform/: PRISM Alpha’s route');

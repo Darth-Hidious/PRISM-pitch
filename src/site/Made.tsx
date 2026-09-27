@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactElement } from 'react';
 import { useT } from './i18n';
-import { CouponDrawing, DedDrawing, PbfDrawing, PowderDrawing } from './route-drawings';
-import { Idx, Words } from './ui';
+import { DedDrawing } from './route-drawings';
+import { Idx, Note, Words } from './ui';
 
 /** Our own photographs, as taken: cropped, never retouched. In order, from raw metal to a part. */
 const PHOTOS = [
@@ -32,20 +32,39 @@ const PHOTOS = [
     },
 ];
 
-/** The steps after milling, drawn until we have photographs of them: powder, printing, coupons and tests. */
-const DRAWN = [
-    { Art: PowderDrawing, caption: 'Made into powder' },
-    { Art: PbfDrawing, caption: 'Printed in a powder bed', note: 'LPBF: research at Fraunhofer IAPT, industrial at Bimo Tech.' },
+/**
+ * The steps after milling, which we have no photographs of our own of yet: photographs of the same steps
+ * in other labs (credited in the Impressum, credits-data.ts), and a drawing where no free photograph was
+ * good enough.
+ */
+type Later = { caption: string; note?: string } & ({ src: string; alt: string } | { Art: () => ReactElement });
+const LATER: Later[] = [
+    {
+        src: '/img/route-powder.webp',
+        alt: 'Metal powder for 3D printing under an electron microscope: tiny, almost perfect spheres.',
+        caption: 'Made into powder',
+    },
+    {
+        src: '/img/route-powder-bed.webp',
+        alt: 'Through the tinted safety window of a laser powder-bed printer: small test pieces stand in the metal powder they were printed from.',
+        caption: 'Printed in a powder bed',
+        note: 'LPBF: research at Fraunhofer IAPT, industrial at Bimo Tech.',
+    },
     { Art: DedDrawing, caption: 'Or built up by DED', note: 'Directed energy deposition.' },
-    { Art: CouponDrawing, caption: 'Coupons, then tests', note: 'Density and flaws first, then real conditions.' },
+    {
+        src: '/img/route-coupons.webp',
+        alt: 'Freshly printed test coupons, shaped to be pulled apart in a strength test, still standing in powder on the build plate.',
+        caption: 'Coupons, then tests',
+        note: 'Density and flaws first, then real conditions.',
+    },
 ];
 
 /** Narrower screens: the row is wider than the screen, so scrolling down slides it across. */
 const SLIDE = '(max-width: 900px) and (prefers-reduced-motion: no-preference)';
 
 /**
- * Home: the ideas are real metal. The lab, then the route from raw metal to a tested coupon: five
- * photographs up to the milled chips, then four drawings for the steps we have no photographs of yet.
+ * Home: the ideas are real metal. The lab, then the route from raw metal to a tested coupon: our own
+ * photographs up to the milled chips, then the steps we have no photographs of our own of yet.
  * Nothing here scrolls sideways: where the row is wider than the screen, the section holds still and
  * the page's own scroll moves the photographs across, the way Apple's product pages do.
  */
@@ -132,9 +151,12 @@ export default function Made({ n = '02' }: { n?: string }) {
                             <h2 id="made-title" className="w-h2">
                                 <Words>{t('We make what we design.')}</Words>
                             </h2>
+                            <Note label={t('Photos')}>
+                                {t('01 to 05 are our own photographs. 06, 07 and 09 show the same steps in other labs, until we have our own; 08 is drawn.')}
+                            </Note>
                         </header>
                         <div className="made__view rv">
-                            <ul ref={track} className="made__grid" aria-label={t('From raw metal to a tested coupon: five photographs, then four drawings')}>
+                            <ul ref={track} className="made__grid" aria-label={t('From raw metal to a tested coupon, in nine steps')}>
                                 {PHOTOS.map((ph, i) => (
                                     <li key={ph.src}>
                                         <figure>
@@ -146,17 +168,21 @@ export default function Made({ n = '02' }: { n?: string }) {
                                         </figure>
                                     </li>
                                 ))}
-                                {DRAWN.map(({ Art, caption, note }, i) => (
-                                    <li key={caption} className="made__drawn">
+                                {LATER.map((step, i) => (
+                                    <li key={step.caption} className="made__later">
                                         <figure>
-                                            <div className="made__art">
-                                                <Art />
-                                            </div>
+                                            {'src' in step ? (
+                                                <img src={step.src} alt={t(step.alt)} width={1000} height={1000} loading="lazy" />
+                                            ) : (
+                                                <div className="made__art">
+                                                    <step.Art />
+                                                </div>
+                                            )}
                                             <figcaption>
                                                 <span className="made__step">{String(PHOTOS.length + i + 1).padStart(2, '0')}</span>
                                                 <span>
-                                                    {t(caption)}
-                                                    {note && <small className="made__note">{t(note)}</small>}
+                                                    {t(step.caption)}
+                                                    {step.note && <small className="made__note">{t(step.note)}</small>}
                                                 </span>
                                             </figcaption>
                                         </figure>
