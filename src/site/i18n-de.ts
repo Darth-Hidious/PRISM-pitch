@@ -860,7 +860,7 @@ export const DE: Readonly<Record<string, string>> = {
     'what the part must survive': 'was das Bauteil überstehen muss',
     'AI suggests ideas': 'KI schlägt Ideen vor',
     'physics checks; most stop here': 'Prüfung der Physik; die meisten scheitern hier',
-    'melted, powdered, printed': 'geschmolzen, zu Pulver gemahlen, gedruckt',
+    'melted, powdered, printed': 'geschmolzen, gemahlen, gedruckt',
     'measured against the targets': 'an den Zielwerten gemessen',
     targets: 'Zielwerte',
     ideas: 'Ideen',
