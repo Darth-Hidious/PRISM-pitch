@@ -19,8 +19,11 @@ export default function Business({ n = '02' }: { n?: string }) {
                 <header className="sec-head rv">
                     <Idx n={n}>{t('Working with us')}</Idx>
                     <h2 id="business-title" className="w-h2">
-                        <Words>{t('Our tools are free. We are paid for projects and materials.')}</Words>
+                        <Words>{t('Our tools are free. We earn from development contracts and licensing.')}</Words>
                     </h2>
+                    <p className="w-lead">
+                        {t('Customers want the material now, for what it can do. Certifying a part takes ten years or more; that comes later.')}
+                    </p>
                 </header>
 
                 <ol className="ladder rv" aria-label={t('How Mirdyne works with you, from open source to supply')}>

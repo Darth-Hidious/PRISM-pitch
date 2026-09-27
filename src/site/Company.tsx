@@ -79,7 +79,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                     <div className="founders__grid">
                         <article className="founder">
                             <Name>Kevin Grüning</Name>
-                            <p className="founder__role">{t('Managing Director, Mirdyne')}</p>
+                            <p className="founder__role">{t('CEO and Managing Director, Mirdyne')}</p>
                             <p>
                                 {t('Space Systems Lead at Bimo Tech. Physics and technology for space applications, JLU Giessen and THM.')}
                             </p>
@@ -93,7 +93,7 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                         </article>
                         <article className="founder">
                             <Name>Marcin Orzechowski</Name>
-                            <p className="founder__role">{t('Co-founder, Mirdyne')}</p>
+                            <p className="founder__role">{t('CFO, Mirdyne')}</p>
                             <p>
                                 {t('CEO and Head of R&D at Bimo Tech, which supplies special metals and precision parts for space, energy and science. Wrocław University of Technology.')}
                             </p>

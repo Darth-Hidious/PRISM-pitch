@@ -505,11 +505,12 @@ const CONTEXT = [
 ];
 
 const PAID = [
-    { name: 'Programme', desc: 'Experimental campaign accepted against customer requirements.' },
+    { name: 'Programme', desc: 'Development contract: a campaign accepted against customer requirements.' },
     { name: 'Pilot', desc: 'Probe deployment, calibration and a reference run.' },
     { name: 'Deployment', desc: 'PRISM run by us for the customer’s programme, under their sign-off.' },
     { name: 'Support', desc: 'Recalibration, traceability and versioned releases.' },
     { name: 'Supply', desc: 'The qualified material, made at scale by Bimo Tech.' },
+    { name: 'Licensing', desc: 'The right to use the materials and methods we develop.' },
 ];
 
 export function Market() {
@@ -689,7 +690,7 @@ const FOUNDERS = [
     {
         name: 'Kevin Grüning',
         initials: 'KG',
-        role: 'Managing Director',
+        role: 'CEO and Managing Director',
         text: 'Space Systems Lead at Bimo Tech. Physics and technology for space applications, JLU Giessen and THM.',
     },
     {
@@ -701,7 +702,7 @@ const FOUNDERS = [
     {
         name: 'Marcin Orzechowski',
         initials: 'MO',
-        role: 'Co-founder',
+        role: 'CFO',
         text: 'CEO and Head of R&D at Bimo Tech, which supplies special metals and precision parts for space, energy and science. Wrocław University of Technology.',
     },
 ];

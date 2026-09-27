@@ -1018,7 +1018,7 @@
 
 .d-boundary {
     display: grid;
-    grid-template-columns: 300px repeat(5, minmax(0, 1fr));
+    grid-template-columns: 300px repeat(6, minmax(0, 1fr));
     gap: 16px;
 }
 

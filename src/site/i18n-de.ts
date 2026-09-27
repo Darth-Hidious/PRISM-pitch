@@ -291,13 +291,13 @@ export const DE: Readonly<Record<string, string>> = {
         'Nahaufnahme des Kupferherds: kleine Stücke Rohmetall in seinen Mulden, bereit zum Schmelzen.',
     'Where our alloys are melted: the materials lab at WUST, Wrocław.': 'Wo unsere Legierungen geschmolzen werden: im Werkstofflabor der Technischen Universität Wrocław.',
     Founders: 'Gründer',
-    'Managing Director, Mirdyne': 'Geschäftsführer, Mirdyne',
+    'CEO and Managing Director, Mirdyne': 'CEO und Geschäftsführer, Mirdyne',
     'Space Systems Lead at Bimo Tech. Physics and technology for space applications, JLU Giessen and THM.':
         'Leiter Raumfahrtsysteme bei Bimo Tech. Physik und Technik für Raumfahrtanwendungen, JLU Gießen und THM.',
     'Technical Lead, Mirdyne': 'Technischer Leiter, Mirdyne',
     'Technical lead of the ESA projects SPARK and PRISM Alpha at Bimo Tech. Applied AI and data science, MIT Professional Education; biomedical engineering, THM.':
         'Technischer Leiter der ESA-Projekte SPARK und PRISM Alpha bei Bimo Tech. Angewandte KI und Data Science, MIT Professional Education; Biomedizintechnik, THM.',
-    'Co-founder, Mirdyne': 'Mitgründer, Mirdyne',
+    'CFO, Mirdyne': 'CFO, Mirdyne',
     'CEO and Head of R&D at Bimo Tech, which supplies special metals and precision parts for space, energy and science. Wrocław University of Technology.':
         'CEO und Leiter F&E bei Bimo Tech, das Sondermetalle und Präzisionsteile für Raumfahrt, Energie und Wissenschaft liefert. Technische Universität Wrocław.',
 
@@ -334,7 +334,9 @@ export const DE: Readonly<Record<string, string>> = {
 
     // Working with us (src/site/Business.tsx)
     'Working with us': 'Zusammenarbeit mit uns',
-    'Our tools are free. We are paid for projects and materials.': 'Unsere Werkzeuge sind kostenlos. Bezahlt werden wir für Projekte und Materialien.',
+    'Our tools are free. We earn from development contracts and licensing.': 'Unsere Werkzeuge sind kostenlos. Wir verdienen an Entwicklungsaufträgen und Lizenzen.',
+    'Customers want the material now, for what it can do. Certifying a part takes ten years or more; that comes later.':
+        'Kunden wollen das Material jetzt, für das, was es kann. Die Zertifizierung eines Bauteils dauert zehn Jahre oder länger; sie kommt später.',
     'How Mirdyne works with you, from open source to supply': 'Wie Mirdyne mit Ihnen zusammenarbeitet, von Open Source bis zur Lieferung',
     'Open source': 'Open Source',
     'Tools anyone can use and check.': 'Werkzeuge, die jeder nutzen und prüfen kann.',
