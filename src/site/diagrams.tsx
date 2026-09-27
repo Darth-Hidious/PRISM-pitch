@@ -21,7 +21,7 @@ const PANELS = [
 const HANDOFFS = ['targets', 'classes', 'ideas', 'survivors', 'samples'];
 const LEARN = PANELS.length;
 
-function Requirement({ px }: { px: number }) {
+export function Requirement({ px }: { px: number }) {
     return (
         <g>
             <path className="eg-solid" d={`M${px - 60},128 H${px} L${px + 14},142 V240 H${px - 60} Z`} />
@@ -76,7 +76,7 @@ const WALKERS: [number, number, Tone][] = [
     [2, 238, 'dark'],
 ];
 
-function Design({ px }: { px: number }) {
+export function Design({ px }: { px: number }) {
     return (
         <g>
             <path className="eg-solid eg-solid--open" d={`M${px},116 L${px - 80},254 L${px + 80},254 Z`} />
@@ -102,7 +102,7 @@ function Design({ px }: { px: number }) {
     );
 }
 
-function Screen({ px, id }: { px: number; id: string }) {
+export function Screen({ px, id }: { px: number; id: string }) {
     const curve = `M${px - 78},150 C${px - 58},150 ${px - 52},206 ${px - 32},206 C${px - 12},206 ${px - 12},166 ${px + 4},166 C${px + 22},166 ${px + 26},224 ${px + 46},224 C${px + 64},224 ${px + 66},158 ${px + 78},156`;
     return (
         <g>

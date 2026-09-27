@@ -1,7 +1,20 @@
 import { useEffect, useRef, type ReactElement } from 'react';
 import { useT } from './i18n';
-import { DedDrawing } from './route-drawings';
+import { ChooseDrawing, ClassesDrawing, DedDrawing, GenerateDrawing, LiteratureDrawing, RequirementDrawing } from './route-drawings';
 import { Idx, Note, Words } from './ui';
+
+/**
+ * Before any metal: the design steps, drawn. It starts from the customer's requirement, not from the
+ * metal: PRISM reads the literature on it, we pick the classes of material worth researching, our
+ * generative models propose recipes in them, and the best few are chosen.
+ */
+const DESIGN: { Art: () => ReactElement; caption: string; note: string }[] = [
+    { Art: RequirementDrawing, caption: 'Your requirement', note: 'What the part must survive, and what it has to beat.' },
+    { Art: LiteratureDrawing, caption: 'PRISM reads the literature', note: 'Papers and data on your requirement, with their sources.' },
+    { Art: ClassesDrawing, caption: 'Classes worth researching', note: 'The families of material that could meet it.' },
+    { Art: GenerateDrawing, caption: 'Our generative models propose recipes', note: 'A whole batch, not one best guess.' },
+    { Art: ChooseDrawing, caption: 'The best few are chosen', note: 'Several models judge; an exact check settles the doubtful ones.' },
+];
 
 /** Our own photographs, as taken: cropped, never retouched. In order, from raw metal to a part. */
 const PHOTOS = [
@@ -63,7 +76,7 @@ const LATER: Later[] = [
 const SLIDE = '(max-width: 900px) and (prefers-reduced-motion: no-preference)';
 
 /**
- * Home: once PRISM has chosen the recipes, we make them. The lab, then the route from raw metal to a tested coupon: our own
+ * Home: from the customer's requirement to tested metal. The lab, then the design steps, drawn, then the route from raw metal to a tested coupon: our own
  * photographs up to the milled chips, then the steps we have no photographs of our own of yet.
  * Nothing here scrolls sideways: where the row is wider than the screen, the section holds still and
  * the page's own scroll moves the photographs across, the way Apple's product pages do.
@@ -147,22 +160,38 @@ export default function Made({ n = '02' }: { n?: string }) {
                 <div ref={stage} className="made__stage">
                     <div className="wrap made__inner">
                         <header className="made__head rv">
-                            <Idx n={n}>{t('From recipe to tested metal')}</Idx>
+                            <Idx n={n}>{t('From your requirement to tested metal')}</Idx>
                             <h2 id="made-title" className="w-h2">
-                                <Words>{t('We make what we design.')}</Words>
+                                <Words>{t('We design it, then we make it.')}</Words>
                             </h2>
                             <Note label={t('Photos')}>
-                                {t('01 to 05 and 09 are our own photographs. 06 and 07 show the same steps in other labs, until we have our own; 08 is drawn.')}
+                                {t('01 to 05 are drawn. 06 to 10 and 14 are our own photographs. 11 and 12 show the same steps in other labs, until we have our own; 13 is drawn.')}
                             </Note>
                         </header>
                         <div className="made__view rv">
-                            <ul ref={track} className="made__grid" aria-label={t('From raw metal to a tested coupon, in nine steps')}>
+                            <ul ref={track} className="made__grid" aria-label={t('From your requirement to a tested coupon, in fourteen steps')}>
+                                {DESIGN.map((step, i) => (
+                                    <li key={step.caption} className="made__design">
+                                        <figure>
+                                            <div className="made__art">
+                                                <step.Art />
+                                            </div>
+                                            <figcaption>
+                                                <span className="made__step">{String(i + 1).padStart(2, '0')}</span>
+                                                <span>
+                                                    {t(step.caption)}
+                                                    <small className="made__note">{t(step.note)}</small>
+                                                </span>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                ))}
                                 {PHOTOS.map((ph, i) => (
                                     <li key={ph.src}>
                                         <figure>
                                             <img src={ph.src} alt={t(ph.alt)} width={1000} height={1000} loading="lazy" />
                                             <figcaption>
-                                                <span className="made__step">{String(i + 1).padStart(2, '0')}</span>
+                                                <span className="made__step">{String(DESIGN.length + i + 1).padStart(2, '0')}</span>
                                                 {t(ph.caption)}
                                             </figcaption>
                                         </figure>
@@ -179,7 +208,7 @@ export default function Made({ n = '02' }: { n?: string }) {
                                                 </div>
                                             )}
                                             <figcaption>
-                                                <span className="made__step">{String(PHOTOS.length + i + 1).padStart(2, '0')}</span>
+                                                <span className="made__step">{String(DESIGN.length + PHOTOS.length + i + 1).padStart(2, '0')}</span>
                                                 <span>
                                                     {t(step.caption)}
                                                     {step.note && <small className="made__note">{t(step.note)}</small>}

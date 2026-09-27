@@ -458,18 +458,20 @@ test('the drawn step of the making route moves only on screen, and stands still 
         await page.goto(`${base}/`, { waitUntil: 'networkidle' });
         const state = () =>
             page.evaluate(() => {
-                const svgs = [...document.querySelectorAll('.made__grid svg.route')];
+                // Only the drawn making step (DED) moves; the drawn design steps stand still.
+                const svgs = [...document.querySelectorAll('.made__grid svg.route')].filter((s) => s.querySelector('animate, animateTransform') || s.getAttribute('aria-label')?.includes('nozzle'));
                 return { count: svgs.length, paused: svgs.map((s) => s.animationsPaused()), animations: document.querySelectorAll('.route animate, .route animateTransform').length };
             });
         const away = await state();
-        assert.equal(away.count, 1, 'one drawn step');
+        assert.equal(away.count, 1, 'one moving drawn step');
         if (reducedMotion === 'reduce') {
             assert.equal(away.animations, 0, 'the drawing animates without motion');
         } else {
             assert.ok(away.animations > 0, 'the drawing does not animate');
             assert.deepEqual(away.paused, [true], 'the drawing moves while off screen');
-            await page.locator('.made__art').first().scrollIntoViewIfNeeded();
-            await page.waitForFunction(() => [...document.querySelectorAll('.made__grid svg.route')].every((s) => !s.animationsPaused()));
+            const ded = page.locator('.made__grid svg.route[aria-label*="nozzle"]');
+            await ded.scrollIntoViewIfNeeded();
+            await page.waitForFunction(() => !document.querySelector('.made__grid svg.route[aria-label*="nozzle"]').animationsPaused());
         }
         await context.close();
     }

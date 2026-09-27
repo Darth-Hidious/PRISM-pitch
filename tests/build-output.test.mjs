@@ -368,22 +368,22 @@ test('the supply-chain explorer, read without JavaScript: its words and each pro
     }
 });
 
-test('the making route, read without JavaScript: melted, milled, made into powder, printed, then coupons and tests', () => {
+test('the route, read without JavaScript: from the requirement through research and design, then melted, milled, made into powder, printed, then coupons and tests', () => {
     for (const [path, steps, diagram] of [
         [
             '/',
-            ['Raw metals, ready to melt', 'Loaded into the hearth', 'Melted with an electric arc', 'An alloy button, as cast', 'Milled down', 'Made into powder', 'Printed in a powder bed', 'Or built up by DED', 'Coupons, then tests'],
+            ['Your requirement', 'PRISM reads the literature', 'Classes worth researching', 'Our generative models propose recipes', 'The best few are chosen', 'Raw metals, ready to melt', 'Loaded into the hearth', 'Melted with an electric arc', 'An alloy button, as cast', 'Milled down', 'Made into powder', 'Printed in a powder bed', 'Or built up by DED', 'Coupons, then tests'],
             'Diagram:',
         ],
         [
             '/de/',
-            ['Rohmetalle, bereit zum Schmelzen', 'In den Herd eingelegt', 'Im Lichtbogen geschmolzen', 'Ein Legierungsknopf im Gusszustand', 'Klein gefräst', 'Zu Pulver verarbeitet', 'Im Pulverbett gedruckt', 'Oder per DED aufgebaut', 'Proben, dann Tests'],
+            ['Ihre Anforderung', 'PRISM liest die Fachliteratur', 'Werkstoffklassen, die sich lohnen', 'Unsere generativen Modelle schlagen Rezepte vor', 'Nur die besten kommen weiter', 'Rohmetalle, bereit zum Schmelzen', 'In den Herd eingelegt', 'Im Lichtbogen geschmolzen', 'Ein Legierungsknopf im Gusszustand', 'Klein gefräst', 'Zu Pulver verarbeitet', 'Im Pulverbett gedruckt', 'Oder per DED aufgebaut', 'Proben, dann Tests'],
             'Diagramm:',
         ],
     ]) {
         const { copy } = page(fileOf(path));
         const items = [...copy.querySelectorAll('.made__grid > li')];
-        // Each step in order, numbered 01 to 09, its caption first (a note may follow it).
+        // Each step in order, numbered 01 to 14, its caption first (a note may follow it).
         assert.deepEqual(
             items.map((li) => text(li.querySelector('.made__step'))),
             steps.map((_, i) => String(i + 1).padStart(2, '0')),
@@ -393,9 +393,9 @@ test('the making route, read without JavaScript: melted, milled, made into powde
             const caption = text(li.querySelector('figcaption')).replace(/^\d\d\s*/, '');
             assert.ok(caption.startsWith(steps[i]), `${path}: step ${i + 1} reads "${caption}", not "${steps[i]}"`);
         });
-        // Every step is a photograph with its description, except DED (08), which is drawn and described.
+        // The five design steps and DED (13) are drawn and described; every other step is a photograph with its description.
         items.forEach((li, i) => {
-            if (i === 7) {
+            if (i < 5 || i === 12) {
                 const d = text(li.querySelector('.prerender-figure'));
                 assert.ok(d.startsWith(diagram) && d.length > 40, `${path}: the drawn step without its description: "${d}"`);
             } else {
@@ -404,7 +404,7 @@ test('the making route, read without JavaScript: melted, milled, made into powde
             }
         });
         // LPBF names both places it runs.
-        assert.match(text(items[6]), /Fraunhofer IAPT.*Bimo Tech/, `${path}: where the powder bed printing runs`);
+        assert.match(text(items[11]), /Fraunhofer IAPT.*Bimo Tech/, `${path}: where the powder bed printing runs`);
     }
     // Nothing on the site still says the route ends in machining, or skips the powder.
     for (const path of ENGLISH) {
@@ -448,8 +448,8 @@ test('PRISM Alpha is placed in ESA’s launcher programme (FLPP), and the July 2
 
 test('the home page starts from the requirement: how PRISM works comes before the metal, and research comes before design', () => {
     for (const [path, steps, made] of [
-        ['/', ['Requirement', 'Research', 'Design', 'Screen', 'Make', 'Test', 'Learn'], 'From recipe to tested metal'],
-        ['/de/', ['Anforderung', 'Forschung', 'Entwurf', 'Screening', 'Herstellung', 'Test', 'Lernen'], 'Vom Rezept zum geprüften Metall'],
+        ['/', ['Requirement', 'Research', 'Design', 'Screen', 'Make', 'Test', 'Learn'], 'From your requirement to tested metal'],
+        ['/de/', ['Anforderung', 'Forschung', 'Entwurf', 'Screening', 'Herstellung', 'Test', 'Lernen'], 'Von Ihrer Anforderung zum geprüften Metall'],
     ]) {
         const { copy } = page(fileOf(path));
         const order = [...copy.querySelectorAll('section[id]')].map((s) => s.id);

@@ -80,8 +80,27 @@ export const DE: Readonly<Record<string, string>> = {
     // Made (src/site/Made.tsx)
     'A melt spinner in a university materials lab: a steel vacuum sphere with a round window, its power supply and gas bottles beside it.':
         'Ein Schmelzspinner in einem Universitätslabor: eine stählerne Vakuumkugel mit rundem Fenster, daneben Netzteil und Gasflaschen.',
-    'From recipe to tested metal': 'Vom Rezept zum geprüften Metall',
-    'We make what we design.': 'Wir stellen her, was wir entwickeln.',
+    'From your requirement to tested metal': 'Von Ihrer Anforderung zum geprüften Metall',
+    'We design it, then we make it.': 'Wir entwerfen es, dann stellen wir es her.',
+    'Your requirement': 'Ihre Anforderung',
+    'What the part must survive, and what it has to beat.': 'Was das Bauteil überstehen muss und was es übertreffen muss.',
+    'Papers and data on your requirement, with their sources.': 'Fachartikel und Daten zu Ihrer Anforderung, mit ihren Quellen.',
+    'Classes worth researching': 'Werkstoffklassen, die sich lohnen',
+    'The families of material that could meet it.': 'Die Werkstofffamilien, die sie erfüllen könnten.',
+    'Our generative models propose recipes': 'Unsere generativen Modelle schlagen Rezepte vor',
+    'A whole batch, not one best guess.': 'Eine ganze Reihe, nicht nur ein bester Tipp.',
+    'The best few are chosen': 'Nur die besten kommen weiter',
+    'Several models judge; an exact check settles the doubtful ones.': 'Mehrere Modelle urteilen; eine exakte Rechnung klärt die unsicheren Fälle.',
+    'A specification sheet beside a thermometer: what the part must survive.':
+        'Ein Anforderungsblatt neben einem Thermometer: was das Bauteil überstehen muss.',
+    'A stack of papers under a magnifying glass: the literature on the requirement.':
+        'Ein Stapel Fachartikel unter einer Lupe: die Literatur zur Anforderung.',
+    'Four classes of material as tags; the two worth researching are marked.':
+        'Vier Werkstoffklassen als Etiketten; die zwei, die sich zu erforschen lohnen, sind markiert.',
+    'A triangle of three metals with many recipes proposed across it: the generative models at work.':
+        'Ein Dreieck aus drei Metallen, über das viele vorgeschlagene Rezepte verteilt sind: die generativen Modelle bei der Arbeit.',
+    'A landscape of the physics: most ideas fall away and the best few settle in its deepest valley.':
+        'Eine Landschaft der Physik: Die meisten Ideen fallen weg, die besten wenigen landen im tiefsten Tal.',
     'Small pieces of raw metal spread out on a paper towel before a melt.': 'Kleine Stücke Rohmetall, vor dem Schmelzen auf einem Papiertuch ausgebreitet.',
     'Raw metals, ready to melt': 'Rohmetalle, bereit zum Schmelzen',
     'Close-up of a copper hearth: small pieces of raw metal loaded into its hollows.': 'Nahaufnahme eines Kupferherds: kleine Stücke Rohmetall in seinen Mulden.',
@@ -103,10 +122,10 @@ export const DE: Readonly<Record<string, string>> = {
     'Coupons, then tests': 'Proben, dann Tests',
     'Density and flaws first, then real conditions.': 'Erst Dichte und Fehler, dann echte Bedingungen.',
 
-    'From raw metal to a tested coupon, in nine steps': 'Vom Rohmetall zur getesteten Probe, in neun Schritten',
+    'From your requirement to a tested coupon, in fourteen steps': 'Von Ihrer Anforderung zur getesteten Probe, in vierzehn Schritten',
     Photos: 'Fotos',
-    '01 to 05 and 09 are our own photographs. 06 and 07 show the same steps in other labs, until we have our own; 08 is drawn.':
-        '01 bis 05 und 09 sind unsere eigenen Fotos. 06 und 07 zeigen dieselben Schritte in anderen Laboren, bis wir eigene haben; 08 ist gezeichnet.',
+    '01 to 05 are drawn. 06 to 10 and 14 are our own photographs. 11 and 12 show the same steps in other labs, until we have our own; 13 is drawn.':
+        '01 bis 05 sind gezeichnet. 06 bis 10 und 14 sind unsere eigenen Fotos. 11 und 12 zeigen dieselben Schritte in anderen Laboren, bis wir eigene haben; 13 ist gezeichnet.',
     'Metal powder for 3D printing under an electron microscope: tiny, almost perfect spheres.':
         'Metallpulver für den 3D-Druck unter dem Elektronenmikroskop: winzige, fast perfekte Kugeln.',
     'Through the tinted safety window of a laser powder-bed printer: small test pieces stand in the metal powder they were printed from.':
