@@ -125,6 +125,12 @@ function toView(view: GlobeView, lat: number, lon: number) {
     return { x: x1, y: y2, z: z2 };
 }
 
+/** Where a place appears for a view, in CSS pixels, and whether it faces the viewer. Needs no WebGL. */
+export function projectPoint(view: GlobeView, lat: number, lon: number) {
+    const v = toView(view, lat, lon);
+    return { x: view.cx + v.x * view.r, y: view.cy - v.y * view.r, front: v.z };
+}
+
 /**
  * Sets up the globe on `canvas` and starts loading the map. Returns null when WebGL 2 is not
  * available, so the caller can show a photograph instead. `onReady` runs once the map is loaded.
@@ -219,16 +225,11 @@ export function createGlobe(canvas: HTMLCanvasElement, mapUrl: string, onReady: 
         gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4);
     }
 
-    function project(view: GlobeView, lat: number, lon: number) {
-        const v = toView(view, lat, lon);
-        return { x: view.cx + v.x * view.r, y: view.cy - v.y * view.r, front: v.z };
-    }
-
     resize();
 
     return {
         draw,
-        project,
+        project: projectPoint,
         resize,
         destroy() {
             img.onload = null;

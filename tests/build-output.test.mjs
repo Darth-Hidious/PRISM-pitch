@@ -425,6 +425,22 @@ test('the making route, read without JavaScript: melted, milled, made into powde
     assert.match(platform, /melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons/, '/platform/: PRISM Alpha’s route');
 });
 
+test('the company page names its two advisors, and no one else from the partners', () => {
+    for (const [path, heading] of [['/company/', 'Advisors'], ['/de/company/', 'Beirat']]) {
+        const { copy } = page(fileOf(path));
+        const block = copy.querySelector('.experts');
+        assert.ok(block, `${path}: no advisors`);
+        assert.equal(text(block.querySelector('h2, h3')), heading);
+        assert.deepEqual([...block.querySelectorAll('li b')].map(text), ['Prof. Jan Wróbel', 'Prof. Dariusz Jarząbek'], `${path}: advisors`);
+    }
+    // Staff of the partner institutes are not named, on the site or in the deck.
+    const assets = readdirSync(resolve(DIST, 'assets')).filter((f) => f.endsWith('.js'));
+    for (const f of [...PAGES.map((p) => p.file), ...assets.map((a) => `assets/${a}`)]) {
+        const body = read(f);
+        for (const name of ['Cyperling', 'Jothi Prakash', 'Neding']) assert.ok(!body.includes(name), `${f}: ${name}`);
+    }
+});
+
 test('how PRISM chooses, read without JavaScript: six steps in plain words, the scene described, no controls', () => {
     for (const [path, heading, titles, diagram] of [
         ['/method/', 'Which recipes are worth making?', ['Propose', 'Judge', 'Check exactly', 'Can it be printed?', 'A window, not a point', 'Test, then learn'], 'Diagram: How PRISM chooses:'],

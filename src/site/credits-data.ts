@@ -129,7 +129,7 @@ export const PICTURE_CREDITS: PictureCredit[] = [
         licence: 'CC BY 4.0',
         licenceUrl: CC_BY_4,
         change: 'wrapped around the globe',
-        pages: 'Home',
+        pages: 'Home, Investor room',
     },
     {
         picture: 'Fruit-fly brain wiring map (MaleCNS v1.0)',

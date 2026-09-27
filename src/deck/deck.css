@@ -2468,17 +2468,23 @@
     }
 }
 
-/* Market momentum: the year's raises and PRISM's own steps, in order, in the middle of the slide. */
+/* Market momentum: the globe on the left, the year's raises and PRISM's own steps on the right. */
 .d-momentum__body {
+    display: grid;
+    grid-template-columns: 560px minmax(0, 1fr);
+    gap: 48px;
+    align-items: stretch;
+}
+
+.d-momentum__side {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-width: 0;
 }
 
 .d-momentum {
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 14px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -2486,42 +2492,205 @@
 
 .d-momentum li {
     display: grid;
-    align-content: start;
-    gap: 8px;
-    padding: 16px 14px 18px;
-    border-top: 2px solid var(--ink-3);
-    background: var(--surface);
-    border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+    grid-template-columns: 76px minmax(0, 1fr) auto;
+    column-gap: 16px;
+    align-items: baseline;
+    padding: 6px 0 7px;
+    border-top: var(--hairline) solid var(--rule);
 }
 
-.d-momentum li.d-momentum--ours {
-    border-top-color: var(--crimson);
+.d-momentum li:last-child {
+    border-bottom: var(--hairline) solid var(--rule);
+}
+
+.d-momentum .pm-data-label {
+    grid-row: 1 / span 2;
 }
 
 .d-momentum b {
-    font-size: 18px;
-    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    line-height: 1.25;
+}
+
+/* The same mark as the place on the globe. */
+.d-momentum b::before {
+    content: '';
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ink);
+}
+
+.d-momentum li.d-momentum--ours b::before {
+    background: var(--crimson);
 }
 
 .d-momentum strong {
-    font-size: 34px;
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+    font-size: 28px;
     font-weight: 300;
     letter-spacing: -0.02em;
     line-height: 1;
 }
 
 .d-momentum p {
-    font-size: 14px;
-    line-height: 1.4;
+    grid-column: 2;
+    font-size: 13.5px;
+    line-height: 1.35;
     color: var(--ink-2);
 }
 
 .d-momentum__close {
-    margin-top: 32px;
-    max-width: 44em;
+    margin-top: 18px;
 }
 
-/* The team slide: the experts who work with us, under Bimo Tech. */
+:where(.deck:not(.deck--reader)) .deck-stage .d-momentum__close {
+    margin-top: 18px;
+    font-size: 20px;
+    line-height: 1.35;
+}
+
+/* The globe: a real Earth, with each company pinned to where it is. */
+.d-globe {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 6px;
+    min-width: 0;
+    margin: 0;
+}
+
+.d-globe__box {
+    position: relative;
+    min-height: 0;
+}
+
+.d-globe__canvas,
+.d-globe__still {
+    position: absolute;
+    pointer-events: none;
+}
+
+.d-globe__canvas {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.d-globe__still {
+    max-width: none;
+}
+
+.d-globe__pin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 500ms ease;
+    transition-delay: calc(var(--i, 0) * 60ms);
+    pointer-events: none;
+}
+
+.d-globe__pin[data-show='true'] {
+    opacity: 1;
+}
+
+.d-globe__pin i {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow:
+        0 0 0 1.5px rgba(6, 24, 50, 0.8),
+        0 0 0 4px rgba(255, 255, 255, 0.25);
+}
+
+.d-globe__pin--ours i {
+    top: -5px;
+    left: -5px;
+    width: 10px;
+    height: 10px;
+    background: var(--crimson);
+    box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 7px rgba(209, 47, 73, 0.3);
+}
+
+.d-globe__lead {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    max-width: none;
+    height: 1px;
+    overflow: visible;
+}
+
+.d-globe__lead line {
+    stroke: rgba(255, 255, 255, 0.75);
+    stroke-width: 1;
+}
+
+.d-globe__tag {
+    position: absolute;
+    top: var(--dy);
+    left: var(--dx);
+    display: grid;
+    gap: 1px;
+    padding: 3px 8px 4px;
+    border-radius: 4px;
+    background: rgba(6, 24, 50, 0.84);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+.d-globe__tag b {
+    font-weight: 600;
+}
+
+.d-globe__pin--ours .d-globe__tag {
+    box-shadow: inset 2px 0 0 var(--crimson);
+}
+
+.d-globe__tag--r {
+    transform: translate(2px, -50%);
+}
+
+.d-globe__tag--l {
+    transform: translate(calc(-100% - 2px), -50%);
+}
+
+.d-globe__tag--t {
+    transform: translate(-50%, calc(-100% - 2px));
+}
+
+.d-globe__credit {
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--ink-3);
+}
+
+.d-globe__credit a {
+    color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .d-globe__pin {
+        transition: none;
+    }
+}
+
+/* The team slide: our advisors, under Bimo Tech. */
 .d-team__experts {
     grid-column: 1;
     display: grid;
@@ -2535,8 +2704,33 @@
 }
 
 @media (max-width: 760px), (max-aspect-ratio: 4/5) {
-    .d-momentum {
+    .d-momentum__body {
         grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+    }
+
+    .d-globe__box {
+        aspect-ratio: 1;
+        max-height: 80svh;
+    }
+
+    .d-momentum li {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .d-momentum .pm-data-label {
+        grid-row: auto;
+        grid-column: 1 / -1;
+    }
+
+    .d-momentum b,
+    .d-momentum p {
+        grid-column: 1;
+    }
+
+    .d-momentum strong {
+        grid-column: 2;
+        grid-row: 2 / span 2;
     }
 }
 

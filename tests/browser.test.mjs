@@ -537,6 +537,83 @@ test('how PRISM chooses on a phone: the scene stays on screen, and scrolling mov
     }
 });
 
+/** Opens the deck on the market momentum slide. */
+async function momentum(context) {
+    const page = await context.newPage();
+    await page.goto(`${base}/deck/`, { waitUntil: 'networkidle' });
+    const n = await page.evaluate(() => [...document.querySelectorAll('.deck-slide')].findIndex((s) => s.querySelector('.d-globe')) + 1);
+    assert.ok(n > 0, 'no slide with the globe');
+    await page.close();
+    const slide = await context.newPage();
+    await slide.goto(`${base}/deck/#${n}`, { waitUntil: 'networkidle' });
+    return slide;
+}
+
+const pinsNow = (page) =>
+    page.evaluate(() => [...document.querySelectorAll('.d-globe__pin')].map((p) => ({ name: p.textContent, show: p.dataset.show, at: p.style.transform })));
+
+test('the market momentum globe turns when its slide arrives, and each company comes round', { skip }, async () => {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await momentum(context);
+    const early = await pinsNow(page);
+    assert.equal(early.length, 6, 'six places');
+    // It starts over the Pacific: California is round, Europe is not yet.
+    assert.equal(early.find((p) => p.name.includes('Periodic Labs')).show, 'true');
+    assert.equal(early.find((p) => p.name.includes('Wrocław')).show, 'false', 'Europe shows before the Earth has turned');
+    await page.waitForFunction(() => [...document.querySelectorAll('.d-globe__pin')].every((p) => p.dataset.show === 'true'), null, { timeout: 6000 });
+    // After the turn it keeps moving a little.
+    const a = await pinsNow(page);
+    await page.waitForTimeout(700);
+    const b = await pinsNow(page);
+    assert.notDeepEqual(a.map((p) => p.at), b.map((p) => p.at), 'the Earth stopped');
+    assert.equal(await page.evaluate(() => !!document.querySelector('.d-globe__still')), false, 'the picture shows where WebGL works');
+    await context.close();
+});
+
+test('the market momentum globe without motion, or without WebGL: every company at once, standing still', { skip }, async () => {
+    for (const [reducedMotion, noGL] of [['reduce', false], ['no-preference', true]]) {
+        const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion });
+        if (noGL) {
+            await context.addInitScript(() => {
+                const get = HTMLCanvasElement.prototype.getContext;
+                HTMLCanvasElement.prototype.getContext = function (type, ...rest) {
+                    return type === 'webgl2' ? null : get.call(this, type, ...rest);
+                };
+            });
+        }
+        const page = await momentum(context);
+        await page.waitForTimeout(400);
+        const a = await pinsNow(page);
+        assert.ok(a.every((p) => p.show === 'true'), `${a.filter((p) => p.show !== 'true').map((p) => p.name)} hidden`);
+        await page.waitForTimeout(700);
+        assert.deepEqual(await pinsNow(page), a, 'the Earth moves');
+        const still = await page.evaluate(() => document.querySelector('.d-globe__still')?.complete ?? false);
+        assert.equal(still, noGL, noGL ? 'no picture without WebGL' : 'the picture shows where WebGL works');
+        await context.close();
+    }
+});
+
+test('the market momentum globe on phones: every tag on screen, nothing to scroll sideways', { skip }, async () => {
+    for (const viewport of [{ width: 360, height: 740 }, { width: 390, height: 844 }]) {
+        const context = await browser.newContext({ viewport, isMobile: true, hasTouch: true });
+        const page = await context.newPage();
+        await page.goto(`${base}/deck/`, { waitUntil: 'networkidle' });
+        await page.locator('.d-globe__box').scrollIntoViewIfNeeded();
+        await page.waitForFunction(() => [...document.querySelectorAll('.d-globe__pin')].every((p) => p.dataset.show === 'true'), null, { timeout: 8000 });
+        const out = await page.evaluate(() =>
+            [...document.querySelectorAll('.d-globe__tag')]
+                .filter((t) => {
+                    const r = t.getBoundingClientRect();
+                    return r.left < 0 || r.right > document.documentElement.clientWidth;
+                })
+                .map((t) => t.textContent),
+        );
+        assert.deepEqual(out, [], `${viewport.width}px: tags off screen`);
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `${viewport.width}px: sideways scroll`);
+        await context.close();
+    }
+});
+
 test('if the page’s script cannot load, or hangs, the plain copy shows instead of a blank page', { skip }, async () => {
     const context = await browser.newContext();
     for (const [handle, within] of [

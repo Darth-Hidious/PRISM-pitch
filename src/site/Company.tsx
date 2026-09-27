@@ -5,13 +5,10 @@ import { Arrow, Idx, Words } from './ui';
 
 /* ── Company: Mirdyne, Bimo Tech and PRISM ────────────────────────────── */
 
-/** Experts who work with us on PRISM, from the universities and institutes we work with. */
-const EXPERTS = [
+/** Our advisors, from the universities and institutes we work with. */
+const ADVISORS = [
     { name: 'Prof. Jan Wróbel', where: 'Warsaw University of Technology', text: 'Computer models of how the atoms in an alloy arrange, and what that does to it.' },
     { name: 'Prof. Dariusz Jarząbek', where: 'IPPT PAN, Warsaw', text: 'Materials research, from powder to how a sample holds up under load.' },
-    { name: 'Matthäus Cyperling', where: 'Fraunhofer IAPT, Hamburg', text: 'Head of NextGen Mobility.' },
-    { name: 'Dr Vishnuu Jothi Prakash', where: 'Fraunhofer IAPT, Hamburg', text: 'Digital twins: watching metal printing as it happens.' },
-    { name: 'Dr Benjamin Neding', where: 'Fraunhofer IAPT, Hamburg', text: 'Tuning laser printing for new alloys.' },
 ];
 
 export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) {
@@ -110,9 +107,9 @@ export function Company({ n = '01', h1 = false }: { n?: string; h1?: boolean }) 
                     </div>
                 </div>
                 <div className="experts rv">
-                    <Sub className="w-label">{t('Experts who work with us')}</Sub>
+                    <Sub className="w-label">{t('Advisors')}</Sub>
                     <ul className="experts__grid">
-                        {EXPERTS.map((e) => (
+                        {ADVISORS.map((e) => (
                             <li key={e.name}>
                                 <b>{t(e.name)}</b>
                                 <span className="founder__role">{t(e.where)}</span>

@@ -350,22 +350,15 @@ export const DE: Readonly<Record<string, string>> = {
     'The qualified material, made at scale by Bimo Tech.': 'Das qualifizierte Material, im industriellen Maßstab von Bimo Tech hergestellt.',
     Licensed: 'Lizenziert',
     'Materials on your line': 'Materialien für Ihre Fertigung',
-    'Experts who work with us': 'Expertinnen und Experten, die mit uns arbeiten',
+    Advisors: 'Beirat',
     'Prof. Jan Wróbel': 'Prof. Jan Wróbel',
     'Prof. Dariusz Jarząbek': 'Prof. Dariusz Jarząbek',
-    'Matthäus Cyperling': 'Matthäus Cyperling',
-    'Dr Vishnuu Jothi Prakash': 'Dr. Vishnuu Jothi Prakash',
-    'Dr Benjamin Neding': 'Dr. Benjamin Neding',
     'Warsaw University of Technology': 'Technische Universität Warschau',
     'Computer models of how the atoms in an alloy arrange, and what that does to it.':
         'Computermodelle dafür, wie sich die Atome einer Legierung anordnen und was das bewirkt.',
     'IPPT PAN, Warsaw': 'IPPT PAN, Warschau',
     'Materials research, from powder to how a sample holds up under load.':
         'Werkstoffforschung, vom Pulver bis dazu, wie eine Probe unter Last standhält.',
-    'Fraunhofer IAPT, Hamburg': 'Fraunhofer IAPT, Hamburg',
-    'Head of NextGen Mobility.': 'Leiter NextGen Mobility.',
-    'Digital twins: watching metal printing as it happens.': 'Digitale Zwillinge: Metalldruck beobachten, während er läuft.',
-    'Tuning laser printing for new alloys.': 'Laserdruck für neue Legierungen einstellen.',
     'Where PRISM is used first': 'Wo PRISM zuerst eingesetzt wird',
 
     // The method (src/site/Method.tsx)
