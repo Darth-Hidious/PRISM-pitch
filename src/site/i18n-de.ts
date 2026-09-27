@@ -119,6 +119,56 @@ export const DE: Readonly<Record<string, string>> = {
     coupons: 'Proben',
     flaw: 'Fehler',
 
+    // How PRISM chooses (src/site/Chooses.tsx)
+    'Judges and trust meter': 'Gutachter und Vertrauensmesser',
+    'Suggests a whole batch of promising recipes, not one best guess.': 'Schlägt eine ganze Reihe vielversprechender Rezepte vor, nicht nur einen besten Tipp.',
+    'Several models score each recipe. Where they disagree, the score counts for less.':
+        'Mehrere Modelle bewerten jedes Rezept. Wo sie sich uneinig sind, zählt die Bewertung weniger.',
+    'Exact check': 'Exakte Prüfung',
+    'A safe range that still works when powder and machine change.': 'Ein sicherer Bereich, der auch noch funktioniert, wenn Pulver und Maschine wechseln.',
+    'A generator proposes': 'Ein Generator schlägt',
+    'a whole batch of promising recipes, not one best guess.': 'eine ganze Reihe vielversprechender Rezepte vor, nicht nur einen besten Tipp.',
+    'Several models judge each one,': 'Mehrere Modelle bewerten jedes,',
+    'an exact calculation settles the doubtful ones, and most ideas stop here.': 'eine exakte Rechnung klärt die unsicheren, und die meisten Ideen enden hier.',
+    'How PRISM chooses': 'Wie PRISM auswählt',
+    'Which recipes are worth making?': 'Welche Rezepte lohnen sich?',
+    'The AI proposes and scores recipes, and says where it is unsure. Exact physics and real tests have the last word.':
+        'Die KI schlägt Rezepte vor, bewertet sie und sagt, wo sie unsicher ist. Das letzte Wort haben exakte Physik und echte Tests.',
+    Propose: 'Vorschlagen',
+    'A generator suggests a whole batch of recipes: many good ones, not one best guess.':
+        'Ein Generator schlägt eine ganze Reihe von Rezepten vor: viele gute, nicht nur einen besten Tipp.',
+    Judge: 'Bewerten',
+    'Several independent models score each recipe. Where they disagree, we trust the score less.':
+        'Mehrere unabhängige Modelle bewerten jedes Rezept. Wo sie sich uneinig sind, trauen wir der Bewertung weniger.',
+    'Check exactly': 'Genau nachrechnen',
+    'The promising recipes the models are unsure about get an exact quantum calculation.':
+        'Vielversprechende Rezepte, bei denen die Modelle unsicher sind, bekommen eine exakte Quantenrechnung.',
+    'Can it be printed?': 'Lässt es sich drucken?',
+    'Before any metal is made, we check that it will print, using Fraunhofer IAPT’s process data.':
+        'Bevor Metall hergestellt wird, prüfen wir mit Prozessdaten von Fraunhofer IAPT, ob es sich drucken lässt.',
+    'A window, not a point': 'Ein Fenster, kein Punkt',
+    'We send a safe range, not a single point. A range still works when the machine changes.':
+        'Wir geben einen sicheren Bereich weiter, keinen einzelnen Punkt. Ein Bereich funktioniert auch noch, wenn die Maschine wechselt.',
+    'Test, then learn': 'Testen, dann lernen',
+    'Every test result goes back in and retrains the models for the next round.':
+        'Jedes Testergebnis fließt zurück und trainiert die Modelle für die nächste Runde nach.',
+    'How PRISM chooses: a generator proposes recipes in a design space of three elements. Several models score each one, and a halo shows how much they disagree. The promising but uncertain ones get an exact check, recipes that are hard to print drop out, and a safe window is chosen. Test results retrain the models.':
+        'Wie PRISM auswählt: Ein Generator schlägt Rezepte in einem Entwurfsraum aus drei Elementen vor. Mehrere Modelle bewerten jedes davon, und ein Hof zeigt, wie uneinig sie sich sind. Die vielversprechenden, aber unsicheren werden exakt nachgerechnet, schwer druckbare fallen heraus, und ein sicheres Fenster wird gewählt. Testergebnisse trainieren die Modelle nach.',
+    'element A': 'Element A',
+    'element B': 'Element B',
+    'element C': 'Element C',
+    'hard to print': 'schwer druckbar',
+    window: 'Fenster',
+    generator: 'Generator',
+    Generator: 'Generator',
+    retrain: 'nachtrainieren',
+    judges: 'Gutachter',
+    'trust meter': 'Vertrauensmesser',
+    'Drawn for this site. The recipes, scores and window show how it works; they are not project data.':
+        'Für diese Website gezeichnet. Rezepte, Bewertungen und Fenster zeigen das Prinzip; es sind keine Projektdaten.',
+    'A language model reads the papers and cites its sources. It never judges the physics.':
+        'Ein Sprachmodell liest die Fachliteratur und nennt seine Quellen. Über die Physik urteilt es nie.',
+
     // Why Europe (src/site/Europe.tsx)
     'A satellite view of the Earth turning to Europe, with Giessen and Wrocław marked.':
         'Satellitenansicht der Erde, die sich nach Europa dreht; Gießen und Wrocław sind markiert.',
@@ -157,15 +207,11 @@ export const DE: Readonly<Record<string, string>> = {
     'Does it meet the requirement?': 'Erfüllt es die Anforderung?',
     'What should we try next?': 'Was sollten wir als Nächstes versuchen?',
     'You tell us': 'Sie nennen uns',
-    'AI proposes': 'Die KI schlägt',
-    'Simulations rule out': 'Simulationen schließen',
     'We melt the best candidates,': 'Wir schmelzen die besten Kandidaten,',
     'We measure': 'Wir messen',
     'Every result': 'Jedes Ergebnis',
     'the heat and loads the part faces, and the material it has to beat.':
         'die Temperaturen und Lasten, denen das Bauteil ausgesetzt ist, und das Material, das übertroffen werden muss.',
-    'candidate mixes from the whole range of possibilities.': 'Mischungen aus dem ganzen Spektrum der Möglichkeiten vor.',
-    'most ideas before anything is melted.': 'die meisten Ideen aus, bevor überhaupt etwas geschmolzen wird.',
     'mill them down, turn them into powder and print them by laser powder bed fusion or DED.':
         'fräsen sie klein, machen daraus Pulver und drucken sie per Laser-Pulverbettschmelzen oder DED.',
     'each sample against your targets.': 'jede Probe an Ihren Zielwerten.',
@@ -431,12 +477,6 @@ export const DE: Readonly<Record<string, string>> = {
         'Es kann nicht sehen, was eine reale Maschine mit der Legierung macht. Das prüft der Fertigungs-Stack.',
     'Knowledge graph': 'Wissensgraph',
     'Papers, patents and lab data, linked, each with its source.': 'Fachartikel, Patente und Labordaten, verknüpft und jeweils mit Quelle.',
-    'AI that suggests new mixes that are physically possible.': 'KI, die neue, physikalisch mögliche Mischungen vorschlägt.',
-    'Physics filter': 'Physik-Filter',
-    'Fast simulations first, then exact ones. Most ideas stop here, cheaply.': 'Zuerst schnelle Simulationen, dann exakte. Hier scheitern die meisten Ideen, und zwar günstig.',
-    'Smart experiment choice': 'Intelligente Experimentwahl',
-    'Each experiment is picked for what it will teach us.': 'Jedes Experiment wird danach ausgewählt, was wir daraus lernen.',
-    'Settings that still work when powder and machine vary.': 'Einstellungen, die noch funktionieren, wenn Pulver und Maschine variieren.',
 
     'Harness stack': 'Harness-Stack',
     Harness: 'Harness',

@@ -1,4 +1,5 @@
 import { mount } from '../boot';
+import Chooses from '../Chooses';
 import { Contact } from '../Company';
 import Method from '../Method';
 import OpenResearch from '../OpenResearch';
@@ -9,8 +10,9 @@ import SitePage from '../SitePage';
 export const page = (
     <SitePage page="method">
         <Method n="01" h1 />
-        <OpenResearch n="02" />
-        <Proof n="03" />
+        <Chooses n="02" />
+        <OpenResearch n="03" />
+        <Proof n="04" />
         <Contact />
     </SitePage>
 );

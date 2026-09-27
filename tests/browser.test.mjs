@@ -475,6 +475,68 @@ test('the drawn steps of the making route move only on screen, and stand still w
     }
 });
 
+test('how PRISM chooses: it plays by itself on a wide screen, and a picked step stays', { skip }, async () => {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    await page.goto(`${base}/method/`, { waitUntil: 'networkidle' });
+    await page.locator('.choose__body').scrollIntoViewIfNeeded();
+    const on = () => page.evaluate(() => [...document.querySelectorAll('.choose__steps li')].findIndex((li) => li.classList.contains('is-on')));
+    assert.equal(await on(), 0);
+    // The next step comes by itself, and the scene adds its layer.
+    await page.waitForFunction(() => document.querySelector('.choose__steps li:nth-child(2)').classList.contains('is-on'), null, { timeout: 8000 });
+    assert.ok(await page.evaluate(() => document.querySelector('.choose__svg').classList.contains('is-scored')), 'the models have not scored the recipes');
+    // Picking a step shows it, with every layer before it, and stops the play.
+    await page.locator('.choose__pick').nth(4).click();
+    const layers = () => page.evaluate(() => [...document.querySelector('.choose__svg').classList].filter((c) => c.startsWith('is-') || c.startsWith('has-')).sort());
+    assert.deepEqual(await layers(), ['has-window', 'is-checked', 'is-filtered', 'is-moving', 'is-scored']);
+    await page.waitForTimeout(5500);
+    assert.equal(await on(), 4, 'the play went on after a pick');
+    await context.close();
+});
+
+test('how PRISM chooses without motion: every step at once, standing still', { skip }, async () => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto(`${base}/method/`, { waitUntil: 'networkidle' });
+    await page.locator('.choose__body').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(600);
+    const state = await page.evaluate(() => ({
+        classes: [...document.querySelector('.choose__svg').classList],
+        lit: document.querySelectorAll('.choose__steps li.is-on').length,
+        moving: document.getAnimations().filter((a) => a.effect?.target?.closest?.('.choose')).length,
+        sticky: getComputedStyle(document.querySelector('.choose__figure')).position,
+    }));
+    for (const c of ['is-scored', 'is-checked', 'is-filtered', 'has-window', 'is-learned']) assert.ok(state.classes.includes(c), `no ${c}`);
+    assert.ok(!state.classes.includes('is-moving'), 'the recipes fly in');
+    assert.equal(state.lit, 6, 'every step is shown');
+    assert.equal(state.moving, 0, 'something moves');
+    assert.equal(state.sticky, 'static', 'the scene holds still on screen');
+    await context.close();
+});
+
+test('how PRISM chooses on a phone: the scene stays on screen, and scrolling moves through the steps', { skip }, async () => {
+    for (const viewport of [{ width: 390, height: 844 }, { width: 844, height: 390 }]) {
+        const context = await browser.newContext({ viewport, isMobile: true, hasTouch: true });
+        const page = await context.newPage();
+        await page.goto(`${base}/method/`, { waitUntil: 'networkidle' });
+        const top = await page.evaluate(() => document.querySelector('.choose__body').getBoundingClientRect().top + scrollY);
+        const seen = new Set();
+        for (let k = 0; k <= 30; k++) {
+            await page.evaluate((y) => scrollTo({ top: y, behavior: 'instant' }), top - 40 + k * viewport.height * 0.15);
+            await page.waitForTimeout(80);
+            const s = await page.evaluate(() => {
+                const f = document.querySelector('.choose__figure').getBoundingClientRect();
+                const on = [...document.querySelectorAll('.choose__steps li')].findIndex((li) => li.classList.contains('is-on'));
+                return { on, visible: f.bottom > 0 && f.top < innerHeight };
+            });
+            if (s.on >= 0) seen.add(s.on);
+            if (s.on > 0 && s.on < 5) assert.ok(s.visible, `step ${s.on + 1} shows with the scene off screen`);
+        }
+        assert.deepEqual([...seen].sort(), [0, 1, 2, 3, 4, 5], `${viewport.width}x${viewport.height}: steps seen ${[...seen]}`);
+        await context.close();
+    }
+});
+
 test('if the page’s script cannot load, or hangs, the plain copy shows instead of a blank page', { skip }, async () => {
     const context = await browser.newContext();
     for (const [handle, within] of [

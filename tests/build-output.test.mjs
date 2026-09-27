@@ -412,3 +412,34 @@ test('the making route, read without JavaScript: melted, milled, made into powde
     const platform = text(page(fileOf('/platform/')).copy);
     assert.match(platform, /melted, milled and made into powder, printed at Fraunhofer IAPT and then at Bimo Tech, and tested as coupons/, '/platform/: PRISM Alpha’s route');
 });
+
+test('how PRISM chooses, read without JavaScript: six steps in plain words, the scene described, no controls', () => {
+    for (const [path, heading, titles, diagram] of [
+        ['/method/', 'Which recipes are worth making?', ['Propose', 'Judge', 'Check exactly', 'Can it be printed?', 'A window, not a point', 'Test, then learn'], 'Diagram: How PRISM chooses:'],
+        ['/de/method/', 'Welche Rezepte lohnen sich?', ['Vorschlagen', 'Bewerten', 'Genau nachrechnen', 'Lässt es sich drucken?', 'Ein Fenster, kein Punkt', 'Testen, dann lernen'], 'Diagramm: Wie PRISM auswählt:'],
+    ]) {
+        const { copy } = page(fileOf(path));
+        const section = copy.querySelector('#chooses');
+        assert.ok(section, `${path}: no #chooses section`);
+        // It follows the method's demos and comes before open research and proof.
+        const order = [...copy.querySelectorAll('section[id]')].map((s) => s.id);
+        assert.deepEqual(order.slice(0, 4), ['method', 'chooses', 'open-research', 'proof'], `${path}: sections ${order.join(', ')}`);
+        assert.equal(text(section.querySelector('h2')), heading);
+        const steps = [...section.querySelectorAll('.choose__steps > li')];
+        assert.deepEqual(steps.map((li) => text(li.querySelector('h3'))), titles, `${path}: the six steps`);
+        for (const li of steps) {
+            const words = text(li.querySelector('p'));
+            assert.ok(words.length > 30, `${path}: "${text(li.querySelector('h3'))}" says too little`);
+            // Plain words: no numbers, no formulas.
+            assert.ok(!/[\d=±σ∑]/.test(words), `${path}: "${words}"`);
+        }
+        assert.ok(text(section).includes(diagram), `${path}: the scene is not described`);
+        assert.equal(section.querySelectorAll('button, [data-interactive]').length, 0, `${path}: controls in the plain copy`);
+    }
+    // The loop and the research stack tell the same story.
+    const home = text(page(fileOf('/')).copy);
+    assert.match(home, /A generator proposes a whole batch of promising recipes/);
+    assert.match(home, /Several models judge each one, an exact calculation settles the doubtful ones/);
+    const platform = text(page(fileOf('/platform/')).copy);
+    for (const layer of ['Generator', 'Judges and trust meter', 'Exact check', 'A window, not a point']) assert.ok(platform.includes(layer), `/platform/: "${layer}"`);
+});
