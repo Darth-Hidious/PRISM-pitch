@@ -116,8 +116,8 @@ export default function SupplyShock() {
     const t = useT();
     const locale = t.lang === 'de' ? 'de-DE' : 'en-GB';
     const fmt = (x: number, d: number) => x.toLocaleString(locale, { minimumFractionDigits: d, maximumFractionDigits: d });
-    // Two significant digits, so that small values stay readable: 24 %, 0.46 %, 0.0057.
-    const sig = (x: number) => x.toLocaleString(locale, { maximumSignificantDigits: 2 });
+    // Two significant digits, so that small values stay readable: 1.0, 0.72, 0.0057; 24 %, 0.46 %.
+    const sig = (x: number) => x.toLocaleString(locale, { minimumSignificantDigits: 2, maximumSignificantDigits: 2 });
     const pct = (x: number) => x.toLocaleString(locale, { style: 'percent', maximumSignificantDigits: 2 });
 
     const [source, setSource] = useState(SUPPLIERS[0].i);
