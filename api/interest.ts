@@ -1,6 +1,7 @@
 import { put } from '@vercel/blob';
 import { waitUntil } from '@vercel/functions';
 import { createTransport } from 'nodemailer';
+import { interestMail } from '../server/interest-mail.js';
 
 /**
  * Register interest. Checks a submission from the form at /interest/, keeps it as one private JSON file
@@ -154,9 +155,6 @@ const why = (err: unknown) => (err instanceof Error ? err.message : String(err))
 
 type Entry = ReturnType<typeof check>['entry'];
 
-const esc = (v: string) =>
-    v.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
-
 /**
  * Emails one submission to our inbox. Replying to the email answers the visitor. Returns 'off' when no
  * mail password is set, so the site works (storing only) before the mailbox is connected.
@@ -178,42 +176,21 @@ async function mail(entry: Entry, at: Date, saved: string | null): Promise<'sent
         greetingTimeout: 8000,
         socketTimeout: 12000,
     });
-    const when = at.toLocaleString('en-GB', { timeZone: 'Europe/Berlin', dateStyle: 'long', timeStyle: 'short' });
-    const rows: [string, string][] = [
-        ['Name', entry.name],
-        ['Email', entry.email],
-        ['Organisation', entry.organisation],
-        ['Role', entry.role || '(not given)'],
-        ['Interested in', entry.areas.map((a) => AREA_NAMES[a] ?? a).join(', ')],
-        ['Sent from', entry.from ? `the page ${entry.from}` : 'the form directly'],
-        ['Received', `${when} (Berlin)`],
-    ];
+    const received = at.toLocaleString('en-GB', { timeZone: 'Europe/Berlin', dateStyle: 'long', timeStyle: 'short' });
     const kept = saved
         ? `A copy is kept in the prism-interest store on Vercel: ${saved}`
         : 'The store on Vercel could not save it, so this email is the only copy.';
-    const text = [
-        ...rows.map(([k, v]) => `${k}: ${v}`),
-        '',
-        'Message:',
-        entry.message || '(none)',
-        '',
-        `Reply to this email to answer ${entry.name}.`,
+    const { subject, html, text } = interestMail({
+        ...entry,
+        areas: entry.areas.map((a) => AREA_NAMES[a] ?? a),
+        received,
         kept,
-    ].join('\n');
-    const html = `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.5;color:#161714">
-<p style="margin:0 0 16px;font-size:18px"><b>New interest from ${esc(entry.name)}</b>, ${esc(entry.organisation)}</p>
-<table cellpadding="0" cellspacing="0" style="border-collapse:collapse">
-${rows.map(([k, v]) => `<tr><td style="padding:4px 20px 4px 0;color:#5f625e;vertical-align:top">${esc(k)}</td><td style="padding:4px 0">${esc(v)}</td></tr>`).join('\n')}
-</table>
-<p style="margin:20px 0 6px;color:#5f625e">Message</p>
-<p style="margin:0;white-space:pre-wrap">${esc(entry.message || '(none)')}</p>
-<p style="margin:24px 0 0;font-size:13px;color:#5f625e">Reply to this email to answer ${esc(entry.name)}. ${esc(kept)}</p>
-</div>`;
+    });
     await transport.sendMail({
         from: { name: 'PRISM website', address: process.env.INTEREST_MAIL_FROM || 'info@mirdyne.com' },
         to: process.env.INTEREST_MAIL_TO || 'info@mirdyne.com',
         replyTo: { name: entry.name, address: entry.email },
-        subject: `Register interest: ${entry.name}, ${entry.organisation}`,
+        subject,
         text,
         html,
     });
