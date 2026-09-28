@@ -12,8 +12,12 @@ const DESIGN: { Art: () => ReactElement; caption: string; note: string }[] = [
     { Art: RequirementDrawing, caption: 'Your requirement', note: 'What the part must survive, and what it has to beat.' },
     { Art: LiteratureDrawing, caption: 'PRISM reads the literature', note: 'Papers and data on your requirement, with their sources.' },
     { Art: ClassesDrawing, caption: 'Classes worth researching', note: 'The families of material that could meet it.' },
-    { Art: GenerateDrawing, caption: 'Our generative models propose recipes', note: 'A whole batch, not one best guess.' },
-    { Art: ChooseDrawing, caption: 'The best few are chosen', note: 'Several models judge; an exact check settles the doubtful ones.' },
+    {
+        Art: GenerateDrawing,
+        caption: 'Our generative models propose recipes',
+        note: 'A generative flow network (GFlowNet) builds each one step by step; the better a recipe, the more flow reaches it.',
+    },
+    { Art: ChooseDrawing, caption: 'The best few are chosen', note: 'Several models judge each one; where they disagree, an exact calculation decides.' },
 ];
 
 /** Our own photographs, as taken: cropped, never retouched. In order, from raw metal to a part. */

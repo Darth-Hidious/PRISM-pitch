@@ -76,7 +76,7 @@ const WALKERS: [number, number, Tone][] = [
     [2, 238, 'dark'],
 ];
 
-export function Design({ px }: { px: number }) {
+function Design({ px }: { px: number }) {
     return (
         <g>
             <path className="eg-solid eg-solid--open" d={`M${px},116 L${px - 80},254 L${px + 80},254 Z`} />
@@ -102,7 +102,7 @@ export function Design({ px }: { px: number }) {
     );
 }
 
-export function Screen({ px, id }: { px: number; id: string }) {
+function Screen({ px, id }: { px: number; id: string }) {
     const curve = `M${px - 78},150 C${px - 58},150 ${px - 52},206 ${px - 32},206 C${px - 12},206 ${px - 12},166 ${px + 4},166 C${px + 22},166 ${px + 26},224 ${px + 46},224 C${px + 64},224 ${px + 66},158 ${px + 78},156`;
     return (
         <g>

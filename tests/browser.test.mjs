@@ -451,27 +451,35 @@ test('the supply-chain explorer without motion: one whole cascade at once, nothi
     await context.close();
 });
 
-test('the drawn step of the making route moves only on screen, and stands still without motion', { skip }, async () => {
+test('the moving drawings of the home page’s row move only on screen, and stand still without motion', { skip }, async () => {
+    // Two drawings move: the flow network proposing recipes, and DED building up metal.
+    const MOVING = ['generative flow network', 'nozzle'];
     for (const reducedMotion of ['no-preference', 'reduce']) {
         const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion });
         const page = await context.newPage();
         await page.goto(`${base}/`, { waitUntil: 'networkidle' });
         const state = () =>
-            page.evaluate(() => {
-                // Only the drawn making step (DED) moves; the drawn design steps stand still.
-                const svgs = [...document.querySelectorAll('.made__grid svg.route')].filter((s) => s.querySelector('animate, animateTransform') || s.getAttribute('aria-label')?.includes('nozzle'));
-                return { count: svgs.length, paused: svgs.map((s) => s.animationsPaused()), animations: document.querySelectorAll('.route animate, .route animateTransform').length };
-            });
+            page.evaluate(
+                (moving) =>
+                    moving.map((word) => {
+                        const svg = [...document.querySelectorAll('.made__grid svg.route')].find((s) => s.getAttribute('aria-label')?.includes(word));
+                        return { found: !!svg, paused: svg?.animationsPaused(), animations: svg?.querySelectorAll('animate, animateTransform, animateMotion').length ?? 0 };
+                    }),
+                MOVING,
+            );
         const away = await state();
-        assert.equal(away.count, 1, 'one moving drawn step');
+        assert.ok(away.every((d) => d.found), `drawings missing: ${JSON.stringify(away)}`);
+        // The other drawn steps never move.
+        const still = await page.evaluate(() => [...document.querySelectorAll('.made__grid svg.route')].filter((s) => s.querySelector('animate, animateTransform, animateMotion')).length);
         if (reducedMotion === 'reduce') {
-            assert.equal(away.animations, 0, 'the drawing animates without motion');
+            assert.equal(still, 0, 'a drawing animates without motion');
         } else {
-            assert.ok(away.animations > 0, 'the drawing does not animate');
-            assert.deepEqual(away.paused, [true], 'the drawing moves while off screen');
-            const ded = page.locator('.made__grid svg.route[aria-label*="nozzle"]');
-            await ded.scrollIntoViewIfNeeded();
-            await page.waitForFunction(() => !document.querySelector('.made__grid svg.route[aria-label*="nozzle"]').animationsPaused());
+            assert.equal(still, MOVING.length, 'another drawing moves');
+            assert.ok(away.every((d) => d.animations > 0 && d.paused), `a drawing moves while off screen: ${JSON.stringify(away)}`);
+            for (const word of MOVING) {
+                await page.locator(`.made__grid svg.route[aria-label*="${word}"]`).scrollIntoViewIfNeeded();
+                await page.waitForFunction((w) => !document.querySelector(`.made__grid svg.route[aria-label*="${w}"]`).animationsPaused(), word);
+            }
         }
         await context.close();
     }

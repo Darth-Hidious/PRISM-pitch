@@ -446,14 +446,14 @@ test('PRISM Alpha is placed in ESA’s launcher programme (FLPP), and the July 2
     }
 });
 
-test('the home page starts from the requirement: how PRISM works comes before the metal, and research comes before design', () => {
+test('the home page starts from the requirement: the row begins with the design steps, how it works follows it, and research comes before design', () => {
     for (const [path, steps, made] of [
         ['/', ['Requirement', 'Research', 'Design', 'Screen', 'Make', 'Test', 'Learn'], 'From your requirement to tested metal'],
         ['/de/', ['Anforderung', 'Forschung', 'Entwurf', 'Screening', 'Herstellung', 'Test', 'Lernen'], 'Von Ihrer Anforderung zum geprüften Metall'],
     ]) {
         const { copy } = page(fileOf(path));
         const order = [...copy.querySelectorAll('section[id]')].map((s) => s.id);
-        assert.ok(order.indexOf('loop') < order.indexOf('made'), `${path}: ${order.join(', ')}`);
+        assert.ok(order.indexOf('made') < order.indexOf('loop'), `${path}: ${order.join(', ')}`);
         const names = [...copy.querySelectorAll('#loop .loop__list-name')].map((p) => text(p).replace(/\s*(Prototype|In use|Prototyp|Im Einsatz)$/, ''));
         assert.deepEqual(names, steps, `${path}: loop steps`);
         assert.ok(text(copy.querySelector('#made')).includes(made), `${path}: the making section's label`);

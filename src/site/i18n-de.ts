@@ -88,19 +88,25 @@ export const DE: Readonly<Record<string, string>> = {
     'Classes worth researching': 'Werkstoffklassen, die sich lohnen',
     'The families of material that could meet it.': 'Die Werkstofffamilien, die sie erfüllen könnten.',
     'Our generative models propose recipes': 'Unsere generativen Modelle schlagen Rezepte vor',
-    'A whole batch, not one best guess.': 'Eine ganze Reihe, nicht nur ein bester Tipp.',
+    'A generative flow network (GFlowNet) builds each one step by step; the better a recipe, the more flow reaches it.':
+        'Ein generatives Flussnetz (GFlowNet) baut jedes Schritt für Schritt auf; je besser ein Rezept, desto mehr Fluss erreicht es.',
     'The best few are chosen': 'Nur die besten kommen weiter',
-    'Several models judge; an exact check settles the doubtful ones.': 'Mehrere Modelle urteilen; eine exakte Rechnung klärt die unsicheren Fälle.',
+    'Several models judge each one; where they disagree, an exact calculation decides.':
+        'Mehrere Modelle bewerten jedes; wo sie uneins sind, entscheidet eine exakte Rechnung.',
     'A specification sheet beside a thermometer: what the part must survive.':
         'Ein Anforderungsblatt neben einem Thermometer: was das Bauteil überstehen muss.',
     'A stack of papers under a magnifying glass: the literature on the requirement.':
         'Ein Stapel Fachartikel unter einer Lupe: die Literatur zur Anforderung.',
     'Four classes of material as tags; the two worth researching are marked.':
         'Vier Werkstoffklassen als Etiketten; die zwei, die sich zu erforschen lohnen, sind markiert.',
-    'A triangle of three metals with many recipes proposed across it: the generative models at work.':
-        'Ein Dreieck aus drei Metallen, über das viele vorgeschlagene Rezepte verteilt sind: die generativen Modelle bei der Arbeit.',
-    'A landscape of the physics: most ideas fall away and the best few settle in its deepest valley.':
-        'Eine Landschaft der Physik: Die meisten Ideen fallen weg, die besten wenigen landen im tiefsten Tal.',
+    'A generative flow network: from an empty start, it builds recipes step by step, and more of its flow reaches the better ones.':
+        'Ein generatives Flussnetz: Von einem leeren Start aus baut es Rezepte Schritt für Schritt, und mehr seines Flusses erreicht die besseren.',
+    'Several models score each candidate. Where they agree on a good score, the candidate goes on; where they disagree, an exact calculation decides.':
+        'Mehrere Modelle bewerten jeden Kandidaten. Wo sie sich auf eine gute Bewertung einigen, geht er weiter; wo sie uneins sind, entscheidet eine exakte Rechnung.',
+    start: 'Start',
+    recipes: 'Rezepte',
+    'good enough': 'gut genug',
+    'they disagree: exact check': 'uneins: exakte Rechnung',
     'Small pieces of raw metal spread out on a paper towel before a melt.': 'Kleine Stücke Rohmetall, vor dem Schmelzen auf einem Papiertuch ausgebreitet.',
     'Raw metals, ready to melt': 'Rohmetalle, bereit zum Schmelzen',
     'Close-up of a copper hearth: small pieces of raw metal loaded into its hollows.': 'Nahaufnahme eines Kupferherds: kleine Stücke Rohmetall in seinen Mulden.',

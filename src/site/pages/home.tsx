@@ -14,8 +14,8 @@ export const page = (
     <SitePage page="home">
         <Hero />
         <Gap />
-        <Loop n="02" />
-        <Made n="03" />
+        <Made n="02" />
+        <Loop n="03" />
         <Europe />
         <Markets n="04" />
         <Explore n="05" />

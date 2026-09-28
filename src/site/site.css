@@ -4979,6 +4979,36 @@ body {
     fill: #f1dcc2;
 }
 
+/* The design steps (route-drawings.tsx): the flow network's edges and the flow along them, the judges' spread. */
+.route .route-flow {
+    stroke: var(--eg-ink-2);
+    stroke-linecap: round;
+    opacity: 0.55;
+}
+
+.route-dot {
+    fill: var(--crimson);
+}
+
+.route .route-judge {
+    stroke: var(--eg-ink-2);
+}
+
+.route .route-spread {
+    stroke: var(--rule);
+    stroke-width: 7;
+    stroke-linecap: round;
+}
+
+.route .route-good {
+    fill: var(--teal-tint, #edf7f5);
+}
+
+.route .route-check {
+    fill: var(--prism-s4);
+    stroke: var(--crimson);
+}
+
 
 .made__grid figure {
     margin: 0;

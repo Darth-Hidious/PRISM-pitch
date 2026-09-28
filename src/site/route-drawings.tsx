@@ -9,7 +9,7 @@
  * a drawing is off screen.
  */
 import { useEffect, useRef, type ReactNode } from 'react';
-import { Requirement, Design, Screen } from './diagrams';
+import { Requirement } from './diagrams';
 import { Ball, Defs, T } from './engrave';
 import { useReducedMotion } from './hooks';
 import { useT } from './i18n';
@@ -144,22 +144,149 @@ export function ClassesDrawing() {
     );
 }
 
-/** The generative models' search: many recipes spread over a three-metal triangle. */
+/*
+ * The generative models: a generative flow network (GFlowNet). From an empty start it builds each
+ * recipe step by step; flow runs along the choices, and more of it reaches the better recipes, so it
+ * proposes a varied batch weighted towards the good ones, not one best guess.
+ */
+const NODES = {
+    s: [40, 150],
+    a: [
+        [105, 82],
+        [105, 150],
+        [105, 218],
+    ],
+    b: [
+        [170, 60],
+        [170, 120],
+        [170, 180],
+        [170, 240],
+    ],
+    /** The finished recipes, with how good each is (the reward): the ball's size. */
+    c: [
+        [248, 52, 2],
+        [248, 101, 8],
+        [248, 150, 4],
+        [248, 199, 10],
+        [248, 248, 3],
+    ],
+} as const;
+/** Edges as [from layer, from index, to layer, to index, flow]. */
+const FLOWS: ['s' | 'a' | 'b', number, 'a' | 'b' | 'c', number, number][] = [
+    ['s', 0, 'a', 0, 1.4],
+    ['s', 0, 'a', 1, 2.8],
+    ['s', 0, 'a', 2, 2.2],
+    ['a', 0, 'b', 0, 0.8],
+    ['a', 0, 'b', 1, 1.0],
+    ['a', 1, 'b', 1, 1.6],
+    ['a', 1, 'b', 2, 1.8],
+    ['a', 2, 'b', 2, 1.0],
+    ['a', 2, 'b', 3, 1.4],
+    ['b', 0, 'c', 0, 0.5],
+    ['b', 0, 'c', 1, 0.8],
+    ['b', 1, 'c', 1, 1.6],
+    ['b', 2, 'c', 2, 0.9],
+    ['b', 2, 'c', 3, 2.0],
+    ['b', 3, 'c', 3, 1.0],
+    ['b', 3, 'c', 4, 0.6],
+];
+const at = (layer: 's' | 'a' | 'b' | 'c', i: number) => (layer === 's' ? NODES.s : NODES[layer][i]);
+/** Paths the flow is shown taking: most of it ends at the two best recipes. */
+const RUNS = [
+    [NODES.s, NODES.a[1], NODES.b[2], NODES.c[3]],
+    [NODES.s, NODES.a[1], NODES.b[1], NODES.c[1]],
+    [NODES.s, NODES.a[2], NODES.b[2], NODES.c[3]],
+    [NODES.s, NODES.a[0], NODES.b[1], NODES.c[1]],
+    [NODES.s, NODES.a[2], NODES.b[3], NODES.c[4]],
+];
+
 export function GenerateDrawing() {
     const t = useT();
+    const motion = !useReducedMotion();
     return (
-        <Drawing id="route-gen" viewBox="46 86 208 208" label={t('A triangle of three metals with many recipes proposed across it: the generative models at work.')}>
-            <Design px={150} />
+        <Drawing id="route-gen" viewBox="10 20 270 270" label={t('A generative flow network: from an empty start, it builds recipes step by step, and more of its flow reaches the better ones.')}>
+            {FLOWS.map(([fl, fi, tl, ti, w], k) => {
+                const [x1, y1] = at(fl, fi);
+                const [x2, y2] = at(tl, ti);
+                return <line key={k} className="eg-line route-flow" x1={x1} y1={y1} x2={x2} y2={y2} style={{ strokeWidth: 0.6 + w * 0.9 }} />;
+            })}
+            <circle className="eg-solid" cx={NODES.s[0]} cy={NODES.s[1]} r={9} />
+            {[...NODES.a, ...NODES.b].map(([x, y]) => (
+                <circle key={`${x}-${y}`} className="eg-solid" cx={x} cy={y} r={6} />
+            ))}
+            {NODES.c.map(([x, y, r]) => (
+                <Ball key={y} cx={x} cy={y} r={5 + r * 0.9} tone={r >= 8 ? 'white' : r >= 4 ? 'light' : 'mid'} />
+            ))}
+            {motion &&
+                RUNS.map((run, k) => (
+                    <circle key={k} className="route-dot" r={3.2} cx={0} cy={0} opacity={0}>
+                        <animateMotion path={`M${run.map(([x, y]) => `${x},${y}`).join(' L')}`} dur="2.6s" begin={`${k * 0.52}s`} repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0; 1; 1; 0" keyTimes="0; 0.08; 0.9; 1" dur="2.6s" begin={`${k * 0.52}s`} repeatCount="indefinite" />
+                    </circle>
+                ))}
+            <T x={NODES.s[0]} y={NODES.s[1] - 18} kind="small">
+                {t('start')}
+            </T>
+            <T x={248} y={284} kind="small">
+                {t('recipes')}
+            </T>
         </Drawing>
     );
 }
 
-/** A landscape of the physics: most ideas roll out, the best settle in the deepest valley. */
+/*
+ * The judges: several models score each candidate. Where they agree on a good score, it goes on; where
+ * they disagree, the disagreement is the warning, and an exact calculation decides.
+ */
+const CANDIDATES = [65, 95, 125, 155, 185, 215, 245];
+/** Each model's score for each candidate, as a height in the drawing (smaller is better). */
+const SCORES = [
+    [205, 150, 96, 172, 128, 82, 212],
+    [214, 140, 101, 118, 134, 90, 204],
+    [198, 162, 92, 214, 122, 86, 200],
+];
+const GOOD = 112;
+const CHOSEN = [2, 5];
+const CHECK = 3;
+
 export function ChooseDrawing() {
     const t = useT();
     return (
-        <Drawing id="route-cho" viewBox="60 96 180 180" label={t('A landscape of the physics: most ideas fall away and the best few settle in its deepest valley.')}>
-            <Screen px={150} id="route-cho" />
+        <Drawing id="route-cho" viewBox="16 26 270 270" label={t('Several models score each candidate. Where they agree on a good score, the candidate goes on; where they disagree, an exact calculation decides.')}>
+            <rect className="route-good" x={40} y={52} width={230} height={GOOD - 52} />
+            <rect className="eg-frame" x={40} y={52} width={230} height={196} />
+            <line className="eg-line eg-line--dashed" x1={40} y1={GOOD} x2={270} y2={GOOD} />
+            <T x={48} y={72} kind="small" anchor="start">
+                {t('good enough')}
+            </T>
+            {SCORES.map((row, m) => (
+                <polyline
+                    key={m}
+                    className="eg-line eg-line--thin route-judge"
+                    points={row.map((y, i) => `${CANDIDATES[i]},${y}`).join(' ')}
+                    style={{ strokeDasharray: m === 0 ? undefined : m === 1 ? '5 3' : '1.5 3' }}
+                />
+            ))}
+            {CANDIDATES.map((x, i) => {
+                const ys = SCORES.map((r) => r[i]);
+                const lo = Math.min(...ys);
+                const hi = Math.max(...ys);
+                const mid = ys.reduce((a, b) => a + b, 0) / ys.length;
+                const chosen = CHOSEN.includes(i);
+                return (
+                    <g key={x}>
+                        <line className="eg-line route-spread" x1={x} y1={lo - 4} x2={x} y2={hi + 4} />
+                        {i === CHECK ? (
+                            <path className="eg-solid route-check" d={`M${x},${mid - 9} L${x + 9},${mid} L${x},${mid + 9} L${x - 9},${mid} Z`} />
+                        ) : (
+                            <Ball cx={x} cy={mid} r={chosen ? 8 : 5} tone={chosen ? 'white' : 'mid'} />
+                        )}
+                    </g>
+                );
+            })}
+            <T x={CANDIDATES[CHECK]} y={272} kind="small">
+                {t('they disagree: exact check')}
+            </T>
         </Drawing>
     );
 }
