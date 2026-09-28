@@ -15,8 +15,8 @@ export const page = (
         <Hero />
         <Gap />
         <Made n="02" />
-        <Loop n="03" />
         <Europe />
+        <Loop n="03" />
         <Markets n="04" />
         <Explore n="05" />
         <Contact />

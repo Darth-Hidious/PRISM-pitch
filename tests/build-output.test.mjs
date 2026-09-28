@@ -453,7 +453,7 @@ test('the home page starts from the requirement: the row begins with the design 
     ]) {
         const { copy } = page(fileOf(path));
         const order = [...copy.querySelectorAll('section[id]')].map((s) => s.id);
-        assert.ok(order.indexOf('made') < order.indexOf('loop'), `${path}: ${order.join(', ')}`);
+        assert.deepEqual(order.slice(0, 5), ['top', 'gap', 'made', 'europe', 'loop'], `${path}: ${order.join(', ')}`);
         const names = [...copy.querySelectorAll('#loop .loop__list-name')].map((p) => text(p).replace(/\s*(Prototype|In use|Prototyp|Im Einsatz)$/, ''));
         assert.deepEqual(names, steps, `${path}: loop steps`);
         assert.ok(text(copy.querySelector('#made')).includes(made), `${path}: the making section's label`);

@@ -11,7 +11,7 @@ through `www.mirdyne.com` (its own redirect, in the Vercel domain settings);
 
 | Path | What | Source |
 | --- | --- | --- |
-| `/` | Home: the problem PRISM solves, how it works (from the requirement to the next design), the making route, why Europe, links to the other pages | `src/site/pages/home.tsx` |
+| `/` | Home: the problem PRISM solves, the route from the requirement to tested metal, why Europe, how it works (the loop), links to the other pages | `src/site/pages/home.tsx` |
 | `/platform/` | The five stacks, taken apart as you scroll (`/platform/#autonomy` goes to one), and progress | `src/site/pages/platform.tsx` |
 | `/method/` | Four live demos of the method (`/method/#al` opens one), open research, and Proof, built in (`#proof`): a live map of who sees what, a real lineage (NIST's CAMEO), what a part gives away | `src/site/pages/method.tsx` |
 | `/company/` | Mirdyne and Bimo Tech, the founders, working with us | `src/site/pages/company.tsx` |
