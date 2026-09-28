@@ -88,8 +88,8 @@ export const DE: Readonly<Record<string, string>> = {
     'Classes worth researching': 'Werkstoffklassen, die sich lohnen',
     'The families of material that could meet it.': 'Die Werkstofffamilien, die sie erfüllen könnten.',
     'Our generative models propose recipes': 'Unsere generativen Modelle schlagen Rezepte vor',
-    'A generative flow network (GFlowNet) builds each one step by step; the better a recipe, the more flow reaches it.':
-        'Ein generatives Flussnetz (GFlowNet) baut jedes Schritt für Schritt auf; je besser ein Rezept, desto mehr Fluss erreicht es.',
+    'They build each recipe step by step; the better a recipe, the more of the flow reaches it.':
+        'Sie bauen jedes Rezept Schritt für Schritt auf; je besser ein Rezept, desto mehr vom Fluss erreicht es.',
     'The best few are chosen': 'Nur die besten kommen weiter',
     'Several models judge each one; where they disagree, an exact calculation decides.':
         'Mehrere Modelle bewerten jedes; wo sie uneins sind, entscheidet eine exakte Rechnung.',
@@ -99,8 +99,8 @@ export const DE: Readonly<Record<string, string>> = {
         'Ein Stapel Fachartikel unter einer Lupe: die Literatur zur Anforderung.',
     'Four classes of material as tags; the two worth researching are marked.':
         'Vier Werkstoffklassen als Etiketten; die zwei, die sich zu erforschen lohnen, sind markiert.',
-    'A generative flow network: from an empty start, it builds recipes step by step, and more of its flow reaches the better ones.':
-        'Ein generatives Flussnetz: Von einem leeren Start aus baut es Rezepte Schritt für Schritt, und mehr seines Flusses erreicht die besseren.',
+    'A network of choices: from an empty start, our models build recipes step by step, and more of the flow reaches the better ones.':
+        'Ein Netz von Entscheidungen: Von einem leeren Start aus bauen unsere Modelle Rezepte Schritt für Schritt, und mehr vom Fluss erreicht die besseren.',
     'Several models score each candidate. Where they agree on a good score, the candidate goes on; where they disagree, an exact calculation decides.':
         'Mehrere Modelle bewerten jeden Kandidaten. Wo sie sich auf eine gute Bewertung einigen, geht er weiter; wo sie uneins sind, entscheidet eine exakte Rechnung.',
     start: 'Start',

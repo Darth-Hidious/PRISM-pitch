@@ -145,7 +145,7 @@ export function ClassesDrawing() {
 }
 
 /*
- * The generative models: a generative flow network (GFlowNet). From an empty start it builds each
+ * The generative models, drawn as a network of choices. From an empty start they build each
  * recipe step by step; flow runs along the choices, and more of it reaches the better recipes, so it
  * proposes a varied batch weighted towards the good ones, not one best guess.
  */
@@ -204,7 +204,7 @@ export function GenerateDrawing() {
     const t = useT();
     const motion = !useReducedMotion();
     return (
-        <Drawing id="route-gen" viewBox="10 20 270 270" label={t('A generative flow network: from an empty start, it builds recipes step by step, and more of its flow reaches the better ones.')}>
+        <Drawing id="route-gen" viewBox="10 20 270 270" label={t('A network of choices: from an empty start, our models build recipes step by step, and more of the flow reaches the better ones.')}>
             {FLOWS.map(([fl, fi, tl, ti, w], k) => {
                 const [x1, y1] = at(fl, fi);
                 const [x2, y2] = at(tl, ti);

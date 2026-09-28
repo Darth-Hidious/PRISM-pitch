@@ -15,7 +15,7 @@ const DESIGN: { Art: () => ReactElement; caption: string; note: string }[] = [
     {
         Art: GenerateDrawing,
         caption: 'Our generative models propose recipes',
-        note: 'A generative flow network (GFlowNet) builds each one step by step; the better a recipe, the more flow reaches it.',
+        note: 'They build each recipe step by step; the better a recipe, the more of the flow reaches it.',
     },
     { Art: ChooseDrawing, caption: 'The best few are chosen', note: 'Several models judge each one; where they disagree, an exact calculation decides.' },
 ];

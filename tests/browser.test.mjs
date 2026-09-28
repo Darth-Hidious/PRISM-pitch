@@ -453,7 +453,7 @@ test('the supply-chain explorer without motion: one whole cascade at once, nothi
 
 test('the moving drawings of the home page’s row move only on screen, and stand still without motion', { skip }, async () => {
     // Two drawings move: the flow network proposing recipes, and DED building up metal.
-    const MOVING = ['generative flow network', 'nozzle'];
+    const MOVING = ['network of choices', 'nozzle'];
     for (const reducedMotion of ['no-preference', 'reduce']) {
         const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion });
         const page = await context.newPage();

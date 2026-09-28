@@ -446,6 +446,10 @@ test('PRISM Alpha is placed in ESA’s launcher programme (FLPP), and the July 2
     }
 });
 
+test('the site does not name the model behind the generative step', () => {
+    for (const { file } of PAGES) assert.ok(!/gflownet|generative flow network/i.test(read(file)), `${file}: names the model`);
+});
+
 test('the home page starts from the requirement: the row begins with the design steps, how it works follows it, and research comes before design', () => {
     for (const [path, steps, made] of [
         ['/', ['Requirement', 'Research', 'Design', 'Screen', 'Make', 'Test', 'Learn'], 'From your requirement to tested metal'],
