@@ -76,8 +76,8 @@ const LATER: Later[] = [
     },
 ];
 
-/** Narrower screens: the row is wider than the screen, so scrolling down slides it across. */
-const SLIDE = '(max-width: 900px) and (prefers-reduced-motion: no-preference)';
+/** With motion, on every screen: the row is wider than the screen, so scrolling down slides it across. */
+const SLIDE = '(prefers-reduced-motion: no-preference)';
 
 /**
  * Home: from the customer's requirement to tested metal. The lab, then the design steps, drawn, then the route from raw metal to a tested coupon: our own

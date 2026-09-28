@@ -476,11 +476,54 @@ test('the moving drawings of the home page’s row move only on screen, and stan
         } else {
             assert.equal(still, MOVING.length, 'another drawing moves');
             assert.ok(away.every((d) => d.animations > 0 && d.paused), `a drawing moves while off screen: ${JSON.stringify(away)}`);
+            // The row slides as the page scrolls: scroll down until each drawing has come onto the screen.
             for (const word of MOVING) {
-                await page.locator(`.made__grid svg.route[aria-label*="${word}"]`).scrollIntoViewIfNeeded();
+                const onScreen = () =>
+                    page.evaluate((w) => {
+                        const r = document.querySelector(`.made__grid svg.route[aria-label*="${w}"]`).getBoundingClientRect();
+                        return r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight;
+                    }, word);
+                const top = await page.evaluate(() => document.querySelector('.made__pin').getBoundingClientRect().top + scrollY);
+                for (let y = top; !(await onScreen()) && y < top + 20000; y += 150) {
+                    await page.evaluate((to) => scrollTo({ top: to, behavior: 'instant' }), y);
+                    await page.waitForTimeout(30);
+                }
+                assert.ok(await onScreen(), `${word}: never comes onto the screen`);
                 await page.waitForFunction((w) => !document.querySelector(`.made__grid svg.route[aria-label*="${w}"]`).animationsPaused(), word);
             }
         }
+        await context.close();
+    }
+});
+
+test('the home page’s row is one row that scrolling slides across, on a desktop too; without motion it stands still in rows', { skip }, async () => {
+    for (const [reducedMotion, viewport] of [
+        ['no-preference', { width: 1440, height: 900 }],
+        ['no-preference', { width: 1280, height: 720 }],
+        ['reduce', { width: 1440, height: 900 }],
+    ]) {
+        const context = await browser.newContext({ viewport, reducedMotion });
+        const page = await context.newPage();
+        await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+        const rows = () => page.evaluate(() => new Set([...document.querySelectorAll('.made__grid > li')].map((li) => Math.round(li.offsetTop))).size);
+        const shift = () => page.evaluate(() => getComputedStyle(document.querySelector('.made__grid')).transform);
+        const top = await page.evaluate(() => document.querySelector('.made__pin').getBoundingClientRect().top + scrollY);
+        const height = await page.evaluate(() => document.querySelector('.made__pin').getBoundingClientRect().height);
+        const label = `${viewport.width}x${viewport.height} ${reducedMotion}`;
+        if (reducedMotion === 'reduce') {
+            assert.equal(await rows(), 3, `${label}: the steps in three rows`);
+        } else {
+            assert.equal(await rows(), 1, `${label}: one row`);
+            await page.evaluate((y) => scrollTo({ top: y, behavior: 'instant' }), top + (height - viewport.height) / 2);
+            await page.waitForTimeout(200);
+            assert.notEqual(await shift(), 'none', `${label}: scrolling does not slide the row`);
+            // The last step comes fully onto the screen by the end.
+            await page.evaluate((y) => scrollTo({ top: y, behavior: 'instant' }), top + height - viewport.height);
+            await page.waitForTimeout(200);
+            const last = await page.evaluate(() => document.querySelector('.made__grid > li:last-child').getBoundingClientRect().right);
+            assert.ok(last <= viewport.width, `${label}: the last step ends off screen (${last})`);
+        }
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${label}: sideways scroll`);
         await context.close();
     }
 });

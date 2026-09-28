@@ -4907,8 +4907,8 @@ body {
     list-style: none;
 }
 
-/* Wide screens: our five photographs in one row, the four later steps in the row below. */
-@media (min-width: 901px) {
+/* Wide screens without motion: the five design steps, our five photographs, then the four later steps, a row each. */
+@media (min-width: 901px) and (prefers-reduced-motion: reduce) {
     .made__grid {
         grid-template-columns: repeat(20, minmax(0, 1fr));
         row-gap: 32px;
@@ -5047,6 +5047,39 @@ body {
     display: none;
 }
 
+/*
+ * With motion, on every screen: one row, wider than the screen. Nothing scrolls sideways; see below.
+ * On a wide screen the tiles are as large as the screen's height leaves room for.
+ */
+@media (prefers-reduced-motion: no-preference) {
+    .made__grid {
+        grid-template-columns: none;
+        grid-auto-flow: column;
+        grid-auto-columns: clamp(240px, calc(100svh - var(--nav-h) - 400px), 380px);
+        gap: 16px;
+    }
+
+    /* In a row that slides, the photographs stay as they are. */
+    .made__grid img {
+        animation: none;
+    }
+}
+
+/* Short wide screens: a smaller title, so the row still fits under it. */
+@media (min-width: 901px) and (max-height: 760px) and (prefers-reduced-motion: no-preference) {
+    .made__head {
+        gap: 14px;
+    }
+
+    .made__head .w-h2 {
+        font-size: clamp(30px, 6.5svh, 52px);
+    }
+
+    .made__grid {
+        grid-auto-columns: clamp(200px, calc(100svh - var(--nav-h) - 320px), 380px);
+    }
+}
+
 /* Narrower screens: one row, wider than the screen. Nothing scrolls sideways; see below. */
 @media (max-width: 900px) {
     .made__grid {
@@ -5067,7 +5100,7 @@ body {
  * With motion: the section holds still while scrolling down slides the row across (Made.tsx sets the
  * height it holds still for). A thin bar shows how far along it is.
  */
-@media (max-width: 900px) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
     .made__stage {
         position: sticky;
         top: var(--nav-h);
