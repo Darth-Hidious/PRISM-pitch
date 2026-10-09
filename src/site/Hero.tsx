@@ -6,8 +6,9 @@ import { Grain } from './ui';
 
 /**
  * The first screen: one clear line over what the material has to survive. The photograph runs edge to
- * edge where the screen is wider than tall; on upright screens it sits whole above the text. Credited in
- * the footer.
+ * edge where the screen is wider than tall; on upright screens it sits whole above the text. The
+ * KI‑Sonderpreis badge sits with the headline on wide screens and on the photograph when the screen is
+ * upright, and links to the award line in the footer. Photograph credited in the Impressum.
  */
 export default function Hero() {
     const t = useT();
@@ -38,6 +39,17 @@ export default function Hero() {
                         </Button>
                     </div>
                 </div>
+                <a className="hero__award rise" href="#award" style={{ animationDelay: '320ms' }}>
+                    <img
+                        src="/awards/ki-sonderpreis-badge.png"
+                        alt={t('Hessen Ideen Wettbewerb 2026 – KI‑Sonderpreis von hessian.AI')}
+                        width={394}
+                        height={394}
+                        loading="lazy"
+                        fetchPriority="low"
+                        decoding="async"
+                    />
+                </a>
             </section>
             <aside className="proof" data-theme="navy" data-nav="navy" aria-label={t('PRISM in brief')}>
                 <ul className="wrap proof__list">
