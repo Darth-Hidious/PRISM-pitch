@@ -159,6 +159,16 @@ function PictureCredits() {
                     </>
                 )}
             </p>
+            <p>
+                {german ? (
+                    t('The KI‑Sonderpreis badge is used with the organisers’ permission.')
+                ) : (
+                    <>
+                        The KI‑Sonderpreis badge is used with the organisers’ permission.{' '}
+                        <span lang="de">Das KI‑Sonderpreis-Siegel verwenden wir mit Erlaubnis der Veranstalter.</span>
+                    </>
+                )}
+            </p>
         </section>
     );
 }

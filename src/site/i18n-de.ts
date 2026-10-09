@@ -47,6 +47,8 @@ export const DE: Readonly<Record<string, string>> = {
     'Replacing “forever chemicals”, with an industrial partner': 'Ersatz für „Ewigkeitschemikalien“, mit einem Industriepartner',
     'PRISM Alpha, with': 'PRISM Alpha, mit',
     'PRISM Alpha consortium': 'PRISM-Alpha-Konsortium',
+    'Hessen Ideen Wettbewerb 2026 – KI‑Sonderpreis von hessian.AI':
+        'Hessen Ideen Wettbewerb 2026 – KI‑Sonderpreis von hessian.AI',
 
     // Partners (src/site/partners.tsx): PRISM Alpha consortium names and roles
     'European Space Agency': 'Europäische Weltraumorganisation (ESA)',
@@ -938,6 +940,8 @@ export const DE: Readonly<Record<string, string>> = {
     Language: 'Sprache',
     'All other photographs are our own.': 'Alle übrigen Fotos sind unsere eigenen.',
     'Partner logos belong to their owners.': 'Partnerlogos gehören ihren Inhabern.',
+    'The KI‑Sonderpreis badge is used with the organisers’ permission.':
+        'Das KI‑Sonderpreis-Siegel verwenden wir mit Erlaubnis der Veranstalter.',
     'Legal notice': 'Rechtliche Angaben',
     'Privacy policy': 'Datenschutz\u00aderklärung',
     'To be confirmed': 'Noch zu bestätigen',
