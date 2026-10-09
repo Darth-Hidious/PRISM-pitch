@@ -185,7 +185,7 @@ const ELSEWHERE = [
     { href: LINKS.bimomaterials, label: 'Bimo Materials' },
 ];
 
-/** Where to go next, the Hessen Ideen award, and the legal links. Picture credits live in the Impressum. */
+/** Where to go next and the legal links; nothing else. Picture credits live in the Impressum. */
 export function SiteFooter({ page }: { page: PageId }) {
     const t = useT();
     const other = useLanguageSwitch(page);
@@ -214,17 +214,6 @@ export function SiteFooter({ page }: { page: PageId }) {
                         </nav>
                     </div>
                 </div>
-                <a className="footer__award" id="award" href={t.link('/news/')}>
-                    <img
-                        src="/awards/hessen-ideen-wettbewerb-white.png"
-                        alt=""
-                        width={480}
-                        height={234}
-                        loading="lazy"
-                        decoding="async"
-                    />
-                    <span>{t('Winner – KI‑Sonderpreis, Hessen Ideen Wettbewerb 2026 (von hessian.AI)')}</span>
-                </a>
                 <div className="footer__legal">
                     <span>© 2026 Mirdyne</span>
                     <nav className="footer__law" aria-label={t('Legal')}>

@@ -161,11 +161,11 @@ function PictureCredits() {
             </p>
             <p>
                 {german ? (
-                    t('The Hessen Ideen Wettbewerb mark and the KI‑Sonderpreis badge are used with the organisers’ permission.')
+                    t('The KI‑Sonderpreis badge is used with the organisers’ permission.')
                 ) : (
                     <>
-                        The Hessen Ideen Wettbewerb mark and the KI‑Sonderpreis badge are used with the organisers’ permission.{' '}
-                        <span lang="de">Das Signet des Hessen Ideen Wettbewerbs und das KI‑Sonderpreis-Siegel verwenden wir mit Erlaubnis der Veranstalter.</span>
+                        The KI‑Sonderpreis badge is used with the organisers’ permission.{' '}
+                        <span lang="de">Das KI‑Sonderpreis-Siegel verwenden wir mit Erlaubnis der Veranstalter.</span>
                     </>
                 )}
             </p>

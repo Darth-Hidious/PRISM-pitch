@@ -50,10 +50,6 @@ export const DE: Readonly<Record<string, string>> = {
     'Hessen Ideen Wettbewerb 2026 – KI‑Sonderpreis von hessian.AI':
         'Hessen Ideen Wettbewerb 2026 – KI‑Sonderpreis von hessian.AI',
 
-    // Footer award (src/site/Chrome.tsx)
-    'Winner – KI‑Sonderpreis, Hessen Ideen Wettbewerb 2026 (von hessian.AI)':
-        'Gewinner – KI‑Sonderpreis, Hessen Ideen Wettbewerb 2026',
-
     // Partners (src/site/partners.tsx): PRISM Alpha consortium names and roles
     'European Space Agency': 'Europäische Weltraumorganisation (ESA)',
     'Bimo Tech': 'Bimo Tech',
@@ -944,8 +940,8 @@ export const DE: Readonly<Record<string, string>> = {
     Language: 'Sprache',
     'All other photographs are our own.': 'Alle übrigen Fotos sind unsere eigenen.',
     'Partner logos belong to their owners.': 'Partnerlogos gehören ihren Inhabern.',
-    'The Hessen Ideen Wettbewerb mark and the KI‑Sonderpreis badge are used with the organisers’ permission.':
-        'Das Signet des Hessen Ideen Wettbewerbs und das KI‑Sonderpreis-Siegel verwenden wir mit Erlaubnis der Veranstalter.',
+    'The KI‑Sonderpreis badge is used with the organisers’ permission.':
+        'Das KI‑Sonderpreis-Siegel verwenden wir mit Erlaubnis der Veranstalter.',
     'Legal notice': 'Rechtliche Angaben',
     'Privacy policy': 'Datenschutz\u00aderklärung',
     'To be confirmed': 'Noch zu bestätigen',
